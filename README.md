@@ -1,0 +1,2 @@
+# blog.naoty.dev
+
