@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homebrew で自分のためのツールを公開するのが楽しい</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Homebrew で自分のためのツールを公開するのが楽しい">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/294/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Homebrew で自分のためのツールを公開するのが楽しい</h1>
+          <p class="metadata">
+            <time datetime="2017-03-22T11:00:00.000+0000">2017-03-22 11:00</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Homebrew で自分のためだけの細々としたツール類を公開するのが楽しい。<a href="http://github.com/naoty/homebrew-misc">naoty/homebrew-misc</a> という tap を作って、そこにツールのための Formula を置いている。<code>brew tap naoty/misc</code> を実行すると、インストール可能になる。</p>
+<p>自分で作ったソフトウェアを日々自分で使っていると、ジワジワと幸福感が広がってくる。rubygems など、特定の言語、特定のバージョン、特定のライブラリに依存したソフトウェアはずっと使っていくことができなくなるかもしれない。使えなくなった頃には、もうそのソフトウェアを書き直す意欲やモチベーションは失われているかもしれない。</p>
+<p>できれば、コンパイル済みの実行ファイルのみを配布できるようにしたい。Go を好んで使ってるのはそういう理由だ。Go 以外の言語を使う場合は 2 パターンある。</p>
+<ol>
+<li>その言語でなければ実現できない機能。macOS の機能を使ったソフトウェアは Swift で書くだろう。<a href="http://github.com/naoty/flock">naoty/flock</a> もこの理由で Swift で書かれている。</li>
+<li>ソフトウェアの利用者が特定の言語の利用者に偏ってる場合、メンテナンスしやすさを考えて利用者の言語でソフトウェアを書くことになりそう。CocoaPods や Fastlane が Ruby で書かれていることは、この理由で個人的に好きではない。</li>
+</ol>
+<p>自分のためのツールを Homebrew で配布するのは、仕事用の PC でもプライベート用の PC でも使えるようにしたかったり、PC を新調しても使えるようにしたいからだ。ポータビリティを高めて、ずっと長く使えるようにしたい。自分は iOS アプリのプログラマーなので、Linux に移ることはしばらくないと思う。なので、Homebrew を使ってる。まだ Homebrew に移せていないツールがたくさんあるので、隙を見て移していきたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

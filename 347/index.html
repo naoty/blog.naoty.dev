@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECSサービスの分け方</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ECSサービスの分け方">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/347/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ECSサービスの分け方</h1>
+          <p class="metadata">
+            <time datetime="2018-10-02T21:22:00.000+0900">2018-10-02 21:22</time>
+            <a href="/aws/">#aws</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ECSサービスを作るとき、いくつかパターンがあることに気づいたのでメモ。</p>
+<ol>
+<li>コンテナのtagごとに作るパターン</li>
+<li>コマンドごとに作るパターン</li>
+<li>環境変数の組み合わせごとに作るパターン</li>
+<li>スケールアウトの粒度ごとに作るパターン</li>
+</ol>
+<h1>コンテナのtag</h1>
+<p>Dockerコンテナには、コミットIDをtagにするのと同時に、<code>master</code>と<code>develop</code>ブランチではブランチ名をtagに加えている。productionのappサービスは<code>master</code>のtagを使うようにタスク定義を作ってるし、stagingのappサービスは<code>develop</code>のtagを使うようにタスク定義を作っている。それぞれタスク定義が分かれているのでサービスも分かれている。</p>
+<h1>コマンド</h1>
+<p>同じDockerコンテナを使っていた場合でも、例えばrailsサービスとsidekiqサービスのように別々のサービスを起動させることがある。こういう場合もそれぞれコマンドごとにタスク定義を作ってサービスを分けることになる。</p>
+<h1>環境変数の組み合わせ</h1>
+<p>同じDockerコンテナで同じコマンドを実行する場合でも、環境変数を使って例えばDBの接続先やDB名といった外部サービスを変えることがある。環境変数はタスク定義で指定するので、利用する環境変数の組み合わせごとにタスク定義を作り、サービスを作ることになる。</p>
+<p>とはいえ、環境変数の指定方法はいくつか考えられるし、サービスディスカバリを使って外部サービスを参照することで環境変数を使わない方法も考えられるので、避けられるかもしれない。</p>
+<h1>スケールアウト</h1>
+<p>特定のパスの負荷が高い場合などに専用のサービスを作って、部分的にスケールアウトさせるということも考えられそう。場合によってはタスク定義も分けて割り当てるリソースを増やすなど最適化させることもありそう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

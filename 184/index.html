@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mrubyで定義したクラスとメソッドをCから呼び出す</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="mrubyで定義したクラスとメソッドをCから呼び出す">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/184/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">mrubyで定義したクラスとメソッドをCから呼び出す</h1>
+          <p class="metadata">
+            <time datetime="2013-05-03T23:13:00.000+0000">2013-05-03 23:13</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>mrubyで書いた方がいいところはmrubyで書いてそうじゃないところはCで書く、という開発をするには、Cで定義した関数をRubyから実行させたり、逆にRubyで定義したクラスやメソッドをCから呼び出せるようにする必要があると思った。前者のような実装はmrbgemsを読めばたくさんある一方で、後者の実装は調べたけどあんまりなかった。そこで、先日「Head First C」でCの初歩を学んだことだし、mrubyのソースコードを読みながら後者の「mrubyで定義したクラスとメソッドをCから呼び出す」実装を試行錯誤してみた。</p>
+<p>試行錯誤してみてとりあえず動いたというだけで、正しいやり方じゃないかもしれないので、コメントか<a href="https://twitter.com/naoty_k">@naoty_k</a>宛にメッセージをいただけるとありがたいです。また、参照しているmrubyのコミット番号は「9663a7」です。</p>
+<h2>Rubyのクラスとメソッドを用意</h2>
+<p>適当にPersonクラスとメソッド2つを用意する。あとでこれらをCから呼び出す。</p>
+<pre><code>// person.rb
+
+class Person
+  attr_accessor :name, :age
+
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+
+  def greeting
+    &quot;Hello, my name is #{name}, #{age} years old.&quot;
+  end
+end
+</code></pre>
+<h2>mrbcでコンパイル</h2>
+<p>RubyのファイルをCからロードするにはいくつか方法があるようだけど、今回はmrbcで*.mrb形式にコンパイルしてCからロードするようにする。</p>
+<pre><code>$ ls
+person.rb
+$ mrbc person.rb
+$ ls
+person.mrb person.rb
+</code></pre>
+<h2>Cから定義したクラスとメソッドを呼び出す</h2>
+<p>CからRubyで定義した<code>Person</code>インスタンスを生成して<code>greeting</code>メソッドの結果を標準出力に表示してみる。</p>
+<pre><code>// greeting.c
+
+#include 
+#include 
+#include 
+
+int main()
+{
+    mrb_state* mrb = mrb_open();
+
+    // mrubyファイルをロードする
+    FILE *fd = fopen(&quot;person.mrb&quot;, &quot;r&quot;);
+    mrb_load_irep_file(mrb, fd);
+
+    // クラスオブジェクトを取得する
+    struct RClass *person = mrb_class_obj_get(mrb, &quot;Person&quot;);
+
+    // 引数をmrb_valueに変換する
+    mrb_value person_value = mrb_obj_value(person);
+    mrb_value name_value = mrb_str_new(mrb, &quot;naoty&quot;, 5);
+    mrb_value age_value = mrb_fixnum_value(25);
+
+    // Person#newを呼び出す
+    mrb_value naoty = mrb_funcall(mrb, person_value, &quot;new&quot;, 2, name_value, age_value);
+
+    // Person#greetingを呼び出す
+    mrb_value greeting_value = mrb_funcall(mrb, naoty, &quot;greeting&quot;, 0);
+
+    // 返り値をchar*に変換して出力する
+    char *greeting = mrb_string_value_ptr(mrb, greeting_value);
+    printf(&quot;%s\n&quot;, greeting);
+
+    mrb_close(mrb);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>*.mrb形式のファイルをロードするには<code>mrb_load_irep_file()</code>を実行する。</li>
+<li>次にクラスを取得するには<code>mrb_class_obj_get()</code>を実行し、メソッドを呼び出すには<code>mrb_funcall()</code>を実行する。</li>
+<li><code>mrb_funcall()</code>には、第2引数にメソッドのレシーバ、第3引数にメソッド名、第4引数にメソッドの引数の数、第5引数以降にはメソッドの引数を渡す。第2引数と第5引数以降は<code>int</code>や<code>char*</code>などをそのまま渡すことはできなくて、<code>mrb_value</code>という構造体に変換する必要がある。変換するための関数については長くなりそうなので、別の記事にしようと思う。</li>
+<li><code>mrb_funcall()</code>の返り値も<code>mrb_value</code>構造体なので、標準出力をするために<code>char*</code>に変換する。</li>
+</ul>
+<h2>Cをコンパイルして実行</h2>
+<p>Cのソースコードをmrubyのヘッダーファイルやスタティックライブラリと一緒にコンパイルする。僕の環境だと以下のコマンドでコンパイルできた。</p>
+<pre><code>$ gcc -I ~/mruby/include greeting.c ~/mruby/build/host/lib/libmruby.a -lm -o greeting
+$ ./greeting
+Hello, my name is naoty, 25 years old.
+</code></pre>
+<p>greeting.cはperson.mrbに依存し、person.mrbはperson.rbに依存しているので、一連のビルドはMakefileかRakefileで自動化したほうがいいと思う。</p>
+<pre><code>// Rakefile
+
+require &quot;rake/clean&quot;
+
+CC = &quot;gcc&quot;
+MRBC = &quot;mrbc&quot;
+
+CLEAN.include(&quot;person.mrb&quot;)
+CLOBBER.include(&quot;greeting&quot;)
+
+task default: &quot;greeting&quot;
+
+file &quot;greeting&quot; =&gt; [&quot;greeting.c&quot;, &quot;person.mrb&quot;] do |t|
+  sh &quot;#{CC} -I ~/mruby/include #{t.prerequisites[0]} ~/mruby/build/host/lib/libmruby.a -lm -o #{t.name}&quot;
+end
+
+file &quot;person.mrb&quot; =&gt; [&quot;person.rb&quot;] do |t|
+  sh &quot;#{MRBC} #{t.prerequisites[0]}&quot;
+end
+</code></pre>
+<pre><code>$ rake
+$ ./greeting
+</code></pre>
+<hr />
+<h3>参考</h3>
+<ul>
+<li><a href="http://www.kumikomi.net/archives/2012/12/ep17mrb3.php">組み込みC言語プログラマのためのmruby入門（後編）</a></li>
+</ul>
+<blockquote>
+<p>@<a href="https://twitter.com/naoty_k">naoty_k</a> クラスの取り出しはmrb_class_obj_get()、メソッドの呼び出しはmrb_funcall()を使ってください。funcallには派生形あり。</p>
+<p>— Yukihiro Matsumotoさん (@yukihiro_matz) <a href="https://twitter.com/yukihiro_matz/status/329229906561077248">2013年4月30日</a></p>
+</blockquote>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

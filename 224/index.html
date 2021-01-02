@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xcodeでビルド設定を作ったらCocoaPodsのリンクに失敗する件</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Xcodeでビルド設定を作ったらCocoaPodsのリンクに失敗する件">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/224/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Xcodeでビルド設定を作ったらCocoaPodsのリンクに失敗する件</h1>
+          <p class="metadata">
+            <time datetime="2014-07-16T18:51:00.000+0000">2014-07-16 18:51</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>ステージング環境用にビルドしたくて、<code>Debug</code>をコピーして<code>Staging</code>というビルド設定を作成したところ、<code>library not found for -lPods</code>というエラーが出るようになった。リンク時に失敗しているみたい。</p>
+<p>CocoaPodsの設定を調べてみると、Podfileに以下のような設定を追加しなくてはいけないらしい。</p>
+<pre lang="rb:Podfile"><code>xcodeproj &quot;MyProject&quot;, { &quot;Staging&quot; =&gt; :debug }
+</code></pre>
+<p>ビルド設定を作るとき、必ず<code>Debug</code>か<code>Release</code>のどちらをコピーするか選択するため、<code>Debug</code>だったら<code>:debug</code>、<code>Release</code>だったら<code>:release</code>にしてあげればいいようだ。</p>
+<hr />
+<h3>参考</h3>
+<ul>
+<li><a href="http://guides.cocoapods.org/syntax/podfile.html#xcodeproj">http://guides.cocoapods.org/syntax/podfile.html#xcodeproj</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

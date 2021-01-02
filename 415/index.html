@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホームページのパッケージ更新をrenovateに移した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ホームページのパッケージ更新をrenovateに移した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/415/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ホームページのパッケージ更新をrenovateに移した</h1>
+          <p class="metadata">
+            <time datetime="2020-05-09T20:27:00.000+0000">2020-05-09 20:27</time>
+            <a href="/meta/">#meta</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>以前までこのホームページで使っているnpm packageのバージョン更新をdependabotで自動化していたが、最近renovateを使うようになった。</p>
+<h1>Netlifyで無料分を使い切った</h1>
+<p>あるとき、Netlifyから数ドルほど請求されていることに気づいた。このホームページはNetlifyでホスティングしているのだけど、どうやらビルド時間の上限を超えた分が請求されたらしい。</p>
+<p>Build minutesのページを見てみた。</p>
+<p><img src="build-minutes.png" alt="build minutes" /></p>
+<p>確かに、極端にビルド時間がかかっている日がある。</p>
+<p>原因はdependabotからのパッケージ更新のPull requestごとにNetlifyでビルドをおこなっていることだった。dependabotは更新があったパッケージごとにPull requestを作るため、大量のPull requestが作られてしまう。Pull requestのグループ化を要望する<a href="https://github.com/dependabot/feedback/issues/5">声</a>はたくさんあるが、まだ実現されてなさそうだ。</p>
+<h1>renovateへの移行</h1>
+<p>そこで、<a href="https://renovate.whitesourcesoftware.com/">renovate</a>という別のパッケージ更新サービスを使ってみることにした。</p>
+<p>dependabotと同様にGitHubで簡単に連携できた。設定ファイルは、<code>config:base</code> presetを使うような雰囲気だったけど、どういった設定なのか不透明なのが気持ち悪かったので中身を調べて自分にとって必要な設定にした。</p>
+<pre lang="json"><code>{
+  &quot;schedule&quot;: [&quot;on friday&quot;],
+  &quot;ignorePaths&quot;: [&quot;**/node_modules/**&quot;],
+  &quot;packageRules&quot;: [
+    {
+      &quot;updateTypes&quot;: [&quot;minor&quot;, &quot;patch&quot;],
+      &quot;groupName&quot;: &quot;all minor dependencies&quot;,
+      &quot;automerge&quot;: true
+    }
+  ]
+}
+</code></pre>
+<ul>
+<li>週末にPull requestをチェックしたいので、更新は金曜日だけにする。</li>
+<li><code>node_modules</code>以下のpackage.jsonは無視する。</li>
+<li>メジャーアップデートはパッケージごとにPull requestを作ってmergeは手動で行う。</li>
+<li>マイナー以下のアップデートはすべてひとつにまとめて、自動的にmergeする。</li>
+</ul>
+<p>これで、Pull requestが送られる頻度がかなり抑えられたので、Netlifyでビルドする時間も劇的に減った。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

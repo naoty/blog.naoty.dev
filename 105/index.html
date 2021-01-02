@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>capistranoでのunicorn再起動タスク</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="capistranoでのunicorn再起動タスク">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/105/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">capistranoでのunicorn再起動タスク</h1>
+          <p class="metadata">
+            <time datetime="2012-03-12T22:45:00.000+0000">2012-03-12 22:45</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>最低限こんなもんでいいんじゃね程度</p>
+<pre lang="ruby:config/deploy.rb"><code>namespace :deploy do
+  task :start do
+    run &quot;bundle exec unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D&quot;
+  end
+
+  task :stop do
+    run &quot;kill -QUIT `cat #{current_path}/tmp/pids/unicorn.pid`&quot;
+  end
+
+  task :restart do
+    run &quot;kill -USR2 `cat #{current_path}/tmp/pids/unicorn.pid`&quot;
+    run &quot;kill -QUIT `cat #{current_path}/tmp/pids/unicorn.pid.oldbin`&quot;
+  end
+end
+</code></pre>
+<pre lang="ruby:config/unicorn.rb"><code>worker_processes 2
+listen      File.expand_path('tmp/sockets/unicorn.sock', ENV['RAILS_ROOT'])
+pid         File.expand_path('tmp/pids/unicorn.pid',     ENV['RAILS_ROOT'])
+stdout_path File.expand_path('log/unicorn.log',          ENV['RAILS_ROOT'])
+stderr_path File.expand_path('log/unicorn.log',          ENV['RAILS_ROOT'])
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

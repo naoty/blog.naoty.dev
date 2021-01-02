@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homebrew にコントリビュートした</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Homebrew にコントリビュートした">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/292/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Homebrew にコントリビュートした</h1>
+          <p class="metadata">
+            <time datetime="2017-02-28T09:58:00.000+0000">2017-02-28 09:58</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>あらすじ</h1>
+<p>前回、 <a href="https://github.com/naoty">naoty/todo</a> というツールを Homebrew で配布しようとしたときにとある問題にハマった。 <code>todo</code> という名前を持つファイルが <code>README.md</code> や <code>LICENSE</code> のようなメタファイルとして判断されエラーが起きてしまうという問題だった。</p>
+<h1>Homebrew に Pull request を送った</h1>
+<p><a href="https://github.com/Homebrew/brew/pull/2106">Exclude executables from metafiles by naoty · Pull Request #2106 · Homebrew/brew · GitHub</a></p>
+<p>前回は、メタファイルではない適当な名前の空ファイルを置いてこの問題を回避していたが、なんというか負けな気がしてきたので、 Homebrew に Pull request を送った。前回、コードを読んで何が原因なのかは把握していたので、修正すべきポイントもおおよそ見当がついていた。</p>
+<p>当初は実行ファイルであればメタファイルではないという方針で Pull request を送ってみたが、パーミッションが正しく付与されていないものも稀にあるらしかった。そこで、コミッターのアドバイスを基にメタファイルは keg のルートディレクトリにしか存在しないだろうという前提で修正し、無事に merge された。</p>
+<p>この修正によって、 <code>todo</code>, <code>changelog</code>, <code>license</code> といったメタファイルっぽい実行ファイルを配布したいときに <code>Empty installation</code> エラーによって失敗することはなくなった。また一つ、世界が便利になった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todoをtmuxで表示する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="todoをtmuxで表示する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/312/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">todoをtmuxで表示する</h1>
+          <p class="metadata">
+            <time datetime="2017-12-22T13:34:00.000+0900">2017-12-22 13:34</time>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><img src="todo.gif" alt="次のtodoをtmuxのstatus lineに表示する" /></p>
+<p><a href="https://github.com/naoty/todo">naoty/todo</a>に改良して、上のスクリーンキャストのようにtmuxのstatus lineに次のtodoを表示できるようにしてみた。</p>
+<p><code>next</code>というコマンドを追加し、最も優先順位の高いtodoを表示できるようにした。また、<code>done</code>コマンドに引数を指定しない場合に<code>next</code>で表示されるtodoを完了できるようにした。<code>done</code>コマンドなどで次のtodoが変わっても、tmuxが自動的に更新してくれるのですぐに切り替わる。</p>
+<p>iTerm2の画面分割を使っていたためtmuxは使ってこなかったが、status lineに次のtodoを表示するアイデアを思いついたため使い始めた。この使い方によって、次にやることを<code>list</code>コマンドで何度も確認する必要がなくなったし、次にやるべきことのみに集中できるため、とてもいい。</p>
+<h1>導入方法</h1>
+<p>まず、<a href="https://github.com/naoty/todo">naoty/todo</a>をインストールする。</p>
+<pre lang="bash"><code>$ brew tap naoty/misc
+$ brew install todo
+</code></pre>
+<p>次に.tmux.confを以下のように修正する。</p>
+<pre><code>set-option -g status-right-length 80
+if-shell 'which todo' 'set-option -g status-right &quot;next: #(todo next)&quot;'
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

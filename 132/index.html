@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railsでよく使うDSLのfiletypeを設定する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Railsでよく使うDSLのfiletypeを設定する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/132/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Railsでよく使うDSLのfiletypeを設定する</h1>
+          <p class="metadata">
+            <time datetime="2012-07-03T08:48:00.000+0000">2012-07-03 08:48</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>GemfileとかDSLで書かれた設定ファイルがrubyのファイルとして認識されずシンタックスハイライトやインデントが効いてないときがある。そういうときの設定。</p>
+<pre lang=".vimrc"><code>autocmd BufNewFile,BufRead Gemfile setlocal filetype=ruby
+</code></pre>
+<ul>
+<li><code>Gemfile</code>のあとにfiletypeを設定したいファイル名やパターンを追加すればおｋ。</li>
+<li><code>autocmd</code>は「あるイベント」に対して「あるパターンのファイル」に「あるコマンド」を実行させる設定</li>
+<li><code>BufNewFile</code>は新しいファイルを編集するイベント</li>
+<li><code>BufRead</code>はファイルを読み込んで新しいバッファを開くイベント</li>
+<li><code>filetype</code>の変更はグローバルには影響しないらしいけど、<code>autocmd</code>で変更する値は無難に<code>setlocal</code>にしておく</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

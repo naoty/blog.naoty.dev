@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sql_request ver.1</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="sql_request ver.1">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/1/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">sql_request ver.1</h1>
+          <p class="metadata">
+            <time datetime="2010-06-09T22:07:00.000+0000">2010-06-09 22:07</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　PHP、MySQLの基礎的な知識が身についてきたので、そろそろ掲示板の作成に入ろうと思います。その前に、SQL文を実行するときに便利なユーザー定義関数を作っておきます。MySQLへのログイン、DBの選択、SQL文の実行、MySQLからのログアウト、SELECTの場合には値を返す、これらを簡単に呼び出せるようにしておきます。</p>
+<pre><code>function sql_request($sql){
+  $return = array();
+  $db_link = mysql_link(DB_HOST,DB_USER,DB_PASS);
+  mysql_select_db(DB_NAME);
+  $result = mysql_query($sql);
+  if($result !== true){
+    for(;$row = mysql_fetch_array($result);){
+      $return[] = $row;
+    }
+  }
+  mysql_close($db_link);
+  return ($return == array()) ? false : $return;
+}
+</code></pre>
+<p>　DB_HOST、DB_USER、DB_PASS、DB_NAMEは重要な情報なので、別のファイルに保存しておきinclude_once関数で呼び出せるようにしておきます。で、あとは、$sqlにSQL文を代入すれば、それがPHPで実行されるわけですね。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>node.js環境構築</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="node.js環境構築">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/161/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">node.js環境構築</h1>
+          <p class="metadata">
+            <time datetime="2012-12-16T23:33:00.000+0000">2012-12-16 23:33</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>websocketを使ったリアルタイムなアプリケーションを作りたくなったので、node.jsを始めようと思った。とりあえず、いろいろ必要なものをインストールしたので、それをメモに残しておく。</p>
+<h2>nodebrew</h2>
+<pre><code>$ curl https://raw.github.com/hokaccha/nodebrew/master/nodebrew | perl - setup
+$ vi .zprofile
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+$ source .zprofile
+</code></pre>
+<ul>
+<li>node.jsはバージョンがどんどん更新されるようなので、Homebrewではなくパッケージマネージャーでインストールする。</li>
+<li>他にもnvmやnaveというものがあるらしいが、zshとの相性がよくないという話なので、<a href="https://github.com/hokaccha/nodebrew">nodebrew</a>を選択した。</li>
+</ul>
+<h2>node.js &amp; npm</h2>
+<pre><code>$ nodebrew install stable
+$ nodebrew use stable
+$ node -v
+v0.8.16
+$ npm -v
+1.1.69
+</code></pre>
+<ul>
+<li>nodebrewを使ってnode.jsとnpmをインストールする。</li>
+</ul>
+<h2>bower</h2>
+<pre><code>$ npm install bower -g
+</code></pre>
+<ul>
+<li><a href="http://twitter.github.com/bower/">bower</a>はTwitter謹製のクライアントサイドのライブラリに特化したパッケージマネージャー。</li>
+<li>jQuery, underscore.js, bootstrapなどのリソースをpackage.jsonと同じようにプロジェクト毎にインストールできるのが便利。</li>
+<li>Railsだとjquery-railsなどgemのなかにそれらのリソースが含まれることもあるけど、node.jsはそういうのなさそうなので、重宝しそう。</li>
+</ul>
+<h3>例</h3>
+<p>例として、いま見てた本のサンプルプロジェクトで扱うリソースをbowerで管理してみる。</p>
+<pre><code>// component.json
+
+{
+  &quot;name&quot;: &quot;fileupload&quot;,
+  &quot;version&quot;: &quot;0.0.1&quot;,
+  &quot;main&quot;: &quot;./public/stylesheets/style.css&quot;,
+  &quot;dependencies&quot;: {
+    &quot;jquery&quot;: &quot;*&quot;,
+    &quot;jquery-ui&quot;: &quot;*&quot;,
+    &quot;jquery-file-upload&quot;: &quot;*&quot;,
+    &quot;jquery-masonry&quot;: &quot;*&quot;,
+    &quot;fancybox&quot;: &quot;*&quot;
+  }
+}
+</code></pre>
+<p>これで<code>bower install</code>とすればインストール完了。</p>
+<h2>NoSQL</h2>
+<pre><code>$ brew install couchdb
+$ mkdir -p ~/Library/LaunchAgents
+$ cp /usr/local/Cellar/couchdb/1.2.0/Library/LaunchDaemons/org.apache.couchdb.plist ~/Library/LaunchAgents/
+$ launchctl load -w ~/Library/LaunchAgents/org.apache.couchdb.plist
+</code></pre>
+<ul>
+<li>MongoDB, Redis, CouchDBなどのNoSQLはbrewでインストールするだけ。</li>
+<li>インストール後に表示されるメッセージに従って、自動起動ファイルをロードしておくことも忘れずに。</li>
+</ul>
+<hr />
+<h3>追記（2012/12/22）</h3>
+<h3>node.jsでbowerを使うには</h3>
+<pre><code>$ tree -I node_modules
+.
+├── app.js
+├── package.json
+├── public
+│ ├── component.json // 
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

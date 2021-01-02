@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mrb_valueについて調べてみた</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="mrb_valueについて調べてみた">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/185/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">mrb_valueについて調べてみた</h1>
+          <p class="metadata">
+            <time datetime="2013-05-04T20:49:00.000+0000">2013-05-04 20:49</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://naoty.hatenablog.com/entry/2013/05/03/231346">昨日</a>の続き。</p>
+<p>mrubyのソースコードを読むと、<code>mrb_value</code>という構造体がよく出てくるのでソースコードを追いかけて使い方を調べてみた。参照しているコミット番号は昨日と同じく「9663a7」です。</p>
+<h2>mrb_valueの定義</h2>
+<pre><code>// include/mruby/value.h:40
+
+typdef struct mrb_value {
+  union {
+    mrb_float f;
+    void *p;
+    mrb_int i;
+    mrb_sym sym;
+  } value;
+  enum mrb_vtype tt;
+} mrb_value;
+</code></pre>
+<p><code>mrb_value</code>構造体は値とその値のデータ型をもつ。<code>enum mrb_vtype</code>には<code>MRB_TT_FIXNUM</code>とか<code>MRB_TT_STRING</code>などが入る。<code>value</code>と<code>tt</code>は適切な組み合わせにする必要があるはず。</p>
+<p><code>mrb_value</code>は<code>MRB_NAN_BOXING</code>が定義されているかどうかでその定義が変わるんだけど、<code>MRB_NAN_BOXING</code>はmrbconf.hでコメントアウトされていたので、<code>mrb_value</code>のデフォルトの定義は上のようになる。</p>
+<pre><code>// include/mrbconf.h:23
+
+/* represent mrb_value in boxed double; conflict with MRB_USE_FLOAT */
+//#define MRB_NAN_BOXING
+</code></pre>
+<p>どういうときにこれを使うのかはまだよくわかってない。</p>
+<h2>mrb_valueとデータ型の変換</h2>
+<p>int型、char型などと<code>mrb_value</code>を変換する方法も調べた。まず、変換する関数によく使われている<code>mrb_value</code>構造体に値をセットするマクロがある。</p>
+<pre><code>// include/mruby/value.h:53
+
+#define MRB_SET_VALUE(o, ttt, attr, v) do {\
+  (o).tt = ttt;\
+  (o).attr = v;\
+} while (0)
+</code></pre>
+<p>これを使って変換する関数が実装されているっぽい。とりあえず見つけたのは以下の通り。</p>
+<p><code>int</code> -&gt; <code>mrb_value</code></p>
+<pre><code>// include/mruby/value.h:205
+
+static inline mrb_value
+mrb_fixnum_value(mrb_int i)
+{
+  mrb_value v;
+
+  MRB_SET_VALUE(v, MRB_TT_FIXNUM, value.i, i);
+  return v;
+}
+</code></pre>
+<p><code>mrb_value</code> -&gt; <code>int</code></p>
+<pre><code>// include/mruby/value.h:145
+
+#define mrb_fixnum(o) (o).value.i
+</code></pre>
+<p><code>float</code> -&gt; <code>mrb_value</code></p>
+<pre><code>// include/mruby/value.h:58
+
+static inline mrb_value
+mrb_float_value(mrb_float f)
+{
+  mrb_value v;
+
+  MRB_SET_VALUE(v, MRB_TT_FLOAT, value.f, f);
+  return v;
+}
+</code></pre>
+<p><code>mrb_value</code> -&gt; <code>float</code></p>
+<pre><code>// include/mruby/value.h:51
+
+#define mrb_float(o) (o).value.f
+</code></pre>
+<p><code>char[]</code> -&gt; <code>mrb_value</code></p>
+<pre><code>// src/string.c:670
+
+char *
+mrb_string_value_ptr(mrb_state *mrb, mrb_value ptr)
+{
+  mrb_value str = mrb_str_to_str(mrb, ptr);
+  return RSTRING_PTR(str);
+}
+</code></pre>
+<p><code>char[]</code> -&gt; <code>mrb_value</code></p>
+<pre><code>// src/string.c:232
+
+mrb_value
+mrb_str_new(mrb_state *mrb, const char *p, size_t len)
+{
+  struct RString *s;
+
+  s = str_new(mrb, p, len);
+  return mrb_obj_value(s);
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

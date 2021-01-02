@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vimperatorで快適ブラウジング</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="vimperatorで快適ブラウジング">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/112/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">vimperatorで快適ブラウジング</h1>
+          <p class="metadata">
+            <time datetime="2012-04-09T23:53:00.000+0000">2012-04-09 23:53</time>
+          </p>
+        </header>
+        <section class="body">
+          <h2>vimperatorとは</h2>
+<p>ブラウザをキーボードのみで操作できるようになるFirefoxのアドオン。vimのように操作できる。</p>
+<h2>ダウンロード</h2>
+<p><a href="https://addons.mozilla.org/ja/firefox/addon/vimperator/">https://addons.mozilla.org/ja/firefox/addon/vimperator/</a></p>
+<h2>設定</h2>
+<p>以下のテキストをホームディレクトリに<code>.vimperatorrc</code>として保存。<br />
+Firefoxを再起動。</p>
+<pre lang="vim:.vimperatorrc"><code>map j 5
+map k 5
+map h 
+map l 
+map H 
+map L 
+
+set hintchars=asdfjkl
+</code></pre>
+<h2>vimperatorの世界にようこそ！</h2>
+<h3>基本的なキーボード操作</h3>
+<ul>
+<li><code>o</code>でurlを入力して<code>Enter</code>で候補のページを開く。</li>
+<li><code>t</code>でurlを入力して<code>Enter</code>で候補のページを別タブで開く。</li>
+<li><code>d</code>でタブを閉じ、<code>u</code>で閉じたタブを開く</li>
+<li><code>j</code>, <code>k</code>で上下に移動</li>
+<li><code>h</code>, <code>l</code>でタブを左右に移動</li>
+<li><code>H</code>, <code>L</code>でウィンドウの履歴を前後に移動</li>
+<li><code>f</code>でリンクにキーが表示される。どれかのキーを入力するとリンクを開く。</li>
+<li><code>F</code>でリンクにキーが表示される。どれかのキーを入力すると別タブでリンクを開く。</li>
+<li><code>/</code>でページ内を検索する。<code>n</code>, <code>N</code>で検索結果を移動する。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

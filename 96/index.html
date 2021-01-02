@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>さくらVPS作業メモ（rubyインストールまで）</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="さくらVPS作業メモ（rubyインストールまで）">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/96/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">さくらVPS作業メモ（rubyインストールまで）</h1>
+          <p class="metadata">
+            <time datetime="2012-01-03T00:14:00.000+0000">2012-01-03 00:14</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>環境</p>
+<ul>
+<li>さくらVPS 512</li>
+<li>CentOS</li>
+<li>naoty@local：ローカルの作業用ユーザー</li>
+<li>root@sakura：さくらVPSのroot</li>
+<li>naoty@sakura：さくらVPSの作業用ユーザー</li>
+<li>使いまわしてる設定ファイル：<a href="https://github.com/naoty/dotfiles">https://github.com/naoty/dotfiles</a> ブランチはserver</li>
+</ul>
+<p>sshでrootにログイン</p>
+<pre><code>naoty@local% ssh-keygen -R xxx.xxx.xxx.xxx
+naoty@local% ssh root@xxx.xxx.xxx.xxx
+</code></pre>
+<p>作業用ユーザーの作成</p>
+<pre><code>root@sakura% useradd naoty
+root@sakura% passwd naoty
+</code></pre>
+<p>su, sudoをwheelのみに限定</p>
+<pre><code>root@sakura% usermod -G wheel naoty
+root@sakura% visudo
+root@sakura% vi /etc/login.defs
+root@sakura% exit
+</code></pre>
+<p>公開鍵でのログインに変更</p>
+<pre><code>naoty@local% scp .ssh/id_rsa.pub naoty@xxx.xxx.xxx.xxx:~
+naoty@local% ssh naoty@xxx.xxx.xxx.xxx
+naoty@sakura% mkdir .ssh
+naoty@sakura% chmod 700 .ssh
+naoty@sakura% mv id_rsa.pub .ssh/authorized_keys
+naoty@sakura% chmod 600 .ssh/authorized_keys
+naoty@sakura% sudo vi /etc/ssh/sshd_config
+naoty@sakura% sudo /etc/init.d/sshd restart
+naoty@sakura% exit
+naoty@local% ssh sakura
+</code></pre>
+<p>yumでgit, zsh, vimをインストール</p>
+<pre><code>naoty@sakura% sudo yum -y update
+naoty@sakura% sudo rpm -ivh http://repo.webtatic.com/yum/centos/5/latest.rpm
+naoty@sakura% sudo yum -y --enablerepo=webtatic install git zsh vim-enhanced
+</code></pre>
+<p>使い回してる設定ファイルを適用</p>
+<pre><code>naoty@sakura% ssh-keygen -t rsa
+naoty@sakura% cat .ssh/id_rsa.pub
+# githubにsakuraの公開鍵を設定
+naoty@sakura% git clone git@github.com:naoty/dotfiles.git
+naoty@sakura% cd dotfiles
+naoty@sakura% git checkout server
+naoty@sakura% cd
+naoty@sakura% ln -s dotfiles/.gitconfig ~/.gitconfig
+naoty@sakura% ln -s dotfiles/.gitignore_global ~/.gitignore_global
+naoty@sakura% ln -s dotfiles/.vimrc ~/.vimrc
+naoty@sakura% mkdir -p .vim/colors
+naoty@sakura% exit
+naoty@local% scp -P sshd .vim/colors/railscasts.vim naoty@xxx.xxx.xxx.xxx:.vim/colors/
+</code></pre>
+<p>パスを通す</p>
+<pre><code>naoty@local% ssh sakura
+naoty@sakura% vi .bash_profile
+naoty@sakura% source .bash_profile
+</code></pre>
+<p>iptablesの設定（とりあえずsshと内部からのコネクションのみ）</p>
+<pre><code>naoty@sakura% sudo iptables -A INPUT -p tcp --dport sshd -j ACCEPT
+naoty@sakura% sudo iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+naoty@sakura% sudo iptables -P INPUT DROP
+naoty@sakura% sudo /etc/init.d/iptables save
+naoty@sakura% sudo /etc/init.d/iptables restart
+</code></pre>
+<p>rvmのインストール</p>
+<pre><code>naoty@sakura% cp /etc/pki/tls/certs/ca-bundle.crt .
+naoty@sakura% sudo curl http://curl.haxx.se/ca/cacert.pem -o /etc/pki/tls/certs/ca-bundle.crt
+naoty@sakura% sudo bash -s stable &lt; curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+naoty@sakura% su -
+root@sakura% usermod -G wheel,rvm naoty
+root@sakura% exit
+naoty@sakura% exit
+naoty@local% ssh sakura
+</code></pre>
+<p>rubyのインストール</p>
+<pre><code>naoty@sakura% sudo yum install -y gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison
+naoty@sakura% rvm install 1.9.3
+naoty@sakura% rvm use 1.9.3 --default
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

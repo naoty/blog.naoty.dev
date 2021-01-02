@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScriptのループ文あれこれ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="JavaScriptのループ文あれこれ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/43/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">JavaScriptのループ文あれこれ</h1>
+          <p class="metadata">
+            <time datetime="2011-03-10T11:46:00.000+0000">2011-03-10 11:46</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>1.　典型的なfor文</p>
+<pre><code>for (var i = 0; i &lt; array.length; i++) {
+    statement
+}
+</code></pre>
+<ul>
+<li>ループ開始前に「var i = 0」でループに使う変数を宣言する。ちなみに、「,」でつなげると、複数の変数を宣言できる。</li>
+<li>「i &lt; array.length」がtrueであるかぎり、ループが続く。</li>
+<li>「i++」が各ループの最後に実行される。「i++」はiが0のとき、iに1を足して0を返す。</li>
+<li>各ループのはじめにarray.lengthを呼び出しているので、効率が悪い。事前にキャッシュすると2.のようになる。</li>
+</ul>
+<p>2.　改良型for文</p>
+<pre><code>var i = 0, len = array.length;
+for (; i &lt; len; i++) {
+    statement
+}
+</code></pre>
+<ul>
+<li>事前にiとarray.lengthをキャッシュしておく。</li>
+<li>「;」は省略できない。なんか気持ち悪い。whileを使ってシンプルにすると、3.のようになる。</li>
+</ul>
+<p>3.　while文</p>
+<pre><code>var len = array.length;
+while (len--) {
+    statement
+}
+</code></pre>
+<ul>
+<li>「len--」がfalseになるとループが停止する。</li>
+<li>「len--」は、lenが1のとき、lenに0をセットし、1を返す（よって、ループは続く）。lenが0のとき、lenに-1をセットし、0を返す（よって、falseと解釈されループは停止する）。</li>
+</ul>
+<p>4.　while文・do while文のテスト</p>
+<pre><code>var i = 10
+while (i--) {
+    console.log(i);
+}
+//=&gt; 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+
+while (--i) {
+    console.log(i);
+}
+//=&gt; 9, 8, 7, 6, 5, 4, 3, 2, 1
+
+do {
+    console.log(i);
+} while (i--)
+//=&gt; 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+
+do {
+    console.log(i);
+} while (--i)
+//=&gt; 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+</code></pre>
+<ul>
+<li>「i--」はiを返してから1引く。「--i」は1引いてからiを返す。</li>
+<li>while文はループ開始時に評価し、do while文はループ終了時に評価する。</li>
+<li>回数を指定してループを実行したいときは、「while (i--) {}」か「do {} while (i--)」がいい。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

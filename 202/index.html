@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RubyのWebSocketサーバー「pingpong」を作った</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="RubyのWebSocketサーバー「pingpong」を作った">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/202/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">RubyのWebSocketサーバー「pingpong」を作った</h1>
+          <p class="metadata">
+            <time datetime="2013-10-11T02:25:00.000+0000">2013-10-11 02:25</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、「<a href="http://www.jstorimer.com/products/working-with-tcp-sockets">Working with TCP Sockets</a>」って本を読んだ。Rubyでソケットと戯れつつ、7つくらいのWebサーバーのアーキテクチャを概観できるいい本だった。で、その中にイベント駆動モデルの実装とかノンブロッキングIOの実装について紹介されてて面白かったので、練習がてらWebSocketサーバーを作ることにした。</p>
+<h2>PingPong</h2>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20131011/20131011013521.gif" alt="f:id:naoty_k:20131011013521g:plain" title="f:id:naoty_k:20131011013521g:plain" /></p>
+<p><a href="https://github.com/naoty/pingpong">https://github.com/naoty/pingpong</a></p>
+<p>卓球ハウスっぽい名前にした。数日で作ったので、他のクライアントへpush通知を行うことしかできない。たぶん大きいデータも送れない気がする。</p>
+<h2>WebSocketサーバーの実装とは</h2>
+<p>まずは<a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a>のサーバーに関する部分を読んだ。最低限必要な部分をRubyで実装していった。例えば、以下のコードはHandshake（websocket接続の確立）の際にサーバーがクライアントに返すレスポンスヘッダーを作っている。</p>
+<pre><code>def response_headers
+  [
+    [&quot;Upgrade&quot;, &quot;websocket&quot;],
+    [&quot;Connection&quot;, &quot;Upgrade&quot;],
+    [&quot;Sec-WebSocket-Accept&quot;, signature]
+  ]
+end
+
+def signature
+  value = @header[&quot;Sec-WebSocket-Key&quot;] + &quot;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&quot;
+  hash = Digest::SHA1.digest(value)
+  Base64.strict_encode64(hash)
+end
+</code></pre>
+<p>ご覧のとおりハードコーディングがたくさん出てくる。RFCを読むと、このヘッダーにはこの値を入れなさいって書いてあることが多い。なので、それぞれの値の意味はわからないけどとりあえずRFCに従ってハードコーディングしている。<code>signature</code>というメソッドはあるヘッダーの値をRFCで以下のように定められた形式で生成している。（余談だけど、ここで<code>Base64.encode64</code>を使って小1時間ハマった。これは改行コードを入れるためここでは使えない。）</p>
+<blockquote>
+<p>A |Sec-WebSocket-Accept| header field. The value of this header field is constructed by concatenating /key/, defined above in step 4 in Section 4.2.2, with the string &quot;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&quot;, taking the SHA-1 hash of this concatenated value to obtain a 20-byte value and base64-encoding (see Section 4 of [RFC4648]) this 20-byte hash.</p>
+</blockquote>
+<h2>イベント駆動モデルとノンブロッキングIO</h2>
+<p>push通知はイベント駆動モデルというアーキテクチャを使って実装した。イベント駆動モデルはマルチプロセスやマルチスレッドとは違ってシングルスレッドで多数のリクエストを並行処理する。具体的には、websocket接続の確立に成功したソケットを配列に入れておき、ループ内でそれらのソケットにread/writeしていく。このとき、read/writeがブロッキングしてしまうとすべての処理がそこで止まってしまうので、read/writeの前に<code>select(2)</code>等を使ってread/write可能なソケットだけ選択してread/writeを行う。これがノンブロッキングIOだと思う（だよね…？）。</p>
+<p>実際のコードは以下の通り。</p>
+<pre><code>def start
+  @sockets = {}
+  @message_queue = []
+
+  loop do
+    to_read = @sockets.values &lt;&lt; @server
+    to_write = @sockets.values
+    readables, writables, _ = IO.select(to_read, to_write)
+
+    readables.each do |socket|
+      if socket == @server
+        establish_connection
+      else
+        begin
+          request = socket.read_nonblock(CHUNK_SIZE)
+          message = Frame::Request.new(request).message
+          # the message may be passed to a web application.
+          @message_queue &lt;&lt; Message.new(socket.fileno, message)
+        rescue EOFError
+          @sockets.delete(socket.fileno)
+        end
+      end
+    end
+
+    message = @message_queue.shift
+    next if message.nil? || message.empty?
+
+    writables.each do |socket|
+      if socket.fileno != message.from
+        data = Frame::Response.new(message.body).data
+        socket.write_nonblock(data)
+      end
+    end
+  end
+end
+</code></pre>
+<h2>感想</h2>
+<p>WebSocket、イベント駆動モデル、ノンブロッキングIO…という言葉はよく耳にしてきたけど理解したとは言えなかった。実際にWebSocketサーバーを書いてみると、コードに基づいて何が行われているのか正確に理解することができた。push通知も何やら凄そうな響きがするけど、実際に実装してみると特に難しいことはしていなかった。また、websocketの弱点と言われている、CPUヘビーな処理がなぜ弱点なのかも合点がいった。シングルスレッドで処理しているので、例えばレンダリングのような重い処理がひとつでも走ると、全体に悪影響が出るということだと理解した。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

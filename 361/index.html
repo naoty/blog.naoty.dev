@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自分のコンテナインスタンスIDを確認する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="自分のコンテナインスタンスIDを確認する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/361/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">自分のコンテナインスタンスIDを確認する</h1>
+          <p class="metadata">
+            <time datetime="2019-02-24T10:56:00.000+0900">2019-02-24 10:56</time>
+            <a href="/aws/">#aws</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>コンテナインスタンス内で自分自身のコンテナインスタンスIDをたまに取得したいときがあって、そういうときはコンテナインスタンスにログインして、こんな感じのコマンドを実行する。</p>
+<pre lang="bash"><code>curl -s http://localhost:51678/v1/metadata | jq -r .ContainerInstanceArn | cut -d '/' -f 2
+</code></pre>
+<p><code>http://localhost:51678/v1/metadata</code>はコンテナインスタンス内で動くecs-agentが公開しているエンドポイントで、メタデータを返してくれる。コンテナインスタンスIDを返してくれるわけではないので、ARNから強引に抽出していく。</p>
+<p>参考: <a href="https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ecs-agent-introspection.html">https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ecs-agent-introspection.html</a></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result型の返り値を使わないとき</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Result型の返り値を使わないとき">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/357/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Result型の返り値を使わないとき</h1>
+          <p class="metadata">
+            <time datetime="2019-01-05T17:09:00.000+0900">2019-01-05 17:09</time>
+            <a href="/rust/">#rust</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>以下のように<code>Result</code>型を返すメソッドの返り値を使わないと、コンパイラが<code>unused `std::result::Result` that must be used</code>のような警告を出す。</p>
+<pre lang="rust"><code>process::Command::new(&quot;ls&quot;).output()
+</code></pre>
+<p><code>Result</code>型を返すメソッドが失敗したとき、返り値を使わないとそれに気づくことができないため、必ず返り値を使うようにコンパイラが警告してくれる。</p>
+<p>返り値を使わないときは<code>expect</code>を使う。このメソッドは<code>Result</code>が<code>Ok</code>であれば値を返し、<code>Err</code>であれば引数のメッセージを表示してpanicを起こす。</p>
+<pre lang="rust"><code>process::Command::new(&quot;ls&quot;).output().expect(&quot;failed&quot;);
+</code></pre>
+<p>あるいは、<code>?</code>オペレータを使ってエラーをそのまま呼び出し元に転送することもできる。</p>
+<pre lang="rust"><code>fn execute_ls() -&gt; io::Result {
+    process::Command::new(&quot;ls&quot;).output()?;
+    Ok(())
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptana Studioの環境構築</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Aptana Studioの環境構築">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/38/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Aptana Studioの環境構築</h1>
+          <p class="metadata">
+            <time datetime="2011-03-01T01:34:00.000+0000">2011-03-01 01:34</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>0.　インストールするもの</p>
+<ul>
+<li>Aptana Studio 2.0.5（スタンドアロン版）</li>
+<li>Babel（日本語化パック）</li>
+<li>Aptana XUL Runner（Firefoxプレビュー）</li>
+<li>EGit（gitと連携しgithubに保存したい）</li>
+</ul>
+<p>1.　Aptana Studioをインストールする</p>
+<ul>
+<li><a href="http://www.aptana.com/products/studio2/download">http://www.aptana.com/products/studio2/download</a>からダウンロード&amp;インストール</li>
+</ul>
+<p>2.　Babelをインストールする</p>
+<ul>
+<li>「Help &gt; Install New Software」とクリック</li>
+<li>「Work with:」の欄に「<a href="http://download.eclipse.org/technology/babel/update-site/R0.8.1/helios">http://download.eclipse.org/technology/babel/update-site/R0.8.1/helios</a>」と入力</li>
+<li>いろいろパッケージが出てくるので、Japaneseを選択しインストール</li>
+<li>インストール後再起動すると、日本語になっている</li>
+</ul>
+<p>3.　Aptana XUL Runnerをインストールする</p>
+<ul>
+<li>「ヘルプ &gt; 新規ソフトウェアのインストール」をクリック</li>
+<li>「Work with:」の欄の右端の三角形をクリックし、「Aptana XUL Update Site」を選択</li>
+<li>「Aptana XUL Runner」が表示されるので、選択してインストール</li>
+</ul>
+<p>4.　EGitをインストールする</p>
+<ul>
+<li>「ヘルプ &gt; 新規ソフトウェアのインストール」をクリック</li>
+<li>「Work with:」の欄に「<a href="http://download.eclipse.org/egit/updates">http://download.eclipse.org/egit/updates</a>」と入力</li>
+<li>いろいろパッケージが出てくるが、「Eclipse EGit (Incubation)」を選択しインストール</li>
+</ul>
+<p>5.　EGitからgithubにpushする（ここからが本題）</p>
+<ul>
+<li>「ウィンドウ &gt; 設定」をクリックし、設定ダイアログを表示</li>
+<li>「一般 &gt; ネットワーク接続 &gt; SSH2」をクリック</li>
+<li>「鍵管理」タグの「RSA鍵の生成」をクリックし、鍵を生成する</li>
+<li>githubのアカウントページの「SSH公開鍵」をクリックし、生成された公開鍵をコピペする（ついでにプロジェクトを作成しておく）</li>
+<li>その後、「秘密鍵の保管」をクリック。パスフレーズなしでおｋ</li>
+<li>適当にプロジェクト（githubに作成したものと同名）を作成し、ルートで「右クリック &gt; プロジェクトの共用」をクリック</li>
+<li>プロジェクト名をクリックし、「Create Repository」をクリックし、「終了」をクリックする。ローカルリポジトリが作成される</li>
+<li>aptana studioに戻り適当にファイル（READMEファイルなど）を作成する</li>
+<li>プロジェクトのルートディレクトリで「右クリック &gt; 追加」「右クリック &gt; コミット」「右クリック &gt; remote &gt; push」の順に実行</li>
+<li>githubのプロジェクトページの「ssh」のURIをコピペ、あとは適当に従う</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

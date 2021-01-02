@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails4から--binstubsが使えなくなる件</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails4から--binstubsが使えなくなる件">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/171/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails4から--binstubsが使えなくなる件</h1>
+          <p class="metadata">
+            <time datetime="2013-01-26T16:33:00.000+0000">2013-01-26 16:33</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Rails4を試そうと思って、いつもどおり<code>bundle install --binstubs</code>したら<code>rails s</code>が<code>rails new</code>扱いされてうまくいかなかった。</p>
+<h2>原因</h2>
+<p><a href="https://github.com/rails/rails/commit/009873aec89a4b843b41accf616b42b7a9917ba8">ここ</a>によると、以前の<code>scripts/rails</code>が<code>bin/rails</code>に移動したみたいです。</p>
+<p>新<code>bin/rails</code>で<code>rails s</code>とか<code>rails c</code>とかのコマンドができるようになったため、いつものノリで<code>--binstubs</code>すると新<code>bin/rails</code>が上書きされてしまい、<code>rails s</code>などがうまくいかなくなるようです。</p>
+<h2>対策</h2>
+<p>とはいえ、<code>bundle exec rails s</code>と打つのがめんどくさいので、RVMの<code>after_cd_bundler</code>フックを活用できるように<code>.bundle/config</code>に以下の設定を追加します。</p>
+<pre lang="sh:.bundle/config"><code>BUNDLE_BIN: bin
+</code></pre>
+<p>これ<code>bin/</code>以下に自動でパスが通るようになりますので、<code>rails s</code>でちゃんとうごくようになります。</p>
+<p>RVMの<code>after_cd_bundler</code>については<a href="http://qiita.com/items/a1fbac19686a8fcd2e34">昔の投稿</a>を参照してください。</p>
+<p>Rails以外のgemについては最新のBundlerを使うことで<code>bin/</code>以下に実行スクリプトを生成できるようになります。</p>
+<pre><code>$ gem install bundler --pre
+$ bundle --version
+Bundler version 1.3.0.pre.7
+$ bundle binstubs puma
+</code></pre>
+<p><code>bundle binstubs puma</code>で<code>bin/puma</code>が生成されます。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

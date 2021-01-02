@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacPortsでMySQLをインストールしてからログインまで</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="MacPortsでMySQLをインストールしてからログインまで">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/37/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">MacPortsでMySQLをインストールしてからログインまで</h1>
+          <p class="metadata">
+            <time datetime="2011-02-22T16:45:00.000+0000">2011-02-22 16:45</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>1.MacPortsからmysql5とmysql5-serverをインストール。かなり時間がかかります。</p>
+<pre><code>$ sudo port install mysql5-server
+---&gt; Computing dependencies for mysql5-server
+---&gt; Dependencies to be installed: mysql5
+---&gt; Fetching mysql5
+---&gt; Verifying checksum(s) for mysql5
+---&gt; Extracting mysql5
+---&gt; Applying patches to mysql5
+---&gt; Configuring mysql5
+---&gt; Building mysql5
+---&gt; Staging mysql5 into destroot
+---&gt; Installing mysql5 @5.1.55_0
+The MySQL client has been installed.
+If you also want a MySQL server, install the mysql5-server port.
+---&gt; Activating mysql5 @5.1.55_0
+---&gt; Cleaning mysql5
+---&gt; Fetching mysql5-server
+---&gt; Verifying checksum(s) for mysql5-server
+---&gt; Extracting mysql5-server
+---&gt; Configuring mysql5-server
+---&gt; Building mysql5-server
+---&gt; Staging mysql5-server into destroot
+---&gt; Creating launchd control script
+###########################################################
+# A startup item has been generated that will aid in
+# starting mysql5-server with launchd. It is disabled
+# by default. Execute the following command to start it,
+# and to cause it to launch at startup:
+#
+# sudo port load mysql5-server
+###########################################################
+---&gt; Installing mysql5-server @5.1.55_0
+******************************************************
+* In order to setup the database, you might want to run
+* sudo -u _mysql mysql_install_db5
+* if this is a new install
+******************************************************
+---&gt; Activating mysql5-server @5.1.55_0
+---&gt; Cleaning mysql5-server
+</code></pre>
+<p>2.所有者の変更。これをしないと、次の初期化でエラーが発生します。</p>
+<pre><code>$ sudo chown -R _mysql:_mysql /opt/local/var/db/mysql5
+</code></pre>
+<p>3.初期化。</p>
+<pre><code>$ sudo -u _mysql mysql_install_db5
+Installing MySQL system tables...
+110222 16:22:37 [Warning] '--skip-locking' is deprecated and will be removed in a future release. Please use '--skip-external-locking' instead.
+110222 16:22:37 [Warning] '--default-character-set' is deprecated and will be removed in a future release. Please use '--character-set-server' instead.
+110222 16:22:37 [Warning] '--log' is deprecated and will be removed in a future release. Please use ''--general_log'/'--general_log_file'' instead.
+OK
+Filling help tables...
+110222 16:22:37 [Warning] '--skip-locking' is deprecated and will be removed in a future release. Please use '--skip-external-locking' instead.
+110222 16:22:37 [Warning] '--default-character-set' is deprecated and will be removed in a future release. Please use '--character-set-server' instead.
+110222 16:22:37 [Warning] '--log' is deprecated and will be removed in a future release. Please use ''--general_log'/'--general_log_file'' instead.
+OK
+
+To start mysqld at boot time you have to copy
+support-files/mysql.server to the right place for your system
+
+PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+To do so, start the server, then issue the following commands:
+
+/opt/local/lib/mysql5/bin/mysqladmin -u root password 'new-password'
+/opt/local/lib/mysql5/bin/mysqladmin -u root -h nkaneko.reji password 'new-password'
+
+Alternatively you can run:
+/opt/local/lib/mysql5/bin/mysql_secure_installation
+
+which will also give you the option of removing the test
+databases and anonymous user created by default. This is
+strongly recommended for production servers.
+
+See the manual for more instructions.
+
+You can start the MySQL daemon with:
+cd /opt/local ; /opt/local/lib/mysql5/bin/mysqld_safe &amp;
+
+You can test the MySQL daemon with mysql-test-run.pl
+cd /opt/local/mysql-test ; perl mysql-test-run.pl
+
+Please report any problems with the /opt/local/lib/mysql5/bin/mysqlbug script!
+</code></pre>
+<p>4.設定ファイルを作成。</p>
+<pre><code>$ sudo cp /opt/local/share/mysql5/mysql/my-small.cnf /opt/local/share/mysql5/my.cnf
+</code></pre>
+<p>5.起動。初期化しないとエラーが発生します。</p>
+<pre><code>$ sudo /opt/local/share/mysql5/mysql/mysql.server start
+Password:
+Starting MySQL
+.. SUCCESS!
+</code></pre>
+<p>6.ログイン。</p>
+<pre><code>$ mysql5 -u root
+Welcome to the MySQL monitor. Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.1.55-log Source distribution
+
+Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
+This software comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to modify and redistribute it under the GPL v2 license
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+</code></pre>
+<p>7..bashrcにalias設定</p>
+<pre><code>alias mysql='/opt/local/bin/mysql5'
+</code></pre>
+<p>参考</p>
+<blockquote>
+<p><a href="http://www.pleiades.or.jp/misc/mac/MySQL.html">MySQLをインストール/設定</a><br />
+<a href="http://pmoon.bbsnow.net/cgi-bin/tipsalac/?date=20090127">Tips A La Carte - MacPortsでMySQLを初期化する際のエラー</a></p>
+</blockquote>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p>2011.6.17加筆<br />
+転職先でセットアップした際にもこの手順で成功しました。環境は以下のとおりです。</p>
+<ul>
+<li>Mac OS X 10.6</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

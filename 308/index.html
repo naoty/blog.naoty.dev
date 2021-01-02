@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Pagesの更新をCIで自動化した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="GitHub Pagesの更新をCIで自動化した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/308/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">GitHub Pagesの更新をCIで自動化した</h1>
+          <p class="metadata">
+            <time datetime="2017-12-08T00:04:00.000+0900">2017-12-08 00:04</time>
+            <a href="/meta/">#meta</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>GitHub Pagesの管理が煩雑だったため、Circle CIで自動化した。</p>
+<p>これまでは<a href="https://github.com/naoty/naoty.github.io">GitHub Pagesのリポジトリ</a>を<a href="https://github.com/naoty/homepage">管理リポジトリ</a>のサブモジュールとして管理していたが、サブモジュールはいろいろと作業が面倒だった。サブモジュールと本体の両方をgitでコミットするのがとにかく面倒だった。</p>
+<p>最近、仕事でCircle CI 2.0の対応をしているため、このブログの更新もCIに任せることができそうだと思い、さっそく設定をした。以下、ハマったところとか工夫したところとか。</p>
+<ul>
+<li>GitHub pagesのリポジトリをcloneする必要があったが、その際にSSH接続で<code>Are you sure you want to continue connecting (yes/no)?</code>と聞かれてしまい、ビルドが止まってしまった。そこで、以下のようにすることで回避した。</li>
+</ul>
+<pre lang="yaml"><code>- run:
+    name: SSH settings
+    command: mkdir ~/.ssh/ &amp;&amp; echo -e &quot;Host github.com\n\tStrictHostKeyChecking no\n&quot; &gt; ~/.ssh/config
+</code></pre>
+<ul>
+<li>Circle CIで他のリポジトリにアクセスするには鍵を追加する必要があるため、設定画面から鍵を追加した。</li>
+<li>Circle CI上でgit commitする際に<code>username/repo@commit_id</code>の記法をメッセージに追加することで、GitHub pagesのコミットメッセージから対応する管理リポジトリのコミットに辿れるようにした。</li>
+</ul>
+<p>config.ymlは今のところ以下のようになっている。<code>npm install</code>でキャッシュを使っていないけど、そこらへんは徐々に最適化していきたい。</p>
+<pre lang="yaml"><code>version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node
+    steps:
+      - run:
+          name: SSH settings
+          command: mkdir ~/.ssh/ &amp;&amp; echo -e &quot;Host github.com\n\tStrictHostKeyChecking no\n&quot; &gt; ~/.ssh/config
+      - run:
+          name: Clone GitHub pages
+          command: |
+            git clone git@github.com:naoty/naoty.github.io.git .
+            git config user.email &quot;naoty.k@gmail.com&quot;
+            git config user.name &quot;Naoto Kaneko&quot;
+          working_directory: ~/naoty.github.io
+      - checkout
+      - run: npm install
+      - run: npm run build
+      - run:
+          name: Publish GitHub pages
+          command: |
+            cp -pr public/* ~/naoty.github.io/
+            cd ~/naoty.github.io
+            git add .
+            git commit -m &quot;Publish naoty/homepage@${CIRCLE_SHA1}&quot;
+            git push origin master
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

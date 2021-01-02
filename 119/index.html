@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最初のActivityに戻る</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="最初のActivityに戻る">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/119/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">最初のActivityに戻る</h1>
+          <p class="metadata">
+            <time datetime="2012-05-18T19:56:00.000+0000">2012-05-18 19:56</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>A→B→C→Dなどと複数のアクティビティを遷移した後、最初のAに戻る実装。</p>
+<pre lang="java:DActivity.java"><code>Intent intent = new Intent(DActivity.this, AActivity.class);
+intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+startActivity(intent);
+</code></pre>
+<ul>
+<li><code>FLAG_ACTIVITY_CLEAR_TOP</code>は、遷移先のアクティビティが既に動いていればそのアクティビティより上にある（この場合はB, C, D）アクティビティを消す、という挙動を設定する。これによって、A→B→C→D→Aと遷移した後にbackボタンを押してもDに戻ることはなくなる。</li>
+<li><code>FLAG_ACTIVITY_SINGLE_TOP</code>は、既に動いているアクティビティに遷移するとそのアクティビティを閉じてもう一度作りなおすデフォルトの挙動（multiple mode）から、作りなおさずに再利用する挙動に変更する。これによって、D→Aへの遷移のときのアニメーションが戻る動きになる。</li>
+</ul>
+<h3>参考</h3>
+<ul>
+<li><a href="http://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_CLEAR_TOP">http://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_CLEAR_TOP</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

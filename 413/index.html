@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spf13/pflagの使い方</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="spf13/pflagの使い方">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/413/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">spf13/pflagの使い方</h1>
+          <p class="metadata">
+            <time datetime="2020-04-29T22:25:00.000+0000">2020-04-29 22:25</time>
+            <a href="/go/">#go</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>GoでCLIツールを作るとき、いつも<a href="https://github.com/spf13/pflag">spf13/pflag</a>を使ってオプションを実装している。</p>
+<p>spf13/pflagは標準パッケージの<a href="https://golang.org/pkg/flag/">flag</a>と同じインターフェイスを持ちつつ、<code>-h</code>と<code>--help</code>のようなよくある形式のオプションを簡単に実装できる。標準パッケージのflagでは、<code>-help</code>のような形式になってしまう。</p>
+<h1>使い方</h1>
+<pre lang="go"><code>func main() {
+  version := pflag.BoolP(&quot;version&quot;, &quot;v&quot;, false, &quot;show version&quot;)
+  pflag.Parse()
+
+  if pflag.NArg() == 0 {
+    pflag.Usage()
+    os.Exit(1)
+  }
+
+  if *version {
+    fmt.Println(&quot;1.0.0&quot;)
+    return
+  }
+
+  switch pflag.Arg(0) {
+  case &quot;list&quot;:
+    // snip
+  default:
+    fmt.Fprintf(os.Stderr, &quot;subcommand not found: %s\n&quot;, pflag.Arg(0))
+    os.Exit(1)
+  }
+}
+</code></pre>
+<pre lang="bash"><code>% sample
+Usage of sample:
+  -v, --version   show version
+</code></pre>
+<ul>
+<li><code>pflag.BoolP</code>のようにflagパッケージの関数名に<code>P</code>がついた関数をつかうと、よくある形式のオプションを追加できる。</li>
+<li><code>pflag.Usage()</code>でヘルプメッセージを生成する。</li>
+<li><code>NArg()</code>や<code>Arg()</code>などの関数はflagパッケージにあるものと同じなので、覚えていることをそのまま使える。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

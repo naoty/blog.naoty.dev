@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AndroidでUserAgentを指定する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="AndroidでUserAgentを指定する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/162/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">AndroidでUserAgentを指定する</h1>
+          <p class="metadata">
+            <time datetime="2012-12-27T11:48:00.000+0000">2012-12-27 11:48</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><code>DefaultHttpClient</code>を使うとUserAgentが<code>Apache-HttpClient/...</code>みたいな感じになる。サーバー側でUserAgentを使って制限したりする場合には、以下のようにすれば自由にUserAgentを指定できる。</p>
+<pre lang="java"><code>DefaultHttpClient client = new DefaultHttpClient();
+HttpParams params = client.getParams();
+params.setParameter(CoreProtocolPNames.USER_AGENT, &quot;ユーザーエージェント&quot;);
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

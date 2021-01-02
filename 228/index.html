@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromiseKit/swiftを読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="PromiseKit/swiftを読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/228/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">PromiseKit/swiftを読んだ</h1>
+          <p class="metadata">
+            <time datetime="2014-08-13T02:12:00.000+0000">2014-08-13 02:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>PromiseKitとは</h1>
+<ul>
+<li><a href="http://promisekit.org/">http://promisekit.org/</a></li>
+<li>iOSプログラミングで頻繁に出てくる非同期処理を簡単かつエレガントにするライブラリ。</li>
+<li>JavaScriptとかでおなじみのPromiseパターンの実装と、各種CocoaフレームワークからPromiseを使うための拡張が含まれている。</li>
+<li>Objective-C版とSwift版がある。</li>
+</ul>
+<h1>使い方</h1>
+<pre><code>NSURLConnection.GET(&quot;http://placekitten.com/250/250&quot;).then{ (img:UIImage) in
+    // ...
+    return CLGeocoder.geocode(addressString:&quot;Mount Rushmore&quot;)
+}.then { (placemark:CLPlacemark) in
+    // ...
+    return MKMapSnapshotter(options:opts).promise()
+}.then { (snapshot:MKMapSnapshot) -&gt; Promise in
+    // ...
+    let av = UIAlertView()
+    // ...
+    return av.promise()
+}.then {
+    self.title = &quot;You tapped button #\($0)&quot;
+}.then {
+    return CLLocationManager.promise()
+}.catch { _ -&gt; CLLocation in
+    return CLLocation(latitude: 41.89, longitude: -87.63)
+}.then { (ll:CLLocation) -&gt; Promise in
+    // ...
+}.then
+// ...
+</code></pre>
+<ul>
+<li><code>then</code>や<code>catch</code>にクロージャを渡してメソッドチェーンしていく。これは普通のPromiseパターンと同じ。</li>
+<li>エラーが発生したら最も近い<code>catch</code>で補足される。</li>
+</ul>
+<hr />
+<h1>tl;dr</h1>
+<ul>
+<li><code>NSURLConnection+PromiseKit.swift</code>のようなextensionが何種類か用意されている。
+<ul>
+<li>拡張されたメソッドは非同期処理を開始し、Promiseオブジェクトを初期化してすぐに返す。</li>
+<li>非同期処理が成功すると、<code>fulfiller</code>メソッドが実行される。</li>
+</ul>
+</li>
+<li><code>fulfiller</code>メソッドは以下を実行する。
+<ul>
+<li>Promiseオブジェクトの<code>status</code>を<code>.Fulfilled</code>に更新する。</li>
+<li><code>handlers</code>にあるクロージャをすべて実行する。</li>
+</ul>
+</li>
+<li>Promiseオブジェクトの<code>then</code>メソッドを呼ぶと以下のようなクロージャが<code>handlers</code>に追加され、新しいPromiseオブジェクトを返す。
+<ul>
+<li><code>then</code>メソッドの引数のクロージャを実行する。</li>
+<li>その返り値を<code>fulfiller</code>に渡して実行する。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1>NSURLConnection+Promise.swift</h1>
+<pre><code>public class func GET(url:String) -&gt; Promise {
+    // ...
+}
+</code></pre>
+<ul>
+<li>いくつかの拡張を見てみるとすべて<code>Promise</code>を返すようになってる。</li>
+<li>この返り値に対して<code>then</code>や<code>catch</code>を呼んでいるので、これらのメソッドは<code>Promise</code>クラスのメソッドだと考えられる。<code>Promise</code>クラスについてはあとで見ていく。</li>
+</ul>
+<pre><code>public class func GET(url:String) -&gt; Promise {
+    let rq = NSURLRequest(URL:NSURL(string:url))
+    return promise(rq)
+}
+</code></pre>
+<ul>
+<li>冒頭の使い方のところで出てきた<code>UIImage</code>を扱うメソッドはこれ。</li>
+<li><code>NSURLRequest</code>オブジェクトを作って<code>promise</code>メソッドというのに渡して呼んでいる。</li>
+</ul>
+<pre><code>public class func promise(rq:NSURLRequest) -&gt; Promise {
+    return fetch(rq) { (fulfiller, rejecter, data) in
+        // ...
+    }
+}
+</code></pre>
+<ul>
+<li>引数に渡した<code>NSURLRequest</code>オブジェクトを<code>fetch</code>メソッドに渡して呼び出している。</li>
+<li><code>fetch</code>メソッドはさらにクロージャを受け取っている。</li>
+</ul>
+<pre><code>func fetch(var request: NSURLRequest, body: ((T) -&gt; Void, (NSError) -&gt; Void, NSData) -&gt; Void) -&gt; Promise {
+    // ...
+
+    return Promise { (fulfiller, rejunker) in
+        // ...
+    }
+}
+</code></pre>
+<ul>
+<li><code>fetch</code>内では<code>Promise</code>を初期化して返している。初期化時にまたもクロージャを渡している。</li>
+</ul>
+<pre><code>// Promise.swift
+
+public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&gt; Void) {
+    // ...
+    body(fulfiller, rejecter)
+}
+</code></pre>
+<ul>
+<li>上のようなクロージャを受け取る初期化はこれのようだ。</li>
+<li>まず<code>body</code>という引数を受け取る。<code>body</code>は<code>fulfiller</code>と<code>rejecter</code>の2つのクロージャを受け取って<code>Void</code>を返すクロージャ（ややこしい…）である。</li>
+<li>この<code>init</code>では引数として受け取った<code>body</code>というクロージャを実行している。<code>body</code>に渡される2つの引数は<code>init</code>内で定義される内部メソッドである。</li>
+</ul>
+<pre><code>// Promise.swift
+
+public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&gt; Void) {
+    func recurse() {
+        for handler in handlers { handler() }
+        handlers.removeAll(keepCapacity: false)
+    }
+    func rejecter(err: NSError) {
+        if self.pending {
+            self.state = .Rejected(err)
+            recurse()
+        }
+    }
+    func fulfiller(obj: T) {
+        if self.pending {
+            self.state = .Fulfilled(obj)
+            recurse()
+        }
+    }
+
+    body(fulfiller, rejecter)
+}
+</code></pre>
+<ul>
+<li><code>fulfiller</code>メソッドは<code>state</code>を<code>.Fulfilled</code>に変更し<code>recurse</code>を呼ぶ。</li>
+<li><code>rejecter</code>メソッドは<code>state</code>を<code>.Rejected</code>に変更し<code>recurse</code>を呼ぶ。</li>
+<li><code>recurse</code>メソッドは、すべての<code>handler</code>を実行したあと消去している。</li>
+</ul>
+<pre><code>func fetch(var request: NSURLRequest, body: ((T) -&gt; Void, (NSError) -&gt; Void, NSData) -&gt; Void) -&gt; Promise {
+    // ...
+
+    return Promise { (fulfiller, rejunker) in
+        NSURLConnection.sendAsynchronousRequest(request, queue:PMKOperationQueue) { (rsp, data, err) in
+            // ...
+
+            if err {
+                rejecter(err)
+            } else {
+                body(fulfiller, rejecter, data!)
+            }
+        }
+    }
+}
+</code></pre>
+<ul>
+<li><code>Promise</code>の初期化時に引数として渡されたクロージャが実行されるので、このときに非同期通信が実行されるようだ。</li>
+<li>非同期通信が成功した場合、<code>body(fulfiller, rejecter, data!)</code>が呼ばれる。この<code>body</code>というクロージャは<code>fetch</code>メソッドに渡されたもので、その中の<code>fulfiller</code>と<code>rejecter</code>の2つのクロージャは<code>Promise</code>の<code>init</code>内で定義されたメソッドである。</li>
+</ul>
+<h1>Promise.swift</h1>
+<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+}
+</code></pre>
+<ul>
+<li>シグネチャーがジェネリクスまみれで複雑。<code>dispatch_queue_t</code>型と<code>(T) -&gt; U</code>型を引数にとり、<code>Promise</code>型を返すメソッドということになる。</li>
+<li><code>T</code>はPromiseクラスの型変数（←言い方合ってる？）であり、<code>NSURLConnection+Promise.swift</code>の例で言うと、この<code>T</code>には<code>NSData</code>や<code>NSString</code>が入ってくる。</li>
+<li>例えば<code>T</code>が<code>NSData</code>の場合、第2引数のbodyは「NSDataを引数にとって<code>U</code>を返すクロージャ」となる。この<code>U</code>が例えば<code>MKPlacemark</code>である場合、<code>then</code>は<code>Promise</code>を返すことになる。</li>
+<li>この返り値は<code>Promise</code>であるため再度<code>then</code>を呼び出すことができメソッドチェーンが成立している。</li>
+</ul>
+<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+    switch state {
+    case .Rejected(let error):
+        // ...
+    case .Fulfilled(let value):
+        // ...
+    case .Pending:
+        // ...
+    }
+}
+</code></pre>
+<ul>
+<li><code>state</code>は<code>Promise</code>クラスのプロパティで<code>State</code>型として定義されている。</li>
+</ul>
+<pre><code>enum State {
+    case Pending
+    case Fulfilled(@autoclosure () -&gt; T)
+    case Rejected(NSError)
+}
+</code></pre>
+<ul>
+<li><code>Fulfilled</code>は引数に<code>() -&gt; T</code>型のクロージャをとる。<code>@autoclosure</code>は指定された引数を暗黙的にクロージャとして扱えるようにする。これによって引数を<code>{ ... }</code>で囲う必要がなくなる。cf) <a href="https://developer.apple.com/swift/blog/?id=4">https://developer.apple.com/swift/blog/?id=4</a></li>
+</ul>
+<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+    switch state {
+    case .Rejected(let error):
+        // ...
+    case .Fulfilled(let value):
+        // ...
+    case .Pending:
+        // ...
+    }
+}
+</code></pre>
+<ul>
+<li><code>state</code>はenum型であることが分かったので、<code>then</code>に戻る。</li>
+<li>このswitch文ではvalue bindingsを行っている。マッチしたcase文で宣言された変数に値が割り当てられる。例えば、.Fulfilledにマッチした場合、stateを初期化する際に.Fulfilledに渡されたクロージャが<code>value</code>という変数に割り当てられる。</li>
+</ul>
+<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+    switch state {
+    // ...
+    case .Pending:
+        return Promise{ (fulfiller, rejecter) in
+            // ...
+        }
+    }
+}
+</code></pre>
+<ul>
+<li><code>status</code>は宣言時に初期値として<code>.Pending</code>を渡しているため、最初は<code>.Pending</code>のcase文を通ることになりそう。</li>
+<li><code>status</code>が<code>.Pending</code>である場合、<code>Promise</code>を初期化して返している。</li>
+<li>初期化の際、引数にクロージャを渡している。上述の通り、渡されたクロージャは初期化処理の最後に実行される。</li>
+</ul>
+<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+    switch state {
+    // ...
+    case .Pending:
+        return Promise{ (fulfiller, rejecter) in
+            self.handlers.append{
+                switch self.state {
+                case .Fulfilled(let value):
+                    fulfiller(value())
+                case .Rejected(let error):
+                    dispatch_async(onQueue){ fulfiller(body(error)) }
+                case .Pending:
+                    abort()
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<ul>
+<li><code>Promise</code>の初期化の最後で<code>self.handlers</code>にクロージャが追加されている。上述の通り、<code>handlers</code>は<code>fulfiller</code>と<code>rejecter</code>内で呼ばれる<code>recurse</code>ですべて実行される。</li>
+<li>つまり、<code>then()</code>に渡されたクロージャは<code>handlers</code>に追加され、そのPromiseオブジェクトの非同期処理が完了したときに呼ばれることになる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

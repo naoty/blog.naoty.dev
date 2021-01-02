@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBAに入れてるアプリと作業環境</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="MBAに入れてるアプリと作業環境">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/115/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">MBAに入れてるアプリと作業環境</h1>
+          <p class="metadata">
+            <time datetime="2012-04-24T13:52:00.000+0000">2012-04-24 13:52</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>MBAが故障して新しいMBAに引っ越しししてるので、Android SDKをインストール中（長い…）ヒマなので作業環境をメモる。</p>
+<h2>各種アプリケーション</h2>
+<ul>
+<li>ブラウザ：Firefox（アドオン：vimperator、Firebug、はてブ）</li>
+<li>通知：Growl</li>
+<li>Twitter：Twitter for Mac</li>
+<li>メーラー：sparrow</li>
+<li>チャット：skype</li>
+<li>メモ：<a href="http://mouapp.com/">Mou</a>（マークダウンエディター）</li>
+<li>ウィンドウ最前面化：<a href="http://infinite-labs.net/afloat/">afloat</a>（<code>[Command][Ctrl]a</code>でウィンドウを最前面）</li>
+<li>ランチャー：<a href="http://www.shadowlab.org/Software/spark.php">spark</a>（<code>C-0</code>でFirefox、<code>C-9</code>でiTermを起動/移動などショートカットキーを設定する）</li>
+<li>バックアップ：dropbox</li>
+<li>IME：Google IME</li>
+<li>マシン情報：<a href="http://www.ragingmenace.com/software/menumeters/index.html">menu meters</a></li>
+</ul>
+<p>「キーボードだけで作業の9割をこなせる環境」を目指してる。</p>
+<p>Sparkでアプリケーション間を移動を簡略化し、ブラウザもvimpでキーボードのみで操作してる。twitterやsparrowもhjklで移動できるなど慣れたキーバインドで操作できるから使ってる。また、afloatを使うと、ターミナルを最前面に置きつつブラウザを操作するとかできて便利。</p>
+<p>スタイルを編集できて、dropboxで同期できるようになればMouからKobitoに移行します。</p>
+<hr />
+<h3>追記</h3>
+<ul>
+<li>Todoリスト：<a href="http://fluidapp.com/">fruid</a> + Google Tasks</li>
+</ul>
+<p>Todoリストは数多あるけど、一番シンプルかつ使い勝手がいいのがGoogle Tasksだった。ただ、webアプリだと消しちゃうので、fruidでデスクトップアプリにする。fruidはwebアプリをデスクトップアプリにするツール。デスクトップアプリ化したGoogle Tasksはafloatで常にウィンドウの最前面において使ってる。</p>
+<h2>開発環境</h2>
+<ul>
+<li>iTerm2</li>
+<li>Command Line Tools</li>
+<li>Homebrew</li>
+<li>tmux</li>
+<li>git + tig</li>
+</ul>
+<p>Xcodeはいまのところ使わないしインストールに時間がかかるので、Command Line Toolsだけ使う。tig便利。<br />
+vimとかzshは入ってるものをそのまま使う。dotfilesは<a href="https://github.com/naoty/dotfiles">github</a>で管理してるので、それをcloneして使う。</p>
+<h3>Rails開発</h3>
+<ul>
+<li>rvm</li>
+<li>Ruby 1.9.3, 1.9.2</li>
+<li>bundler</li>
+<li>mongodb</li>
+<li>imagemagic</li>
+</ul>
+<p>gemにはbundlerだけ入れて、プロジェクトに必要なgemsはすべてbundleで管理する系男子。</p>
+<h3>Android開発</h3>
+<ul>
+<li>Android SDK 2.3.2, 2.2</li>
+<li>Eclipse（日本語化、vrapper、Eclipse Color Scheme）</li>
+</ul>
+<p>vrapperでEclipseでもvimのキーバインドをある程度使えるようになる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

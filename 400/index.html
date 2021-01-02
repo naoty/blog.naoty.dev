@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pictで複雑な組み合わせを生成する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="pictで複雑な組み合わせを生成する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/400/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">pictで複雑な組み合わせを生成する</h1>
+          <p class="metadata">
+            <time datetime="2020-02-17T22:47:00.000+0000">2020-02-17 22:47</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/microsoft/pict">microsoft/pict</a>はペアワイズ法とよばれる手法を使って多くの変数から組み合わせを生成できる。macOSならHomebrewでインストールできる。</p>
+<pre><code>% brew install pict
+</code></pre>
+<p>例えば、あるiOSアプリを使っているユーザーには、ログインしているかどうか、課金プラン、決済方法といった状態の組み合わせがあるとする。そこで、下のようなテキストファイルを書く。</p>
+<pre><code>status: guest,member
+plan: free,pro,premium
+payment: -,iap,card,paypal
+</code></pre>
+<p>そのテキストファイルを<code>pict</code>にわたすと、ペアワイズ法にしたがって組み合わせを生成してくれる。</p>
+<pre><code>% pict user_pattern.txt
+status	plan	payment
+guest	free	card
+member	premium	-
+guest	pro	-
+member	free	paypal
+member	pro	iap
+guest	premium	iap
+member	pro	card
+guest	premium	paypal
+member	free	-
+guest	free	iap
+member	pro	paypal
+guest	premium	card
+</code></pre>
+<p><a href="https://github.com/naoty/table">naoty/table</a>と組み合わせると、ちょっと見やすくなる。</p>
+<pre><code>% pict user_pattern.txt | table -H
++--------+---------+---------+
+| status | plan    | payment |
++--------+---------+---------+
+| guest  | free    | card    |
+| member | premium | -       |
+| guest  | pro     | -       |
+| member | free    | paypal  |
+| member | pro     | iap     |
+| guest  | premium | iap     |
+| member | pro     | card    |
+| guest  | premium | paypal  |
+| member | free    | -       |
+| guest  | free    | iap     |
+| member | pro     | paypal  |
+| guest  | premium | card    |
++--------+---------+---------+
+</code></pre>
+<p>組み合わせの中に制約条件を加えることもできる。</p>
+<p>ここでは、非ログインユーザーはクレジットカードで決済できないとか、そもそも無料会員なら決済方法は指定できないとか、そういう制約条件を指定してみた。</p>
+<pre><code>status: guest,member
+plan: free,pro,premium
+payment: -,iap,card,paypal
+
+if [status] = &quot;guest&quot; then [payment] IN {&quot;-&quot;, &quot;iap&quot;};
+if [plan] = &quot;free&quot; then [payment] = &quot;-&quot;;
+</code></pre>
+<pre><code>% pict user_pattern.txt | table -H
++--------+---------+---------+
+| status | plan    | payment |
++--------+---------+---------+
+| member | premium | card    |
+| guest  | pro     | iap     |
+| member | pro     | -       |
+| guest  | premium | -       |
+| member | premium | iap     |
+| member | pro     | card    |
+| member | pro     | paypal  |
+| guest  | free    | -       |
+| member | free    | -       |
+| member | premium | paypal  |
++--------+---------+---------+
+</code></pre>
+<p>ちゃんと制約条件が加味されて組み合わせができていることがわかる。</p>
+<p>そもそもペアワイズ法というのは、全組み合わせほど網羅性はないが、テストケースとして有効かつ全組み合わせほどコストが高くない組み合わせを生成する方法だそう。つまり、コスパの良い組み合わせを生成する方法らしい。</p>
+<p>いろんなケースで遊んでみて楽しかったし、応用範囲が広そうなツールなので今後も使っていきたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

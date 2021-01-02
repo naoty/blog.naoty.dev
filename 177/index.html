@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bundle execを使わずに済む方法（rbenv編）</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="bundle execを使わずに済む方法（rbenv編）">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/177/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">bundle execを使わずに済む方法（rbenv編）</h1>
+          <p class="metadata">
+            <time datetime="2013-04-07T17:59:00.000+0000">2013-04-07 17:59</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="sh"><code>$ cd
+$ mkdir .rbenv/plugins
+$ cd .rbenv/plugins
+$ git clone git://github.com/ianheggie/rbenv-binstubs.git
+</code></pre>
+<ul>
+<li>rbenvにはpluginsという仕組みがあってrbenvに機能を追加できる。ruby-buildもその一つ。「ひとつのことをうまくやる」思想っぽい。</li>
+<li>そのpluginのひとつにbundlerとの連携をうまくやってくれる<a href="https://github.com/carsomyr/rbenv-bundler">rbenv-bundler</a>というのがあるんだけど、rbenvはこれを<a href="https://github.com/sstephenson/rbenv/wiki/Plugins#bundler-integration">非推奨</a>といってる。パフォーマンスが悪くなったり、バグが多いみたい。</li>
+<li>同じようなpluginを探したところ、<a href="https://github.com/ianheggie/rbenv-binstubs">rbenv-binstubs</a>というものを見つけた。<a href="http://robots.thoughtbot.com/post/47273164981/using-rbenv-to-manage-rubies-and-gems">thoughtbotのブログ</a>で紹介されていた。</li>
+</ul>
+<h3>Rails 3</h3>
+<pre lang="sh"><code>$ cd path/to/project
+$ bundle install --binstubs
+$ rbenv rehash
+$ rails s
+</code></pre>
+<ul>
+<li><code>--path=vendor/bundle</code>を指定するとうまくいかなかった。</li>
+</ul>
+<h3>Rails 4</h3>
+<pre lang="sh"><code>$ cd path/to/project
+$ bundle install --binstubs=bundle_bin
+$ rbenv rehash
+$ rails s
+</code></pre>
+<ul>
+<li>Rails 4からはbinディレクトリの扱いが若干変わるので要注意。詳しくは<a href="http://qiita.com/items/01c41578e611b038da6e">こちら</a>。</li>
+<li>binstubsが実行ファイルを生成するディレクトリを指定する。指定してもちゃんと動く。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モジュールをディレクトリで構成する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="モジュールをディレクトリで構成する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/425/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">モジュールをディレクトリで構成する</h1>
+          <p class="metadata">
+            <time datetime="2020-07-08T22:56:00.000+0000">2020-07-08 22:56</time>
+            <a href="/rust/">#rust</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>下のディレクトリ構成のように複数ファイルから<code>reader</code>モジュールを作りたい。</p>
+<pre><code>src
+├── lib.rs
+├── main.rs
+├── reader
+│   ├── csv_reader.rs
+│   ├── jsonl_reader.rs
+│   └── ltsv_reader.rs
+└── reader.rs
+</code></pre>
+<p><code>csv_reader.rs</code>, <code>jsonl_reader.rs</code>, <code>ltsv_reader.rs</code>にはそれぞれ<code>CsvReader</code>, <code>JsonlReader</code>, <code>LtsvReader</code>がある。</p>
+<h1>ファイルごとにモジュールを公開する</h1>
+<pre lang="rust"><code>// lib.rs
+pub mod reader;
+</code></pre>
+<pre lang="rust"><code>// reader.rs
+pub mod csv_reader;
+pub mod jsonl_reader;
+pub mod ltsv_reader;
+</code></pre>
+<p>こうすると、<code>main.rs</code>からはこうなる。</p>
+<pre lang="rust"><code>use mycrate::reader::csv_reader::CsvReader;
+use mycrate::reader::jsonl_reader::JsonlReader;
+use mycrate::reader::ltsv_reader::LtsvReader;
+</code></pre>
+<p>各ファイルがモジュールとして公開されているため、冗長な感じになる。</p>
+<h1>モジュールをまとめて公開し直す</h1>
+<pre lang="rust"><code>// lib.rs
+pub mod reader;
+</code></pre>
+<pre lang="rust"><code>// reader.rs
+mod csv_reader;
+mod jsonl_reader;
+mod ltsv_reader;
+
+pub use csv_reader::CsvReader;
+pub use json_reader::JsonlReader;
+pub use ltsv_reader::LtsvReader;
+</code></pre>
+<p><code>pub use</code>を使い、各モジュールに含まれるstructを<code>reader</code>モジュールとして公開している。こうすると、<code>main.rs</code>からはこうなる。</p>
+<pre lang="rust"><code>use mycrate::reader::{CsvReader, JsonlReader, LtsvReader};
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

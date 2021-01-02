@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrestoをDockerで試してみる</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="PrestoをDockerで試してみる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/396/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">PrestoをDockerで試してみる</h1>
+          <p class="metadata">
+            <time datetime="2020-01-25T17:27:00.000+0000">2020-01-25 17:27</time>
+            <a href="/presto/">#presto</a>
+            <a href="/docker/">#docker</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Prestoを学ぶ必要が出てきたので、気軽に試せる環境をDockerで作ってみた。</p>
+<p><a href="https://hub.docker.com/r/prestosql/presto">prestosql/presto</a>というDockerイメージを使う。データソースも同じくDockerコンテナとして起動してDocker Composeで接続させる。</p>
+<h1>設定</h1>
+<pre lang="yaml"><code># docker-compose.yml
+version: &quot;3.7&quot;
+services:
+  presto:
+    image: prestosql/presto:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config/presto:/etc/presto
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./config/mysql/conf.d:/etc/mysql/conf.d
+      - ./config/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./config/mysql/seed:/seed
+</code></pre>
+<pre lang="properties"><code># /etc/presto/catalog/mysql.properties
+connector.name=mysql
+connection-url=jdbc:mysql://mysql:3306
+connection-user=root
+connection-password=password
+</code></pre>
+<ul>
+<li>Prestoコンテナは<code>/etc/presto</code>にある設定ファイルを使うので、ローカルからマウントしておく。ただし、すべての設定ファイルが必要なので、コンテナ内にあるデフォルトの設定ファイルもコピーしておく。</li>
+<li><a href="https://naoty.dev/posts/65.html">#65</a>で書いた、MySQLコンテナの起動時にスキーマやシードデータを初期化するテクニックを使っている。</li>
+<li>MySQLの接続情報はカタログの設定ファイルで指定する。</li>
+</ul>
+<h1>試してみる</h1>
+<pre><code>% docker-compose up -d
+% docker-compose exec presto presto
+presto&gt; SELECT * FROM mysql.hello_presto.pokedex;
+ pokemon_id |   name
+------------+-----------
+          1 | bulbasour
+          2 | ivysaur
+          3 | venusaur
+(3 rows)
+
+Query 20200125_110251_00001_p3vcs, FINISHED, 1 node
+Splits: 17 total, 17 done (100.00%)
+0:01 [3 rows, 0B] [4 rows/s, 0B/s]
+</code></pre>
+<p>今回はMySQLコネクタを試してみたけど、カタログファイルを追加することで他のデータソースにも対応できる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

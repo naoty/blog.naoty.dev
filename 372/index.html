@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データ型と桁数</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="データ型と桁数">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/372/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">データ型と桁数</h1>
+          <p class="metadata">
+            <time datetime="2019-06-23T22:36:00.000+0900">2019-06-23 22:36</time>
+            <a href="/procon/">#procon</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>プログラミングコンテストの問題を解いていると、「<code>N</code>は10の18乗以下」のような制約をよく見る。この制約から、変数<code>N</code>のデータ型を決めて必要十分なサイズのメモリを確保する。</p>
+<p>何乗だったらどのデータ型を使うべきかいつも迷ってしまうので、メモしておく。</p>
+<table>
+<thead>
+<tr>
+<th>データ型</th>
+<th>サイズ</th>
+<th>桁数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code></td>
+<td>32bit</td>
+<td>9</td>
+</tr>
+<tr>
+<td><code>int64_t</code></td>
+<td>64bit</td>
+<td>18</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>32/64bit</td>
+<td>9/18</td>
+</tr>
+<tr>
+<td><code>long long</code></td>
+<td>64bit</td>
+<td>18</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>long</code>型はWindowsで採用されるLLP64と呼ばれるデータモデルでは32bitで、Linuxで採用されるLP64というデータモデルでは64bitとして扱われる。</li>
+<li><code>int64_t</code>型のような<code>int??_t</code>型はサイズが環境に依存しない。C99/C++11から使える。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

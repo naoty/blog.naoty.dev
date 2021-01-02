@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mermaid.jsのグラフをビルド時に生成する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="mermaid.jsのグラフをビルド時に生成する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/405/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">mermaid.jsのグラフをビルド時に生成する</h1>
+          <p class="metadata">
+            <time datetime="2020-03-01T19:54:00.000+0000">2020-03-01 19:54</time>
+            <a href="/meta/">#meta</a>
+            <a href="/gatsby/">#gatsby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://naoty.dev/posts/101.html">前回</a>、このブログにmermaid.jsで描いたグラフを埋め込めるようにしたんだけど、リロードすると表示されたりされなかったり不安定な挙動だった。</p>
+<pre lang="mermaid"><code>pie title 一日
+  &quot;睡眠&quot; : 8
+  &quot;労働&quot; : 9
+  &quot;通勤&quot; : 1.5
+  &quot;朝の支度&quot; : 1.5
+  &quot;その他&quot; : 4
+</code></pre>
+<p>そこで、クライアントサイドでmermaid.jsを実行するのではなく、gatsbyがページを生成するタイミングでpuppeteer上でmermaid.jsを実行し、レンダリングされたSVGをページに埋め込むようにした。これで、リロードするたびに表示されたりされなかったりすることはない。</p>
+<h1>実装</h1>
+<p>雰囲気だとだいたいこんな感じの実装をしている。</p>
+<pre lang="js"><code>const browser = await puppeteer.launch();
+const page = await browser.newPage();
+await page.goto(`file://${path.resolve(__dirname, &quot;index.html&quot;)}`);
+await page.addScriptTag({ path: require.resolve(&quot;mermaid/dist/mermaid.min.js&quot;) });
+
+const result = await page.evaluate(() =&gt; {
+  const text = &quot;graph LR\n  a --&gt; b&quot;;
+  return new Promise((resolve, reject) =&gt; {
+    try {
+      mermaid.initialize({ startOnLoad: true });
+      mermaid.mermaidAPI.render(&quot;diagram&quot;, text, svg =&gt; {
+        resolve(svg)
+      });
+    } catch (e) {
+      reject(e);
+    }
+  })
+});
+
+await browser.close();
+</code></pre>
+<ul>
+<li>レンダリング用のHTMLを用意して、そこにmermaid.jsを埋め込む。</li>
+<li>引数に渡した関数が<code>Promise</code>を返すとき<code>evaluate()</code>は解決を待ってくれるので、mermaid.jsのrenderが終わったタイミングで<code>resolve</code>を呼び出すようにしている。</li>
+<li><code>evaluate()</code>は解決した結果を返すので、ここではレンダリング結果を受け取ることができている。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

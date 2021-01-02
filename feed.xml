@@ -1,0 +1,3043 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <author>
+    <name>Naoto Kaneko</name>
+  </author>
+  <id>https://blog.naoty.dev</id>
+  <link href="https://blog.naoty.dev"/>
+  <title>blog.naoty.dev</title>
+  <updated>2021-01-02T03:19:09.084301+00:00</updated>
+  <entry>
+    <id>https://blog.naoty.dev/433/</id>
+    <link href="https://blog.naoty.dev/433/"/>
+    <title>2020年振り返り</title>
+    <updated>2020-12-31T15:55:00+00:00</updated>
+    <dc:date>2020-12-31T15:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/432/</id>
+    <link href="https://blog.naoty.dev/432/"/>
+    <title>rake/testtask</title>
+    <updated>2020-10-17T23:23:00+00:00</updated>
+    <dc:date>2020-10-17T23:23:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/431/</id>
+    <link href="https://blog.naoty.dev/431/"/>
+    <title>2020-10-04</title>
+    <updated>2020-10-04T17:18:00+00:00</updated>
+    <dc:date>2020-10-04T17:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/430/</id>
+    <link href="https://blog.naoty.dev/430/"/>
+    <title>データフロー図を簡単に書くやつを作った</title>
+    <updated>2020-09-13T15:08:00+00:00</updated>
+    <dc:date>2020-09-13T15:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/429/</id>
+    <link href="https://blog.naoty.dev/429/"/>
+    <title>カスタムエラー型の定義</title>
+    <updated>2020-08-19T21:24:00+00:00</updated>
+    <dc:date>2020-08-19T21:24:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/428/</id>
+    <link href="https://blog.naoty.dev/428/"/>
+    <title>cp-kafkaでruby-kafkaを試してみる</title>
+    <updated>2020-07-19T19:09:00+00:00</updated>
+    <dc:date>2020-07-19T19:09:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/427/</id>
+    <link href="https://blog.naoty.dev/427/"/>
+    <title>cp-kafkaでKafkaの動作環境を用意する</title>
+    <updated>2020-07-18T20:17:00+00:00</updated>
+    <dc:date>2020-07-18T20:17:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/426/</id>
+    <link href="https://blog.naoty.dev/426/"/>
+    <title>naoty/tableをRustで書き直した</title>
+    <updated>2020-07-11T22:14:00+00:00</updated>
+    <dc:date>2020-07-11T22:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/425/</id>
+    <link href="https://blog.naoty.dev/425/"/>
+    <title>モジュールをディレクトリで構成する</title>
+    <updated>2020-07-08T22:56:00+00:00</updated>
+    <dc:date>2020-07-08T22:56:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/424/</id>
+    <link href="https://blog.naoty.dev/424/"/>
+    <title>clapカスタマイズメモ</title>
+    <updated>2020-07-05T22:49:00+00:00</updated>
+    <dc:date>2020-07-05T22:49:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/423/</id>
+    <link href="https://blog.naoty.dev/423/"/>
+    <title>イテレータについて整理</title>
+    <updated>2020-07-04T21:58:00+00:00</updated>
+    <dc:date>2020-07-04T21:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/422/</id>
+    <link href="https://blog.naoty.dev/422/"/>
+    <title>Resultをio::Resultに変換する</title>
+    <updated>2020-06-29T22:13:00+00:00</updated>
+    <dc:date>2020-06-29T22:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/421/</id>
+    <link href="https://blog.naoty.dev/421/"/>
+    <title>KafkaのDockerイメージを用意する</title>
+    <updated>2020-06-24T23:05:00+00:00</updated>
+    <dc:date>2020-06-24T23:05:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/420/</id>
+    <link href="https://blog.naoty.dev/420/"/>
+    <title>Webカメラを買った</title>
+    <updated>2020-06-17T20:53:00+00:00</updated>
+    <dc:date>2020-06-17T20:53:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/419/</id>
+    <link href="https://blog.naoty.dev/419/"/>
+    <title>Rustの勉強を再開した</title>
+    <updated>2020-06-15T21:50:00+00:00</updated>
+    <dc:date>2020-06-15T21:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/418/</id>
+    <link href="https://blog.naoty.dev/418/"/>
+    <title>あるカラムをもつテーブルを探すには</title>
+    <updated>2020-06-08T23:03:00+00:00</updated>
+    <dc:date>2020-06-08T23:03:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/417/</id>
+    <link href="https://blog.naoty.dev/417/"/>
+    <title>エラーの判別</title>
+    <updated>2020-05-23T18:10:00+00:00</updated>
+    <dc:date>2020-05-23T18:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/416/</id>
+    <link href="https://blog.naoty.dev/416/"/>
+    <title>naoty/todoを書き直した</title>
+    <updated>2020-05-17T13:15:00+00:00</updated>
+    <dc:date>2020-05-17T13:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/415/</id>
+    <link href="https://blog.naoty.dev/415/"/>
+    <title>ホームページのパッケージ更新をrenovateに移した</title>
+    <updated>2020-05-09T20:27:00+00:00</updated>
+    <dc:date>2020-05-09T20:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/414/</id>
+    <link href="https://blog.naoty.dev/414/"/>
+    <title>ErrorとFatalの使い方</title>
+    <updated>2020-05-02T12:56:00+00:00</updated>
+    <dc:date>2020-05-02T12:56:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/413/</id>
+    <link href="https://blog.naoty.dev/413/"/>
+    <title>spf13/pflagの使い方</title>
+    <updated>2020-04-29T22:25:00+00:00</updated>
+    <dc:date>2020-04-29T22:25:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/412/</id>
+    <link href="https://blog.naoty.dev/412/"/>
+    <title>引っ越しをあきらめて模様替えした</title>
+    <updated>2020-04-13T21:11:00+00:00</updated>
+    <dc:date>2020-04-13T21:11:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/411/</id>
+    <link href="https://blog.naoty.dev/411/"/>
+    <title>SNS断ちをしてみることにした</title>
+    <updated>2020-04-07T23:20:00+00:00</updated>
+    <dc:date>2020-04-07T23:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/410/</id>
+    <link href="https://blog.naoty.dev/410/"/>
+    <title>Reproに転職してました</title>
+    <updated>2020-04-01T10:15:00+00:00</updated>
+    <dc:date>2020-04-01T10:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/409/</id>
+    <link href="https://blog.naoty.dev/409/"/>
+    <title>Mermaid.jsでデータフロー図を描く</title>
+    <updated>2020-03-15T11:22:00+00:00</updated>
+    <dc:date>2020-03-15T11:22:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/408/</id>
+    <link href="https://blog.naoty.dev/408/"/>
+    <title>HiveをDockerで動かす</title>
+    <updated>2020-03-14T17:44:00+00:00</updated>
+    <dc:date>2020-03-14T17:44:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/407/</id>
+    <link href="https://blog.naoty.dev/407/"/>
+    <title>Rubyの型に入門する</title>
+    <updated>2020-03-10T20:02:00+00:00</updated>
+    <dc:date>2020-03-10T20:02:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/406/</id>
+    <link href="https://blog.naoty.dev/406/"/>
+    <title>HadoopをDockerコンテナで動かす</title>
+    <updated>2020-03-04T10:50:00+00:00</updated>
+    <dc:date>2020-03-04T10:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/405/</id>
+    <link href="https://blog.naoty.dev/405/"/>
+    <title>mermaid.jsのグラフをビルド時に生成する</title>
+    <updated>2020-03-01T19:54:00+00:00</updated>
+    <dc:date>2020-03-01T19:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/404/</id>
+    <link href="https://blog.naoty.dev/404/"/>
+    <title>mermaid.jsに対応した</title>
+    <updated>2020-02-29T14:27:00+00:00</updated>
+    <dc:date>2020-02-29T14:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/403/</id>
+    <link href="https://blog.naoty.dev/403/"/>
+    <title>曲面ディスプレイを買った</title>
+    <updated>2020-02-27T09:14:00+00:00</updated>
+    <dc:date>2020-02-27T09:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/402/</id>
+    <link href="https://blog.naoty.dev/402/"/>
+    <title>「究極の英語ライティング」を読んだ</title>
+    <updated>2020-02-25T23:17:00+00:00</updated>
+    <dc:date>2020-02-25T23:17:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/401/</id>
+    <link href="https://blog.naoty.dev/401/"/>
+    <title>ホームページをGatsbyで作り直した（2年ぶり2度目）</title>
+    <updated>2020-02-24T23:43:00+00:00</updated>
+    <dc:date>2020-02-24T23:43:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/400/</id>
+    <link href="https://blog.naoty.dev/400/"/>
+    <title>pictで複雑な組み合わせを生成する</title>
+    <updated>2020-02-17T22:47:00+00:00</updated>
+    <dc:date>2020-02-17T22:47:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/399/</id>
+    <link href="https://blog.naoty.dev/399/"/>
+    <title>dry-validationで設定ファイルを検証する</title>
+    <updated>2020-02-13T12:50:00+00:00</updated>
+    <dc:date>2020-02-13T12:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/398/</id>
+    <link href="https://blog.naoty.dev/398/"/>
+    <title>BAROCCO MD770を買った</title>
+    <updated>2020-02-03T23:16:00+00:00</updated>
+    <dc:date>2020-02-03T23:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/397/</id>
+    <link href="https://blog.naoty.dev/397/"/>
+    <title>HHKBのキーキャップを替えた</title>
+    <updated>2020-01-25T20:54:00+00:00</updated>
+    <dc:date>2020-01-25T20:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/396/</id>
+    <link href="https://blog.naoty.dev/396/"/>
+    <title>PrestoをDockerで試してみる</title>
+    <updated>2020-01-25T17:27:00+00:00</updated>
+    <dc:date>2020-01-25T17:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/395/</id>
+    <link href="https://blog.naoty.dev/395/"/>
+    <title>naoty/esa-history</title>
+    <updated>2020-01-19T18:01:00+00:00</updated>
+    <dc:date>2020-01-19T18:01:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/394/</id>
+    <link href="https://blog.naoty.dev/394/"/>
+    <title>2019年振り返り</title>
+    <updated>2019-12-30T18:38:00+00:00</updated>
+    <dc:date>2019-12-30T18:38:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/393/</id>
+    <link href="https://blog.naoty.dev/393/"/>
+    <title>作業ファイルという習慣</title>
+    <updated>2019-12-27T21:08:00+00:00</updated>
+    <dc:date>2019-12-27T21:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/392/</id>
+    <link href="https://blog.naoty.dev/392/"/>
+    <title>1Passwordの整理</title>
+    <updated>2019-12-13T20:54:00+00:00</updated>
+    <dc:date>2019-12-13T20:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/391/</id>
+    <link href="https://blog.naoty.dev/391/"/>
+    <title>ブログのフィードバックをGitHubで受け付ける</title>
+    <updated>2019-12-10T21:32:00+00:00</updated>
+    <dc:date>2019-12-10T21:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/390/</id>
+    <link href="https://blog.naoty.dev/390/"/>
+    <title>セキュアなDockerfileを書く</title>
+    <updated>2019-12-07T18:30:00+00:00</updated>
+    <dc:date>2019-12-07T18:30:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/389/</id>
+    <link href="https://blog.naoty.dev/389/"/>
+    <title>NATゲートウェイの冗長化</title>
+    <updated>2019-11-28T18:05:00+00:00</updated>
+    <dc:date>2019-11-28T18:05:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/388/</id>
+    <link href="https://blog.naoty.dev/388/"/>
+    <title>「エンジニアのための時間管理術」を読んだ</title>
+    <updated>2019-10-22T22:40:00+00:00</updated>
+    <dc:date>2019-10-22T22:40:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/387/</id>
+    <link href="https://blog.naoty.dev/387/"/>
+    <title>inboxと通知の整理</title>
+    <updated>2019-10-19T20:01:00+00:00</updated>
+    <dc:date>2019-10-19T20:01:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/386/</id>
+    <link href="https://blog.naoty.dev/386/"/>
+    <title>ダークモードのサポート</title>
+    <updated>2019-10-13T16:00:00+00:00</updated>
+    <dc:date>2019-10-13T16:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/385/</id>
+    <link href="https://blog.naoty.dev/385/"/>
+    <title>Nuxtで明示的にルーティングを定義する</title>
+    <updated>2019-10-04T19:10:00+00:00</updated>
+    <dc:date>2019-10-04T19:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/384/</id>
+    <link href="https://blog.naoty.dev/384/"/>
+    <title>ホームページをNuxtで作り直した</title>
+    <updated>2019-09-28T19:58:00+00:00</updated>
+    <dc:date>2019-09-28T19:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/383/</id>
+    <link href="https://blog.naoty.dev/383/"/>
+    <title>ミニマムなwebpack loader</title>
+    <updated>2019-09-18T13:04:00+09:00</updated>
+    <dc:date>2019-09-18T13:04:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/382/</id>
+    <link href="https://blog.naoty.dev/382/"/>
+    <title>HHKB-BTの接続先切り替え</title>
+    <updated>2019-09-07T23:33:00+09:00</updated>
+    <dc:date>2019-09-07T23:33:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/381/</id>
+    <link href="https://blog.naoty.dev/381/"/>
+    <title>ステータスコードをログに出力するhttp.Handler</title>
+    <updated>2019-09-07T12:05:00+09:00</updated>
+    <dc:date>2019-09-07T12:05:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/380/</id>
+    <link href="https://blog.naoty.dev/380/"/>
+    <title>goroutineの実行パターン</title>
+    <updated>2019-09-01T18:43:00+09:00</updated>
+    <dc:date>2019-09-01T18:43:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/379/</id>
+    <link href="https://blog.naoty.dev/379/"/>
+    <title>bundle lockが便利</title>
+    <updated>2019-08-21T23:24:00+09:00</updated>
+    <dc:date>2019-08-21T23:24:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/378/</id>
+    <link href="https://blog.naoty.dev/378/"/>
+    <title>mrubyの初手</title>
+    <updated>2019-08-07T12:06:00+09:00</updated>
+    <dc:date>2019-08-07T12:06:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/377/</id>
+    <link href="https://blog.naoty.dev/377/"/>
+    <title>ビルドに必要なファイルの種類を整理する</title>
+    <updated>2019-08-04T16:38:00+09:00</updated>
+    <dc:date>2019-08-04T16:38:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/376/</id>
+    <link href="https://blog.naoty.dev/376/"/>
+    <title>ECSタスクでRakeタスクを定期実行する</title>
+    <updated>2019-07-04T23:27:00+09:00</updated>
+    <dc:date>2019-07-04T23:27:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/375/</id>
+    <link href="https://blog.naoty.dev/375/"/>
+    <title>特定のIPアドレスからのアクセスを許可する</title>
+    <updated>2019-07-03T23:46:00+09:00</updated>
+    <dc:date>2019-07-03T23:46:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/374/</id>
+    <link href="https://blog.naoty.dev/374/"/>
+    <title>bit全探索</title>
+    <updated>2019-06-30T23:01:00+09:00</updated>
+    <dc:date>2019-06-30T23:01:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/373/</id>
+    <link href="https://blog.naoty.dev/373/"/>
+    <title>PumaのメトリクスをDatadogに送る</title>
+    <updated>2019-06-30T17:18:00+09:00</updated>
+    <dc:date>2019-06-30T17:18:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/372/</id>
+    <link href="https://blog.naoty.dev/372/"/>
+    <title>データ型と桁数</title>
+    <updated>2019-06-23T22:36:00+09:00</updated>
+    <dc:date>2019-06-23T22:36:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/371/</id>
+    <link href="https://blog.naoty.dev/371/"/>
+    <title>競技プログラミングをはじめてみた</title>
+    <updated>2019-06-10T16:38:00+09:00</updated>
+    <dc:date>2019-06-10T16:38:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/370/</id>
+    <link href="https://blog.naoty.dev/370/"/>
+    <title>データ分析基盤の全体像を整理してみる</title>
+    <updated>2019-05-19T12:44:00+09:00</updated>
+    <dc:date>2019-05-19T12:44:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/369/</id>
+    <link href="https://blog.naoty.dev/369/"/>
+    <title>タグごとのブログ一覧を追加した</title>
+    <updated>2019-05-01T12:24:00+09:00</updated>
+    <dc:date>2019-05-01T12:24:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/368/</id>
+    <link href="https://blog.naoty.dev/368/"/>
+    <title>MySQLコンテナの起動時にDBを初期化する</title>
+    <updated>2019-04-28T16:18:00+09:00</updated>
+    <dc:date>2019-04-28T16:18:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/367/</id>
+    <link href="https://blog.naoty.dev/367/"/>
+    <title>SQLで順番を更新する</title>
+    <updated>2019-04-26T17:08:00+09:00</updated>
+    <dc:date>2019-04-26T17:08:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/366/</id>
+    <link href="https://blog.naoty.dev/366/"/>
+    <title>normalizrの使い方</title>
+    <updated>2019-04-12T20:23:00+09:00</updated>
+    <dc:date>2019-04-12T20:23:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/365/</id>
+    <link href="https://blog.naoty.dev/365/"/>
+    <title>Echoで環境変数を使い回す</title>
+    <updated>2019-04-01T23:25:00+09:00</updated>
+    <dc:date>2019-04-01T23:25:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/364/</id>
+    <link href="https://blog.naoty.dev/364/"/>
+    <title>ヘルスチェックのエンドポイントを分ける</title>
+    <updated>2019-03-05T20:45:00+09:00</updated>
+    <dc:date>2019-03-05T20:45:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/363/</id>
+    <link href="https://blog.naoty.dev/363/"/>
+    <title>ドメインをnaoty.devにした</title>
+    <updated>2019-03-02T20:27:00+09:00</updated>
+    <dc:date>2019-03-02T20:27:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/362/</id>
+    <link href="https://blog.naoty.dev/362/"/>
+    <title>terraformとapex infraの依存関係</title>
+    <updated>2019-02-28T23:52:00+09:00</updated>
+    <dc:date>2019-02-28T23:52:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/361/</id>
+    <link href="https://blog.naoty.dev/361/"/>
+    <title>自分のコンテナインスタンスIDを確認する</title>
+    <updated>2019-02-24T10:56:00+09:00</updated>
+    <dc:date>2019-02-24T10:56:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/360/</id>
+    <link href="https://blog.naoty.dev/360/"/>
+    <title>前後左右に移動する</title>
+    <updated>2019-02-17T18:06:00+09:00</updated>
+    <dc:date>2019-02-17T18:06:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/359/</id>
+    <link href="https://blog.naoty.dev/359/"/>
+    <title>UnityでVRやってる</title>
+    <updated>2019-02-08T19:48:00+09:00</updated>
+    <dc:date>2019-02-08T19:48:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/358/</id>
+    <link href="https://blog.naoty.dev/358/"/>
+    <title>Result型のメソッドをまとめる</title>
+    <updated>2019-01-25T22:32:00+09:00</updated>
+    <dc:date>2019-01-25T22:32:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/357/</id>
+    <link href="https://blog.naoty.dev/357/"/>
+    <title>Result型の返り値を使わないとき</title>
+    <updated>2019-01-05T17:09:00+09:00</updated>
+    <dc:date>2019-01-05T17:09:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/356/</id>
+    <link href="https://blog.naoty.dev/356/"/>
+    <title>2018年振り返り</title>
+    <updated>2018-12-30T21:30:00+09:00</updated>
+    <dc:date>2018-12-30T21:30:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/355/</id>
+    <link href="https://blog.naoty.dev/355/"/>
+    <title>スレッド化できるSlack webhookを作った</title>
+    <updated>2018-12-27T17:28:00+09:00</updated>
+    <dc:date>2018-12-27T17:28:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/354/</id>
+    <link href="https://blog.naoty.dev/354/"/>
+    <title>Circle CIからHeroku registryにpushする</title>
+    <updated>2018-12-16T22:44:00+09:00</updated>
+    <dc:date>2018-12-16T22:44:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/353/</id>
+    <link href="https://blog.naoty.dev/353/"/>
+    <title>ブログで使うライブラリのアップデートを自動化する</title>
+    <updated>2018-12-12T22:16:00+09:00</updated>
+    <dc:date>2018-12-12T22:16:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/352/</id>
+    <link href="https://blog.naoty.dev/352/"/>
+    <title>Terraformの実行環境</title>
+    <updated>2018-12-02T11:41:00+09:00</updated>
+    <dc:date>2018-12-02T11:41:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/351/</id>
+    <link href="https://blog.naoty.dev/351/"/>
+    <title>Pixel 3に乗り換えた</title>
+    <updated>2018-11-21T21:06:00+09:00</updated>
+    <dc:date>2018-11-21T21:06:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/350/</id>
+    <link href="https://blog.naoty.dev/350/"/>
+    <title>db:migrateした分だけdb:rollbackするrubygemを書いた</title>
+    <updated>2018-11-11T15:27:00+09:00</updated>
+    <dc:date>2018-11-11T15:27:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/349/</id>
+    <link href="https://blog.naoty.dev/349/"/>
+    <title>デプロイに伴うデータ不整合を回避する</title>
+    <updated>2018-11-10T00:06:00+09:00</updated>
+    <dc:date>2018-11-10T00:06:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/348/</id>
+    <link href="https://blog.naoty.dev/348/"/>
+    <title>非効率なメモ化の改善</title>
+    <updated>2018-10-09T22:52:00+09:00</updated>
+    <dc:date>2018-10-09T22:52:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/347/</id>
+    <link href="https://blog.naoty.dev/347/"/>
+    <title>ECSサービスの分け方</title>
+    <updated>2018-10-02T21:22:00+09:00</updated>
+    <dc:date>2018-10-02T21:22:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/346/</id>
+    <link href="https://blog.naoty.dev/346/"/>
+    <title>AWSのリソースのネーミング</title>
+    <updated>2018-10-01T20:35:00+09:00</updated>
+    <dc:date>2018-10-01T20:35:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/345/</id>
+    <link href="https://blog.naoty.dev/345/"/>
+    <title>sidekiqコンテナのヘルスチェック</title>
+    <updated>2018-09-28T22:41:00+09:00</updated>
+    <dc:date>2018-09-28T22:41:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/344/</id>
+    <link href="https://blog.naoty.dev/344/"/>
+    <title>ISUCON 8予選のKPT</title>
+    <updated>2018-09-17T11:13:00+09:00</updated>
+    <dc:date>2018-09-17T11:13:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/343/</id>
+    <link href="https://blog.naoty.dev/343/"/>
+    <title>Container Componentの作り方</title>
+    <updated>2018-09-05T16:39:00+09:00</updated>
+    <dc:date>2018-09-05T16:39:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/342/</id>
+    <link href="https://blog.naoty.dev/342/"/>
+    <title>ブログをGatsby.jsで書き直した</title>
+    <updated>2018-09-01T11:54:00+09:00</updated>
+    <dc:date>2018-09-01T11:54:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/341/</id>
+    <link href="https://blog.naoty.dev/341/"/>
+    <title>multi-stage buildでのfreshの運用</title>
+    <updated>2018-08-05T18:55:00+09:00</updated>
+    <dc:date>2018-08-05T18:55:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/340/</id>
+    <link href="https://blog.naoty.dev/340/"/>
+    <title>HTMLテンプレートをpackrでバイナリに埋め込む</title>
+    <updated>2018-07-29T17:55:00+09:00</updated>
+    <dc:date>2018-07-29T17:55:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/339/</id>
+    <link href="https://blog.naoty.dev/339/"/>
+    <title>決定境界のプロット</title>
+    <updated>2018-07-22T15:02:00+09:00</updated>
+    <dc:date>2018-07-22T15:02:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/338/</id>
+    <link href="https://blog.naoty.dev/338/"/>
+    <title>「Pythonデータサイエンスハンドブック」を読んでいる</title>
+    <updated>2018-07-21T16:35:00+09:00</updated>
+    <dc:date>2018-07-21T16:35:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/337/</id>
+    <link href="https://blog.naoty.dev/337/"/>
+    <title>CourseraのMachine Learningを修了した</title>
+    <updated>2018-07-08T14:24:00+09:00</updated>
+    <dc:date>2018-07-08T14:24:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/336/</id>
+    <link href="https://blog.naoty.dev/336/"/>
+    <title>パラメータストアで環境変数を管理する</title>
+    <updated>2018-06-08T21:57:00+09:00</updated>
+    <dc:date>2018-06-08T21:57:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/335/</id>
+    <link href="https://blog.naoty.dev/335/"/>
+    <title>Circle CIのSlackへの通知を分かりやすくする</title>
+    <updated>2018-06-08T16:23:00+09:00</updated>
+    <dc:date>2018-06-08T16:23:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/334/</id>
+    <link href="https://blog.naoty.dev/334/"/>
+    <title>docker-composeでwebpack-dev-serverを使う</title>
+    <updated>2018-06-06T23:04:00+09:00</updated>
+    <dc:date>2018-06-06T23:04:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/333/</id>
+    <link href="https://blog.naoty.dev/333/"/>
+    <title>zshに戻った</title>
+    <updated>2018-05-16T21:34:00+09:00</updated>
+    <dc:date>2018-05-16T21:34:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/332/</id>
+    <link href="https://blog.naoty.dev/332/"/>
+    <title>CourseraのMachine Learningを受講しはじめた</title>
+    <updated>2018-05-01T21:47:00+09:00</updated>
+    <dc:date>2018-05-01T21:47:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/331/</id>
+    <link href="https://blog.naoty.dev/331/"/>
+    <title>awscliのwaitコマンドが便利だった</title>
+    <updated>2018-04-22T09:55:00+09:00</updated>
+    <dc:date>2018-04-22T09:55:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/330/</id>
+    <link href="https://blog.naoty.dev/330/"/>
+    <title>作業メモという習慣</title>
+    <updated>2018-04-14T17:16:00+09:00</updated>
+    <dc:date>2018-04-14T17:16:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/329/</id>
+    <link href="https://blog.naoty.dev/329/"/>
+    <title>RailsからReduxのinitial stateを設定する</title>
+    <updated>2018-03-29T23:19:00+09:00</updated>
+    <dc:date>2018-03-29T23:19:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/328/</id>
+    <link href="https://blog.naoty.dev/328/"/>
+    <title>webpackerにjestを導入する</title>
+    <updated>2018-03-20T19:56:00+09:00</updated>
+    <dc:date>2018-03-20T19:56:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/327/</id>
+    <link href="https://blog.naoty.dev/327/"/>
+    <title>bin/webpackに必要最小限のファイル</title>
+    <updated>2018-03-13T21:22:00+09:00</updated>
+    <dc:date>2018-03-13T21:22:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/326/</id>
+    <link href="https://blog.naoty.dev/326/"/>
+    <title>Assets precompileに必要最小限のファイル</title>
+    <updated>2018-03-09T20:55:00+09:00</updated>
+    <dc:date>2018-03-09T20:55:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/325/</id>
+    <link href="https://blog.naoty.dev/325/"/>
+    <title>JSONをASCIIテーブルで表示する</title>
+    <updated>2018-03-05T17:34:00+09:00</updated>
+    <dc:date>2018-03-05T17:34:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/324/</id>
+    <link href="https://blog.naoty.dev/324/"/>
+    <title>MailHogによるメールの受信確認</title>
+    <updated>2018-02-18T21:53:00+09:00</updated>
+    <dc:date>2018-02-18T21:53:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/323/</id>
+    <link href="https://blog.naoty.dev/323/"/>
+    <title>react-railsによるCSRF対策</title>
+    <updated>2018-02-18T12:08:00+09:00</updated>
+    <dc:date>2018-02-18T12:08:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/322/</id>
+    <link href="https://blog.naoty.dev/322/"/>
+    <title>webpacker用のDockerfile</title>
+    <updated>2018-02-12T22:58:00+09:00</updated>
+    <dc:date>2018-02-12T22:58:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/321/</id>
+    <link href="https://blog.naoty.dev/321/"/>
+    <title>副業先を探しています</title>
+    <updated>2018-02-07T22:30:00+09:00</updated>
+    <dc:date>2018-02-07T22:30:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/320/</id>
+    <link href="https://blog.naoty.dev/320/"/>
+    <title>TerraformでAWSを学んでいる</title>
+    <updated>2018-02-03T22:41:00+09:00</updated>
+    <dc:date>2018-02-03T22:41:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/319/</id>
+    <link href="https://blog.naoty.dev/319/"/>
+    <title>FLOCSSを導入した</title>
+    <updated>2018-02-01T08:48:00+09:00</updated>
+    <dc:date>2018-02-01T08:48:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/318/</id>
+    <link href="https://blog.naoty.dev/318/"/>
+    <title>PostCSSを導入した</title>
+    <updated>2018-01-24T16:27:00+09:00</updated>
+    <dc:date>2018-01-24T16:27:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/317/</id>
+    <link href="https://blog.naoty.dev/317/"/>
+    <title>スキーマファイルをSQL形式に変更する</title>
+    <updated>2018-01-13T09:53:00+09:00</updated>
+    <dc:date>2018-01-13T09:53:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/316/</id>
+    <link href="https://blog.naoty.dev/316/"/>
+    <title>Atom形式のフィードをサポートした</title>
+    <updated>2018-01-12T21:08:00+09:00</updated>
+    <dc:date>2018-01-12T21:08:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/315/</id>
+    <link href="https://blog.naoty.dev/315/"/>
+    <title>よく使うLaTeXコマンド</title>
+    <updated>2018-01-08T08:57:00+09:00</updated>
+    <dc:date>2018-01-08T08:57:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/314/</id>
+    <link href="https://blog.naoty.dev/314/"/>
+    <title>「みんなのPython」を読んだ</title>
+    <updated>2017-12-31T11:42:00+09:00</updated>
+    <dc:date>2017-12-31T11:42:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/313/</id>
+    <link href="https://blog.naoty.dev/313/"/>
+    <title>画像アップロードの実装パターン</title>
+    <updated>2017-12-22T17:12:00+09:00</updated>
+    <dc:date>2017-12-22T17:12:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/312/</id>
+    <link href="https://blog.naoty.dev/312/"/>
+    <title>todoをtmuxで表示する</title>
+    <updated>2017-12-22T13:34:00+09:00</updated>
+    <dc:date>2017-12-22T13:34:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/311/</id>
+    <link href="https://blog.naoty.dev/311/"/>
+    <title>2017年に作ったもの</title>
+    <updated>2017-12-21T23:00:00+09:00</updated>
+    <dc:date>2017-12-21T23:00:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/310/</id>
+    <link href="https://blog.naoty.dev/310/"/>
+    <title>Circle CI 2.0への移行作業</title>
+    <updated>2017-12-12T22:35:00+09:00</updated>
+    <dc:date>2017-12-12T22:35:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/309/</id>
+    <link href="https://blog.naoty.dev/309/"/>
+    <title>ActiveRecordのattributeメソッド</title>
+    <updated>2017-12-08T23:00:00+09:00</updated>
+    <dc:date>2017-12-08T23:00:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/308/</id>
+    <link href="https://blog.naoty.dev/308/"/>
+    <title>GitHub Pagesの更新をCIで自動化した</title>
+    <updated>2017-12-08T00:04:00+09:00</updated>
+    <dc:date>2017-12-08T00:04:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/307/</id>
+    <link href="https://blog.naoty.dev/307/"/>
+    <title>ブログで使うHTML5</title>
+    <updated>2017-12-03T20:03:00+09:00</updated>
+    <dc:date>2017-12-03T20:03:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/306/</id>
+    <link href="https://blog.naoty.dev/306/"/>
+    <title>モデルに記述する順番</title>
+    <updated>2017-12-02T23:02:00+09:00</updated>
+    <dc:date>2017-12-02T23:02:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/305/</id>
+    <link href="https://blog.naoty.dev/305/"/>
+    <title>モデルの差分更新</title>
+    <updated>2017-12-01T21:40:00+09:00</updated>
+    <dc:date>2017-12-01T21:40:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/304/</id>
+    <link href="https://blog.naoty.dev/304/"/>
+    <title>GitHub Pagesに移行した</title>
+    <updated>2017-11-29T17:12:00+09:00</updated>
+    <dc:date>2017-11-29T17:12:00+09:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/303/</id>
+    <link href="https://blog.naoty.dev/303/"/>
+    <title>引っ越しのお知らせ</title>
+    <updated>2017-11-25T21:04:00+00:00</updated>
+    <dc:date>2017-11-25T21:04:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/302/</id>
+    <link href="https://blog.naoty.dev/302/"/>
+    <title>Write 日報 Every Day</title>
+    <updated>2017-11-02T22:37:00+00:00</updated>
+    <dc:date>2017-11-02T22:37:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/301/</id>
+    <link href="https://blog.naoty.dev/301/"/>
+    <title>net/httpによるHTTPメソッドを含んだルーティングの実装</title>
+    <updated>2017-09-24T14:35:00+00:00</updated>
+    <dc:date>2017-09-24T14:35:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/300/</id>
+    <link href="https://blog.naoty.dev/300/"/>
+    <title>GoのためのDockerfile</title>
+    <updated>2017-09-18T12:18:00+00:00</updated>
+    <dc:date>2017-09-18T12:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/299/</id>
+    <link href="https://blog.naoty.dev/299/"/>
+    <title>Goでちょっとしたツールを作った</title>
+    <updated>2017-09-16T18:49:00+00:00</updated>
+    <dc:date>2017-09-16T18:49:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/298/</id>
+    <link href="https://blog.naoty.dev/298/"/>
+    <title>近況</title>
+    <updated>2017-09-05T19:24:00+00:00</updated>
+    <dc:date>2017-09-05T19:24:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/297/</id>
+    <link href="https://blog.naoty.dev/297/"/>
+    <title>`bin/webpack`を読んだ</title>
+    <updated>2017-08-17T20:12:00+00:00</updated>
+    <dc:date>2017-08-17T20:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/296/</id>
+    <link href="https://blog.naoty.dev/296/"/>
+    <title>vim も zsh も捨てた</title>
+    <updated>2017-04-18T22:46:00+00:00</updated>
+    <dc:date>2017-04-18T22:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/295/</id>
+    <link href="https://blog.naoty.dev/295/"/>
+    <title>Rails APIモードのdiff</title>
+    <updated>2017-03-22T15:46:00+00:00</updated>
+    <dc:date>2017-03-22T15:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/294/</id>
+    <link href="https://blog.naoty.dev/294/"/>
+    <title>Homebrew で自分のためのツールを公開するのが楽しい</title>
+    <updated>2017-03-22T11:00:00+00:00</updated>
+    <dc:date>2017-03-22T11:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/293/</id>
+    <link href="https://blog.naoty.dev/293/"/>
+    <title>Swiftのオブジェクトグラフを生成する flock を作った</title>
+    <updated>2017-03-13T23:17:00+00:00</updated>
+    <dc:date>2017-03-13T23:17:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/292/</id>
+    <link href="https://blog.naoty.dev/292/"/>
+    <title>Homebrew にコントリビュートした</title>
+    <updated>2017-02-28T09:58:00+00:00</updated>
+    <dc:date>2017-02-28T09:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/291/</id>
+    <link href="https://blog.naoty.dev/291/"/>
+    <title>Homebrewで自作Formulaを作るときの落とし穴</title>
+    <updated>2017-02-20T22:30:00+00:00</updated>
+    <dc:date>2017-02-20T22:30:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/290/</id>
+    <link href="https://blog.naoty.dev/290/"/>
+    <title>CHANGELOG.mdを書き始めた</title>
+    <updated>2017-01-06T19:38:00+00:00</updated>
+    <dc:date>2017-01-06T19:38:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/289/</id>
+    <link href="https://blog.naoty.dev/289/"/>
+    <title>2016年振り返り</title>
+    <updated>2016-12-31T21:19:00+00:00</updated>
+    <dc:date>2016-12-31T21:19:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/288/</id>
+    <link href="https://blog.naoty.dev/288/"/>
+    <title>コード署名・証明書</title>
+    <updated>2016-12-11T23:56:00+00:00</updated>
+    <dc:date>2016-12-11T23:56:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/287/</id>
+    <link href="https://blog.naoty.dev/287/"/>
+    <title>エンジニア立ち居振る舞い：生産性を計測する</title>
+    <updated>2016-11-18T10:54:00+00:00</updated>
+    <dc:date>2016-11-18T10:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/286/</id>
+    <link href="https://blog.naoty.dev/286/"/>
+    <title>Timepiece 1.0.0をリリースした</title>
+    <updated>2016-10-31T13:37:00+00:00</updated>
+    <dc:date>2016-10-31T13:37:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/285/</id>
+    <link href="https://blog.naoty.dev/285/"/>
+    <title>CocoaPodsにコントリビュートした</title>
+    <updated>2016-08-14T10:00:00+00:00</updated>
+    <dc:date>2016-08-14T10:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/284/</id>
+    <link href="https://blog.naoty.dev/284/"/>
+    <title>GroupedなUITableViewで上端のmarginをとりたい</title>
+    <updated>2016-07-19T17:20:00+00:00</updated>
+    <dc:date>2016-07-19T17:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/283/</id>
+    <link href="https://blog.naoty.dev/283/"/>
+    <title>通信周りの処理をミドルウェアで整理する</title>
+    <updated>2016-07-14T11:00:00+00:00</updated>
+    <dc:date>2016-07-14T11:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/282/</id>
+    <link href="https://blog.naoty.dev/282/"/>
+    <title>Xcodeのカラーパレットを作るコマンドをSwiftで書いた</title>
+    <updated>2016-03-17T10:00:00+00:00</updated>
+    <dc:date>2016-03-17T10:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/281/</id>
+    <link href="https://blog.naoty.dev/281/"/>
+    <title>ブログタイトルを変えた</title>
+    <updated>2016-03-13T16:24:00+00:00</updated>
+    <dc:date>2016-03-13T16:24:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/280/</id>
+    <link href="https://blog.naoty.dev/280/"/>
+    <title>型消去を用いたSwiftによるリポジトリパターンの実装</title>
+    <updated>2016-03-11T16:00:00+00:00</updated>
+    <dc:date>2016-03-11T16:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/279/</id>
+    <link href="https://blog.naoty.dev/279/"/>
+    <title>try! Swiftに参加してきた</title>
+    <updated>2016-03-07T00:49:00+00:00</updated>
+    <dc:date>2016-03-07T00:49:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/278/</id>
+    <link href="https://blog.naoty.dev/278/"/>
+    <title>SwiftCSVをフルスクラッチした</title>
+    <updated>2016-02-24T23:15:00+00:00</updated>
+    <dc:date>2016-02-24T23:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/277/</id>
+    <link href="https://blog.naoty.dev/277/"/>
+    <title>HIGで推奨されているアラートをSwiftで効率的に組み立てる</title>
+    <updated>2016-02-17T10:00:00+00:00</updated>
+    <dc:date>2016-02-17T10:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/276/</id>
+    <link href="https://blog.naoty.dev/276/"/>
+    <title>FriendlyErrorType</title>
+    <updated>2016-02-10T13:25:00+00:00</updated>
+    <dc:date>2016-02-10T13:25:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/275/</id>
+    <link href="https://blog.naoty.dev/275/"/>
+    <title>2015年の振り返りと2016年に向けて</title>
+    <updated>2016-01-02T03:49:00+00:00</updated>
+    <dc:date>2016-01-02T03:49:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/274/</id>
+    <link href="https://blog.naoty.dev/274/"/>
+    <title>Rakeタスクの賢いロギング</title>
+    <updated>2015-10-11T12:41:00+00:00</updated>
+    <dc:date>2015-10-11T12:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/273/</id>
+    <link href="https://blog.naoty.dev/273/"/>
+    <title>Vagrant rsync + Railsでコードの変更が反映されない件</title>
+    <updated>2015-10-08T00:12:00+00:00</updated>
+    <dc:date>2015-10-08T00:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/272/</id>
+    <link href="https://blog.naoty.dev/272/"/>
+    <title>Vagrantfileを分割する</title>
+    <updated>2015-10-03T15:12:00+00:00</updated>
+    <dc:date>2015-10-03T15:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/271/</id>
+    <link href="https://blog.naoty.dev/271/"/>
+    <title>「エンジニアのための時間管理術」を読んだ</title>
+    <updated>2015-09-06T15:34:00+00:00</updated>
+    <dc:date>2015-09-06T15:34:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/270/</id>
+    <link href="https://blog.naoty.dev/270/"/>
+    <title>近況</title>
+    <updated>2015-08-23T16:49:00+00:00</updated>
+    <dc:date>2015-08-23T16:49:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/269/</id>
+    <link href="https://blog.naoty.dev/269/"/>
+    <title>gomobileでiOS用のライブラリをビルドするまで</title>
+    <updated>2015-07-26T11:21:00+00:00</updated>
+    <dc:date>2015-07-26T11:21:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/268/</id>
+    <link href="https://blog.naoty.dev/268/"/>
+    <title>Timepieceを0.4.0にアップデートした</title>
+    <updated>2015-07-19T23:06:00+00:00</updated>
+    <dc:date>2015-07-19T23:06:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/267/</id>
+    <link href="https://blog.naoty.dev/267/"/>
+    <title>コマンドラインを拡張しやすくするヤツ書いた</title>
+    <updated>2015-07-14T10:15:00+00:00</updated>
+    <dc:date>2015-07-14T10:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/266/</id>
+    <link href="https://blog.naoty.dev/266/"/>
+    <title>GeneratorとSequence</title>
+    <updated>2015-07-11T19:07:00+00:00</updated>
+    <dc:date>2015-07-11T19:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/265/</id>
+    <link href="https://blog.naoty.dev/265/"/>
+    <title>Pocketのもう読んでない記事を掃除するヤツ書いた</title>
+    <updated>2015-07-11T16:19:00+00:00</updated>
+    <dc:date>2015-07-11T16:19:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/264/</id>
+    <link href="https://blog.naoty.dev/264/"/>
+    <title>コミット数が多いファイルを表示するコマンドを書いた</title>
+    <updated>2015-06-20T19:04:00+00:00</updated>
+    <dc:date>2015-06-20T19:04:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/263/</id>
+    <link href="https://blog.naoty.dev/263/"/>
+    <title>「すごいHaskell たのしく学ぼう！」を読んだ</title>
+    <updated>2015-06-14T18:40:00+00:00</updated>
+    <dc:date>2015-06-14T18:40:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/262/</id>
+    <link href="https://blog.naoty.dev/262/"/>
+    <title>naoty/todoとnaoty/nowisで定期的なtodoを管理できるようにした</title>
+    <updated>2015-05-30T19:32:00+00:00</updated>
+    <dc:date>2015-05-30T19:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/261/</id>
+    <link href="https://blog.naoty.dev/261/"/>
+    <title>自分専用のtodo管理ツールを書いた</title>
+    <updated>2015-05-23T17:17:00+00:00</updated>
+    <dc:date>2015-05-23T17:17:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/260/</id>
+    <link href="https://blog.naoty.dev/260/"/>
+    <title>#potatotips でTimepieceについて発表した</title>
+    <updated>2015-05-14T00:20:00+00:00</updated>
+    <dc:date>2015-05-14T00:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/259/</id>
+    <link href="https://blog.naoty.dev/259/"/>
+    <title>IdeaVimでキーマップが衝突した場合の対応</title>
+    <updated>2015-04-17T11:59:00+00:00</updated>
+    <dc:date>2015-04-17T11:59:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/258/</id>
+    <link href="https://blog.naoty.dev/258/"/>
+    <title>コミット毎に実行環境をビルドするoasisを書いた</title>
+    <updated>2015-04-09T23:24:00+00:00</updated>
+    <dc:date>2015-04-09T23:24:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/257/</id>
+    <link href="https://blog.naoty.dev/257/"/>
+    <title>ghqを読んだ</title>
+    <updated>2015-03-29T01:58:00+00:00</updated>
+    <dc:date>2015-03-29T01:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/256/</id>
+    <link href="https://blog.naoty.dev/256/"/>
+    <title>Railsにコントリビュートした</title>
+    <updated>2015-03-14T16:10:00+00:00</updated>
+    <dc:date>2015-03-14T16:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/255/</id>
+    <link href="https://blog.naoty.dev/255/"/>
+    <title>Rubotyで勤務時間を管理する</title>
+    <updated>2015-03-13T22:10:00+00:00</updated>
+    <dc:date>2015-03-13T22:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/254/</id>
+    <link href="https://blog.naoty.dev/254/"/>
+    <title>Timepieceを0.2.0にアップデートした</title>
+    <updated>2015-03-01T15:06:00+00:00</updated>
+    <dc:date>2015-03-01T15:06:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/253/</id>
+    <link href="https://blog.naoty.dev/253/"/>
+    <title>「UMLモデリングの本質」を読んだ</title>
+    <updated>2015-02-28T11:25:00+00:00</updated>
+    <dc:date>2015-02-28T11:25:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/252/</id>
+    <link href="https://blog.naoty.dev/252/"/>
+    <title>「達人に学ぶDB設計徹底指南書」を読んだ</title>
+    <updated>2015-02-02T01:27:00+00:00</updated>
+    <dc:date>2015-02-02T01:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/251/</id>
+    <link href="https://blog.naoty.dev/251/"/>
+    <title>ブランチごとにDB切り替えるヤツ作った</title>
+    <updated>2015-01-19T00:32:00+00:00</updated>
+    <dc:date>2015-01-19T00:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/250/</id>
+    <link href="https://blog.naoty.dev/250/"/>
+    <title>`rails s`読んだ</title>
+    <updated>2015-01-10T21:55:00+00:00</updated>
+    <dc:date>2015-01-10T21:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/249/</id>
+    <link href="https://blog.naoty.dev/249/"/>
+    <title>Faraday middlewareの作り方</title>
+    <updated>2015-01-03T23:02:00+00:00</updated>
+    <dc:date>2015-01-03T23:02:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/248/</id>
+    <link href="https://blog.naoty.dev/248/"/>
+    <title>Qiita:TeamのテンプレートとJSONからテキストを組み立てるヤツ</title>
+    <updated>2015-01-02T18:07:00+00:00</updated>
+    <dc:date>2015-01-02T18:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/247/</id>
+    <link href="https://blog.naoty.dev/247/"/>
+    <title>activeadmin読んだ</title>
+    <updated>2014-12-31T01:32:00+00:00</updated>
+    <dc:date>2014-12-31T01:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/246/</id>
+    <link href="https://blog.naoty.dev/246/"/>
+    <title>RailsのReloaderの仕組み</title>
+    <updated>2014-12-30T01:39:00+00:00</updated>
+    <dc:date>2014-12-30T01:39:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/245/</id>
+    <link href="https://blog.naoty.dev/245/"/>
+    <title>Qiita API v2のSwiftクライアントを書き始めた</title>
+    <updated>2014-12-14T00:29:00+00:00</updated>
+    <dc:date>2014-12-14T00:29:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/244/</id>
+    <link href="https://blog.naoty.dev/244/"/>
+    <title>転職のお知らせ</title>
+    <updated>2014-11-28T16:21:00+00:00</updated>
+    <dc:date>2014-11-28T16:21:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/243/</id>
+    <link href="https://blog.naoty.dev/243/"/>
+    <title>Web API: The Good Partsを読んだ</title>
+    <updated>2014-11-27T14:55:00+00:00</updated>
+    <dc:date>2014-11-27T14:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/242/</id>
+    <link href="https://blog.naoty.dev/242/"/>
+    <title>MDCSwipeToChooseを読んだ</title>
+    <updated>2014-11-23T16:27:00+00:00</updated>
+    <dc:date>2014-11-23T16:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/241/</id>
+    <link href="https://blog.naoty.dev/241/"/>
+    <title>SlackTextViewControllerを読んだ</title>
+    <updated>2014-11-18T21:23:00+00:00</updated>
+    <dc:date>2014-11-18T21:23:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/240/</id>
+    <link href="https://blog.naoty.dev/240/"/>
+    <title>自分をコピーするbotを作る</title>
+    <updated>2014-11-11T15:10:00+00:00</updated>
+    <dc:date>2014-11-11T15:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/239/</id>
+    <link href="https://blog.naoty.dev/239/"/>
+    <title>pod installしたら自動的にghq getする</title>
+    <updated>2014-10-22T18:18:00+00:00</updated>
+    <dc:date>2014-10-22T18:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/238/</id>
+    <link href="https://blog.naoty.dev/238/"/>
+    <title>pod installしたらgit cloneしてくれるヤツ書いた</title>
+    <updated>2014-10-20T00:15:00+00:00</updated>
+    <dc:date>2014-10-20T00:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/237/</id>
+    <link href="https://blog.naoty.dev/237/"/>
+    <title>「集合知プログラミング」を読んでる</title>
+    <updated>2014-10-13T23:12:00+00:00</updated>
+    <dc:date>2014-10-13T23:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/236/</id>
+    <link href="https://blog.naoty.dev/236/"/>
+    <title>ストリームを利用したローパスフィルタの実装</title>
+    <updated>2014-10-01T00:07:00+00:00</updated>
+    <dc:date>2014-10-01T00:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/235/</id>
+    <link href="https://blog.naoty.dev/235/"/>
+    <title>peco+giboで.gitignoreのテンプレを1秒で取得</title>
+    <updated>2014-09-30T10:50:00+00:00</updated>
+    <dc:date>2014-09-30T10:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/234/</id>
+    <link href="https://blog.naoty.dev/234/"/>
+    <title>マシなiOSアプリのフォームを実装・デザインする</title>
+    <updated>2014-09-18T01:22:00+00:00</updated>
+    <dc:date>2014-09-18T01:22:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/233/</id>
+    <link href="https://blog.naoty.dev/233/"/>
+    <title>Swiftでストリームを扱うライブラリを書いた</title>
+    <updated>2014-08-31T00:01:00+00:00</updated>
+    <dc:date>2014-08-31T00:01:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/232/</id>
+    <link href="https://blog.naoty.dev/232/"/>
+    <title>SwiftでNSDateを直感的に扱う</title>
+    <updated>2014-08-20T17:16:00+00:00</updated>
+    <dc:date>2014-08-20T17:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/231/</id>
+    <link href="https://blog.naoty.dev/231/"/>
+    <title>SwiftでNSDateを簡単に扱うライブラリを書いた</title>
+    <updated>2014-08-17T16:39:00+00:00</updated>
+    <dc:date>2014-08-17T16:39:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/230/</id>
+    <link href="https://blog.naoty.dev/230/"/>
+    <title>Alamofire/**/*Tests.swiftを読んだ</title>
+    <updated>2014-08-15T17:01:00+00:00</updated>
+    <dc:date>2014-08-15T17:01:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/229/</id>
+    <link href="https://blog.naoty.dev/229/"/>
+    <title>Alamofireを読んだ</title>
+    <updated>2014-08-14T22:51:00+00:00</updated>
+    <dc:date>2014-08-14T22:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/228/</id>
+    <link href="https://blog.naoty.dev/228/"/>
+    <title>PromiseKit/swiftを読んだ</title>
+    <updated>2014-08-13T02:12:00+00:00</updated>
+    <dc:date>2014-08-13T02:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/227/</id>
+    <link href="https://blog.naoty.dev/227/"/>
+    <title>D3.jsで&quot;+09:00&quot;がパースできない件</title>
+    <updated>2014-07-24T14:34:00+00:00</updated>
+    <dc:date>2014-07-24T14:34:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/226/</id>
+    <link href="https://blog.naoty.dev/226/"/>
+    <title>バックエンドAPI用のテンプレートを作り始めた</title>
+    <updated>2014-07-21T22:54:00+00:00</updated>
+    <dc:date>2014-07-21T22:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/225/</id>
+    <link href="https://blog.naoty.dev/225/"/>
+    <title>SinatraでJSONを受け取る</title>
+    <updated>2014-07-17T09:12:00+00:00</updated>
+    <dc:date>2014-07-17T09:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/224/</id>
+    <link href="https://blog.naoty.dev/224/"/>
+    <title>Xcodeでビルド設定を作ったらCocoaPodsのリンクに失敗する件</title>
+    <updated>2014-07-16T18:51:00+00:00</updated>
+    <dc:date>2014-07-16T18:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/223/</id>
+    <link href="https://blog.naoty.dev/223/"/>
+    <title>shields.ioでバッジをフラットデザインにする</title>
+    <updated>2014-07-10T12:51:00+00:00</updated>
+    <dc:date>2014-07-10T12:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/222/</id>
+    <link href="https://blog.naoty.dev/222/"/>
+    <title>APNsの概要と関連ツール群</title>
+    <updated>2014-07-07T01:46:00+00:00</updated>
+    <dc:date>2014-07-07T01:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/221/</id>
+    <link href="https://blog.naoty.dev/221/"/>
+    <title>pecoでハッカーを検索</title>
+    <updated>2014-07-04T18:00:00+00:00</updated>
+    <dc:date>2014-07-04T18:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/220/</id>
+    <link href="https://blog.naoty.dev/220/"/>
+    <title>技術メモの管理</title>
+    <updated>2014-06-30T23:55:00+00:00</updated>
+    <dc:date>2014-06-30T23:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/219/</id>
+    <link href="https://blog.naoty.dev/219/"/>
+    <title>PecoからRakeタスクを実行する</title>
+    <updated>2014-06-23T19:11:00+00:00</updated>
+    <dc:date>2014-06-23T19:11:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/218/</id>
+    <link href="https://blog.naoty.dev/218/"/>
+    <title>SwiftでRubyのInteger#timesを実装してみた</title>
+    <updated>2014-06-13T00:09:00+00:00</updated>
+    <dc:date>2014-06-13T00:09:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/217/</id>
+    <link href="https://blog.naoty.dev/217/"/>
+    <title>カスタムディレクティブでAPIから受け取ったデータを表示する</title>
+    <updated>2014-06-12T13:29:00+00:00</updated>
+    <dc:date>2014-06-12T13:29:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/216/</id>
+    <link href="https://blog.naoty.dev/216/"/>
+    <title>Objective-CでCSVをパースする</title>
+    <updated>2014-04-24T11:12:00+00:00</updated>
+    <dc:date>2014-04-24T11:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/215/</id>
+    <link href="https://blog.naoty.dev/215/"/>
+    <title>CoreDataに簡単に初期データを追加する</title>
+    <updated>2014-04-20T13:12:00+00:00</updated>
+    <dc:date>2014-04-20T13:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/214/</id>
+    <link href="https://blog.naoty.dev/214/"/>
+    <title>Xcodeでビルドした実行ファイルを自動的にプロジェクトにコピーする</title>
+    <updated>2014-04-14T01:07:00+00:00</updated>
+    <dc:date>2014-04-14T01:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/213/</id>
+    <link href="https://blog.naoty.dev/213/"/>
+    <title>tmux 1.9でもウィンドウ作成時にパスを引き継ぐ</title>
+    <updated>2014-03-17T13:02:00+00:00</updated>
+    <dc:date>2014-03-17T13:02:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/212/</id>
+    <link href="https://blog.naoty.dev/212/"/>
+    <title>Railsのロケールで特殊文字が表示されない問題</title>
+    <updated>2014-03-12T13:33:00+00:00</updated>
+    <dc:date>2014-03-12T13:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/211/</id>
+    <link href="https://blog.naoty.dev/211/"/>
+    <title>Railsでオートリンクを有効にしつつサニタイズ</title>
+    <updated>2014-03-07T18:21:00+00:00</updated>
+    <dc:date>2014-03-07T18:21:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/210/</id>
+    <link href="https://blog.naoty.dev/210/"/>
+    <title>安全なrmコマンド</title>
+    <updated>2014-03-03T15:06:00+00:00</updated>
+    <dc:date>2014-03-03T15:06:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/209/</id>
+    <link href="https://blog.naoty.dev/209/"/>
+    <title>プラットフォーム依存のgemのせいでデプロイがこける件</title>
+    <updated>2014-02-05T19:13:00+00:00</updated>
+    <dc:date>2014-02-05T19:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/208/</id>
+    <link href="https://blog.naoty.dev/208/"/>
+    <title>RSpecでmoduleをテストする</title>
+    <updated>2014-01-28T13:18:00+00:00</updated>
+    <dc:date>2014-01-28T13:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/207/</id>
+    <link href="https://blog.naoty.dev/207/"/>
+    <title>ブログ移転しました</title>
+    <updated>2014-01-21T11:48:00+00:00</updated>
+    <dc:date>2014-01-21T11:48:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/206/</id>
+    <link href="https://blog.naoty.dev/206/"/>
+    <title>アプリのアイコンを自動生成する</title>
+    <updated>2013-12-15T16:54:00+00:00</updated>
+    <dc:date>2013-12-15T16:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/205/</id>
+    <link href="https://blog.naoty.dev/205/"/>
+    <title>websocket-railsで簡単なPush通知を実装する</title>
+    <updated>2013-12-03T00:58:00+00:00</updated>
+    <dc:date>2013-12-03T00:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/204/</id>
+    <link href="https://blog.naoty.dev/204/"/>
+    <title>Kobito用カスタムCSSつくってみた</title>
+    <updated>2013-11-07T19:31:00+00:00</updated>
+    <dc:date>2013-11-07T19:31:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/203/</id>
+    <link href="https://blog.naoty.dev/203/"/>
+    <title>ChefでRaspberry Piをセットアップする</title>
+    <updated>2013-10-20T17:16:00+00:00</updated>
+    <dc:date>2013-10-20T17:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/202/</id>
+    <link href="https://blog.naoty.dev/202/"/>
+    <title>RubyのWebSocketサーバー「pingpong」を作った</title>
+    <updated>2013-10-11T02:25:00+00:00</updated>
+    <dc:date>2013-10-11T02:25:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/201/</id>
+    <link href="https://blog.naoty.dev/201/"/>
+    <title>Unite.vimで.gitignoreで無視したファイルを候補から除外する</title>
+    <updated>2013-08-22T17:34:00+00:00</updated>
+    <dc:date>2013-08-22T17:34:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/200/</id>
+    <link href="https://blog.naoty.dev/200/"/>
+    <title>quickrun.vimでC++11をコンパイルする</title>
+    <updated>2013-08-21T11:36:00+00:00</updated>
+    <dc:date>2013-08-21T11:36:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/199/</id>
+    <link href="https://blog.naoty.dev/199/"/>
+    <title>vimでtodoリストを書くためのtips</title>
+    <updated>2013-08-14T00:18:00+00:00</updated>
+    <dc:date>2013-08-14T00:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/198/</id>
+    <link href="https://blog.naoty.dev/198/"/>
+    <title>iOS6以降のAVAudioSessionのdelegate設定方法</title>
+    <updated>2013-08-09T18:12:00+00:00</updated>
+    <dc:date>2013-08-09T18:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/197/</id>
+    <link href="https://blog.naoty.dev/197/"/>
+    <title>iOS用グラフ描画ライブラリを書き始めた</title>
+    <updated>2013-08-06T23:10:00+00:00</updated>
+    <dc:date>2013-08-06T23:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/196/</id>
+    <link href="https://blog.naoty.dev/196/"/>
+    <title>Asset Pipelineでコントローラー・アクションごとにassetを管理する</title>
+    <updated>2013-07-18T13:46:00+00:00</updated>
+    <dc:date>2013-07-18T13:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/195/</id>
+    <link href="https://blog.naoty.dev/195/"/>
+    <title>半年経ちました・引っ越しました</title>
+    <updated>2013-07-01T02:37:00+00:00</updated>
+    <dc:date>2013-07-01T02:37:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/194/</id>
+    <link href="https://blog.naoty.dev/194/"/>
+    <title>Rails 4.0だとCSRFトークンでエラーになる</title>
+    <updated>2013-06-28T23:41:00+00:00</updated>
+    <dc:date>2013-06-28T23:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/193/</id>
+    <link href="https://blog.naoty.dev/193/"/>
+    <title>カーソル上の単語でvim-refを検索する</title>
+    <updated>2013-06-26T00:42:00+00:00</updated>
+    <dc:date>2013-06-26T00:42:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/192/</id>
+    <link href="https://blog.naoty.dev/192/"/>
+    <title>konashi make-a-thonに参加してきた</title>
+    <updated>2013-06-23T01:16:00+00:00</updated>
+    <dc:date>2013-06-23T01:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/191/</id>
+    <link href="https://blog.naoty.dev/191/"/>
+    <title>slide_template改めglideの今後について</title>
+    <updated>2013-06-05T00:43:00+00:00</updated>
+    <dc:date>2013-06-05T00:43:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/190/</id>
+    <link href="https://blog.naoty.dev/190/"/>
+    <title>LTのスライドつくるのだるい</title>
+    <updated>2013-05-27T00:33:00+00:00</updated>
+    <dc:date>2013-05-27T00:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/189/</id>
+    <link href="https://blog.naoty.dev/189/"/>
+    <title>.vimrc整理術</title>
+    <updated>2013-05-22T11:46:00+00:00</updated>
+    <dc:date>2013-05-22T11:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/188/</id>
+    <link href="https://blog.naoty.dev/188/"/>
+    <title>vim高速移動</title>
+    <updated>2013-05-22T00:13:00+00:00</updated>
+    <dc:date>2013-05-22T00:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/187/</id>
+    <link href="https://blog.naoty.dev/187/"/>
+    <title>todoリストをwebに公開した話</title>
+    <updated>2013-05-19T20:52:00+00:00</updated>
+    <dc:date>2013-05-19T20:52:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/186/</id>
+    <link href="https://blog.naoty.dev/186/"/>
+    <title>Androidに乗り換えるかも</title>
+    <updated>2013-05-12T00:29:00+00:00</updated>
+    <dc:date>2013-05-12T00:29:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/185/</id>
+    <link href="https://blog.naoty.dev/185/"/>
+    <title>mrb_valueについて調べてみた</title>
+    <updated>2013-05-04T20:49:00+00:00</updated>
+    <dc:date>2013-05-04T20:49:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/184/</id>
+    <link href="https://blog.naoty.dev/184/"/>
+    <title>mrubyで定義したクラスとメソッドをCから呼び出す</title>
+    <updated>2013-05-03T23:13:00+00:00</updated>
+    <dc:date>2013-05-03T23:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/183/</id>
+    <link href="https://blog.naoty.dev/183/"/>
+    <title>Head First Cの感想</title>
+    <updated>2013-04-29T14:18:00+00:00</updated>
+    <dc:date>2013-04-29T14:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/182/</id>
+    <link href="https://blog.naoty.dev/182/"/>
+    <title>vimでTodoリスト</title>
+    <updated>2013-04-28T00:29:00+00:00</updated>
+    <dc:date>2013-04-28T00:29:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/181/</id>
+    <link href="https://blog.naoty.dev/181/"/>
+    <title>vimでコメントを非表示にする</title>
+    <updated>2013-04-23T01:08:00+00:00</updated>
+    <dc:date>2013-04-23T01:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/180/</id>
+    <link href="https://blog.naoty.dev/180/"/>
+    <title>vimプラグインを作ってみた</title>
+    <updated>2013-04-21T01:30:00+00:00</updated>
+    <dc:date>2013-04-21T01:30:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/179/</id>
+    <link href="https://blog.naoty.dev/179/"/>
+    <title>Arduinoで構造体をつかう</title>
+    <updated>2013-04-18T23:35:00+00:00</updated>
+    <dc:date>2013-04-18T23:35:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/178/</id>
+    <link href="https://blog.naoty.dev/178/"/>
+    <title>vimの便利機能</title>
+    <updated>2013-04-10T00:46:00+00:00</updated>
+    <dc:date>2013-04-10T00:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/177/</id>
+    <link href="https://blog.naoty.dev/177/"/>
+    <title>bundle execを使わずに済む方法（rbenv編）</title>
+    <updated>2013-04-07T17:59:00+00:00</updated>
+    <dc:date>2013-04-07T17:59:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/176/</id>
+    <link href="https://blog.naoty.dev/176/"/>
+    <title>退職のお知らせ</title>
+    <updated>2013-03-29T22:14:00+00:00</updated>
+    <dc:date>2013-03-29T22:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/175/</id>
+    <link href="https://blog.naoty.dev/175/"/>
+    <title>人間の脳みその限界とツールについて</title>
+    <updated>2013-03-13T01:02:00+00:00</updated>
+    <dc:date>2013-03-13T01:02:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/174/</id>
+    <link href="https://blog.naoty.dev/174/"/>
+    <title>Arduinoと感圧センサーで圧力をサーバーに送信する</title>
+    <updated>2013-03-11T22:51:00+00:00</updated>
+    <dc:date>2013-03-11T22:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/173/</id>
+    <link href="https://blog.naoty.dev/173/"/>
+    <title>UIViewの位置取得・操作のための便利カテゴリー</title>
+    <updated>2013-02-26T13:45:00+00:00</updated>
+    <dc:date>2013-02-26T13:45:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/172/</id>
+    <link href="https://blog.naoty.dev/172/"/>
+    <title>ハッカソンでgithub連携のnode.jsアプリ作った話</title>
+    <updated>2013-02-03T23:52:00+00:00</updated>
+    <dc:date>2013-02-03T23:52:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/171/</id>
+    <link href="https://blog.naoty.dev/171/"/>
+    <title>Rails4から--binstubsが使えなくなる件</title>
+    <updated>2013-01-26T16:33:00+00:00</updated>
+    <dc:date>2013-01-26T16:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/170/</id>
+    <link href="https://blog.naoty.dev/170/"/>
+    <title>Railsに組み込むgemを作るためのTips</title>
+    <updated>2013-01-20T12:27:00+00:00</updated>
+    <dc:date>2013-01-20T12:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/169/</id>
+    <link href="https://blog.naoty.dev/169/"/>
+    <title>最近のテスト事情</title>
+    <updated>2013-01-19T01:14:00+00:00</updated>
+    <dc:date>2013-01-19T01:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/168/</id>
+    <link href="https://blog.naoty.dev/168/"/>
+    <title>Object#freezeについて</title>
+    <updated>2013-01-17T18:29:00+00:00</updated>
+    <dc:date>2013-01-17T18:29:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/167/</id>
+    <link href="https://blog.naoty.dev/167/"/>
+    <title>東京Ruby会議10にいってきた</title>
+    <updated>2013-01-16T13:45:00+00:00</updated>
+    <dc:date>2013-01-16T13:45:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/166/</id>
+    <link href="https://blog.naoty.dev/166/"/>
+    <title>Limechatのテーマつくった</title>
+    <updated>2013-01-13T00:26:00+00:00</updated>
+    <dc:date>2013-01-13T00:26:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/165/</id>
+    <link href="https://blog.naoty.dev/165/"/>
+    <title>IntelliJ IDEAをvimっぽくする</title>
+    <updated>2013-01-04T23:41:00+00:00</updated>
+    <dc:date>2013-01-04T23:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/164/</id>
+    <link href="https://blog.naoty.dev/164/"/>
+    <title>2012年の振り返り・2013年の目標</title>
+    <updated>2012-12-31T02:16:00+00:00</updated>
+    <dc:date>2012-12-31T02:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/163/</id>
+    <link href="https://blog.naoty.dev/163/"/>
+    <title>Herokuでhubotを使ったIRC botを動かす</title>
+    <updated>2012-12-30T03:41:00+00:00</updated>
+    <dc:date>2012-12-30T03:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/162/</id>
+    <link href="https://blog.naoty.dev/162/"/>
+    <title>AndroidでUserAgentを指定する</title>
+    <updated>2012-12-27T11:48:00+00:00</updated>
+    <dc:date>2012-12-27T11:48:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/161/</id>
+    <link href="https://blog.naoty.dev/161/"/>
+    <title>node.js環境構築</title>
+    <updated>2012-12-16T23:33:00+00:00</updated>
+    <dc:date>2012-12-16T23:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/160/</id>
+    <link href="https://blog.naoty.dev/160/"/>
+    <title>Qiita Hackathon参加してきました</title>
+    <updated>2012-12-09T00:21:00+00:00</updated>
+    <dc:date>2012-12-09T00:21:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/159/</id>
+    <link href="https://blog.naoty.dev/159/"/>
+    <title>Hello, Arduino!</title>
+    <updated>2012-12-02T22:50:00+00:00</updated>
+    <dc:date>2012-12-02T22:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/158/</id>
+    <link href="https://blog.naoty.dev/158/"/>
+    <title>近況・これからの方向性についての話</title>
+    <updated>2012-12-02T02:00:00+00:00</updated>
+    <dc:date>2012-12-02T02:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/157/</id>
+    <link href="https://blog.naoty.dev/157/"/>
+    <title>ちょっとしたiPadアプリを作った話</title>
+    <updated>2012-11-26T00:08:00+00:00</updated>
+    <dc:date>2012-11-26T00:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/156/</id>
+    <link href="https://blog.naoty.dev/156/"/>
+    <title>書評：ふつうのLinuxプログラミング、あるいはHTTPサーバーについておおざっぱに</title>
+    <updated>2012-11-11T01:06:00+00:00</updated>
+    <dc:date>2012-11-11T01:06:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/155/</id>
+    <link href="https://blog.naoty.dev/155/"/>
+    <title>ruby-2.0.0-preview1をインストールしてみた</title>
+    <updated>2012-11-09T00:05:00+00:00</updated>
+    <dc:date>2012-11-09T00:05:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/154/</id>
+    <link href="https://blog.naoty.dev/154/"/>
+    <title>Cはじめました</title>
+    <updated>2012-11-05T23:45:00+00:00</updated>
+    <dc:date>2012-11-05T23:45:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/153/</id>
+    <link href="https://blog.naoty.dev/153/"/>
+    <title>iOS 6とiOS 5でFacebook SDK使おうとしたらハマった</title>
+    <updated>2012-11-05T17:34:00+00:00</updated>
+    <dc:date>2012-11-05T17:34:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/152/</id>
+    <link href="https://blog.naoty.dev/152/"/>
+    <title>プログラムにフリックさせてイベントを受け取る</title>
+    <updated>2012-10-26T14:33:00+00:00</updated>
+    <dc:date>2012-10-26T14:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/151/</id>
+    <link href="https://blog.naoty.dev/151/"/>
+    <title>SinatraでのRABLの使い方</title>
+    <updated>2012-10-26T00:03:00+00:00</updated>
+    <dc:date>2012-10-26T00:03:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/150/</id>
+    <link href="https://blog.naoty.dev/150/"/>
+    <title>ラーメン戦記（中目黒・恵比寿エリア）</title>
+    <updated>2012-10-18T13:08:00+00:00</updated>
+    <dc:date>2012-10-18T13:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/149/</id>
+    <link href="https://blog.naoty.dev/149/"/>
+    <title>セルフ新人研修の話</title>
+    <updated>2012-10-14T01:32:00+00:00</updated>
+    <dc:date>2012-10-14T01:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/148/</id>
+    <link href="https://blog.naoty.dev/148/"/>
+    <title>Hello, Sinatra! (1)</title>
+    <updated>2012-10-08T23:11:00+00:00</updated>
+    <dc:date>2012-10-08T23:11:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/147/</id>
+    <link href="https://blog.naoty.dev/147/"/>
+    <title>書評：iOS SDK Development</title>
+    <updated>2012-09-30T19:19:00+00:00</updated>
+    <dc:date>2012-09-30T19:19:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/146/</id>
+    <link href="https://blog.naoty.dev/146/"/>
+    <title>ちゃんとテスト書き始めた話</title>
+    <updated>2012-09-27T02:47:00+00:00</updated>
+    <dc:date>2012-09-27T02:47:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/145/</id>
+    <link href="https://blog.naoty.dev/145/"/>
+    <title>tmuxのlaunchctlエラー対策</title>
+    <updated>2012-09-25T11:51:00+00:00</updated>
+    <dc:date>2012-09-25T11:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/144/</id>
+    <link href="https://blog.naoty.dev/144/"/>
+    <title>__FILE__と$0の違い</title>
+    <updated>2012-09-18T16:20:00+00:00</updated>
+    <dc:date>2012-09-18T16:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/143/</id>
+    <link href="https://blog.naoty.dev/143/"/>
+    <title>Regexp#+を定義して「または」を簡単に作る</title>
+    <updated>2012-09-06T18:22:00+00:00</updated>
+    <dc:date>2012-09-06T18:22:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/142/</id>
+    <link href="https://blog.naoty.dev/142/"/>
+    <title>Firefox用Qiita検索プラグイン</title>
+    <updated>2012-09-05T02:10:00+00:00</updated>
+    <dc:date>2012-09-05T02:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/141/</id>
+    <link href="https://blog.naoty.dev/141/"/>
+    <title>FactoryGirlでコールバックをスキップする</title>
+    <updated>2012-09-04T11:53:00+00:00</updated>
+    <dc:date>2012-09-04T11:53:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/140/</id>
+    <link href="https://blog.naoty.dev/140/"/>
+    <title>vimで右にhelpを表示する</title>
+    <updated>2012-08-14T15:58:00+00:00</updated>
+    <dc:date>2012-08-14T15:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/139/</id>
+    <link href="https://blog.naoty.dev/139/"/>
+    <title>ローカルIPアドレスをtmuxのステータスラインに表示する</title>
+    <updated>2012-08-08T11:42:00+00:00</updated>
+    <dc:date>2012-08-08T11:42:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/138/</id>
+    <link href="https://blog.naoty.dev/138/"/>
+    <title>Rails開発環境 2012夏</title>
+    <updated>2012-08-08T10:14:00+00:00</updated>
+    <dc:date>2012-08-08T10:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/137/</id>
+    <link href="https://blog.naoty.dev/137/"/>
+    <title>Androidの標準カメラで撮った画像をPOSTで送信する</title>
+    <updated>2012-08-05T05:42:00+00:00</updated>
+    <dc:date>2012-08-05T05:42:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/136/</id>
+    <link href="https://blog.naoty.dev/136/"/>
+    <title>tmuxinatorで一瞬で開発環境を起動する</title>
+    <updated>2012-07-21T16:57:00+00:00</updated>
+    <dc:date>2012-07-21T16:57:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/135/</id>
+    <link href="https://blog.naoty.dev/135/"/>
+    <title>Railsデフォルトのjqueryは圧縮されてない</title>
+    <updated>2012-07-21T01:14:00+00:00</updated>
+    <dc:date>2012-07-21T01:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/134/</id>
+    <link href="https://blog.naoty.dev/134/"/>
+    <title>cui-about.meをリリースしました</title>
+    <updated>2012-07-17T22:15:00+00:00</updated>
+    <dc:date>2012-07-17T22:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/133/</id>
+    <link href="https://blog.naoty.dev/133/"/>
+    <title>見やすいgit-tag</title>
+    <updated>2012-07-10T20:44:00+00:00</updated>
+    <dc:date>2012-07-10T20:44:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/132/</id>
+    <link href="https://blog.naoty.dev/132/"/>
+    <title>Railsでよく使うDSLのfiletypeを設定する</title>
+    <updated>2012-07-03T08:48:00+00:00</updated>
+    <dc:date>2012-07-03T08:48:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/131/</id>
+    <link href="https://blog.naoty.dev/131/"/>
+    <title>見やすいgit-grep</title>
+    <updated>2012-07-02T15:30:00+00:00</updated>
+    <dc:date>2012-07-02T15:30:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/130/</id>
+    <link href="https://blog.naoty.dev/130/"/>
+    <title>binding.pryがあったらコミットを中止する</title>
+    <updated>2012-06-25T16:55:00+00:00</updated>
+    <dc:date>2012-06-25T16:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/129/</id>
+    <link href="https://blog.naoty.dev/129/"/>
+    <title>コンソールで直前の結果を参照する</title>
+    <updated>2012-06-17T11:55:00+00:00</updated>
+    <dc:date>2012-06-17T11:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/128/</id>
+    <link href="https://blog.naoty.dev/128/"/>
+    <title>Gemfileを公開するサイト「Gemfile Freaks」を公開しました</title>
+    <updated>2012-06-11T09:32:00+00:00</updated>
+    <dc:date>2012-06-11T09:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/127/</id>
+    <link href="https://blog.naoty.dev/127/"/>
+    <title>開発環境用Procfile</title>
+    <updated>2012-06-09T13:07:00+00:00</updated>
+    <dc:date>2012-06-09T13:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/126/</id>
+    <link href="https://blog.naoty.dev/126/"/>
+    <title>rablを使ってRailsのAPIレスポンスを簡潔に定義する</title>
+    <updated>2012-05-27T01:50:00+00:00</updated>
+    <dc:date>2012-05-27T01:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/125/</id>
+    <link href="https://blog.naoty.dev/125/"/>
+    <title>gemをすべてアンインストールするワンライナー</title>
+    <updated>2012-05-25T15:16:00+00:00</updated>
+    <dc:date>2012-05-25T15:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/124/</id>
+    <link href="https://blog.naoty.dev/124/"/>
+    <title>gemのディレクトリに一瞬で移動する</title>
+    <updated>2012-05-23T12:02:00+00:00</updated>
+    <dc:date>2012-05-23T12:02:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/123/</id>
+    <link href="https://blog.naoty.dev/123/"/>
+    <title>command line toolsのみインストールしたときのpathの設定</title>
+    <updated>2012-05-22T10:13:00+00:00</updated>
+    <dc:date>2012-05-22T10:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/122/</id>
+    <link href="https://blog.naoty.dev/122/"/>
+    <title>ブログをはてなブログに移転しました。</title>
+    <updated>2012-05-20T22:23:00+00:00</updated>
+    <dc:date>2012-05-20T22:23:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/121/</id>
+    <link href="https://blog.naoty.dev/121/"/>
+    <title>Happy Hacking Keyboard Lite2を買ってみた</title>
+    <updated>2012-05-20T18:27:00+00:00</updated>
+    <dc:date>2012-05-20T18:27:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/120/</id>
+    <link href="https://blog.naoty.dev/120/"/>
+    <title>Rails開発環境 2012初夏</title>
+    <updated>2012-05-20T03:22:00+00:00</updated>
+    <dc:date>2012-05-20T03:22:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/119/</id>
+    <link href="https://blog.naoty.dev/119/"/>
+    <title>最初のActivityに戻る</title>
+    <updated>2012-05-18T19:56:00+00:00</updated>
+    <dc:date>2012-05-18T19:56:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/118/</id>
+    <link href="https://blog.naoty.dev/118/"/>
+    <title>foremanでthinを起動しても何も表示されない件の解決策</title>
+    <updated>2012-05-04T12:16:00+00:00</updated>
+    <dc:date>2012-05-04T12:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/117/</id>
+    <link href="https://blog.naoty.dev/117/"/>
+    <title>HTMLやCSSの変更を自動でブラウザに反映させる</title>
+    <updated>2012-05-03T21:31:00+00:00</updated>
+    <dc:date>2012-05-03T21:31:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/116/</id>
+    <link href="https://blog.naoty.dev/116/"/>
+    <title>Railsで使ってる間に合わせのCSS</title>
+    <updated>2012-04-29T00:00:00+00:00</updated>
+    <dc:date>2012-04-29T00:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/115/</id>
+    <link href="https://blog.naoty.dev/115/"/>
+    <title>MBAに入れてるアプリと作業環境</title>
+    <updated>2012-04-24T13:52:00+00:00</updated>
+    <dc:date>2012-04-24T13:52:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/114/</id>
+    <link href="https://blog.naoty.dev/114/"/>
+    <title>Kobitoのスタイルを変更する</title>
+    <updated>2012-04-12T13:07:00+00:00</updated>
+    <dc:date>2012-04-12T13:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/113/</id>
+    <link href="https://blog.naoty.dev/113/"/>
+    <title>CSRFトークンの検証プロセス</title>
+    <updated>2012-04-12T11:33:00+00:00</updated>
+    <dc:date>2012-04-12T11:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/112/</id>
+    <link href="https://blog.naoty.dev/112/"/>
+    <title>vimperatorで快適ブラウジング</title>
+    <updated>2012-04-09T23:53:00+00:00</updated>
+    <dc:date>2012-04-09T23:53:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/111/</id>
+    <link href="https://blog.naoty.dev/111/"/>
+    <title>Titaniumでdate.jsを使う</title>
+    <updated>2012-04-08T21:39:00+00:00</updated>
+    <dc:date>2012-04-08T21:39:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/110/</id>
+    <link href="https://blog.naoty.dev/110/"/>
+    <title>中2っぽいプロンプト</title>
+    <updated>2012-04-05T14:20:00+00:00</updated>
+    <dc:date>2012-04-05T14:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/109/</id>
+    <link href="https://blog.naoty.dev/109/"/>
+    <title>ファイルのパスを絶対パスに変換</title>
+    <updated>2012-04-04T16:12:00+00:00</updated>
+    <dc:date>2012-04-04T16:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/108/</id>
+    <link href="https://blog.naoty.dev/108/"/>
+    <title>モバイルからのリクエストのCSRF検証をスキップする</title>
+    <updated>2012-03-29T00:15:00+00:00</updated>
+    <dc:date>2012-03-29T00:15:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/107/</id>
+    <link href="https://blog.naoty.dev/107/"/>
+    <title>vimrc晒し</title>
+    <updated>2012-03-27T14:47:00+00:00</updated>
+    <dc:date>2012-03-27T14:47:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/106/</id>
+    <link href="https://blog.naoty.dev/106/"/>
+    <title>ハッピーになれるpry拡張詰め合わせGemfile</title>
+    <updated>2012-03-20T18:05:00+00:00</updated>
+    <dc:date>2012-03-20T18:05:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/105/</id>
+    <link href="https://blog.naoty.dev/105/"/>
+    <title>capistranoでのunicorn再起動タスク</title>
+    <updated>2012-03-12T22:45:00+00:00</updated>
+    <dc:date>2012-03-12T22:45:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/104/</id>
+    <link href="https://blog.naoty.dev/104/"/>
+    <title>Capistranoでassets:precompileを自動化</title>
+    <updated>2012-03-12T22:16:00+00:00</updated>
+    <dc:date>2012-03-12T22:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/103/</id>
+    <link href="https://blog.naoty.dev/103/"/>
+    <title>bundle execを使わずにすむ方法</title>
+    <updated>2012-03-05T16:50:00+00:00</updated>
+    <dc:date>2012-03-05T16:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/102/</id>
+    <link href="https://blog.naoty.dev/102/"/>
+    <title>Railsで時間を「◯分前」「◯時間前」にフォーマットする</title>
+    <updated>2012-03-01T19:41:00+00:00</updated>
+    <dc:date>2012-03-01T19:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/101/</id>
+    <link href="https://blog.naoty.dev/101/"/>
+    <title>scss内でimageを参照したいとき</title>
+    <updated>2012-03-01T00:46:00+00:00</updated>
+    <dc:date>2012-03-01T00:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/100/</id>
+    <link href="https://blog.naoty.dev/100/"/>
+    <title>nginx.conf for Jekyll</title>
+    <updated>2012-02-21T16:12:00+00:00</updated>
+    <dc:date>2012-02-21T16:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/99/</id>
+    <link href="https://blog.naoty.dev/99/"/>
+    <title>容赦無いCollection Insert</title>
+    <updated>2012-02-21T15:59:00+00:00</updated>
+    <dc:date>2012-02-21T15:59:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/98/</id>
+    <link href="https://blog.naoty.dev/98/"/>
+    <title>capistranoでtail -f</title>
+    <updated>2012-01-17T23:01:00+00:00</updated>
+    <dc:date>2012-01-17T23:01:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/97/</id>
+    <link href="https://blog.naoty.dev/97/"/>
+    <title>ブログを移転しました。</title>
+    <updated>2012-01-10T22:28:00+00:00</updated>
+    <dc:date>2012-01-10T22:28:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/96/</id>
+    <link href="https://blog.naoty.dev/96/"/>
+    <title>さくらVPS作業メモ（rubyインストールまで）</title>
+    <updated>2012-01-03T00:14:00+00:00</updated>
+    <dc:date>2012-01-03T00:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/95/</id>
+    <link href="https://blog.naoty.dev/95/"/>
+    <title>dotfilesをgithubで管理する</title>
+    <updated>2011-12-29T10:32:00+00:00</updated>
+    <dc:date>2011-12-29T10:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/94/</id>
+    <link href="https://blog.naoty.dev/94/"/>
+    <title>HTMLから始めたド素人がwebサービスをリリースするまでに読んだオススメの本10冊</title>
+    <updated>2011-12-08T18:23:00+00:00</updated>
+    <dc:date>2011-12-08T18:23:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/93/</id>
+    <link href="https://blog.naoty.dev/93/"/>
+    <title>Rails3.1でTwitter認証しTwitter APIを呼び出す</title>
+    <updated>2011-12-03T21:52:00+00:00</updated>
+    <dc:date>2011-12-03T21:52:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/92/</id>
+    <link href="https://blog.naoty.dev/92/"/>
+    <title>himzinz.comをリリースしました</title>
+    <updated>2011-11-26T01:54:00+00:00</updated>
+    <dc:date>2011-11-26T01:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/91/</id>
+    <link href="https://blog.naoty.dev/91/"/>
+    <title>Time::DATE_FORMATS</title>
+    <updated>2011-11-13T23:58:00+00:00</updated>
+    <dc:date>2011-11-13T23:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/90/</id>
+    <link href="https://blog.naoty.dev/90/"/>
+    <title>rvm installでyamlがmakeできない件</title>
+    <updated>2011-11-05T18:42:00+00:00</updated>
+    <dc:date>2011-11-05T18:42:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/89/</id>
+    <link href="https://blog.naoty.dev/89/"/>
+    <title>実行環境とBundler.require</title>
+    <updated>2011-11-02T00:24:00+00:00</updated>
+    <dc:date>2011-11-02T00:24:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/88/</id>
+    <link href="https://blog.naoty.dev/88/"/>
+    <title>production環境のみダイジェスト認証を有効にする</title>
+    <updated>2011-10-31T20:41:00+00:00</updated>
+    <dc:date>2011-10-31T20:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/87/</id>
+    <link href="https://blog.naoty.dev/87/"/>
+    <title>factory_girlを使ってスマートにseedデータを作成する</title>
+    <updated>2011-10-30T20:24:00+00:00</updated>
+    <dc:date>2011-10-30T20:24:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/86/</id>
+    <link href="https://blog.naoty.dev/86/"/>
+    <title>さくらVPSでRailsを動かすまでのTodo</title>
+    <updated>2011-10-28T19:43:00+00:00</updated>
+    <dc:date>2011-10-28T19:43:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/85/</id>
+    <link href="https://blog.naoty.dev/85/"/>
+    <title>nginx+rvmでPassengerが動いてない？</title>
+    <updated>2011-10-24T13:12:00+00:00</updated>
+    <dc:date>2011-10-24T13:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/84/</id>
+    <link href="https://blog.naoty.dev/84/"/>
+    <title>CentOSにmysqlを入れて起動するまでのメモ</title>
+    <updated>2011-10-17T21:58:00+00:00</updated>
+    <dc:date>2011-10-17T21:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/83/</id>
+    <link href="https://blog.naoty.dev/83/"/>
+    <title>centosにgitosisを入れてpushするまでのメモ</title>
+    <updated>2011-10-15T01:41:00+00:00</updated>
+    <dc:date>2011-10-15T01:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/82/</id>
+    <link href="https://blog.naoty.dev/82/"/>
+    <title>deviseで確認メールが送られてこない件を解決</title>
+    <updated>2011-09-28T12:00:00+00:00</updated>
+    <dc:date>2011-09-28T12:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/81/</id>
+    <link href="https://blog.naoty.dev/81/"/>
+    <title>Rails3.1にjquery-uiを導入する</title>
+    <updated>2011-09-25T01:50:00+00:00</updated>
+    <dc:date>2011-09-25T01:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/80/</id>
+    <link href="https://blog.naoty.dev/80/"/>
+    <title>Twitter APIのエラーの回避方法</title>
+    <updated>2011-09-09T03:26:00+00:00</updated>
+    <dc:date>2011-09-09T03:26:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/79/</id>
+    <link href="https://blog.naoty.dev/79/"/>
+    <title>Rails3.0.xと3.1のrails newとrails generateの違い</title>
+    <updated>2011-09-03T21:56:00+00:00</updated>
+    <dc:date>2011-09-03T21:56:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/78/</id>
+    <link href="https://blog.naoty.dev/78/"/>
+    <title>factory_girlでdeviseのメール通知をスキップする</title>
+    <updated>2011-09-01T14:16:00+00:00</updated>
+    <dc:date>2011-09-01T14:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/77/</id>
+    <link href="https://blog.naoty.dev/77/"/>
+    <title>rspec, factory_girl, spork, guardによる自動テスト環境の構築</title>
+    <updated>2011-08-24T01:48:00+00:00</updated>
+    <dc:date>2011-08-24T01:48:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/76/</id>
+    <link href="https://blog.naoty.dev/76/"/>
+    <title>plistから数値を読み込む</title>
+    <updated>2011-08-17T22:30:00+00:00</updated>
+    <dc:date>2011-08-17T22:30:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/75/</id>
+    <link href="https://blog.naoty.dev/75/"/>
+    <title>Rails3のDate.currentのソースコードリーディング</title>
+    <updated>2011-08-01T23:08:00+00:00</updated>
+    <dc:date>2011-08-01T23:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/74/</id>
+    <link href="https://blog.naoty.dev/74/"/>
+    <title>脱初心者なRubyのループ処理の書き方</title>
+    <updated>2011-07-26T23:51:00+00:00</updated>
+    <dc:date>2011-07-26T23:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/73/</id>
+    <link href="https://blog.naoty.dev/73/"/>
+    <title>tm_twitter_apiでうまく認証できない</title>
+    <updated>2011-07-24T23:51:00+00:00</updated>
+    <dc:date>2011-07-24T23:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/72/</id>
+    <link href="https://blog.naoty.dev/72/"/>
+    <title>class_evalとinstance_eval</title>
+    <updated>2011-07-22T01:42:00+00:00</updated>
+    <dc:date>2011-07-22T01:42:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/71/</id>
+    <link href="https://blog.naoty.dev/71/"/>
+    <title>特異クラスと特異メソッド</title>
+    <updated>2011-07-20T23:16:00+00:00</updated>
+    <dc:date>2011-07-20T23:16:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/70/</id>
+    <link href="https://blog.naoty.dev/70/"/>
+    <title>Moduleによるクラスの拡張</title>
+    <updated>2011-07-20T13:42:00+00:00</updated>
+    <dc:date>2011-07-20T13:42:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/69/</id>
+    <link href="https://blog.naoty.dev/69/"/>
+    <title>Dateクラスのタイムゾーンの不思議</title>
+    <updated>2011-07-20T12:02:00+00:00</updated>
+    <dc:date>2011-07-20T12:02:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/68/</id>
+    <link href="https://blog.naoty.dev/68/"/>
+    <title>MongoDBを使う際のRspecの設定メモ</title>
+    <updated>2011-07-18T22:52:00+00:00</updated>
+    <dc:date>2011-07-18T22:52:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/67/</id>
+    <link href="https://blog.naoty.dev/67/"/>
+    <title>Rails3にrspecとfactory girlをインストールしたときのメモ</title>
+    <updated>2011-07-18T22:07:00+00:00</updated>
+    <dc:date>2011-07-18T22:07:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/66/</id>
+    <link href="https://blog.naoty.dev/66/"/>
+    <title>Classクラスに関する仮説</title>
+    <updated>2011-07-11T23:44:00+00:00</updated>
+    <dc:date>2011-07-11T23:44:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/65/</id>
+    <link href="https://blog.naoty.dev/65/"/>
+    <title>ある条件であるクラスを追加するヘルパーメソッドつくりました</title>
+    <updated>2011-07-11T17:17:00+00:00</updated>
+    <dc:date>2011-07-11T17:17:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/64/</id>
+    <link href="https://blog.naoty.dev/64/"/>
+    <title>ある条件でhiddenなHTMLタグを出力するヘルパーメソッドつくりました</title>
+    <updated>2011-07-11T15:26:00+00:00</updated>
+    <dc:date>2011-07-11T15:26:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/63/</id>
+    <link href="https://blog.naoty.dev/63/"/>
+    <title>アプリ（Titanium Mobile）とサーバー（Rails）間の通信</title>
+    <updated>2011-07-04T00:33:00+00:00</updated>
+    <dc:date>2011-07-04T00:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/62/</id>
+    <link href="https://blog.naoty.dev/62/"/>
+    <title>アプリ起動時にログイン画面を表示させる</title>
+    <updated>2011-06-21T00:55:00+00:00</updated>
+    <dc:date>2011-06-21T00:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/61/</id>
+    <link href="https://blog.naoty.dev/61/"/>
+    <title>基本的なログインフォーム</title>
+    <updated>2011-06-16T22:57:00+00:00</updated>
+    <dc:date>2011-06-16T22:57:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/60/</id>
+    <link href="https://blog.naoty.dev/60/"/>
+    <title>Titanium Mobileで現在地を表示する</title>
+    <updated>2011-06-12T23:51:00+00:00</updated>
+    <dc:date>2011-06-12T23:51:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/59/</id>
+    <link href="https://blog.naoty.dev/59/"/>
+    <title>Titanium Mobileによる開発環境の構築</title>
+    <updated>2011-06-11T17:20:00+00:00</updated>
+    <dc:date>2011-06-11T17:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/58/</id>
+    <link href="https://blog.naoty.dev/58/"/>
+    <title>Rails 3のバッチ処理</title>
+    <updated>2011-06-10T11:39:00+00:00</updated>
+    <dc:date>2011-06-10T11:39:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/57/</id>
+    <link href="https://blog.naoty.dev/57/"/>
+    <title>Tweetボタンのカスタマイズ</title>
+    <updated>2011-06-09T11:20:00+00:00</updated>
+    <dc:date>2011-06-09T11:20:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/56/</id>
+    <link href="https://blog.naoty.dev/56/"/>
+    <title>jQueryでテキストエリアのキャレットを先頭に移動する</title>
+    <updated>2011-05-23T18:48:00+00:00</updated>
+    <dc:date>2011-05-23T18:48:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/55/</id>
+    <link href="https://blog.naoty.dev/55/"/>
+    <title>ルーティングヘルパーにパラメーターを付加する</title>
+    <updated>2011-05-12T18:05:00+00:00</updated>
+    <dc:date>2011-05-12T18:05:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/54/</id>
+    <link href="https://blog.naoty.dev/54/"/>
+    <title>Rails3のルーティングの初歩</title>
+    <updated>2011-05-12T13:36:00+00:00</updated>
+    <dc:date>2011-05-12T13:36:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/53/</id>
+    <link href="https://blog.naoty.dev/53/"/>
+    <title>Rails3でMongoidを使ってみる</title>
+    <updated>2011-05-10T00:09:00+00:00</updated>
+    <dc:date>2011-05-10T00:09:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/52/</id>
+    <link href="https://blog.naoty.dev/52/"/>
+    <title>ターミナルのプロンプトの設定</title>
+    <updated>2011-05-09T12:22:00+00:00</updated>
+    <dc:date>2011-05-09T12:22:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/51/</id>
+    <link href="https://blog.naoty.dev/51/"/>
+    <title>CSV出力の機能テスト</title>
+    <updated>2011-04-28T17:41:00+00:00</updated>
+    <dc:date>2011-04-28T17:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/50/</id>
+    <link href="https://blog.naoty.dev/50/"/>
+    <title>Ruby InstallerでWindowsにRubyを入れるとirbでエラーが起こる件</title>
+    <updated>2011-04-18T00:36:00+00:00</updated>
+    <dc:date>2011-04-18T00:36:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/49/</id>
+    <link href="https://blog.naoty.dev/49/"/>
+    <title>さくらVPSに最新版GNU screenをインストールする</title>
+    <updated>2011-04-08T04:14:00+00:00</updated>
+    <dc:date>2011-04-08T04:14:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/48/</id>
+    <link href="https://blog.naoty.dev/48/"/>
+    <title>ボタンによって処理を切り替える</title>
+    <updated>2011-03-30T17:26:00+00:00</updated>
+    <dc:date>2011-03-30T17:26:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/47/</id>
+    <link href="https://blog.naoty.dev/47/"/>
+    <title>jQueryでの選択解除</title>
+    <updated>2011-03-29T11:55:00+00:00</updated>
+    <dc:date>2011-03-29T11:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/46/</id>
+    <link href="https://blog.naoty.dev/46/"/>
+    <title>canvasでお絵かき</title>
+    <updated>2011-03-25T23:32:00+00:00</updated>
+    <dc:date>2011-03-25T23:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/45/</id>
+    <link href="https://blog.naoty.dev/45/"/>
+    <title>Google Maps APIとTwitter APIのマッシュアップ</title>
+    <updated>2011-03-20T19:54:00+00:00</updated>
+    <dc:date>2011-03-20T19:54:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/44/</id>
+    <link href="https://blog.naoty.dev/44/"/>
+    <title>jQueryによるアコーディオンパネル</title>
+    <updated>2011-03-15T14:04:00+00:00</updated>
+    <dc:date>2011-03-15T14:04:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/43/</id>
+    <link href="https://blog.naoty.dev/43/"/>
+    <title>JavaScriptのループ文あれこれ</title>
+    <updated>2011-03-10T11:46:00+00:00</updated>
+    <dc:date>2011-03-10T11:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/42/</id>
+    <link href="https://blog.naoty.dev/42/"/>
+    <title>select_datetimeからの日付検索</title>
+    <updated>2011-03-09T19:59:00+00:00</updated>
+    <dc:date>2011-03-09T19:59:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/41/</id>
+    <link href="https://blog.naoty.dev/41/"/>
+    <title>セレクトボックスの値を動的に設定する</title>
+    <updated>2011-03-09T13:31:00+00:00</updated>
+    <dc:date>2011-03-09T13:31:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/40/</id>
+    <link href="https://blog.naoty.dev/40/"/>
+    <title>選択されたチェックを画面遷移後も維持する</title>
+    <updated>2011-03-04T13:11:00+00:00</updated>
+    <dc:date>2011-03-04T13:11:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/39/</id>
+    <link href="https://blog.naoty.dev/39/"/>
+    <title>Mac OS XにおけるJavaのバージョン変更</title>
+    <updated>2011-03-02T17:12:00+00:00</updated>
+    <dc:date>2011-03-02T17:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/38/</id>
+    <link href="https://blog.naoty.dev/38/"/>
+    <title>Aptana Studioの環境構築</title>
+    <updated>2011-03-01T01:34:00+00:00</updated>
+    <dc:date>2011-03-01T01:34:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/37/</id>
+    <link href="https://blog.naoty.dev/37/"/>
+    <title>MacPortsでMySQLをインストールしてからログインまで</title>
+    <updated>2011-02-22T16:45:00+00:00</updated>
+    <dc:date>2011-02-22T16:45:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/36/</id>
+    <link href="https://blog.naoty.dev/36/"/>
+    <title>「初めてのJavaScript」は初心者向けじゃない！</title>
+    <updated>2011-02-18T00:59:00+00:00</updated>
+    <dc:date>2011-02-18T00:59:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/35/</id>
+    <link href="https://blog.naoty.dev/35/"/>
+    <title>MechanizeでMixiボイスに投稿する</title>
+    <updated>2011-02-17T02:41:00+00:00</updated>
+    <dc:date>2011-02-17T02:41:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/34/</id>
+    <link href="https://blog.naoty.dev/34/"/>
+    <title>プロパティの参照順序について</title>
+    <updated>2011-02-13T22:12:00+00:00</updated>
+    <dc:date>2011-02-13T22:12:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/33/</id>
+    <link href="https://blog.naoty.dev/33/"/>
+    <title>プラグイン読み込みの設定</title>
+    <updated>2011-02-09T18:06:00+00:00</updated>
+    <dc:date>2011-02-09T18:06:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/32/</id>
+    <link href="https://blog.naoty.dev/32/"/>
+    <title>Canvasで図形を描画する</title>
+    <updated>2011-02-02T15:55:00+00:00</updated>
+    <dc:date>2011-02-02T15:55:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/31/</id>
+    <link href="https://blog.naoty.dev/31/"/>
+    <title>IEでよくあるバグ</title>
+    <updated>2011-01-27T17:37:00+00:00</updated>
+    <dc:date>2011-01-27T17:37:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/30/</id>
+    <link href="https://blog.naoty.dev/30/"/>
+    <title>セレクタのリファクタリング</title>
+    <updated>2011-01-20T19:56:00+00:00</updated>
+    <dc:date>2011-01-20T19:56:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/29/</id>
+    <link href="https://blog.naoty.dev/29/"/>
+    <title>jQueryでテーブルを垂直方向に分割する</title>
+    <updated>2011-01-20T17:04:00+00:00</updated>
+    <dc:date>2011-01-20T17:04:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/28/</id>
+    <link href="https://blog.naoty.dev/28/"/>
+    <title>jQueryでテーブルを水平方向に分割する</title>
+    <updated>2011-01-20T14:43:00+00:00</updated>
+    <dc:date>2011-01-20T14:43:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/27/</id>
+    <link href="https://blog.naoty.dev/27/"/>
+    <title>わかりやすかったテキスト（Rails, jQuery編）</title>
+    <updated>2011-01-18T17:47:00+00:00</updated>
+    <dc:date>2011-01-18T17:47:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/26/</id>
+    <link href="https://blog.naoty.dev/26/"/>
+    <title>jQueryでchangeイベント内で変更後の値を取得する</title>
+    <updated>2011-01-18T15:13:00+00:00</updated>
+    <dc:date>2011-01-18T15:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/25/</id>
+    <link href="https://blog.naoty.dev/25/"/>
+    <title>jQueryで現在のページのURLを取得する</title>
+    <updated>2011-01-18T14:58:00+00:00</updated>
+    <dc:date>2011-01-18T14:58:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/24/</id>
+    <link href="https://blog.naoty.dev/24/"/>
+    <title>form_tagでパラメータをつけて現在のページに遷移する</title>
+    <updated>2011-01-13T20:37:00+00:00</updated>
+    <dc:date>2011-01-13T20:37:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/23/</id>
+    <link href="https://blog.naoty.dev/23/"/>
+    <title>jQueryで複数のテキストを取得する方法</title>
+    <updated>2010-12-28T16:50:00+00:00</updated>
+    <dc:date>2010-12-28T16:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/22/</id>
+    <link href="https://blog.naoty.dev/22/"/>
+    <title>Instant Railsのrubyコンソールでgitを使う</title>
+    <updated>2010-10-11T21:50:00+00:00</updated>
+    <dc:date>2010-10-11T21:50:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/21/</id>
+    <link href="https://blog.naoty.dev/21/"/>
+    <title>Grepコマンドもどき ver.2（完成版）</title>
+    <updated>2010-10-02T18:10:00+00:00</updated>
+    <dc:date>2010-10-02T18:10:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/20/</id>
+    <link href="https://blog.naoty.dev/20/"/>
+    <title>Grepコマンドもどき ver.1</title>
+    <updated>2010-10-02T15:13:00+00:00</updated>
+    <dc:date>2010-10-02T15:13:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/19/</id>
+    <link href="https://blog.naoty.dev/19/"/>
+    <title>変数の区別</title>
+    <updated>2010-09-26T17:36:00+00:00</updated>
+    <dc:date>2010-09-26T17:36:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/18/</id>
+    <link href="https://blog.naoty.dev/18/"/>
+    <title>VimによるRails開発環境の構築　ver.2</title>
+    <updated>2010-09-25T19:35:00+00:00</updated>
+    <dc:date>2010-09-25T19:35:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/17/</id>
+    <link href="https://blog.naoty.dev/17/"/>
+    <title>VimによるRails開発環境の構築　ver.1</title>
+    <updated>2010-09-24T02:04:00+00:00</updated>
+    <dc:date>2010-09-24T02:04:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/16/</id>
+    <link href="https://blog.naoty.dev/16/"/>
+    <title>Merge Sort ver.1</title>
+    <updated>2010-09-09T15:48:00+00:00</updated>
+    <dc:date>2010-09-09T15:48:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/15/</id>
+    <link href="https://blog.naoty.dev/15/"/>
+    <title>WIN32OLEを使ったExcelの操作(1)</title>
+    <updated>2010-08-23T19:26:00+00:00</updated>
+    <dc:date>2010-08-23T19:26:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/14/</id>
+    <link href="https://blog.naoty.dev/14/"/>
+    <title>ハノイの塔　ver.2</title>
+    <updated>2010-08-21T10:00:00+00:00</updated>
+    <dc:date>2010-08-21T10:00:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/13/</id>
+    <link href="https://blog.naoty.dev/13/"/>
+    <title>ハノイの塔　ver.1</title>
+    <updated>2010-08-19T08:08:00+00:00</updated>
+    <dc:date>2010-08-19T08:08:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/12/</id>
+    <link href="https://blog.naoty.dev/12/"/>
+    <title>Fizzbuzz問題（Ruby） ver.1</title>
+    <updated>2010-08-16T11:18:00+00:00</updated>
+    <dc:date>2010-08-16T11:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/11/</id>
+    <link href="https://blog.naoty.dev/11/"/>
+    <title>ディレクトリ内のファイルの大きさを表示する</title>
+    <updated>2010-08-15T01:30:00+00:00</updated>
+    <dc:date>2010-08-15T01:30:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/10/</id>
+    <link href="https://blog.naoty.dev/10/"/>
+    <title>count_letters ver.2</title>
+    <updated>2010-08-14T03:33:00+00:00</updated>
+    <dc:date>2010-08-14T03:33:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/9/</id>
+    <link href="https://blog.naoty.dev/9/"/>
+    <title>count_letters ver.1</title>
+    <updated>2010-08-14T03:09:00+00:00</updated>
+    <dc:date>2010-08-14T03:09:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/8/</id>
+    <link href="https://blog.naoty.dev/8/"/>
+    <title>sql_request ver.2</title>
+    <updated>2010-06-23T05:26:00+00:00</updated>
+    <dc:date>2010-06-23T05:26:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/7/</id>
+    <link href="https://blog.naoty.dev/7/"/>
+    <title>「PHP逆引きレシピ」を買いました</title>
+    <updated>2010-06-22T06:40:00+00:00</updated>
+    <dc:date>2010-06-22T06:40:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/6/</id>
+    <link href="https://blog.naoty.dev/6/"/>
+    <title>掲示板 ver.2.1</title>
+    <updated>2010-06-20T17:43:00+00:00</updated>
+    <dc:date>2010-06-20T17:43:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/5/</id>
+    <link href="https://blog.naoty.dev/5/"/>
+    <title>掲示板 ver.1.2</title>
+    <updated>2010-06-19T04:32:00+00:00</updated>
+    <dc:date>2010-06-19T04:32:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/4/</id>
+    <link href="https://blog.naoty.dev/4/"/>
+    <title>掲示板 ver.1.1</title>
+    <updated>2010-06-18T03:18:00+00:00</updated>
+    <dc:date>2010-06-18T03:18:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/3/</id>
+    <link href="https://blog.naoty.dev/3/"/>
+    <title>掲示板 ver.1</title>
+    <updated>2010-06-10T15:46:00+00:00</updated>
+    <dc:date>2010-06-10T15:46:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/2/</id>
+    <link href="https://blog.naoty.dev/2/"/>
+    <title>掲示板 ver.2</title>
+    <updated>2010-06-10T13:53:00+00:00</updated>
+    <dc:date>2010-06-10T13:53:00+00:00</dc:date>
+  </entry>
+  <entry>
+    <id>https://blog.naoty.dev/1/</id>
+    <link href="https://blog.naoty.dev/1/"/>
+    <title>sql_request ver.1</title>
+    <updated>2010-06-09T22:07:00+00:00</updated>
+    <dc:date>2010-06-09T22:07:00+00:00</dc:date>
+  </entry>
+  <dc:date>2021-01-02T03:19:09.084301+00:00</dc:date>
+</feed>

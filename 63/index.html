@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アプリ（Titanium Mobile）とサーバー（Rails）間の通信</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="アプリ（Titanium Mobile）とサーバー（Rails）間の通信">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/63/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">アプリ（Titanium Mobile）とサーバー（Rails）間の通信</h1>
+          <p class="metadata">
+            <time datetime="2011-07-04T00:33:00.000+0000">2011-07-04 00:33</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code># /app/controllers/users_controller.rb
+class UsersController &lt; ApplicationController  
+  def signin
+    @user = User.create({:name =&gt; params[:name], :password =&gt; params[:password]})
+    respond_to do |format|
+      format.json { render :json =&gt; @user.to_json }
+    end
+  end
+end
+</code></pre>
+<ul>
+<li>アプリ側からのリクエストを受けると、Userインスタンスを新しく作成します。ここでは、セキュリティ面の実装は無視しています。</li>
+<li>jsonでレスポンスを返したいので、インスタンスをto_jsonでjson化したものをformat.jsonで返します。</li>
+</ul>
+<pre><code>// /Resources/signin.js
+button.addEventListener('click', function () {
+	var username = usernameForm.value;
+	var password = passwordForm.value;
+	var confirmation = confirmationForm.value;
+	
+	if (username === '' || password === '' || confirmation === '') {
+		Titanium.API.debug('form is blank.');
+		return;
+	}
+	if (password !== confirmation) {
+		Titanium.API.debug('confirmation is wrong.');
+		return;
+	}
+	
+	var xhr = Titanium.Network.createHTTPClient();
+	xhr.open('PUT', 'http://localhost:3000/users/signin.json');
+	xhr.onload = function () {
+		var user = JSON.parse(this.responseText);
+		Titanium.App.Properties.setString('name', user.name);
+		Titanium.App.Properties.setString('password', user.password);
+		Titanium.App.Properties.setInt('id', user._id);
+		win.close();
+	};
+	xhr.send({
+		'name': username,
+		'password': password
+	});
+});
+</code></pre>
+<ul>
+<li>会員登録画面をつくったつもりです。このコードはそのボタン部分の抜粋です。</li>
+<li>サーバーにリクエストする前に最低限の検証をおこなっておきます。ひっかかったら、フォームの背景色を赤にするなど、目立たせる処理も実装するといいっすねー。</li>
+<li>Titanium.Network.HTTPClientを使って、サーバー側と非同期通信します。</li>
+<li>jsonでレスポンスを返してもらいたいので、URLの末尾に「.json」をつけておきます。</li>
+<li>Titanium.Network.HTTPClient.onloadはレスポンスが正常に返ってきた際の処理です。jsonで返ってくるので、JSON.parse()でJavaScriptのオブジェクトに変換します。</li>
+<li>Titanium.App.Propertiesで、アプリ側に変数を保持しておくことができます。ブラウザでいうところのクッキーみたいな使い方ができるので便利です。</li>
+<li>Titanium.Network.HTTPClient.send()は引数にパラメータをもつことができるので、この場合だと、ユーザー名とパスワードをオブジェクトのプロパティとしてセットします。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

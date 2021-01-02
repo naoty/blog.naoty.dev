@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スレッド化できるSlack webhookを作った</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="スレッド化できるSlack webhookを作った">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/355/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">スレッド化できるSlack webhookを作った</h1>
+          <p class="metadata">
+            <time datetime="2018-12-27T17:28:00.000+0900">2018-12-27 17:28</time>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><img src="thread.png" alt="" /></p>
+<p>Slackへの通知をスレッド化するため、<a href="https://github.com/naoty/slack-thread-webhook">naoty/slack-thread-webhook</a>という簡単なプロキシをGoで作った。</p>
+<h1>作った理由</h1>
+<p>CIからの通知をSlackに送るようにしていると、CIからの通知でchannelが埋まってしまうようなことがよくあると思う。しかも、複雑な処理をCI上で行うと、細かく分解されたジョブから大量の通知が来るようになる。そこで、こういった簡単なプロキシを作って同じworkflowの通知をスレッドにまとめようと考えた。</p>
+<h1>これは何か</h1>
+<p>slack-thread-webhookは<code>POST /hooks/</code>というエンドポイントを持っており、Slackのincoming webhookと同じリクエストボディを受け付ける。このエンドポイントにリクエストを送ると、初回はメッセージとしてSlackに転送し、同じ``に二回以上送ると初回に送られたメッセージのスレッドに転送する。</p>
+<p>内部的には、Slackにスレッドとしてメッセージを送るために必要な親メッセージのtimestampを``とともにRedisに保持するようにしている。</p>
+<h1>どう使うのか</h1>
+<p>上のスクショのようなCIの通知では、例えばCircle CIの<code>CIRCLE_WORKFLOW_ID</code>のような一連のジョブで共通するIDを使って、以下のようにリクエストを送ることでスレッドに通知をまとめることができる。</p>
+<pre><code>cat &lt;&lt; EOS | curl -X POST -H &quot;Content-Type: application/json&quot; -d @- https://slack-thread-webhook.herokuapp.com/hooks/${CIRCLE_WORKFLOW_ID}
+{
+  &quot;attachments&quot;: [
+    {
+      &quot;title&quot;: &quot;Start&quot;,
+      &quot;text&quot;: &quot;$(git log -1 --pretty='%an: %s')&quot;,
+      &quot;footer&quot;: &quot;naoty/slack-thread-webhook | ${CIRCLE_BRANCH}&quot;
+    }
+  ]
+}
+EOS
+</code></pre>
+<pre><code>cat &lt;&lt; EOS | curl -X POST -H &quot;Content-Type: application/json&quot; -d @- https://slack-thread-webhook.herokuapp.com/hooks/${CIRCLE_WORKFLOW_ID}
+{
+  &quot;attachments&quot;: [
+    {
+      &quot;color&quot;: &quot;good&quot;,
+      &quot;title&quot;: &quot;Finish &quot;
+    }
+  ]
+}
+EOS
+</code></pre>
+<h1>どうやって始めるのか</h1>
+<p>Herokuで簡単に動かせるようにHeroku buttonを作った（ブログのCSSででかくなっちゃったけど面倒だからこのまま）。</p>
+<p><a href="https://heroku.com/deploy"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" /></a></p>
+<p>また、Docker HubにDockerイメージを公開しているので、ECS等で動かす場合にはこちらを使うとセットアップしやすいと思う。</p>
+<p><a href="https://hub.docker.com/r/naoty/slack-thread-webhook">https://hub.docker.com/r/naoty/slack-thread-webhook</a></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraformの実行環境</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Terraformの実行環境">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/352/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Terraformの実行環境</h1>
+          <p class="metadata">
+            <time datetime="2018-12-02T11:41:00.000+0900">2018-12-02 11:41</time>
+            <a href="/terraform/">#terraform</a>
+            <a href="/docker/">#docker</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Terraformを実行する方法としては、Homebrew等でインストールしてローカルで実行する方法と、<a href="https://hub.docker.com/r/hashicorp/terraform/">hashicorp/terraform</a>のDockerイメージを使って実行する方法がある。</p>
+<h1>Dockerイメージ</h1>
+<p>Dockerイメージを使うことで実行するTerraformのバージョンをチームで統一することができる。また、CIでTerraformを簡単に実行できるようになるので、Dockerイメージを使うようにしている。</p>
+<p><a href="https://hub.docker.com/r/hashicorp/terraform/">hashicorp/terraform</a>を使うときにはベースイメージとして使い、ソースコードを<code>ADD</code>したDockerイメージを作っている。<code>ENTRYPOINT</code>が<code>terraform</code>に設定されているため、以下のようにしてデフォルトでシェルにログインできるようにしている。</p>
+<pre lang="docker"><code>FROM hashicorp/terraform:0.11.10
+WORKDIR /terraform
+ADD . /terraform/
+ENTRYPOINT [&quot;&quot;]
+CMD [&quot;/bin/sh&quot;]
+</code></pre>
+<p><code>CMD</code>では<code>/bin/sh</code>の前に<code>terraform init</code>をしておくようなスクリプトを使うとより便利になると思う。</p>
+<h1>複数環境</h1>
+<p>本番環境やステージング環境といった環境ごとにtfstateを管理し環境間で共用するモジュールがある場合、以下のようなディレクトリ構成になると思う。</p>
+<pre><code>.
+├── modules
+│   └── some_module
+├── production
+│   ├── main.tf
+│   └── terraform.tfstate
+└── staging
+    ├── main.tf
+    └── terraform.tfstate
+</code></pre>
+<p>こういった場合、環境ごとにDockerfileを用意するようにしている。</p>
+<pre lang="docker"><code>FROM hashicorp/terraform:0.11.10
+WORKDIR /terraform/production
+
+ADD ./production /terraform/production
+ADD ./modules /terraform/modules
+RUN terraform get
+
+ENTRYPOINT [&quot;&quot;]
+CMD [&quot;/bin/sh&quot;]
+</code></pre>
+<p>モジュールを利用するため<code>terraform get</code>でモジュールを初期化した状態でDockerイメージをビルドする。ビルドする際には以下のようにDockerfileの場所とコンテキストを分けて指定する。</p>
+<pre><code>$ docker build -t my-terraform:production -f ./production/Dockerfile .
+</code></pre>
+<p>環境ごとにDockerfileを用意する場合、docker-composeを使うとより簡単に管理できる。</p>
+<pre lang="yaml"><code>version: &quot;3&quot;
+services:
+  production:
+    build:
+      context: .
+      dockerfile: ./production/Dockerfile
+    image: my-terraform:production
+    volumes:
+      - ./production:/terraform/production
+      - ./modules:/terraform/modules
+  staging:
+    build:
+      context: .
+      dockerfile: ./staging/Dockerfile
+    image: my-terraform:staging
+    volumes:
+      - ./staging:/terraform/staging
+      - ./modules:/terraform/modules
+</code></pre>
+<p>これですべての環境のDockerイメージを簡単にビルドできる。</p>
+<pre><code>$ docker-compose build
+</code></pre>
+<p>Terraformを実行するときは環境を指定してDockerイメージを起動すればいい。</p>
+<pre><code>$ docker-compose run --rm production
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

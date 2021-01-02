@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qiita API v2のSwiftクライアントを書き始めた</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Qiita API v2のSwiftクライアントを書き始めた">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/245/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Qiita API v2のSwiftクライアントを書き始めた</h1>
+          <p class="metadata">
+            <time datetime="2014-12-14T00:29:00.000+0000">2014-12-14 00:29</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>昨日、<a href="http://peatix.com/event/55420">Qiita API v2 Hackathon</a>に参加してきた。</p>
+<p>僕はハッカソンで<a href="https://github.com/naoty/qiita-swift">naoty/qiita-swift</a>を作った。Qiita API v2のSwiftクライアントだ。動機としては、Swiftはすごく楽しいのだけどJSONのパースあたりがとてもつらいという問題があって、そこらへんの地味な実装を代わりに担うライブラリを書くことで、楽しいSwiftの開発をより楽しくできると思った。</p>
+<h1>使い方</h1>
+<pre><code>let client = Qiita.Client(accessToken: &quot;...&quot;)
+
+let parameters = [&quot;query&quot;: &quot;user:naoty_k&quot;]
+client.getItems(parameters: parameters).onComplete({ items in
+  // ...
+}).onError({ error in
+  // ...
+}).resume()
+</code></pre>
+<p>Promiseっぽい感じで非同期処理をメソッドチェーンで記述することができる。対応しているAPIは、ハッカソンで数時間で作っただけだから、まだユーザーと投稿のGETリクエストのみしかないので、今後追加していきたい。</p>
+<h1>ハッカソンについての所見</h1>
+<p>これまで何回かハッカソンに参加してきたけど、ハッカソンで作ったソフトウェアの開発をその後も続けた、ということはなかった。そのことがハッカソンに参加するたびに心にひっかかっていた。というのも、ハッカソンで開発するソフトウェアはなにかしらの問題を解決するために作っているはずで、その場かぎりの開発で解決できることはめったにないと思うからだ。ハッカソンは解決する価値のある問題を発見し、その解決策のプロトタイピングを短時間で行うイベントだと思う。だから、ハッカソンはきっかけであって解決に値する問題であればその後も継続的に開発していくべきなんだと思う。だから、開発しようと思った動機を大切にして、開発を継続していこうと思う。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

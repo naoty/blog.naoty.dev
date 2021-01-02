@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>count_letters ver.2</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="count_letters ver.2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/10/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">count_letters ver.2</h1>
+          <p class="metadata">
+            <time datetime="2010-08-14T03:33:00.000+0000">2010-08-14 03:33</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　Array#uniqで重複を削除した配列に対してArray#eachでループさせたところ、問題は無事解決されました。ただ、実行すると最後にこの配列が表示されるのが気になる。なんでだろう？</p>
+<pre><code>def count_letters(str)
+	ary = str.split(//)
+	ary.uniq!
+	ary.each do |letter|
+		result = str.scan(/(#{letter})/)
+		print &quot;'&quot;, letter, &quot;': &quot;
+		result.count.times{print &quot;*&quot;}
+		print &quot;\n&quot;
+	end
+end
+
+p count_letters(&quot;Ruby is an object oriented programming language&quot;)
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

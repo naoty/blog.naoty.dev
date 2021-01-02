@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timepiece 1.0.0をリリースした</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Timepiece 1.0.0をリリースした">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/286/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Timepiece 1.0.0をリリースした</h1>
+          <p class="metadata">
+            <time datetime="2016-10-31T13:37:00.000+0000">2016-10-31 13:37</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/naoty/Timepiece">naoty/Timepiece</a></p>
+<p>最初のバージョンはSwiftが出た2014年だった。それ以降、細かな機能追加やバグ修正を繰り返し、0.5.0でSwift 2.3、0.6.0でSwift 3に対応した。どこかのタイミングで多くのStar、issueがつくようになり、多くのユーザーが使ってくれるようになった。</p>
+<p>そして昨日、ようやく安定版となる1.0.0をリリースした。1.0.0では破壊的な変更を行った。</p>
+<h3>メソッド名の変更</h3>
+<pre><code>// 0.6.0
+Date.date(year: 2016, month: 10, day: 31)
+&quot;2016-10-31T12:00:00+0900&quot;.dateFromFormat(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;)
+
+// 1.0.0
+Date(year: 2016, month: 10, day: 31)
+&quot;2016-10-31T12:00:00+0900&quot;.date(inFormat: &quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;)
+</code></pre>
+<p>よりSwiftらしく、またSwift 3の命名規則に沿ったものに変更した。</p>
+<h3>タイムゾーンのサポートをやめた</h3>
+<p>個別の日付オブジェクトについてタイムゾーンをサポートするようにしていたが、バグになりかねない部分であり、後述するメンテナンスコストを下げていく方針に合わないため、この機能を削除した。</p>
+<h3>Durationの内部表現を変更した</h3>
+<p>これまでのバージョンでは、期間を表す概念として<code>Duration</code>というstructを用意していたが、これをやめた。本来、期間を表す概念として<code>DateComponents</code>というものがあるため（これまで<code>DateComponents</code>が期間を表すということをちゃんと認識してなかった）、これを最大限利用した。この変更によって、1.0.0では新たに以下のような計算や処理が可能になった。</p>
+<pre><code>// 1.0.0
+Date() + (3.hours - 30.minutes)
+(3.hours - 30.minutes).string(in: .abbreviated) //=&gt; &quot;2h 30m&quot;
+</code></pre>
+<h3>固定フォーマットでの出力をやめた</h3>
+<pre><code>// 0.6.0
+1.weeks.later.stringFromFormat(&quot;yyyy/MM/dd&quot;)
+</code></pre>
+<p>上のようなメソッドをやめた。<code>DateFormatter</code>で簡単に実装できるが、この機能は暦やロケールを考慮していない実装なのであまりオススメできない。その代わりに<code>DateFormatter.Style</code>を指定して出力できるようにした。</p>
+<pre><code>// 1.0.0
+1.weeks.later.dateString(in: .short)
+</code></pre>
+<p>望ましい機能は実装しやすくする。望ましくない機能は実装しにくくする。というのが理想的なAPIのインターフェイスであるように思う。</p>
+<h2>変更の背景</h2>
+<p>OSSにかけられる時間が減った。メンテナンスコストを下げたかった。バグが出やすい機能はできるだけ削った。機能が豊富な日付操作ライブラリは他にもある。そんな中、最小限の機能でバグがなく正確で少し読めば何をしているか分かるようなライブラリが理想的だとおもった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

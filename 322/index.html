@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webpacker用のDockerfile</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="webpacker用のDockerfile">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/322/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">webpacker用のDockerfile</h1>
+          <p class="metadata">
+            <time datetime="2018-02-12T22:58:00.000+0900">2018-02-12 22:58</time>
+            <a href="/rails/">#rails</a>
+            <a href="/docker/">#docker</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>webpackerを導入する際にDockerイメージにNode.jsとYarnが必要になるため、以下のようにDockerfileにインストールコマンドを追加する。いつも調べるのが面倒なので、メモしておく。</p>
+<pre lang="docker"><code>FROM ruby:2.5.0
+
+# Node.js
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - &amp;&amp; \
+  apt-get install -y nodejs
+
+# Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &amp;&amp; \
+  echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; | tee /etc/apt/sources.list.d/yarn.list &amp;&amp; \
+  apt-get update &amp;&amp; \
+  apt-get install -y yarn
+</code></pre>
+<h1>参考</h1>
+<ul>
+<li><a href="https://nodejs.org/ja/download/package-manager/">https://nodejs.org/ja/download/package-manager/</a></li>
+<li><a href="https://yarnpkg.com/ja/docs/install#linux-tab">https://yarnpkg.com/ja/docs/install#linux-tab</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

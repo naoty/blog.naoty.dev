@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color: #333;
+  font-size: 100%;
+  font-family: Verdana, "Noto Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  background-color: #ddd;
+}
+
+main {
+  padding: 1rem;
+  background-color: #fff;
+}
+
+main > *:first-child {
+  margin-top: 0;
+}
+
+main > *:last-child {
+  margin-bottom: 0;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 2rem 0 1rem 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 2rem 0 1rem 0;
+}
+
+hr,
+p,
+pre,
+ol,
+table,
+ul {
+  margin: 1rem 0;
+}
+
+ol,
+ul {
+  padding-left: 1.5rem;
+}
+
+pre,
+code {
+  font-family: Menlo, monospace;
+}
+
+pre {
+  padding: 1em;
+  font-size: 0.8rem;
+  background-color: #2d2d2d;
+  overflow-x: auto;
+}
+
+pre > code {
+  color: #ccc;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.title {
+  border-bottom: 1px solid #000;
+}
+
+.list-item {
+  font-size: 0.8rem;
+}
+
+.metadata {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 0.8rem;
+  font-family: Menlo, monospace;
+}
+
+.body h1 {
+  font-size: 18px;
+}
+
+.body h2 {
+  font-size: 16px;
+}
+
+.body img {
+  width: 100%;
+}
+
+.footer-links {
+  text-align: center;
+}
+
+ul.footer-links {
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 32rem) {
+  main {
+    min-height: 100vh;
+  }
+}
+
+@media (min-width: 32rem) {
+  main {
+    width: 32rem;
+    margin: 2rem auto;
+    border: 1px solid #000;
+  }
+}

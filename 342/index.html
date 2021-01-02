@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブログをGatsby.jsで書き直した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ブログをGatsby.jsで書き直した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/342/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ブログをGatsby.jsで書き直した</h1>
+          <p class="metadata">
+            <time datetime="2018-09-01T11:54:00.000+0900">2018-09-01 11:54</time>
+            <a href="/meta/">#meta</a>
+            <a href="/gatsby/">#gatsby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>このブログを<a href="https://www.gatsbyjs.org">Gatsby.js</a>で書き直した。昨年11月にこのブログを作ったときはgulpとejsを組み合わせて自作していたんだけど、Gatsby.jsの練習のために作り直すことにした。</p>
+<h2>JAMstack</h2>
+<p>Gatsby.jsの練習をすることにしたきっかけとしては、<a href="https://jamstack.org/">JAMstack</a>という考え方を知り興味を持ったことだった。JAMstackを簡単に説明すると、Webアプリケーションを作るときの以下のような方針のことを指しているんだと理解している。</p>
+<ul>
+<li>サーバーサイドでHTMLをレンダリングしない。事前にHTMLをビルドして静的ファイルとしてCDNから配信する。</li>
+<li>データの取得はすべてクライアントサイドから行う。</li>
+</ul>
+<p>どこまでこの考え方が有効なのか分からないけど、ポストRailsの時代を見据えたときに筋の良さを感じたので、実践してみようと思った。</p>
+<p>JAMstackを実践するにあたって必要な静的サイトジェネレータの練習として、ブログをGatsby.jsで作ってみたということになる。</p>
+<h2>Gatsby.jsの感想</h2>
+<p>Reactは多少触っていたので、チュートリアルを一通りやればあとはすんなりブログの開発を進めることができた。WebpackとかBabelの面倒な設定は不要だったので、Reactの初心者でも扱えそうな気がした。</p>
+<p>また、Gatsby.jsではHTMLのビルド時に必要なMarkdownで書いたコンテンツやサーバーにあるデータはすべてGraphQLで取得するようになっているため、GraphQLの雰囲気をつかむのにもよかった。GraphQLの仕様とかあんまりわかってなくても問題なかった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiveをDockerで動かす</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="HiveをDockerで動かす">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/408/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">HiveをDockerで動かす</h1>
+          <p class="metadata">
+            <time datetime="2020-03-14T17:44:00.000+0000">2020-03-14 17:44</time>
+            <a href="/hadoop/">#hadoop</a>
+            <a href="/docker/">#docker</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://cwiki.apache.org/confluence/display/Hive/GettingStarted">公式ドキュメント</a>に従ってHiveのDockerイメージをつくっていく。今回は2系を動かす。</p>
+<p>すべてのコードは<a href="https://github.com/naoty/hello-hive">naoty/hello-hive</a>にある。</p>
+<h1>Java</h1>
+<p>Java 1.8への移行が推奨されているので、<code>openjdk:8</code>をベースイメージに使う。</p>
+<pre lang="diff"><code>+FROM openjdk:8
+</code></pre>
+<h1>Hadoop</h1>
+<p>Hive 2系に合わせてHadoopも2系をインストールする。以前の<a href="/posts/103.html">ブログ</a>で紹介したとおり、HadoopをDockerコンテナで動かすには下のようなことが必要になる。</p>
+<ul>
+<li>sshdのセットアップ</li>
+<li>Hadoopのダウンロード</li>
+<li>HDFSのフォーマット</li>
+</ul>
+<pre lang="diff"><code> FROM openjdk:8
+
++# sshd
++RUN apt-get update \
++  &amp;&amp; apt-get install -y --no-install-recommends ssh \
++  &amp;&amp; apt-get clean \
++  &amp;&amp; rm -rf /var/lib/apt/lists/*
++RUN mkdir /run/sshd \
++  &amp;&amp; ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
++  &amp;&amp; cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys \
++  &amp;&amp; chmod 0600 ~/.ssh/authorized_keys
++
++# Hadoop
++RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hadoop/common/hadoop-2.9.2/hadoop-2.9.2.tar.gz | tar zxf -
++ENV PATH=/hadoop-2.9.2/bin:/hadoop-2.9.2/sbin:$PATH
++COPY config/hadoop /hadoop-2.9.2/etc/hadoop/
++RUN hdfs namenode -format
+</code></pre>
+<h1>Hive</h1>
+<pre lang="diff"><code> FROM openjdk:8
+
+ # sshd
+ RUN apt-get update \
+   &amp;&amp; apt-get install -y --no-install-recommends ssh \
+   &amp;&amp; apt-get clean \
+   &amp;&amp; rm -rf /var/lib/apt/lists/*
+ RUN mkdir /run/sshd \
+   &amp;&amp; ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
+   &amp;&amp; cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys \
+   &amp;&amp; chmod 0600 ~/.ssh/authorized_keys
+ 
+ # Hadoop
+ RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hadoop/common/hadoop-2.9.2/hadoop-2.9.2.tar.gz | tar zxf -
+ ENV PATH=/hadoop-2.9.2/bin:/hadoop-2.9.2/sbin:$PATH
+ COPY config/hadoop /hadoop-2.9.2/etc/hadoop/
+ RUN hdfs namenode -format
+
++# Hive
++RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
++ENV HIVE_HOME=/apache-hive-2.3.6-bin PATH=/apache-hive-2.3.6-bin/bin:$PATH
++COPY config/hive /apache-hive-2.3.6-bin/conf/
+</code></pre>
+<h1>起動スクリプト</h1>
+<p>コンテナの起動スクリプトを追加し、下のようなことを起動時におこなうようにする。</p>
+<ul>
+<li>sshdの起動（Hadoopの起動に必要）</li>
+<li>HadoopのNameNodeとDataNodeデーモンの起動</li>
+<li>Hiveが使うHDFSの初期化</li>
+<li>Hive metastoreの初期化（今回は埋め込み型のmetastoreを使う）</li>
+<li>hiveserver2の起動（コンテナ外部から接続してHiveQLを利用できるようにするため）</li>
+</ul>
+<pre lang="bash"><code>#!/bin/bash -ex
+
+/usr/sbin/sshd
+start-dfs.sh
+
+hdfs dfs -mkdir -p /tmp
+hdfs dfs -mkdir -p /user/hive/warehouse
+hdfs dfs -chmod g+w /tmp
+hdfs dfs -chmod g+w /user/hive/warehouse
+
+schematool -dbType derby -initSchema
+
+hiveserver2
+</code></pre>
+<pre lang="diff"><code> FROM openjdk:8
+
+ # sshd
+ RUN apt-get update \
+   &amp;&amp; apt-get install -y --no-install-recommends ssh \
+   &amp;&amp; apt-get clean \
+   &amp;&amp; rm -rf /var/lib/apt/lists/*
+ RUN mkdir /run/sshd \
+   &amp;&amp; ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
+   &amp;&amp; cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys \
+   &amp;&amp; chmod 0600 ~/.ssh/authorized_keys
+ 
+ # Hadoop
+ RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hadoop/common/hadoop-2.9.2/hadoop-2.9.2.tar.gz | tar zxf -
+ ENV PATH=/hadoop-2.9.2/bin:/hadoop-2.9.2/sbin:$PATH
+ COPY config/hadoop /hadoop-2.9.2/etc/hadoop/
+ RUN hdfs namenode -format
+
+ # Hive
+ RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
+ ENV HIVE_HOME=/apache-hive-2.3.6-bin PATH=/apache-hive-2.3.6-bin/bin:$PATH
+ COPY config/hive /apache-hive-2.3.6-bin/conf/
+
++WORKDIR /root
++COPY start /root/
++CMD [&quot;./start&quot;]
+</code></pre>
+<h1>動作確認</h1>
+<p>hiveserver2を起動する。</p>
+<pre lang="bash"><code>% docker build -t naoty/hello-hive .
+% docker run --rm -it naoty/hello-hive
+</code></pre>
+<p>beelineを使ってhiveserver2に接続する。</p>
+<pre lang="bash"><code>% docker exec xxxxxxxx -it beeline -u jdbc:hive2://localhost:10000
+0: jdbc:hive2://localhost:10000&gt; 
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goでちょっとしたツールを作った</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Goでちょっとしたツールを作った">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/299/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Goでちょっとしたツールを作った</h1>
+          <p class="metadata">
+            <time datetime="2017-09-16T18:49:00.000+0000">2017-09-16 18:49</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Go言語のレベルアップを目的としてちょっとしたツールを2つ作った。</p>
+<h2>license</h2>
+<p><a href="https://github.com/naoty/license">naoty/license</a></p>
+<p>MITライセンスファイル（<code>LICENSE</code>）を作成するとき、いつも<a href="https://choosealicense.com/licenses/mit/">MIT License | Choose a License</a>からコピペしていた。さすがに毎回同じことをするのは面倒になってきたのでテンプレートからテキストを生成するだけのコマンドラインツールを書いた。<code>text/template</code>を使ったことがなかったのでちょうどいい練習になった。</p>
+<h2>brewery</h2>
+<p><a href="https://github.com/naoty/brewery">naoty/brewery</a></p>
+<p>Goで書いたコマンドラインツールは<a href="https://github.com/naoty/homebrew-misc">naoty/homebrew-misc</a>からHomebrewでインストールできるようにしている。その準備をするためにformulaを作るとき、<code>brew create  --tap naoty/misc</code>を実行していた。しかし、この方法だと<code>/usr/local/Homebrew/Library/Taps/naoty/homebrew-misc/</code>以下にformulaが作成されてしまい、その後ワークスペースにコピペする作業が発生していた。</p>
+<p>そこで、formulaをテンプレートから生成して標準出力に出力するだけのコマンドラインツールを作った。SHA256もちゃんと計算してくれるので便利。今後はformulaを書く作業が捗りそう。</p>
+<h2>学び</h2>
+<ul>
+<li><code>text/template</code>の使い方。Webアプリケーションを開発するのであれば、同じようなパッケージである<code>html/template</code>が確実に必要になるので、覚えておきたかった。</li>
+<li><a href="https://github.com/jteeuwen/go-bindata">https://github.com/jteeuwen/go-bindata</a>によってテンプレートをバイナリに含めること。これもテンプレートを使う以上シングルバイナリにして配布を簡単にするために必要になるだろう。</li>
+<li>golang/depの使い方。おおかたの仕様についてはstableになったとのことなので、今から使い方に慣れておきたい。<code>dep ensure</code>のバリエーションと<code>Gopkg.toml</code>の書き方をもう少し把握したい。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>決定境界のプロット</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="決定境界のプロット">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/339/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">決定境界のプロット</h1>
+          <p class="metadata">
+            <time datetime="2018-07-22T15:02:00.000+0900">2018-07-22 15:02</time>
+            <a href="/python/">#python</a>
+            <a href="/ml/">#ml</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ロジスティック回帰など分類を行うアルゴリズムがちゃんとトレーニングデータを分類できているか確認するため、決定境界をプロットする方法を学んだ。そのメモをブログに残す。</p>
+<h2>まとめ</h2>
+<ul>
+<li><code>np.meshgrid()</code>で格子点を取得する。しかも、<code>np.arange()</code>などを使ってできるだけ細かく格子点を取得する。</li>
+<li>格子点を分類器に適用するため、トレーニングデータの形状に変換する。</li>
+<li>格子点に対して分類を予測する。</li>
+<li>格子点とその分類の予測を<code>plt.contourf()</code>を使って等高線としてプロットする。</li>
+</ul>
+<h2>格子点の取得</h2>
+<pre lang="python"><code>x1 = np.arange(0, 5, 0.5)
+x2 = np.arange(0, 10, 0.5)
+X1, X2 = np.meshgrid(x1, x2)
+
+plt.plot(X1, X2, 'ok')
+plt.xlimit(-1, 11)
+plt.ylimit(-1, 11)
+plt.show()
+</code></pre>
+<p><img src="meshgrid.png" alt="meshgrid" /></p>
+<p>上のように<code>np.meshgrid()</code>を使うと、2つの配列<code>x1</code>と<code>x2</code>からなる平面上にある格子点を取得できる。</p>
+<p>この格子点の間隔を小さくすると、<code>x1</code>と<code>x2</code>からなる平面上の「すべての点」を擬似的に再現できる。</p>
+<pre lang="python"><code>x1 = np.arange(0, 5, 0.01)
+x2 = np.arange(0, 10, 0.01)
+
+# 以下同じ
+</code></pre>
+<p><img src="dense_meshgrid.png" alt="dense meshgrid" /></p>
+<h2>格子点の変換</h2>
+<p>ある平面上の「すべての点」を分類器に適用すると、平面上に分類した結果をマッピングできるようになる。</p>
+<p>そのために格子点をトレーニングデータの形状に変換する。つまり、$(x_1, x_2)$のようにする。</p>
+<pre lang="python"><code># flatにする
+X1_flatten = X1.ravel()
+X2_flatten = X2.ravel()
+
+# 結合して行列にする
+X = np.array([X1_flatten, X2_flatten])
+
+# 行方向がトレーニングデータ、列方向がフィーチャーになるように転置する
+X = X.T
+</code></pre>
+<h2>格子点を分類器に適用する</h2>
+<pre lang="python"><code>Z = classifier.predict(X)
+</code></pre>
+<p>上で分類器に適用できるように変換できたので、あとは予測する。</p>
+<h2>等高線図でプロットする</h2>
+<pre lang="python"><code># プロットできるように形状を揃える
+Z = Z.reshape(X1.shape)
+
+plt.contourf(X1, X2, Z, cmap='RdBu', alpha=0.5)
+plt.xlim(-1, 11)
+plt.ylim(-1, 11)
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.show()
+</code></pre>
+<p><img src="decision_regions.png" alt="decision regions" /></p>
+<p><em>（上図は適当な関数を適用しただけです）</em></p>
+<p><code>plt.contourf()</code>は等高線図を引きつつ、領域を塗りつぶしてくれるので決定境界をプロットするのに便利。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails3にrspecとfactory girlをインストールしたときのメモ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails3にrspecとfactory girlをインストールしたときのメモ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/67/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails3にrspecとfactory girlをインストールしたときのメモ</h1>
+          <p class="metadata">
+            <time datetime="2011-07-18T22:07:00.000+0000">2011-07-18 22:07</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code># /Gemfile
+gem 'rspec-rails'
+gem 'factory_girl_rails'
+</code></pre>
+<pre><code>$ bundle install --path vendor/bundle
+</code></pre>
+<pre><code>$ rails g rspec:install
+Mon Jul 18 21:51:37 [initandlisten] connection accepted from 127.0.0.1:50773 #1
+Mon Jul 18 21:51:37 [conn1] end connection 127.0.0.1:50773
+Mon Jul 18 21:51:37 [initandlisten] connection accepted from 127.0.0.1:50774 #2
+      create .rspec
+      create spec
+      create spec/spec_helper.rb
+Mon Jul 18 21:51:37 [conn2] end connection 127.0.0.1:50774
+</code></pre>
+<p>作成済みのモデルのrspecファイルを生成する場合</p>
+<pre><code>$ rails g rspec:model user
+Mon Jul 18 21:55:13 [initandlisten] connection accepted from 127.0.0.1:50866 #3
+Mon Jul 18 21:55:13 [conn3] end connection 127.0.0.1:50866
+Mon Jul 18 21:55:13 [initandlisten] connection accepted from 127.0.0.1:50867 #4
+      create spec/models/user_spec.rb
+Mon Jul 18 21:55:14 [conn4] end connection 127.0.0.1:50867
+</code></pre>
+<p>ファクトリーを定義するファイルを作成</p>
+<pre><code>$ touch spec/factories.rb
+</code></pre>
+<p>テスト実行</p>
+<pre><code>$ rake spec 
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

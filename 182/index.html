@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vimでTodoリスト</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="vimでTodoリスト">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/182/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">vimでTodoリスト</h1>
+          <p class="metadata">
+            <time datetime="2013-04-28T00:29:00.000+0000">2013-04-28 00:29</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>今までいろんなTodo管理アプリを試してきたけど、「GUIアプリほど高機能はいらない」「ターミナル上でtodoを確認したい」という理由でvimでTodoリストを書くようになった。<a href="https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments">これ</a>によるとGithubがGithub Flavored MarkdownにTodoリスト記法を実装したようなので、これに倣ってmarkdownでTodoリストを書くことにした。</p>
+<h2>todoコマンド</h2>
+<p>まず、Todoリストを開くコマンドをaliasで定義してみた。これで<code>todo</code>でTodoリストを確認できる。さらに、Dropbox上にファイルを置けば複数PCで共有できるので、オフィスのPCとプライベートPCでTodoリストを共用できる。</p>
+<pre><code># .zshrc
+
+if [-e &quot;$HOME/Dropbox&quot;]; then
+  alias todo=&quot;$EDITOR $HOME/Dropbox/.todo.md&quot;
+else
+  alias todo=&quot;$EDITOR $HOME/.todo.md&quot;
+end
+</code></pre>
+<h2>vimでmarkdownを書く準備</h2>
+<p>次に、vimでmarkdownを書く準備をする。普通に*.mdを開くとmodula2というfiletypeで認識されてしまい、markdownファイルとして見なされないので、便利プラグインをインストールする。</p>
+<pre><code>&quot; .vimrc
+
+NeoBundle 'tpope/vim-markdown'
+</code></pre>
+<h2>折り返しを有効にする</h2>
+<p>これだけでも十分なんだけど、より使いやすくするための設定を自分なりに考えてみた。まず、一行が長くなるとリストとしては見づらいので、普段は折り返さないけどmarkdownのときだけ折り返すようにしてみた。</p>
+<pre><code>&quot; .vim/ftplugin/markdown.vim
+
+&quot; 折り返しを有効にする
+set wrap
+
+&quot; 80文字で折り返す
+set textwidth=80
+
+&quot; マルチバイト文字の場合も折り返しを有効にする
+set formatoptions+=m
+</code></pre>
+<h2>Todoリストを簡単に書く</h2>
+<p>上でふれたGithubが実装したTodoリスト記法<code>- []</code>, <code>- [x]</code>を簡単に入力するための設定も書いた。abbreviateを使うと略記を登録することができる。下の設定では<code>tl</code>と入力すると<code>- []</code>と自動的に変換される。さらに、Todoリストのある行の上で<code>を2回おすと（僕は</code>を``にしてる）、チェックをon/off切り替えられる。</p>
+<pre><code>&quot; .vim/ftplugin/markdown.vim
+
+&quot; todoリストを簡単に入力する
+abbreviate tl - []
+
+&quot; todoリストのon/offを切り替える
+nnoremap   :call ToggleCheckbox()
+
+function! ToggleCheckbox()
+  let l:line = getline('.')
+  if l:line =~ '^\-\s\[\s\]'
+    let l:result = substitute(l:line, '^-\s\[\s\]', '- [x]', '')
+    call setline('.', l:result)
+  elseif l:line =~ '^\-\s\[x\]'
+    let l:result = substitute(l:line, '^-\s\[x\]', '- []', '')
+    call setline('.', l:result)
+  end
+endfunction
+</code></pre>
+<h2>スクリーンショット</h2>
+<p>普段は下のようにtmuxで画面を分割して小さいウィンドウ（右上）にTodoリストを表示しながら開発している。</p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130428/20130428002301.png" alt="f:id:naoty_k:20130428002301p:plain" title="f:id:naoty_k:20130428002301p:plain" /></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

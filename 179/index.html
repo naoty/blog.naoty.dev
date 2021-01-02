@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduinoで構造体をつかう</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Arduinoで構造体をつかう">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/179/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Arduinoで構造体をつかう</h1>
+          <p class="metadata">
+            <time datetime="2013-04-18T23:35:00.000+0000">2013-04-18 23:35</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>引数が長くなったときに構造体使いたくなったんだけど、公式リファレンスがわかりづらかった &amp;&amp; 公式以外にちゃんとした情報がなかったので、がんばった記録を投稿しておく。</p>
+<pre lang="c:struct_sample.ino"><code>#include &quot;types.h&quot;
+
+void setup() {
+  Serial.begin(9600);
+  RGB color = getBlue();
+  Serial.println(color.b);
+}
+
+void loop() {
+}
+
+RGB getBlue() {
+  RGB color = { 0, 0, 255 };
+  return color;
+}
+</code></pre>
+<pre lang="c:types.h"><code>#include 
+
+struct RGB {
+  byte r;
+  byte g;
+  byte b;
+};
+
+RGB getBlue();
+</code></pre>
+<p>IDEの新しいタブから適当な名前のヘッダーファイルを作成して、そこに構造体の定義と構造体を返り値または引数のデータ型に持つ関数の宣言をする。</p>
+<p>関数で構造体を使わないのであれば、こうする必要はなかったはず。</p>
+<p>なぜこうするのかはまだよくわかっていない。</p>
+<hr />
+<p>参考</p>
+<ul>
+<li><a href="http://playground.arduino.cc/Code/Struct">Arduino Playground - Struct Resource</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

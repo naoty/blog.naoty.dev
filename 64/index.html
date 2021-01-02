@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ある条件でhiddenなHTMLタグを出力するヘルパーメソッドつくりました</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ある条件でhiddenなHTMLタグを出力するヘルパーメソッドつくりました">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/64/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ある条件でhiddenなHTMLタグを出力するヘルパーメソッドつくりました</h1>
+          <p class="metadata">
+            <time datetime="2011-07-11T15:26:00.000+0000">2011-07-11 15:26</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code># application_helper.rb
+def tag_hidden_if(tag, conditions, attributes = {}, &amp;block)
+  attributes = attributes.merge({'style' =&gt; 'display:none;'}) if conditions
+  content_tag tag, attributes, &amp;block
+end
+</code></pre>
+<pre><code># index.html.erb
+
+   'naotyhoge'} do %&gt;
+    # ...
+  
+
+</code></pre>
+<ul>
+<li>この例だと、偶数の列は非表示になるはずです。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

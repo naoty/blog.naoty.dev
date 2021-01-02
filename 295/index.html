@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails APIモードのdiff</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails APIモードのdiff">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/295/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails APIモードのdiff</h1>
+          <p class="metadata">
+            <time datetime="2017-03-22T15:46:00.000+0000">2017-03-22 15:46</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>既に似たような記事は存在するものの、 initializer や middleware の差分までは触れられていなかったので、捕捉するような記事です。</p>
+<h2>主な差分</h2>
+<ul>
+<li>アセットパイプライン関連の設定やディレクトリがなくなった。</li>
+<li>Cookie 等 Web ブラウザでしか使われない設定やミドルウェアがなくなった。</li>
+</ul>
+<hr />
+<pre lang="sh"><code>$ rails new rails-sample
+$ rails new rails-api-sample --api
+</code></pre>
+<ul>
+<li><code>--api</code> をつけると API モードで rails アプリケーションを作成する。</li>
+</ul>
+<pre lang="sh"><code>$ diff -qr rails-sample rails-api-sample
+Files rails-sample/Gemfile and rails-api-sample/Gemfile differ
+Files rails-sample/Gemfile.lock and rails-api-sample/Gemfile.lock differ
+Only in rails-sample/app: assets
+Files rails-sample/app/controllers/application_controller.rb and rails-api-sample/app/controllers/application_controller.rb differ
+Only in rails-sample/app: helpers
+Only in rails-sample/app/views/layouts: application.html.erb
+Files rails-sample/config/application.rb and rails-api-sample/config/application.rb differ
+Files rails-sample/config/environments/development.rb and rails-api-sample/config/environments/development.rb differ
+Files rails-sample/config/environments/production.rb and rails-api-sample/config/environments/production.rb differ
+Only in rails-sample/config/initializers: assets.rb
+Only in rails-sample/config/initializers: cookies_serializer.rb
+Only in rails-api-sample/config/initializers: cors.rb
+Files rails-sample/config/initializers/new_framework_defaults.rb and rails-api-sample/config/initializers/new_framework_defaults.rb differ
+Only in rails-sample/config/initializers: session_store.rb
+Files rails-sample/config/secrets.yml and rails-api-sample/config/secrets.yml differ
+Only in rails-sample/lib: assets
+Only in rails-sample/public: 404.html
+Only in rails-sample/public: 422.html
+Only in rails-sample/public: 500.html
+Only in rails-sample/public: apple-touch-icon-precomposed.png
+Only in rails-sample/public: apple-touch-icon.png
+Only in rails-sample/public: favicon.ico
+Only in rails-sample/test: helpers
+Only in rails-sample/tmp/cache: assets
+Only in rails-sample/vendor: assets
+</code></pre>
+<ul>
+<li>API モードの Rails アプリケーションには、アセット関連のファイルやディレクトリ、ヘルパー、レイアウトファイル、そして cookie 等の Web ブラウザに関連する設定ファイルがない。</li>
+<li>逆に API モードには CORS に関する initializer が存在する。</li>
+</ul>
+<pre><code>$ diff {rails-sample,rails-api-sample}/Gemfile
+15,27d14
+&lt; # Use SCSS for stylesheets
+&lt; gem 'sass-rails', '~&gt; 5.0'
+&lt; # Use Uglifier as compressor for JavaScript assets
+&lt; gem 'uglifier', '&gt;= 1.3.0'
+&lt; # Use CoffeeScript for .coffee assets and views
+&lt; gem 'coffee-rails', '~&gt; 4.2'
+&lt; # See https://github.com/rails/execjs#readme for more supported runtimes
+&lt; # gem 'therubyracer', platforms: :ruby
+&lt;
+&lt; # Use jquery as the JavaScript library
+&lt; gem 'jquery-rails'
+&lt; # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+&lt; gem 'turbolinks', '~&gt; 5'
+29c16
+&lt; gem 'jbuilder', '~&gt; 2.5'
+---
+&gt; # gem 'jbuilder', '~&gt; 2.5'
+37a25,27
+&gt; # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+&gt; # gem 'rack-cors'
+&gt;
+44,45d33
+&lt;   # Access an IRB console on exception pages or by using  anywhere in the code.
+&lt;   gem 'web-console', '&gt;= 3.3.0'
+</code></pre>
+<ul>
+<li>API モードでは、rack-cors という CORS をケアする rubygems が含まれる。</li>
+<li>逆に、API モードでは不要なアセットパイプラインに関わる rubygems は含まれない。</li>
+<li>API モードでは、jbuilder がコメントアウトされているのが興味深い。JSON 以外のフォーマットが採用される可能性を見越しているのかな。</li>
+</ul>
+<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/app/controllers/application_controller.rb
+1,2c1
+&lt; class ApplicationController &lt; ActionController::Base
+&lt;   protect_from_forgery with: :exception
+---
+&gt; class ApplicationController &lt; ActionController::API
+</code></pre>
+<ul>
+<li>API モードでは CSRF 対策は不要なので削除されている。</li>
+<li><code>ActionController::Base</code> ではなく <code>ActionController::API</code> を継承するようになっている。</li>
+</ul>
+<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/config/application.rb
+3c3,13
+&lt; require 'rails/all'
+---
+&gt; require &quot;rails&quot;
+&gt; # Pick the frameworks you want:
+&gt; require &quot;active_model/railtie&quot;
+&gt; require &quot;active_job/railtie&quot;
+&gt; require &quot;active_record/railtie&quot;
+&gt; require &quot;action_controller/railtie&quot;
+&gt; require &quot;action_mailer/railtie&quot;
+&gt; require &quot;action_view/railtie&quot;
+&gt; require &quot;action_cable/engine&quot;
+&gt; # require &quot;sprockets/railtie&quot;
+&gt; require &quot;rails/test_unit/railtie&quot;
+9c19
+&lt; module RailsSample
+---
+&gt; module RailsApiSample
+13a24,28
+&gt;
+&gt;     # Only loads a smaller set of middleware suitable for API only apps.
+&gt;     # Middleware like session, flash, cookies can be added back manually.
+&gt;     # Skip views, helpers and assets when generating a new resource.
+&gt;     config.api_only = true
+</code></pre>
+<ul>
+<li>API モードでは <code>require</code> する rubygems をひとつひとつ書いている。sprockets は API モードでは不要なのでコメントアウトされている。</li>
+<li><code>require rails/all</code> の内容と大差はなさそうだが、不要なものをコメントアウトできるようにしてある。</li>
+<li>API モードでは、generate 時にアセットやヘルパーの generate をスキップするオプションが設定されている。</li>
+</ul>
+<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/config/environments/development.rb
+40,46d39
+&lt;   # Debug mode disables concatenation and preprocessing of assets.
+&lt;   # This option may cause significant delays in view rendering with a large
+&lt;   # number of complex assets.
+&lt;   config.assets.debug = true
+&lt;
+&lt;   # Suppress logger output for asset requests.
+&lt;   config.assets.quiet = true
+$ diff {rails-sample,rails-api-sample}/config/environments/production.rb
+21,28d20
+&lt;   # Compress JavaScripts and CSS.
+&lt;   config.assets.js_compressor = :uglifier
+&lt;   # config.assets.css_compressor = :sass
+&lt;
+&lt;   # Do not fallback to assets pipeline if a precompiled asset is missed.
+&lt;   config.assets.compile = false
+&lt;
+&lt;   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
+57c49
+&lt;   # config.active_job.queue_name_prefix = &quot;rails-sample_#{Rails.env}&quot;
+---
+&gt;   # config.active_job.queue_name_prefix = &quot;rails-api-sample_#{Rails.env}&quot;
+</code></pre>
+<ul>
+<li>環境設定ファイルはアセットパイプラインの設定の有無が異なっているだけだった。</li>
+</ul>
+<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/config/initializers/new_framework_defaults.rb
+7,12d6
+&lt; # Enable per-form CSRF tokens. Previous versions had false.
+&lt; Rails.application.config.action_controller.per_form_csrf_tokens = true
+&lt;
+&lt; # Enable origin-checking CSRF mitigation. Previous versions had false.
+&lt; Rails.application.config.action_controller.forgery_protection_origin_check = true
+&lt;
+</code></pre>
+<ul>
+<li>API モードには CSRF 対策は不要ということで、設定が省かれている。</li>
+</ul>
+<pre lang="sh"><code>$ cd rails-sample
+$ bin/rails initializers &gt; initializers.txt
+$ cd ../rails-api-sample
+$ bin/rails initializers &gt; initializers.txt
+$ cd ..
+$ diff {rails-sample,rails-api-sample}/initializers.txt
+3,5d2
+&lt; set_load_path
+&lt; set_load_path
+&lt; set_load_path
+8,12d4
+&lt; set_autoload_paths
+&lt; set_autoload_paths
+&lt; set_autoload_paths
+&lt; add_routing_paths
+&lt; add_routing_paths
+15,18d6
+&lt; add_routing_paths
+&lt; add_locales
+&lt; add_locales
+&lt; add_locales
+23,28d10
+&lt; add_view_paths
+&lt; add_view_paths
+&lt; add_view_paths
+&lt; load_environment_config
+&lt; load_environment_config
+&lt; load_environment_config
+43a26,29
+&gt; global_id
+&gt; active_job.logger
+&gt; active_job.set_configs
+&gt; active_job.set_reloader_hook
+67,70d52
+&lt; global_id
+&lt; active_job.logger
+&lt; active_job.set_configs
+&lt; active_job.set_reloader_hook
+75,90d56
+&lt; set_default_precompile
+&lt; quiet_assets
+&lt; setup_sass
+&lt; setup_compression
+&lt; jbuilder
+&lt; web_console.initialize
+&lt; web_console.development_only
+&lt; web_console.insert_middleware
+&lt; web_console.mount_point
+&lt; web_console.template_paths
+&lt; web_console.whitelisted_ips
+&lt; web_console.whiny_requests
+&lt; i18n.load_path
+&lt; prepend_helpers_path
+&lt; prepend_helpers_path
+&lt; prepend_helpers_path
+95,98d60
+&lt; load_config_initializers
+&lt; load_config_initializers
+&lt; load_config_initializers
+&lt; engines_blank_point
+100,103d61
+&lt; engines_blank_point
+&lt; engines_blank_point
+&lt; engines_blank_point
+&lt; append_assets_path
+109,114c67
+&lt; append_assets_path
+&lt; override js_template hook
+&lt; append_assets_path
+&lt; append_assets_path
+&lt; turbolinks
+&lt; append_assets_path
+---
+&gt; engines_blank_point
+</code></pre>
+<ul>
+<li>API モードだと余計な initializers の読み込みが少なくなっているようだ。</li>
+<li>なお、このコマンドは筆者によって追加されている。</li>
+</ul>
+<pre lang="sh"><code>$ cd rails-sample
+$ bin/rails middleware &gt; middleware.txt
+$ cd ../rails-api-sample
+$ bin/rails middleware &gt; middleware.txt
+$ cd ..
+$ diff {rails-sample,rails-api-sample}/middleware.txt
+6d5
+&lt; use Rack::MethodOverride
+8d6
+&lt; use Sprockets::Rails::QuietAssets
+11d8
+&lt; use WebConsole::Middleware
+17,19d13
+&lt; use ActionDispatch::Cookies
+&lt; use ActionDispatch::Session::CookieStore
+&lt; use ActionDispatch::Flash
+23c17
+&lt; run RailsSample::Application.routes
+---
+&gt; run RailsApiSample::Application.routes
+</code></pre>
+<ul>
+<li><code>Rack::MethodOverride</code> とは <code>params[:_method]</code> によって HTTP メソッドを上書きするためのミドルウェアで、PUT や DELETE リクエストはこれによって実現している。しかし、これらは フォーム等の HTML が存在しない API モードでは不要なので削除してあると思われる。</li>
+<li>cookie 等の Web ブラウザに関連するミドルウェアが API モードには含まれない。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQueryによるアコーディオンパネル</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="jQueryによるアコーディオンパネル">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/44/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">jQueryによるアコーディオンパネル</h1>
+          <p class="metadata">
+            <time datetime="2011-03-15T14:04:00.000+0000">2011-03-15 14:04</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>
+    miyagia&gt;li&gt;
+    sendaia&gt;li&gt;
+    kesennumaa&gt;li&gt;
+    ishinomakia&gt;li&gt;
+    onagawaa&gt;li&gt;
+    iwatea&gt;li&gt;
+    miyakoa&gt;li&gt;
+    rikuzentakadaa&gt;li&gt;
+    fukushimaa&gt;li&gt;
+    soumaa&gt;li&gt;
+ul&gt;
+</code></pre>
+<pre><code>$(&quot;li.pref&quot;).click(accordion); // (1)
+
+function accordion(e) {
+    var $this = $(this);
+    if (!$this.hasClass(&quot;opened&quot;)) { // (2)
+        $(&quot;li.opened&quot;).removeClass(&quot;opened&quot;).nextUntil(&quot;.pref&quot;).slideUp(); // (3)
+        $this.addClass(&quot;opened&quot;).nextUntil(&quot;.pref&quot;).slideDown(); // (4)
+    } else { // (5)
+        $this.removeClass(&quot;opened&quot;).nextUntil(&quot;.pref&quot;).slideUp(); // (6)
+    }
+    e.preventDefault(); // (7)
+}
+</code></pre>
+<p>(1)：「pref」クラスを持つli要素がクリックされると、accordion関数が実行される。<br />
+(2)：クリックされたli要素が「opened」クラスを持っていなければ、<br />
+(3)：「opened」クラスを持つli要素から「opened」クラスを取り除き、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideUpする。<br />
+(4)：クリックされたli要素に「opened」クラスをつけ、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideDownする。<br />
+(5)：クリックされたli要素が「opened」クラスを持っていれば、<br />
+(6)：クリックされたli要素から「opened」クラスを取り除き、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideUpする。<br />
+(7)：li直下にあるa要素にデフォルトでセットされているイベント（他ページへのジャンプ）を実行させない。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

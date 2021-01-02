@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails3のDate.currentのソースコードリーディング</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails3のDate.currentのソースコードリーディング">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/75/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails3のDate.currentのソースコードリーディング</h1>
+          <p class="metadata">
+            <time datetime="2011-08-01T23:08:00.000+0000">2011-08-01 23:08</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code># config/application.rb
+module Hoge
+  class Application &lt; Rails::Application
+    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+    # Run &quot;rake -D time&quot; for a list of tasks for finding time zone names. Default is UTC.
+    # config.time_zone = 'Central Time (US &amp; Canada)'
+  end
+end
+</code></pre>
+<ul>
+<li>プロジェクトが作成されたばかりの設定を見ると、デフォルトのタイムゾーンはTime.zoneを参照していることがわかる。</li>
+<li>Date.currentのソースコードからもそれが読み取れる。</li>
+</ul>
+<pre><code># activesupport/lib/active_support/core_ext/date/calculations.rb
+require 'date'
+class Date
+  class &lt;&lt; self
+    def current
+      ::Time.zone ? ::Time.zone.today : ::Date.today
+    end
+  end
+end
+</code></pre>
+<pre><code># lib/date.rb
+class Date
+  def self.today(sg=ITALY)
+    t = Time.now
+    jd = civil_to_jd(t.year, t.mon, t.mday, sg)
+    new!(jd_to_ajd(jd, 0, 0), 0, sg)
+  end
+end
+</code></pre>
+<ul>
+<li>TimeクラスはC言語で実装されてるっぽいので、よくわからない。けど、タイムゾーンはシステムのものを使っていると思われる。</li>
+</ul>
+<pre><code>ruby-1.9.2-p180 :001 &gt; Date.current
+ =&gt; Mon, 01 Aug 2011
+ruby-1.9.2-p180 :002 &gt; Time.zone
+ =&gt; (GMT+00:00) UTC
+ruby-1.9.2-p180 :003 &gt; Time.zone.today
+ =&gt; Mon, 01 Aug 2011
+$ date
+Mon Aug 1 23:05:00 JST 2011
+</code></pre>
+<ul>
+<li>ん？でも、タイムゾーンはJSTになってる。ここまで低水準だともうわから〜ん。</li>
+</ul>
+<pre><code># config/application.rb
+module Hoge
+  class Application &lt; Rails::Application
+    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+    # Run &quot;rake -D time&quot; for a list of tasks for finding time zone names. Default is UTC.
+    # config.time_zone = 'Central Time (US &amp; Canada)'
+    config.time_zone = 'Tokyo'
+  end
+end
+</code></pre>
+<ul>
+<li>試しに設定を日本時に変更してみると…</li>
+</ul>
+<pre><code>ruby-1.9.2-p180 :001 &gt; Time.zone
+ =&gt; (GMT+09:00) Tokyo
+</code></pre>
+<ul>
+<li>
+<p>Time.zoneは変更された。</p>
+</li>
+<li>
+<p>Railsアプリケーションのタイムゾーンを調べる場合はTime.zoneで確認できるようだ。</p>
+</li>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p>追記</p>
+<pre><code>$ date
+2011年 8月2日 火曜日 00時04分59秒 JST
+
+ruby-1.9.2-p180 :001 &gt; Date.current
+ =&gt; Mon, 01 Aug 2011
+ruby-1.9.2-p180 :002 &gt; Date.today
+ =&gt; Mon, 02 Aug 2011
+ruby-1.9.2-p180 :003 &gt; Time.zone
+ =&gt; (GMT+00:00) UTC
+ruby-1.9.2-p180 :004 &gt; Time.now
+ =&gt; 2011-08-02 00:05:23 +0900
+</code></pre>
+<p>Date.currentとDate.todayでタイムゾーンが異なるのは、前者がTime.zoneを参照しているからで、後者がTime.nowを参照しているからなのだが、それらが違うのがまた謎だ…</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

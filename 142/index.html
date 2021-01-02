@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firefox用Qiita検索プラグイン</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Firefox用Qiita検索プラグイン">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/142/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Firefox用Qiita検索プラグイン</h1>
+          <p class="metadata">
+            <time datetime="2012-09-05T02:10:00.000+0000">2012-09-05 02:10</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Firefoxの右上の検索ボックスでQiita内の検索を行うためのプラグインを作ってみた。vimperatorであれば<code>qiita [keyword]</code>で検索できるようになった。</p>
+<pre lang="xml:qiita.xml"><code>
+
+    Qiita
+    Search by Qiita
+    utf-8
+    http://qiita.com/favicon.ico?v=3
+    
+        
+    
+
+</code></pre>
+<ul>
+<li>macの場合は<code>~/Library/Application Support/Firefox/Profiles/xxxxxxxx.default/searchplugins/</code>以下に上のファイルを保存し、firefoxを再起動。（xxxxxxxxの部分はランダム）</li>
+<li>githubみたいにQiitaもプラグインをブラウザに認識させるとcoolだと思う。</li>
+</ul>
+<p><img src="https://dl.dropbox.com/u/1235413/add-github-plugin.png" alt="github-plugin" /></p>
+<ul>
+<li>これは以下のような感じでできるらしい（未確認）。</li>
+</ul>
+<pre lang="html"><code>
+</code></pre>
+<h3>追記（9/5）</h3>
+<ul>
+<li>githubのソースを確認したら上のような箇所があった。</li>
+</ul>
+<pre lang="html"><code>
+</code></pre>
+<ul>
+<li>xmlも上で紹介した形式とほぼ同じだった。</li>
+</ul>
+<pre lang="xml:opensearch.xml"><code>
+  GitHub
+  Search GitHub
+  UTF-8
+  data:image/x-icon;base64,
+  iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+  bWFnZVJlYWR5ccllPAAAAVpJREFUeNqM0s0rRGEUx/F7x0RKxob4A6bZKBYWFkLZqIkkC7FUsrCw
+  oCxsZcN/IFmIP4E9ZWnyurBR3krZeH8b1/dMv5vTpDue+szzzL33nJ5znieIoihIGCGmMIt0+ctS
+  bIUETbhHEbm/EqSD5PGOC2TwgHo04xaPv9tIHhbUoPUMXjAcx4aln9BKDcYxgRR20IJNDKEO69hC
+  Fie2JnYx3sGYJcQ5jrU2PTjEDbpwpeeXWPZN3NOLnLb8hm1UoaBAG3P6btR26pt4rblDDarRs6KO
+  Mh7fmr/idZxgAW3Y0H/r/IqCfYKU5o/yB1b7kY5tGp04Uwmh++5Vcx59PoGNWtV3pznQXK2SbLf7
+  6s8kVv09yLpGRro0SwoawIgrt1fNzPtT2FVd/WjVCdiL9qQb5k8ho3Ia8eTKea50TeMd2LZOXQmf
+  mP9PrL/K3RjURTrAmk4lMcGPAAMAEvmJGW+ZZPAAAAAASUVORK5CYII=
+  
+    
+  
+  https://github.com/search
+
+</code></pre>
+<hr />
+<h3>環境</h3>
+<ul>
+<li>osx mountain lion</li>
+<li>firefox 14</li>
+</ul>
+<hr />
+<h3>参考</h3>
+<ul>
+<li><a href="http://webos-goodies.jp/archives/50835795.html">http://webos-goodies.jp/archives/50835795.html</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

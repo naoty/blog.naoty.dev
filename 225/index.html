@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SinatraでJSONを受け取る</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="SinatraでJSONを受け取る">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/225/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">SinatraでJSONを受け取る</h1>
+          <p class="metadata">
+            <time datetime="2014-07-17T09:12:00.000+0000">2014-07-17 09:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="rb:Gemfile"><code>gem &quot;rack-contrib&quot;, require: [&quot;rack/contrib/post_body_content_type_parser&quot;], github: &quot;rack/rack-contrib&quot;
+</code></pre>
+<pre lang="rb:config.ru"><code>use Rack::PostBodyContentTypeParser
+run YourApplication
+</code></pre>
+<p>これだけ。</p>
+<hr />
+<p><code>Rack::PostBodyContentTypeParser</code>はその名の通りContentTypeを見てbodyをパースするmiddlewareで、実装を見ると実体は<code>application/json</code>のときは<code>JSON.parse(body)</code>みたいなことをしているだけ。</p>
+<p>現在リリースされているバージョンだと正常に動かないので、開発版をgithubから取得している。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

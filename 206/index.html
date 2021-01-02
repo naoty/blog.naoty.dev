@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アプリのアイコンを自動生成する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="アプリのアイコンを自動生成する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/206/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">アプリのアイコンを自動生成する</h1>
+          <p class="metadata">
+            <time datetime="2013-12-15T16:54:00.000+0000">2013-12-15 16:54</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>アイコンをプログラムによって生成して、デフォルトの真っ白なアイコンと差し替えた話です。</p>
+<h2>問題意識</h2>
+<p>開発中のiOSアプリはデフォルトで真っ白な（iOS7から幾何学模様）アイコンですが、開発中のアプリをいくつかインストールすると、ホーム画面に真っ白なアイコンがズラズラと並びます。iOSアプリを開発したことのある方であれば、見慣れた光景かと思います。こういう画面だと、一目でどのアイコンがどのアプリか判断つかないし、なによりiOSらしからぬダサいホーム画面になってしまいます。</p>
+<p>一目でどれがどのアプリか分かって、かつ開発中のアプリで覆い尽くされてもホーム画面が華やかに見える状態を目指して、今回のソリューションを考案しました。</p>
+<h2>picon</h2>
+<p>以上のような問題を解決するため、<a href="https://github.com/naoty/picon">picon</a>というrubygemを作りました。Xcode 5.0以降が必須です。使い方は簡単で以下のとおりです。</p>
+<pre lang="zsh"><code>$ gem install picon
+$ cd path/to/project
+$ picon generate
+</code></pre>
+<p>これでこんな感じになります。</p>
+<h3>Before</h3>
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/bd35114d-5177-835d-bf5d-77a68f3d410a.png" alt="picon_before_s.png" title="picon_before_s.png" /></p>
+<h3>After</h3>
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/f117fb38-7db7-d1f2-e558-af2c3437d344.png" alt="picon_after_s.png" title="picon_after_s.png" /></p>
+<p>piconはアプリのbundle identifier（com.example.SampleApp的なアレ）のハッシュ値に基づいた<a href="http://en.wikipedia.org/wiki/Identicon">identicon</a>を生成し、デフォルトのアイコンと差し替えます。bundle identifierに基づいているので、アプリ毎にユニークなアイコンが生成されます。もちろんiPadやiOS 7など各解像度に合わせて生成して差し替えてくれます。実装の中身としては、Xcode 5.0から追加されたAsset Catalogという機能を使っています。新しいAsset Catalogを作成し、そこに生成したidenticonを追加して、最後にデフォルトのアイコンのAsset Catalogと入れ替えています。ちょっと強引なやり方をしていますが。</p>
+<hr />
+<p>デフォルトのアイコンに見飽きたという方は、ぜひお使いください。また、まだまだ完成度は高くないのでpull reqやissueもお待ちしております。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoで環境変数を使い回す</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Echoで環境変数を使い回す">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/365/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Echoで環境変数を使い回す</h1>
+          <p class="metadata">
+            <time datetime="2019-04-01T23:25:00.000+0900">2019-04-01 23:25</time>
+            <a href="/go/">#go</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>状況</h1>
+<p>Echoでデータベースに接続するときなどに環境変数を使ってデータベースのホスト名などの情報を取得したい。</p>
+<h1>問題</h1>
+<p>必要なときに都度<code>os.Getenv</code>で環境変数の値を取得すると、各ハンドラーで同じようなコードを何度も書くことになる。</p>
+<p>また、環境変数が設定されていないときのデフォルト値を設定したい場合や<code>string</code>以外の型に変換したい場合、さらにコード量が増えてしまう。</p>
+<h1>解決</h1>
+<p><a href="https://github.com/kelseyhightower/envconfig">kelseyhightower/envconfig</a>を使って環境変数を簡単に扱えるようにし、すべてのハンドラーからカスタムコンテキストを通して環境変数にアクセスできるようにした。</p>
+<pre lang="go"><code>// config.go
+type Config struct {
+  DatabaseHost     string `split_words:&quot;true&quot;`
+  DatabaseName     string `split_words:&quot;true&quot;`
+  DatabasePassword string `split_words:&quot;true&quot;`
+  DatabasePort     int    `split_words:&quot;true&quot;`
+  DatabaseUser     string `split_words:&quot;true&quot;`
+}
+</code></pre>
+<pre lang="go"><code>// server.go
+func main() {
+  var config Config
+  err := envconfig.Process(&quot;&quot;, &amp;config)
+  if err != nil {
+    log.Fatal(err.Error())
+  }
+
+  // ...
+}
+</code></pre>
+<ul>
+<li><code>DATABASE_HOST</code>のような環境変数に<code>Config</code>という構造体からアクセスできるようにしている。<code>config.DatabaseHost</code>のようにアクセスできるようになる。<code>string</code>型であれば<code>os.Getenv</code>でも問題ないけど、<code>int</code>型や<code>bool</code>型の場合は変換処理が面倒なのでenvconfigを使っている。</li>
+<li><code>split_words=&quot;true&quot;</code>というアノテーションをつけることで、スネークケースからキャメルケースに変換している。</li>
+<li><code>envconfig.Process</code>の第1引数は環境変数のプレフィックスになっている。<code>envconfig.Processs(&quot;database&quot;, &amp;config)</code>とすると、<code>config.Host</code>で環境変数<code>DATABASE_HOST</code>にアクセスできるようになる。必要なければ空文字でいい。</li>
+</ul>
+<pre lang="go"><code>// custom_context.go
+type CustomContext struct {
+  echo.Context
+  Config
+}
+
+func CustomContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+  return func(c echo.Context) error {
+    cc := &amp;CustomContext{c}
+    return next(cc)
+  }
+}
+
+func ConfigMiddleware(config Config) echo.MiddlewareFunc {
+  return func(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+      cc := c.(*CustomContext)
+      cc.Config = config
+      return next(cc)
+    }
+  }
+}
+</code></pre>
+<pre lang="go"><code>// server.go
+func main() {
+  // ...
+
+  e := echo.New()
+  e.Use(CustomContextMiddleware)
+  e.Use(ConfigMiddleware(config))
+
+  // ...
+}
+</code></pre>
+<ul>
+<li>すべてのハンドラーから<code>Config</code>にアクセスできるようにカスタムコンテキストを用意し、そのフィールドに<code>Config</code>を追加する。</li>
+<li>カスタムコンテキストをデフォルトのコンテキストで拡張するため、middlewareを設定している。さらに、上で初期化した<code>Config</code>をカスタムコンテキストのフィールドに追加するためのmiddlewareも設定している。</li>
+</ul>
+<p>このように実装することで、以下のように簡単に環境変数にアクセスできるようになる。</p>
+<pre lang="go"><code>// server.go
+func main() {
+  // ...
+
+  e.GET(&quot;/tasks&quot;, getTasks)
+
+  // ...
+}
+
+func getTasks(c echo.Context) error {
+  cc := c.(*CustomContext)
+  dsn := cc.GetDSN()
+
+  // ...
+}
+</code></pre>
+<pre lang="go"><code>// config.go
+func (c Config) GetDSN() string {
+  return fmt.Sprintf(
+    &quot;%s:%s@tcp(%s:%i)/%s&quot;,
+    c.DatabaseUser,
+    c.DatabasePassword,
+    c.DatabaseHost,
+    c.DatabasePort,
+    c.DatabaseName,
+  )
+}
+</code></pre>
+<ul>
+<li><code>Config</code>は<code>CustomContext</code>の匿名フィールドなので、<code>CustomContext</code>から直接<code>Config</code>のメソッドである<code>GetDSN</code>を呼ぶことができる。</li>
+<li>上で説明したとおり、<code>c.DatabaseUser</code>などは環境変数<code>DATABASE_USER</code>などから値を取得している。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

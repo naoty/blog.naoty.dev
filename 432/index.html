@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rake/testtask</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="rake/testtask">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/432/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">rake/testtask</h1>
+          <p class="metadata">
+            <time datetime="2020-10-17T23:23:00.000+0000">2020-10-17 23:23</time>
+            <a href="/ruby/">#ruby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>minitestでテストを書いたことがなかったので、まずはテストの実行方法を調べてみた。すると、<a href="https://docs.ruby-lang.org/ja/latest/class/Rake=3a=3aTestTask.html"><code>rake/testtask</code></a>というライブラリを使うと簡単にテストのためのrakeタスクを定義できることがわかった。</p>
+<pre lang="ruby"><code># Rakefile
+require &quot;rake/testtask&quot;
+
+Rake::TestTask.new do |task|
+  task.libs = [&quot;lib&quot;, &quot;test&quot;]
+  task.test_files = FileList[&quot;test/**/*.rb&quot;]
+end
+</code></pre>
+<ul>
+<li><code>#libs=</code>でテスト実行前に<code>$LOAD_PATH</code>に指定したパスを追加できる。<code>require &quot;test_helper&quot;</code>みたいに書けるのはこれのおかげ。</li>
+<li><code>#test_files=</code>でテスト対象を指定できる。</li>
+</ul>
+<p>テストの実行はこんな感じ。</p>
+<pre lang="bash"><code># 全テストを実行
+% rake test
+# ファイルを指定して実行
+% rake test TEST=test/foo_test.rb
+# メソッドを指定して実行
+% rake test TESTOPTS=&quot;--name=test_foo&quot;
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

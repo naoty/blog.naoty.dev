@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todoリストをwebに公開した話</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="todoリストをwebに公開した話">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/187/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">todoリストをwebに公開した話</h1>
+          <p class="metadata">
+            <time datetime="2013-05-19T20:52:00.000+0000">2013-05-19 20:52</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>自分が開発したいこと、勉強したいことをwebに公開した。</p>
+<p><a href="http://naoty.info/todo.html">naoty.info/todo</a></p>
+<p>以前に書いた<a href="http://naoty.hatenablog.com/entry/2013/04/28/002926">記事</a>の通り、ここ数週間vimでtodoリストを書くようになった。これがなかなかよくて、.vimrcをいじってtodoリストを書きやすいようにvimをカスタマイズした。GUIアプリだと自由にカスタマイズできなくて、痒いところに手が届かずに使わなくなってしまうケースがあったけど、vimだと自由にいじれるからそういうこともなく長続きしているのだと思う。</p>
+<p>そうこうしてるうちに、vimで書いたtodoリストはどんどん増えていった。その中には誰かがやってくれればいいものもあったので、公開していいかと思った。あと、todoリストを買い物リストのように使うことがあって、そういうときに外出先でiPhoneからチェックしたいと思ったのでwebで公開した。viewportを設定してモバイル端末からも見やすいようにした。</p>
+<p>公開の仕組みは単純で、todo.mdというファイルをguardで監視して保存されたら自動的にあるスクリプト（下記リンク）とscpが実行されるようにした。このスクリプトはtodo.mdをパースし用意しておいたテンプレートとくっつけてHTML化する。そして、そのHTMLがscpでサーバーにアップロードされる。</p>
+<p><a href="https://github.com/naoty/md2html">naoty/md2html · GitHub</a></p>
+<p>あとRedcarpetをちょっと拡張して<code>- []</code>, <code>- [x]</code>をチェックボックスに変換するようにした。これはGithub Flavored Markdownで実装されているTask Listの形式を<a href="https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments">参考</a>にした。</p>
+<hr />
+<h3>余談</h3>
+<p>最初はこの仕組みをSinatra、Heroku、Dropbox APIで作ろうとしたのだけど、いろいろ問題があって今の仕組みにいたった。結局「markdownの変換」「scpによるアップロード」の2つを自動化しただけのシンプルな形になった。最近これ以外にも、仕組みを選択する段階で失敗する経験があった。単純な仕組みであるほど問題は少ないし、起きたときに解決しやすいと思った。</p>
+<p>「todoリストをテキストファイルとして扱う」というアイデアは、vimを十二分にカスタマイズ可能なtodoアプリとして扱えるようになっただけでなく、今回のようにtodoリストをwebに公開するというところまで行き着いた。なんかで読んだけど、データをテキストとして保存した方が扱いやすいというのが身にしみて理解できたのでよかった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

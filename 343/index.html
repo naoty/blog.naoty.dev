@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Componentの作り方</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Container Componentの作り方">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/343/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Container Componentの作り方</h1>
+          <p class="metadata">
+            <time datetime="2018-09-05T16:39:00.000+0900">2018-09-05 16:39</time>
+            <a href="/react/">#react</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Reactに慣れてきたので、ComponentをContainer ComponentとPresentational Componentに分けるという実装パターンを試している。</p>
+<p>Presentational ComponentはFunctional Componentで簡単に書けるけど、Container Componentの書き方がいまいち分かってなかったのでメモする。</p>
+<pre lang="js"><code>import React from &quot;react&quot;;
+
+export default class Container extends React.Component {
+  render() {
+    // 子コンポーネントに渡すprops
+    const props = {};
+
+    // this.props.childrenは複数の可能性もあるので
+    // React.cloneElement(this.props.children)はエラーになる。
+    return React.Children.map(this.props.children, child =&gt; (
+      // childはテキストの可能性もあるためtype checkする
+      if (typeof child === &quot;object&quot;) {
+        return React.cloneElement(child, props);
+      }
+
+      return child;
+    ));
+  }
+}
+</code></pre>
+<p>このContainerでstateを管理し、子コンポーネントにprops経由で渡すようなイメージ。あとは、副作用を伴うアクションをContainerで定義しておいて、props経由で渡すこともありそう。</p>
+<hr />
+<h2>追記: 2018-09-06 12:30:00</h2>
+<p>上のような汎用的なContainer Componentを作るならHOCを使う方がいいかもしれない。</p>
+<pre lang="jsx"><code>import React from &quot;react&quot;;
+
+export default (Component) =&gt; {
+  // 引数のComponentをラップするComponentを返す
+  return class extends React.Component {
+    render() {
+      // 自身に渡されたpropsとstateをラップしたComponentに渡す
+      return ;
+    }
+  }
+}
+</code></pre>
+<p>こっちの方がシンプルに書けそう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ちょっとしたiPadアプリを作った話</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ちょっとしたiPadアプリを作った話">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/157/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ちょっとしたiPadアプリを作った話</h1>
+          <p class="metadata">
+            <time datetime="2012-11-26T00:08:00.000+0000">2012-11-26 00:08</time>
+          </p>
+        </header>
+        <section class="body">
+          <blockquote>
+<p>シンプルなBGMアプリほしい</p>
+<p>— なおてぃーさん (@naoty_k) <a href="https://twitter.com/naoty_k/status/271989557321420800">11月 23, 2012</a></p>
+</blockquote>
+<blockquote>
+<p>好きな曲のyoutubeのリンクをHerokuとかにアップしておいて、iPadでそれらをリストを取得してエンドレスで聞けるようにしたい</p>
+<p>— なおてぃーさん (@naoty_k) <a href="https://twitter.com/naoty_k/status/271989962881265664">11月 23, 2012</a></p>
+</blockquote>
+<p>↑というのを思いつき、2日間でプロトタイプを作ってみた。</p>
+<p><img src="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg" alt="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg" /></p>
+<p>ジョジョOPでテンション上げながら。</p>
+<p><img src="http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg" alt="http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg" /></p>
+<p>サーバー側をRails on Herokuで作って、そっからデータを取得までできた。</p>
+<p>アプリとサーバーのコードはこちらで公開してます。</p>
+<ul>
+<li><a href="https://github.com/naoty/RemoteTrack">https://github.com/naoty/RemoteTrack</a></li>
+<li><a href="https://github.com/naoty/RemoteTrack-server">https://github.com/naoty/RemoteTrack-server</a></li>
+</ul>
+<h2>YouTube再生プレイヤー</h2>
+<p>YouTubeの再生プレイヤーは<code>UIWebView</code>にiframeを埋め込んで実装した。<code>MPMoviePlayerController</code>というのでもできそうな感じがするけど、時間かかりそうなので、とりあえず<code>UIWebView</code>を選択。</p>
+<p>iframeはYoutubeの動画の下のところから取ってこれるものを使う。↓こんなの。</p>
+<pre><code>
+</code></pre>
+<p>あとは、<code>UITableView</code>で選択した動画のIDを<code>UIWebView</code>に渡してリロードすることで、動画を切り替える。</p>
+<h2>サーバーとの通信</h2>
+<p>サーバーとの通信は<code>AFNetworking</code>という便利ライブラリを使って実装した。外部ライブラリのインストールには<code>CocoaPods</code>を初めて使ってみた。RailsのBundlerに慣れると、iOSの外部ライブラリの管理がしんどく感じるけど、これでだいぶ楽になれる。</p>
+<pre><code>platform :ios, '6.0'
+pod 'AFNetworking'
+</code></pre>
+<p>↑のようなファイルを<code>Podfile</code>という名前でプロジェクトのルートディレクトリに置いて（<code>Gemfile</code>っぽい）</p>
+<pre><code>$ pod install
+</code></pre>
+<p>して、できた<code>*.xcworkspace</code>を方を使うと簡単に外部ライブラリを使えるようになる。</p>
+<h2>自動再生</h2>
+<p>ここまではそんなに時間がかからなかったけど、ここから</p>
+<ul>
+<li>HTMLがロードされたら自動で動画を再生する</li>
+<li>動画が終了したら自動で次の曲に移る</li>
+</ul>
+<p>の2つを実装するのに、相当手こずってる（現在進行形）。</p>
+<p>YouTubeのiFrameプレイヤーをJavaScriptで制御する<a href="https://developers.google.com/youtube/iframe_api_reference?hl=ja">YouTube Player API</a>というものがあるので、これを使ってプレイヤーのロード時、動画再生終了時のイベントを受け取る。詳しい実装方法はリンク先のとおりだけど、ポイントは以下のところ。</p>
+<pre><code>function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.ENDED) {
+        document.location = &quot;api://didEndedMovie&quot;;
+    }
+}
+</code></pre>
+<p>これで再生終了時のイベントを受け取って、<code>api://didEndedMovie</code>をロードすることができる。</p>
+<p><code>UIWebView</code>でのロードは<code>UIWebViewDelegate</code>でキャッチすることができるので、これをうまく使うことでJSからアプリ側への通知を実装する。</p>
+<pre><code>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *requestString = [[request URL] absoluteString];
+
+    if ([requestString isEqualToString:@&quot;api:didEndedMovie&quot;]) {
+        // 再生終了時の処理をここに実装する
+
+        return NO;
+    }
+
+    return YES;
+}
+</code></pre>
+<p>このデリゲートメソッドの返り値を<code>YES</code>にすると<code>UIWebView</code>はページ遷移するが、<code>NO</code>にするとページ遷移しない。リクエスト先を見て<code>api://didEndedMovie</code>であれば、再生終了時の処理を実行し<code>NO</code>を返す。</p>
+<p>これで再生終了時に次の動画に自動的に移すことが可能</p>
+<p>…かと思いきや、なぜかうまくいかないorz</p>
+<p>デバッグをしてみると、どうやらJSの<code>onPlayerStateChange</code>が呼ばれていないっぽい。ブラウザではうまくいっていたので、<code>UIWebView</code>のみで起きる現象のようだけど、原因がよくわからない…。というところで、今週の土日が終わりました。</p>
+<hr />
+<p>以下のページを参考にさせていただきました。ありがとうございました。</p>
+<ul>
+<li><a href="http://qiita.com/items/66457a0d5fe55877dea1">http://qiita.com/items/66457a0d5fe55877dea1</a></li>
+<li><a href="http://d.hatena.ne.jp/ntaku/20111103/1320288456">http://d.hatena.ne.jp/ntaku/20111103/1320288456</a></li>
+<li><a href="https://developers.google.com/youtube/iframe_api_reference?hl=ja">https://developers.google.com/youtube/iframe_api_reference?hl=ja</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

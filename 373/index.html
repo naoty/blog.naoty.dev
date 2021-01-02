@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PumaのメトリクスをDatadogに送る</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="PumaのメトリクスをDatadogに送る">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/373/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">PumaのメトリクスをDatadogに送る</h1>
+          <p class="metadata">
+            <time datetime="2019-06-30T17:18:00.000+0900">2019-06-30 17:18</time>
+            <a href="/rails/">#rails</a>
+            <a href="/datadog/">#datadog</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>普段、Datadogを使ってシステムを監視している。AWSの各サービスはCloudWatch metricsを通してDatadogから監視できるんだけど、今回はRailsアプリケーションサーバーであるPumaをDatadogから監視できるようにする。</p>
+<h1>DogStatsD</h1>
+<p>DatadogのIntegrationにPumaはないため、カスタムメトリクスを送ることになる。DogStatsDを使うと簡単にカスタムメトリクスを送ることができる。DogStatsDはdatadog-agentに同梱されており、受け取ったカスタムメトリクスをDatadogに転送する。また、<a href="https://github.com/statsd/statsd">StatsD</a>と同じプロトコルを実装しているため、StatsDクライアントはDogStatsDを通してDatadogにメトリクスを送ることができる。</p>
+<h1>Pumaのメトリクス</h1>
+<p>Pumaは<code>Puma.stats</code>から以下のようなメトリクスを取得することができる。</p>
+<ul>
+<li><code>backlog</code>: スレッドによる処理を待つコネクション数</li>
+<li><code>running</code>: 実行中のスレッド数</li>
+<li><code>pool_capacity</code>: 現在サーバーが取得できるリクエスト数</li>
+<li><code>max_threads</code>: 最大スレッド数</li>
+</ul>
+<h1>puma-plugin-statsd</h1>
+<p><a href="https://github.com/yob/puma-plugin-statsd">puma-plugin-statsd</a>は<code>Puma.stats</code>から取得したメトリクスをStatsDサーバーに送る。Pumaのプラグインなので、以下のように<code>config/puma.rb</code>に指定する。</p>
+<pre lang="ruby"><code>plugin :statsd
+</code></pre>
+<p>そして、起動時に環境変数<code>STATSD_HOST</code>でStatsDサーバーのホストを指定する。DogStatsDを使う場合、datadog-agentのホストを指定すればいい。</p>
+<p>これで、PumaのメトリクスがDatadogに送られるようになる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

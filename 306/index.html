@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モデルに記述する順番</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="モデルに記述する順番">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/306/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">モデルに記述する順番</h1>
+          <p class="metadata">
+            <time datetime="2017-12-02T23:02:00.000+0900">2017-12-02 23:02</time>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>他のメンバーがコードを読むときに知っておいてほしいことを意識して、以下の順に書いている。</p>
+<ol>
+<li>モジュール</li>
+<li>定数</li>
+<li>関連</li>
+<li>属性（<code>enum</code>, <code>attribute</code>など）</li>
+<li>コールバック</li>
+<li>バリデーション</li>
+<li>スコープ</li>
+<li>クラスメソッド</li>
+<li>インスタンスメソッド</li>
+<li>プライベートメソッド</li>
+</ol>
+<p>以下のコードは例のために書いてみたけど、動くかわからない。</p>
+<pre lang="ruby"><code>class Pokemon &lt; ApplicationRecord
+  include Tradable
+
+  INITIAL_HP_RANGE = 10..20
+
+  belongs_to :master
+  has_many :skills
+
+  enum gender: %i[male female]
+
+  before_validation :set_initial_hp, on: :create
+
+  validates :name, presence: true
+  validates :hp, numericality: { greater_than_or_equal_to: 0 }
+
+  scope :first_generation, -&gt; { where(id: (1..151).to_a) }
+
+  def self.capture
+    # ...
+  end
+
+  def attack
+    # ...
+  end
+
+  private
+
+  def set_initial_hp
+    self.hp = rand(INITIAL_HP_RANGE)
+  end
+end
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

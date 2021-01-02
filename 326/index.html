@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assets precompileに必要最小限のファイル</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Assets precompileに必要最小限のファイル">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/326/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Assets precompileに必要最小限のファイル</h1>
+          <p class="metadata">
+            <time datetime="2018-03-09T20:55:00.000+0900">2018-03-09 20:55</time>
+            <a href="/rails/">#rails</a>
+            <a href="/docker/">#docker</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Dockerfileで<code>rails assets:precompile</code>を実行する前に<code>COPY</code>するファイルを必要最小限にしておけると、キャッシュを有効活用できてビルド時間を短縮できる。</p>
+<pre lang="docker"><code>WORKDIR /myapp
+
+COPY app/assets /myapp/
+COPY bin/rails /myapp/bin/
+COPY config/environments /myapp/config/environments/
+COPY config/initializers /myapp/config/initializers/
+COPY config/application.rb /myapp/config/application.rb
+COPY config/boot.rb /myapp/config/boot.rb
+COPY config/environment.rb /myapp/config/environment.rb
+COPY config/secrets.yml.enc /myapp/config/secrets.yml.enc
+COPY lib/assets /myapp/lib/assets/
+COPY vendor/assets /myapp/vendor/assets/
+COPY Rakefile /myapp/
+RUN bin/rails assets:precompile
+</code></pre>
+<p>とりあえずこれだけで動いた。<code>config/initializers/</code>以下も削れそうな気がするけど、プロジェクトによってケースバイケースだと思うので、これで十分だとおもう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

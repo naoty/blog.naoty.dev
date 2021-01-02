@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実行環境とBundler.require</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="実行環境とBundler.require">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/89/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">実行環境とBundler.require</h1>
+          <p class="metadata">
+            <time datetime="2011-11-02T00:24:00.000+0000">2011-11-02 00:24</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Gemfile</p>
+<pre><code>source 'http://rubygems.org'
+
+gem 'rails', '3.1.1'
+
+group :assets do
+  gem 'sass-rails', '~&gt; 3.1.4'
+  gem 'coffee-rails', '~&gt; 3.1.1'
+  gem 'uglifier', '&gt;= 1.0.3'
+end
+
+gem 'jquery-rails'
+
+group :development, :test do
+  gem 'turn', :require =&gt; false
+end
+
+group :production do
+  gem 'therubyracer'
+end
+</code></pre>
+<p>以上のようなGemfileがあった場合、Bundler.requireによって次のような結果が得られる。</p>
+<pre><code>Bundler.require(:default)
+#=&gt; rails, jquery-rails
+Bundler.require(:default, :assets)
+#=&gt; rails, jquery-rails, sass-rails, coffee-rails, uglifier
+Bundler.require(:default, :assets, :development)
+#=&gt; rails, jquery-rails, sass-rails, coffee-rails, uglifier, turn
+
+Bundler.require(*Rails.groups(:assets =&gt; %w(development test)))
+#=&gt; Bundler.require(:default, :development, :assets) # for Rails.env == 'development'
+#=&gt; rails, jquery-rails, sass-rails, coffee-rails, uglifier, turn
+
+#=&gt; Bundler.require(:default, :production) # for Rails.env == 'production'
+#=&gt; rails, jquery-rails, therubyracer
+</code></pre>
+<p>Bundler.requireの仕様を理解していれば、config/application.rbのコメントの説明も理解できるだろう。</p>
+<p>config/application.rb</p>
+<pre><code>if defined?(Bundler)
+  # If you precompile assets before deploying to production, use this line
+  Bundler.require(*Rails.groups(:assets =&gt; %w(development test)))
+  # If you want your assets lazily compiled in production use this line
+  # Bundler.require(:default, :assets, Rails.env)
+end
+</code></pre>
+<p>production環境でaseetsをどのタイミングでプリコンパイルするかで、この設定を変更する必要があるようだ。</p>
+<pre><code>Bundler.require(*Rails.groups(:assets =&gt; %w(development test)))
+#=&gt; production環境では:assetsはロードされないので、デプロイ前に手動でプリコンパイルしておく必要がある
+
+Bundler.require(:default, :assets, Rails.env)
+#=&gt; production環境でも:assetsをロードするので、自動でプリコンパイルしてくれる
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

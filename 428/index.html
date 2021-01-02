@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cp-kafkaでruby-kafkaを試してみる</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="cp-kafkaでruby-kafkaを試してみる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/428/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">cp-kafkaでruby-kafkaを試してみる</h1>
+          <p class="metadata">
+            <time datetime="2020-07-19T19:09:00.000+0000">2020-07-19 19:09</time>
+            <a href="/kafka/">#kafka</a>
+            <a href="/ruby/">#ruby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="/posts/124.html">前回</a>、cp-kafkaを使ってKafkaの検証環境を用意したので、今度はRubyで簡単なproducerとconsumerを書いてみる。</p>
+<p>前回用意したdocker-composeから<code>kafka-topic</code>コマンドで<code>greetings</code>トピックを作っておく。</p>
+<pre lang="bash"><code>% docker-compose exec kafka kafka-topic \
+  --create \
+  --zookeeper zookeeper:32181 \
+  --partitions 1 \
+  --replication-factor 1 \
+  --topic greetings
+</code></pre>
+<ul>
+<li><code>--partitions 1</code>でこのトピックのパーティション数が1つだけ。</li>
+<li><code>--replication-factor 1</code>でパーティションのレプリカの数を表している。この値はパーティション数に対する倍数なので、1の場合はレプリカなしになる。</li>
+</ul>
+<h1>producer</h1>
+<p><a href="https://github.com/zendesk/ruby-kafka">ruby-kafka</a>を使って簡単なproducerを作る。</p>
+<pre lang="ruby"><code># producer.rb
+require &quot;bundler/inline&quot;
+
+gemfile do
+  source &quot;https://rubygems.org&quot;
+  gem &quot;ruby-kafka&quot;
+end
+
+kafka = Kafka.new([&quot;localhost:9092&quot;], client_id: &quot;hello-kafka&quot;)
+kafka.deliver_message(&quot;Hello, World!&quot;, key: &quot;hello&quot;, topic: &quot;greetings&quot;)
+</code></pre>
+<ul>
+<li><code>Kafka.new</code>の第1引数はseed brokerのホスト名のリスト。</li>
+<li><code>Kafka.new</code>の第2引数はclient idで、任意だけどクライアントを識別するために使うので指定するのが推奨。</li>
+</ul>
+<pre lang="bash"><code>% ruby producer.rb
+</code></pre>
+<p>kafkacatでconsumerを起動してproducerが送った値を受け取る。</p>
+<pre lang="bash"><code>% kafka -b localhost:9092 -t greetings
+% Auto-selecting consumer mode (use -P or -C to override)
+% Reached end of topic greetings [0] at offset 0
+Hello, World!
+</code></pre>
+<ul>
+<li><code>-b</code>はbrokerのホストを指す。</li>
+<li><code>-t</code>はトピックを指す。</li>
+</ul>
+<p>Rubyで書いたproducerから送ったメッセージをconsumerから確認できた。</p>
+<h1>consumer</h1>
+<p>同様にruby-kafkaで簡単なconsumerを作る。</p>
+<pre lang="ruby"><code># consumer.rb
+require &quot;bundler/inline&quot;
+
+gemfile do
+  source &quot;https://rubygems.org&quot;
+  gem &quot;ruby-kafka&quot;
+end
+
+kafka = Kafka.new([&quot;localhost:9092&quot;])
+kafka.each_message(topic: &quot;greetings&quot;) do |message|
+  puts &quot;offset:#{message.offset}\tkey:#{message.key}\tvalue:#{message.value}&quot;
+end
+</code></pre>
+<p>kafkacatでproducerを起動してメッセージを送る。</p>
+<pre lang="bash"><code>% echo &quot;hello:Hello, World&quot; | kafkacat -b localhost:9092 -t greetings -K :
+</code></pre>
+<ul>
+<li><code>-K</code>でメッセージとキーを分割するデリミタを指定できる。</li>
+</ul>
+<pre lang="bash"><code>% ruby consumer.rb
+offset:0    key:hello   value:Hello, World
+</code></pre>
+<p>producerから送ったメッセージをRubyで書いたconsumerで取得することができた。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

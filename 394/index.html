@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2019年振り返り</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="2019年振り返り">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/394/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">2019年振り返り</h1>
+          <p class="metadata">
+            <time datetime="2019-12-30T18:38:00.000+0000">2019-12-30 18:38</time>
+            <a href="/retro/">#retro</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>仕事</h1>
+<p>今年はAWS上のインフラ運用が主な仕事だった。例えば、以下のようなことを行っていた。</p>
+<ul>
+<li>Railsアプリケーションや部内で利用していた細々としたアプリケーションをFargateに移行した。Fargateへの移行によってEC2をメンテナンスする手間が減り、より生産的な仕事に時間を回せるようになった。</li>
+<li>RailsアプリケーションのデプロイをCodeDeployに変更した。CodeDeployによってより安全にデプロイできるようになったものの考える手間が増えてしまったので、導入はケースバイケースだなと感じた。</li>
+<li>SFTPを使っていた業務フローをAWS Transfer for SFTPに移行した。セキュリティに配慮する必要があったため、Private Link等を使ってやや複雑なネットワーク構成を作った。おかげで、VPCについての理解が深まった。</li>
+<li>部内で利用しているJenkinsをオフィスにあるMac miniからEC2に移した。、EC2にJenkinsをセットアップする際に初めてAnsibleを使った。JenkinsもAnsibleも初めてだったのでいい経験になった。</li>
+</ul>
+<h1>プライベート</h1>
+<h2>開発</h2>
+<ul>
+<li><strong><a href="https://github.com/naoty/homepage">naoty/homepage</a></strong>: 昨年に引き続きホームページを作り直した。今年はGatsby.jsベースからNuxt.jsベースに移行した。また、ホスティングもGitHub pagesからNetlifyに移行した。</li>
+<li><strong><a href="https://github.com/naoty/task">naoty/task</a></strong>: <a href="https://naoty.dev/posts/90.html">以前の記事</a>でも書いたとおり、ファイルベースのタスク管理に移行するため自作のタスク管理ツールをGoで開発している。</li>
+</ul>
+<h2>読んだ本</h2>
+<ul>
+<li><strong><a href="https://www.oreilly.co.jp/books/9784873118468/">Go言語による並行処理</a></strong>: naoty/taskをGoで書くにあたって並行処理を学ぶ必要があって読んでみた。goroutineやchannelの使い方についてまとまった情報がなかったので、読んでなかったらいっさい書けなかったと思う。</li>
+<li><strong><a href="https://www.oreilly.co.jp/books/9784873118703/">データ指向アプリケーションデザイン</a></strong>: まだ読んでいるけど、もっと早く読み始めればよかった。転職先で活きそうなのでちゃんと読み込みたい。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li>AtCoderで競技プログラミングを始めた。とりあえず茶色になったけど、これ以上は時間をとって勉強しないと難しそう。</li>
+<li>会社の制度で1ヶ月休みがとれたので、ようやく運転免許をとった。とってから一度も運転してない。</li>
+<li>12月末で5年間在籍していた会社を退職した。来年から新しい会社でSRE的な雰囲気で立ち回る予定。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

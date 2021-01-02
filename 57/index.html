@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweetボタンのカスタマイズ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Tweetボタンのカスタマイズ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/57/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Tweetボタンのカスタマイズ</h1>
+          <p class="metadata">
+            <time datetime="2011-06-09T11:20:00.000+0000">2011-06-09 11:20</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>railsで動的なページにTweetボタンを埋め込みたいので、公式ドキュメント<a href="#f1" title="http://dev.twitter.com/pages/tweet_button">*1</a>を見ながら、カスタマイズしてみました。</p>
+<pre><code>script&gt;
+&lt;div&gt;
+  &lt;a href=&quot;http://twitter.com/share&quot; class=&quot;twitter-share-button&quot;
+       data-count=&quot;horizontal&quot;
+       data-lang=&quot;ja&quot;
+       data-related=&quot;naoty_k&quot;
+       data-text=&quot;RT #{@article.title}&quot;
+       data-url=&quot;#{article_url(@article)}&quot;
+       data-via=&quot;naoty_k&quot;&gt;Tweeta&gt;
+div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>デフォルト</th>
+<th>意味</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-count</td>
+<td>horizontal</td>
+<td>ツイート数をどこに表示するか</td>
+<td>horizontal, vertial, noneから選択</td>
+</tr>
+<tr>
+<td>data-lang</td>
+<td>en</td>
+<td>言語</td>
+<td></td>
+</tr>
+<tr>
+<td>data-related</td>
+<td></td>
+<td>ツイート後にオススメされるアカウント</td>
+<td>挙動が細かいので公式ドキュメントを参照</td>
+</tr>
+<tr>
+<td>data-text</td>
+<td>titleタグ内</td>
+<td>ツイート本文</td>
+<td>ここにurlを貼る必要はない</td>
+</tr>
+<tr>
+<td>data-url</td>
+<td>HTTP Referer</td>
+<td>ツイート本文に貼られるurl</td>
+<td>t.coで短縮される</td>
+</tr>
+<tr>
+<td>data-via</td>
+<td></td>
+<td>ツイート本文末尾に「via @user_name」をつける</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a href="#fn1">*1</a>:<a href="http://dev.twitter.com/pages/tweet%5C_button">http://dev.twitter.com/pages/tweet\_button</a></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

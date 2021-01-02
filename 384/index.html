@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホームページをNuxtで作り直した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ホームページをNuxtで作り直した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/384/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ホームページをNuxtで作り直した</h1>
+          <p class="metadata">
+            <time datetime="2019-09-28T19:58:00.000+0000">2019-09-28 19:58</time>
+            <a href="/meta/">#meta</a>
+            <a href="/nuxt/">#nuxt</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>このホームページをだいたい1年ぶりに作り直した。ホームページ作りは毎年一度、Webフロントエンドのスキルをアップデートする目的でやっている。今回の作り直しでv3となった。</p>
+<p>v3の主な変更点は以下のとおり。</p>
+<ul>
+<li>静的サイトジェネレーターをGatsby.jsからNuxt.jsに変更した。</li>
+<li>ホスティング先をGitHub pagesからNetlifyに変更した。</li>
+<li>Markdownパーサーをmarkedからmarkdown-itに変更した。</li>
+</ul>
+<h1>Nuxt.js</h1>
+<p>Markdownでブログなどの静的サイトを作りたい場合、正直Gatsby.jsの方がやりやすいと思った。今回、最も大変だったのはMarkdownコンテンツをどのようにNuxt.jsで扱うかだった。各記事のページであれば、MarkdownファイルをWebpackで<code>import</code>できるように変換すれば割と簡単に実装できた。だけど、記事のインデックスページを実装するには、すべてのMarkdownコンテンツをまとめて扱うことになる。こういった実装は調べてもあんまり出てこず、しまいにはmarkdownコンテンツを返すWebサーバーをGoで実装してみたりもしたけど、HMRによるプレビューが使えないことを考えるとあまり現実的な解とは言えなかった。</p>
+<p>一方で、Gatsby.jsだとコンテンツをGraphQLで取得できるようにするための仕組みが備わっていて、公式ドキュメントにも実装方法が紹介されていたため、あまり苦戦しなかった。</p>
+<p>結局、Markdownコンテンツの変更をwatchしてパースするprocessmdのようなスクリプトを書いて、docker-composeでNuxtとは別プロセスで動かすという方法をとっている。</p>
+<h1>Netlify</h1>
+<p>以前から耳にしたことはあったけど触ったことがなかったので初挑戦してみた。感想としては、GitHub pagesでのホスティングに比べて非常によかった。</p>
+<p>以前は、<a href="https://github.com/naoty/homepage">naoty/homepage</a>というホームページを生成するリポジトリと、<a href="https://github.com/naoty/naoty.github.io">naoty/naoty.github.io</a>というホームページそのもののリポジトリが分かれていた。そして、Circle CIでホームページを生成してnaoty/naoty.github.ioのリポジトリにpushするような設定を書いていた。</p>
+<p>Netlifyにした結果、そういったデプロイの設定がこれだけになり、Circle CIは使わなくなった。</p>
+<pre lang="toml"><code># netlify.toml
+[build]
+command = &quot;npm run build&quot;
+publish = &quot;dist/&quot;
+environment = { NUXT_BASE_URL = &quot;https://naoty.dev&quot;, TZ = &quot;Asia/Tokyo&quot; }
+</code></pre>
+<h1>CHANGELOG</h1>
+<p>せっかくの機会なので、これまでのホームページの経緯を振り返ってみたい。</p>
+<ul>
+<li><strong>2017-11-29</strong>：v1を公開した。当時は<a href="https://dev.to">dev.to</a>が話題になっていた頃で、爆速なブログにあこがれて始めた気がする。このときはまだ静的サイトジェネレータすら使わず、Markdownファイルからホームページを生成するパイプラインをGulpで作っていた。<a href="https://naoty.dev/posts/1.html">#1</a></li>
+<li><strong>2017-12-08</strong>：Circle CIでGitHub pagesへのアップロードを自動化した。<a href="https://naoty.dev/posts/5.html">#5</a></li>
+<li><strong>2018-01-12</strong>：Atom形式のフィードを配信するようになった。これでRSSリーダーで購読できるようになった。だけど、v2でGatsby.jsを導入したあと、フィードを配信する機能を実装する方法がよくわからなかったりして廃止されている。v3で今後復活させたい。<a href="https://naoty.dev/posts/13.html">#13</a></li>
+<li><strong>2018-09-01</strong>：v2を公開した。このときにGatsby.jsを導入してまともなホームページ作成環境になった。この頃からモダンなWebフロントエンド開発をたしなむようになった。<a href="https://naoty.dev/posts/39.html">#39</a></li>
+<li><strong>2018-12-12</strong>：ライブラリのアップデートをdependabotで自動化した。これによって面倒なアップデート作業が非常にラクになり、仕事でもアップデートの自動化を試みるようになった。<a href="https://naoty.dev/posts/50.html">#50</a></li>
+<li><strong>2019-03-02</strong>：ドメインを<code>naoty.github.io</code>から<code>naoty.dev</code>に変更した。<code>dev</code>ドメインが公開される日に急いでGoogle Domainsで取得した記憶がある。<a href="https://naoty.dev/posts/60.html">#60</a></li>
+<li><strong>2019-05-01</strong>：タグごとの記事一覧ページを実装した。Gatsby.jsだと簡単にできたんだけど、Nuxt.jsだとルーティングの関係でなんかうまくいってない。<a href="https://naoty.dev/posts/66.html">#66</a></li>
+<li><strong>2019-09-28</strong>：v3を公開した。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDCSwipeToChooseを読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="MDCSwipeToChooseを読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/242/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">MDCSwipeToChooseを読んだ</h1>
+          <p class="metadata">
+            <time datetime="2014-11-23T16:27:00.000+0000">2014-11-23 16:27</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://naoty.hatenablog.com/entry/2014/11/18/212355">前回</a>に引き続き、UI周りのテクニックを学ぶため<a href="https://github.com/modocache/MDCSwipeToChoose">https://github.com/modocache/MDCSwipeToChoose</a>を読む。海外で話題のTinder風のアプリを簡単に開発することができる。</p>
+<p>まず使い方を簡単に見ていく。</p>
+<pre><code>override func viewDidLoad() {
+    let options = MDCSwipeToChooseViewOptions()
+    options.delegate = self
+    options.likedText = &quot;Like&quot;
+    options.likedColor = UIColor.blueColor()
+    options.nopeText = &quot;Nope&quot;
+    options.nopeColor = UIColor.redColor()
+    options.onPan = { state in NSLog(&quot;Panning&quot;) }
+
+    let swipableView = MDCSwipeToChooseView(frame: view.frame, options: options)
+    view.addSubview(swipableview)
+}
+
+func viewDidCancelSwipe(view: UIView!) {
+    NSLog(&quot;Cancel to choose&quot;)
+}
+
+func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
+    NSLog(&quot;Choose to \(direction == .Left ? &quot;Left&quot; : &quot;Right&quot;)&quot;)
+}
+</code></pre>
+<ul>
+<li><code>MDCSwipeToChooseViewOptions</code>オブジェクトにスワイプするViewの設定をまとめて初期化時に渡している。
+<ul>
+<li><code>delegate</code>は<code>MDCSwipeToChooseDelegate</code>を実装するオブジェクトである必要がある。</li>
+<li><code>likedText</code>とか<code>nopeText</code>というのは、右もしくは左にスワイプされるときにView上に表示されるテキストのこと。</li>
+<li><code>onPan</code>はスワイプされているときに呼ばれる処理。</li>
+</ul>
+</li>
+<li><code>MDCSwipeToChooseDelegate</code>のメソッドとして<code>viewDidCancelSwipe()</code>と<code>view(view:wasChoosenWithDirection:)</code>がある。前者はスワイプを途中でやめたとき、後者はスワイプしてViewをどちらかに選んだときに呼ばれる。</li>
+</ul>
+<p>さらに、<code>MDCSwipeToChooseView</code>だけではなく、<code>UIView</code>をスワイプできるようにするカテゴリも用意されているため、より柔軟に実装できるようになっている。</p>
+<p>今回、重点的に読んでいきたいのは以下のポイントだ。</p>
+<ul>
+<li>ライブラリの設計。カテゴリも含めた柔軟な実装を可能にするのは優れた設計があるからだと思うので参考にしたい。</li>
+<li>スワイプに合わせたViewの動き。</li>
+</ul>
+<h1>ライブラリの設計</h1>
+<p>このライブラリの作者の書いた<a href="http://modocache.svbtle.com/ios-ui-component-api-design">iOS UI Component API Design</a>という記事によると、設計において2点考慮されているようだ。</p>
+<ol>
+<li>継承よりカテゴリーによるコンポジションを選ぶ。</li>
+<li>デリゲートメソッドやブロックの引数にパラメータオブジェクトを使う。</li>
+</ol>
+<h2>継承よりカテゴリーによるコンポジション</h2>
+<p><code>MDCSwipeToChooseView</code>に機能を追加したい場合、サブクラスを定義する必要がある。しかし、この方法では別のライブラリが提供するViewのもつ機能を組み込むことができない。そこで、カテゴリーで<code>UIView</code>に機能を拡張することで、他のライブラリとも組み合わせることができる。</p>
+<p>カテゴリーによる拡張の欠点はインスタンス変数を追加することができないことだ。そのため、プロパティをカテゴリーによって拡張する場合は、``の<code>objc_setAssociatedObject()</code>を使ったトリッキーな実装が必要になる。</p>
+<p>より簡単に実装するには、カスタマイズ用のパラメータを束ねる設定オブジェクトを使うのがよさそう。この設定オブジェクトのプロパティだけは上記のトリッキーな手法で拡張するしかないが、Viewをカスタマイズする変数はすべてのこの設定オブジェクトに隠ぺいする。このライブラリでの設定オブジェクトは<code>MDCSwipeOptions</code>と<code>MDCSwipeToChooseViewOptions</code>だった。</p>
+<h2>パラメータオブジェクト</h2>
+<p>デリゲートメソッドや<code>onPan</code>などのブロックのシグネチャがバージョンアップデートで変更されてしまうと互換性がなくなってしまう。そこで、複数の引数をまとめたパラメータオブジェクトというのを用意し、引数の変更をすべてパラメータオブジェクト内の変更で吸収することで、メソッドのシグネチャを変更せずに互換性を保つことができる。このライブラリでは<code>MDCPanState</code>がパラメータオブジェクトの役割を果たしている。</p>
+<pre><code>typedef void (^MDCSwipeToChooseOnPanBlock)(MDCPanState *state);
+
+@interface MDCSwipeOptions : NSObject
+
+// ...
+
+@property (nonatomic, copy) MDCSwipeToChooseOnPanBlock onPan;
+
+// ...
+
+@end
+</code></pre>
+<pre><code>@interface MDCPanState : NSObject
+
+@property (nonatomic, strong) UIView *view;
+@property (nonatomic, assign) MDCSwipeDirection direction;
+@property (nonatomic, assign) CGFloat thresholdRatio;
+
+@end
+</code></pre>
+<h1>初期化から表示まで</h1>
+<p>設計について確認したので、初期化から表示されるまでの流れからソースコードを読んでいく。</p>
+<h2>MDCSwipeToChooseView.m:44</h2>
+<pre><code>- (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
+    self = [super initWithFrame:frame];
+    if (self) {
+        _options = options ? options : [MDCSwipeToChooseViewOptions new];
+        [self setupView];
+        [self constructImageView];
+        [self constructLikedView];
+        [self constructNopeImageView];
+        [self setupSwipeToChoose];
+    }
+    return self;
+}
+</code></pre>
+<ul>
+<li>まずこのクラスのスーパークラスは<code>UIView</code>なので、普通の初期化処理をしたあとにセットアップ処理を実行している。</li>
+<li>いくつかのセットアップ処理を順に見ていく。</li>
+</ul>
+<h2>MDCSwipeToChooseView.m:59</h2>
+<pre><code>- (void)setupView {
+    self.backgroundColor = [UIColor clearColor];
+    self.layer.cornerRadius = 5.f;
+    self.layer.borderWidth = 2.f;
+    self.layer.borderColor = [UIColor colorWith8BitRed:220.f
+                                                 green:220.f
+                                                  blue:220.f
+                                                 alpha:1.f].CGColor;
+}
+</code></pre>
+<ul>
+<li><code>self</code>の見た目に関する設定をしている。</li>
+<li>背景色が透明で、角丸で、枠線の太さと色を指定しているだけのようだ。</li>
+</ul>
+<h2>MDCSwipeToChooseView.m:69</h2>
+<pre><code>- (void)constructImageView {
+    _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    _imageView.clipsToBounds = YES;
+    [self addSubview:_imageView];
+}
+</code></pre>
+<ul>
+<li><code>self</code>と同じ大きさの<code>_imageView</code>を作ってサブビューに追加している。</li>
+<li><code>-[UIView clipsToBounds]</code>はサブビューを自分の<code>bounds</code>のサイズで切り抜く設定だ。<code>YES</code>を指定すると、サブビューの自分からはみ出た部分は表示されなくなる。</li>
+</ul>
+<h2>MDCSwipeToChooseView.m:75</h2>
+<pre><code>- (void)constructLikedView {
+    CGRect frame = CGRectMake(MDCSwipeToChooseViewHorizontalPadding,
+                              MDCSwipeToChooseViewTopPadding,
+                              CGRectGetMidX(_imageView.bounds),
+                              MDCSwipeToChooseViewLabelWidth);
+    self.likedView = [[UIView alloc] initWithFrame:frame];
+    [self.likedView constructBorderedLabelWithText:self.options.likedText
+                                             color:self.options.likedColor
+                                             angle:self.options.likedRotationAngle];
+    self.likedView.alpha = 0.f;
+    [self.imageView addSubview:self.likedView];
+}
+</code></pre>
+<ul>
+<li><code>likedView</code>というのは右にスワイプしたときに浮かび上がるテキストのためのビュー。</li>
+<li>最初は非表示になっているので<code>alpha</code>が<code>0</code>になっている。</li>
+<li><code>-[UIView constructBorderedLabelWithText:color:angle]</code>というメソッドは<code>UIView+MDCBorderedLabel.m</code>で定義されている拡張。</li>
+</ul>
+<h2>UIView+MDCBorderedLabel.m:31</h2>
+<pre><code>- (void)constructBorderedLabelWithText:(NSString *)text
+                                 color:(UIColor *)color
+                                 angle:(CGFloat)angle {
+    self.layer.borderColor = color.CGColor;
+    self.layer.borderWidth = 5.f;
+    self.layer.cornerRadius = 10.f;
+
+    UILabel *label = [[UILabel alloc] initWithFrame:self.bounds];
+    label.text = [text uppercaseString];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont fontWithName:@&quot;HelveticaNeue-CondensedBlack&quot;
+                                 size:48.f];
+    label.textColor = color;
+    [self addSubview:label];
+
+    self.transform = CGAffineTransformRotate(CGAffineTransformIdentity,
+                                             MDCDegreesToRadians(angle));
+}
+</code></pre>
+<ul>
+<li>角丸や枠線の設定をして、<code>UILabel</code>をサブビューに追加している。</li>
+<li><code>-[UIView transform]</code>は<code>center</code>または<code>anchorPoint</code>を基準とした変換値を表す。これを設定するとその変換が適用される。<code>CGAffineTransformRotate()</code>は回転のためのアフィン変換行列を返す。第1引数に既存のアフィン変換、第2引数に回転角度を指定する。</li>
+</ul>
+<h2>MDCSwipeToChooseView.m:88</h2>
+<pre><code>- (void)constructNopeImageView {
+    CGFloat width = CGRectGetMidX(self.imageView.bounds);
+    CGFloat xOrigin = CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding;
+    self.nopeView = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin,
+                                                                  MDCSwipeToChooseViewTopPadding,
+                                                                  width,
+                                                                  MDCSwipeToChooseViewLabelWidth)];
+    [self.nopeView constructBorderedLabelWithText:self.options.nopeText
+                                            color:self.options.nopeColor
+                                            angle:self.options.nopeRotationAngle];
+    self.nopeView.alpha = 0.f;
+    [self.imageView addSubview:self.nopeView];
+}
+</code></pre>
+<ul>
+<li>こちらは左にスワイプしたときに浮かび上がるテキストのビュー。</li>
+<li><code>_likedView</code>と大差ない。</li>
+</ul>
+<h2>MDCSwipeToChooseView.m:102</h2>
+<pre><code>- (void)setupSwipeToChoose {
+    MDCSwipeOptions *options = [MDCSwipeOptions new];
+    options.delegate = self.options.delegate;
+    options.threshold = self.options.threshold;
+
+    __block UIView *likedImageView = self.likedView;
+    __block UIView *nopeImageView = self.nopeView;
+    __weak MDCSwipeToChooseView *weakself = self;
+    options.onPan = ^(MDCPanState *state) {
+        if (state.direction == MDCSwipeDirectionNone) {
+            likedImageView.alpha = 0.f;
+            nopeImageView.alpha = 0.f;
+        } else if (state.direction == MDCSwipeDirectionLeft) {
+            likedImageView.alpha = 0.f;
+            nopeImageView.alpha = state.thresholdRatio;
+        } else if (state.direction == MDCSwipeDirectionRight) {
+            likedImageView.alpha = state.thresholdRatio;
+            nopeImageView.alpha = 0.f;
+        }
+
+        if (weakself.options.onPan) {
+            weakself.options.onPan(state);
+        }
+    };
+
+    [self mdc_swipeToChooseSetup:options];
+}
+</code></pre>
+<ul>
+<li><code>MDCSwipeOptions</code>オブジェクトを生成して、初期化時に渡された<code>self.options</code>のプロパティをコピーしている。<code>onPan</code>ブロック内で最後に初期化時に渡された<code>self.options.onPan</code>が実行されるようになっている。</li>
+<li><code>__block</code>属性はブロック内で変更する場合に変数につける必要がある。</li>
+<li><code>onPan</code>内の処理を詳しく見ていく。
+<ul>
+<li>ブロックの引数に渡される<code>state</code>の<code>direction</code>プロパティは<code>MDCSwipeDirection</code>型の値で、<code>None</code>, <code>Left</code>, <code>Right</code>のいずれかだ。<code>Left</code>なら``nopeImageView<code>のアルファ値を変更し表示されるようにしている。逆に</code>Right`なら`likedImageView`を同様にして表示されるようにしている。</li>
+<li><code>state</code>の<code>thresholdRatio</code>プロパティはコメントによると、ある閾値にどれだけ近づいているかを表す、<code>0</code>から<code>1</code>までの値だ。<code>1</code>のとき閾値に達したことを意味する。よって、ある閾値に達したとき<code>thresholdRatio</code>が<code>1</code>になり、<code>likedImageView</code>または<code>nopeImageView</code>のアルファ値が<code>1</code>になって完全に表示されるようになる。</li>
+</ul>
+</li>
+<li><code>-[UIView mdc_swipeToChooseSetup:]</code>は<code>UIView+MDCSwipeToChoose.m</code>で定義されたカテゴリーによって拡張されたメソッドだ。このライブラリは<code>MDCSwipeToChooseView</code>という専用のクラスだけでなく、<code>UIView</code>のカテゴリーを提供することでより柔軟に実装できるようになっているが、その中心部分はこのカテゴリー内で実装しているようだ。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:38</h2>
+<pre><code>- (void)mdc_swipeToChooseSetup:(MDCSwipeOptions *)options {
+    self.mdc_options = options ? options : [MDCSwipeOptions new];
+    self.mdc_viewState = [MDCViewState new];
+    self.mdc_viewState.originalCenter = self.center;
+
+    [self mdc_setupPanGestureRecognizer];
+}
+</code></pre>
+<ul>
+<li><code>self.mdc_options</code>と<code>self.mdc_viewState</code>を初期化している。</li>
+<li><code>-[UIView mdc_setupPanGestureRecognizer]</code>でジェスチャーのイベントハンドリングを実装しているのだろう。</li>
+</ul>
+<h1>スワイプに合わせたViewの動き</h1>
+<p>これまで<code>MDCSwipeToChooseView</code>および<code>UIView+MDCSwipeToChoose</code>による拡張部分の初期化について見てきた。これからスワイプに合わせてViewをどのように動かしているのかについて詳細に見ていく。</p>
+<h2>UIView+MDCSwipeToChoose.m:104</h2>
+<pre><code>- (void)mdc_setupPanGestureRecognizer {
+    SEL action = @selector(mdc_onSwipeToChoosePanGestureRecognizer:);
+    UIPanGestureRecognizer *panGestureRecognizer =
+    [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                            action:action];
+    [self addGestureRecognizer:panGestureRecognizer];
+}
+</code></pre>
+<ul>
+<li><code>UIPanGestureRecognizer</code>を初期化して<code>UIView</code>に追加している。パンというジェスチャーはスワイプとかドラッグのことだ。</li>
+<li>スワイプされると<code>-[UIView mdc_onSwipeToChoosePanGestureRecognizer:]</code>が呼ばれるようだ。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:227</h2>
+<pre><code>- (void)mdc_onSwipeToChoosePanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer {
+    UIView *view = panGestureRecognizer.view;
+
+    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        self.mdc_viewState.originalCenter = view.center;
+
+        // If the pan gesture originated at the top half of the view, rotate the view
+        // away from the center. Otherwise, rotate towards the center.
+        if ([panGestureRecognizer locationInView:view].y &lt; view.center.y) {
+            self.mdc_viewState.rotationDirection = MDCRotationAwayFromCenter;
+        } else {
+            self.mdc_viewState.rotationDirection = MDCRotationTowardsCenter;
+        }
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        // Either move the view back to its original position or move it off screen.
+        [self mdc_finalizePosition];
+    } else {
+        // Update the position and transform. Then, notify any listeners of
+        // the updates via the pan block.
+        CGPoint translation = [panGestureRecognizer translationInView:view];
+        view.center = MDCCGPointAdd(self.mdc_viewState.originalCenter, translation);
+        [self mdc_rotateForTranslation:translation
+                     rotationDirection:self.mdc_viewState.rotationDirection];
+        [self mdc_executeOnPanBlockForTranslation:translation];
+    }
+}
+</code></pre>
+<ul>
+<li>スワイプが始まったとき、ユーザーの指の位置がViewの上半分なら<code>MDCRotationAwayFromCenter</code>すなわち<code>1.0</code>、下半分なら<code>MDCRotationTowardsCenter</code>すなわち<code>-1.0</code>を<code>self.mdc_viewState.rotationDirection</code>にセットしている。</li>
+<li>スワイプが終わったとき、<code>-[UIVIew mdc_finalizePosition]</code>を呼ぶ。ここはあとで詳細に見ることにしてスキップする。</li>
+<li>スワイプ中
+<ul>
+<li><code>-[UIPanGestureRecognizer translationInView:]</code>によって最初に指が触れた点からの移動量を取得している。</li>
+<li>取得した移動量を<code>originalCenter</code>に加えた値を<code>center</code>とすることで、ユーザーの指の位置が常に<code>center</code>になるようにViewを移動させているようだ。</li>
+<li><code>-[UIView mdc_rotateForTranslation:rotationDirection:]</code>によってViewを回転させているようだ。あとで詳細を見ることにする。</li>
+<li><code>-[UIView mdc_executeOnPanBlockForTranslation:]</code>はスワイプの状態から<code>thresholdRatio</code>を計算したり<code>MDCPanState</code>を生成したりして<code>self.mdc_options.onPan()</code>の引数に渡して実行している。ここで、Viewの初期化時に指定した<code>onPan</code>のブロックが実行されることになる。</li>
+</ul>
+</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:189</h2>
+<p>後回しにしていた<code>-[UIView mdc_rotateForTranslation:rotationDirection:]</code>を先に見る。</p>
+<pre><code>- (void)mdc_rotateForTranslation:(CGPoint)translation
+               rotationDirection:(MDCRotationDirection)rotationDirection {
+    CGFloat rotation = MDCDegreesToRadians(translation.x/100 * self.mdc_options.rotationFactor);
+    self.transform = CGAffineTransformRotate(CGAffineTransformIdentity,
+                                             rotationDirection * rotation);
+}
+</code></pre>
+<ul>
+<li><code>x軸方向への移動量 / 100</code>に定数倍したものをラジアンに変換して、<code>rotationDirection</code>（<code>1.0</code>or<code>-1.0</code>）を掛けた量を回転させている。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:114</h2>
+<p>次に、スワイプが終了したときに呼ばれる<code>-[UIView mdc_finalizePosition]</code>を見ていく。</p>
+<pre><code>- (void)mdc_finalizePosition {
+    MDCSwipeDirection direction = [self mdc_directionOfExceededThreshold];
+    switch (direction) {
+        case MDCSwipeDirectionRight:
+        case MDCSwipeDirectionLeft: {
+            CGPoint translation = MDCCGPointSubtract(self.center,
+                                                     self.mdc_viewState.originalCenter);
+            [self mdc_exitSuperviewFromTranslation:translation];
+            break;
+        }
+        case MDCSwipeDirectionNone:
+            [self mdc_returnToOriginalCenter];
+            [self mdc_executeOnPanBlockForTranslation:CGPointZero];
+            break;
+    }
+}
+</code></pre>
+<ul>
+<li><code>-[UIView mdc_directionOfExceededThreshold]</code>である閾値を超えた方向を取得しているようだ。</li>
+<li>取得した方向が左か右であれば<code>-[UIView mdc_exitSuperviewFromTranslation:]</code>を呼び、どちらでもなかった場合は<code>-[UIView mdc_returnToOriginalCenter]</code>と<code>-[UIView mdc_executeOnPanBlockForTranslation:]</code>を呼んでいる。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:215</h2>
+<p>まず閾値をを超えた方向を取得する部分から見ていく。</p>
+<pre><code>- (MDCSwipeDirection)mdc_directionOfExceededThreshold {
+    if (self.center.x &gt; self.mdc_viewState.originalCenter.x + self.mdc_options.threshold) {
+        return MDCSwipeDirectionRight;
+    } else if (self.center.x &lt; self.mdc_viewState.originalCenter.x - self.mdc_options.threshold) {
+        return MDCSwipeDirectionLeft;
+    } else {
+        return MDCSwipeDirectionNone;
+    }
+}
+</code></pre>
+<ul>
+<li>どうやら閾値というのは<code>self.mdc_options.threshold</code>のことのようだ。デフォルトでは<code>100.0</code>だ。</li>
+<li>Viewの中心点のx座標がもともとの中心点のx座標から閾値以上移動した場合、右方向なら<code>Right</code>、左方向なら<code>Left</code>を返している。そうでなければ<code>None</code>を返している。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:146</h2>
+<p>次に、上記の閾値を超えてどちらかの方向が返ってきた場合に呼ばれる<code>-[UIView mdc_exitSuperviewFromTranslation:]</code>を見る。</p>
+<pre><code>- (void)mdc_exitSuperviewFromTranslation:(CGPoint)translation {
+    MDCSwipeDirection direction = [self mdc_directionOfExceededThreshold];
+    id delegate = self.mdc_options.delegate;
+    if ([delegate respondsToSelector:@selector(view:shouldBeChosenWithDirection:)]) {
+        BOOL should = [delegate view:self shouldBeChosenWithDirection:direction];
+        if (!should) {
+            return;
+        }
+    }
+
+    MDCSwipeResult *state = [MDCSwipeResult new];
+    state.view = self;
+    state.translation = translation;
+    state.direction = direction;
+    state.onCompletion = ^{
+        if ([delegate respondsToSelector:@selector(view:wasChosenWithDirection:)]) {
+            [delegate view:self wasChosenWithDirection:direction];
+        }
+    };
+    self.mdc_options.onChosen(state);
+}
+</code></pre>
+<ul>
+<li><code>delegate</code>に<code>view:shouldBeChosenWithDirection:</code>が実装されていれば、それを呼び<code>NO</code>が返ってきた場合そこで終了する。</li>
+<li><code>MDCSwipeResult</code>オブジェクトを初期化して<code>self.mdc_options.onChosen()</code>に渡して実行している。</li>
+</ul>
+<h2>MDCSwipeOptions.m:33</h2>
+<p><code>onChosen</code>は何を参照しているのか確認する。</p>
+<pre><code>- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _swipeCancelledAnimationDuration = 0.2;
+        _swipeCancelledAnimationOptions = UIViewAnimationOptionCurveEaseOut;
+        _swipeAnimationDuration = 0.1;
+        _swipeAnimationOptions = UIViewAnimationOptionCurveEaseIn;
+        _rotationFactor = 3.f;
+
+        _onChosen = [[self class] exitScreenOnChosenWithDuration:0.1
+                                                         options:UIViewAnimationOptionCurveLinear];
+    }
+    return self;
+}
+</code></pre>
+<ul>
+<li><code>_onChosen</code>は<code>+[MDCSwipeOptions exitScreenOnChosenWithDuration:options]</code>の返り値を参照している。</li>
+</ul>
+<h2>MDCSwipeOptions.m:50</h2>
+<pre><code>+ (MDCSwipeToChooseOnChosenBlock)exitScreenOnChosenWithDuration:(NSTimeInterval)duration
+                                                        options:(UIViewAnimationOptions)options {
+    return ^(MDCSwipeResult *state) {
+        CGRect destination = MDCCGRectExtendedOutOfBounds(state.view.frame,
+                                                          state.view.superview.bounds,
+                                                          state.translation);
+        [UIView animateWithDuration:duration
+                              delay:0.0
+                            options:options
+                         animations:^{
+                             state.view.frame = destination;
+                         } completion:^(BOOL finished) {
+                             if (finished) {
+                                 [state.view removeFromSuperview];
+                                 state.onCompletion();
+                             }
+                         }];
+    };
+}
+</code></pre>
+<ul>
+<li>このメソッドはブロックを返しているのであって、ブロックを実行しているわけではない。</li>
+<li>その内容としては、Viewをスーパービューの外にアニメーションつきで移動させ、完了後にそのViewをスーパービューから削除し、<code>state.onCompletion()</code>を実行するというものだ。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:146</h2>
+<p>いったん<code>-[UIView mdc_exitSuperviewFromTranslation:]</code>に戻って<code>onCompletion</code>を確認する。</p>
+<pre><code>- (void)mdc_exitSuperviewFromTranslation:(CGPoint)translation {
+    // ...
+
+    MDCSwipeResult *state = [MDCSwipeResult new];
+    state.view = self;
+    state.translation = translation;
+    state.direction = direction;
+    state.onCompletion = ^{
+        if ([delegate respondsToSelector:@selector(view:wasChosenWithDirection:)]) {
+            [delegate view:self wasChosenWithDirection:direction];
+        }
+    };
+    self.mdc_options.onChosen(state);
+}
+</code></pre>
+<ul>
+<li>Viewが枠外に消えた後に、<code>onChosen()</code>の引数に渡された<code>state</code>の<code>onCompletion</code>が実行されるので、ここでは<code>delegate</code>の<code>view:wasChosenWithDirection:</code>が呼ばれることになる。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:131</h2>
+<p>続いて、<code>-[UIView mdc_finalizePosition]</code>で閾値を超えなかった場合に呼ばれる2つのメソッドのうち、<code>-[UIView mdc_returnToOriginalCenter]</code>を見る。</p>
+<pre><code>- (void)mdc_returnToOriginalCenter {
+    [UIView animateWithDuration:self.mdc_options.swipeCancelledAnimationDuration
+                          delay:0.0
+                        options:self.mdc_options.swipeCancelledAnimationOptions
+                     animations:^{
+                         self.transform = CGAffineTransformIdentity;
+                         self.center = self.mdc_viewState.originalCenter;
+                     } completion:^(BOOL finished) {
+                         id delegate = self.mdc_options.delegate;
+                         if ([delegate respondsToSelector:@selector(viewDidCancelSwipe:)]) {
+                             [delegate viewDidCancelSwipe:self];
+                         }
+                     }];
+}
+</code></pre>
+<ul>
+<li>アニメーションつきで回転を打ち消し、もともとの中心点に移動させている。</li>
+<li>それらが完了したあと、<code>delegate</code>の<code>viewDidCancelSwipe:</code>を呼んでいる。</li>
+</ul>
+<h2>UIView+MDCSwipeToChoose.m:168</h2>
+<p>もう1つの<code>-[UIView mdc_executeOnPanBlockForTranslation:]</code>を見る。</p>
+<pre><code>- (void)mdc_executeOnPanBlockForTranslation:(CGPoint)translation {
+    if (self.mdc_options.onPan) {
+        CGFloat thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
+
+        MDCSwipeDirection direction = MDCSwipeDirectionNone;
+        if (translation.x &gt; 0.f) {
+            direction = MDCSwipeDirectionRight;
+        } else if (translation.x &lt; 0.f) {
+            direction = MDCSwipeDirectionLeft;
+        }
+
+        MDCPanState *state = [MDCPanState new];
+        state.view = self;
+        state.direction = direction;
+        state.thresholdRatio = thresholdRatio;
+        self.mdc_options.onPan(state);
+    }
+}
+</code></pre>
+<ul>
+<li>中心点に戻る際の<code>onPan</code>ブロックを実行している。そのために、<code>thresholdRatio</code>を計算し<code>MDCPanState</code>を初期化している。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

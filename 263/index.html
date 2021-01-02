@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>「すごいHaskell たのしく学ぼう！」を読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="「すごいHaskell たのしく学ぼう！」を読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/263/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">「すごいHaskell たのしく学ぼう！」を読んだ</h1>
+          <p class="metadata">
+            <time datetime="2015-06-14T18:40:00.000+0000">2015-06-14 18:40</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B009RO80XY/naotoknk-22/"><img src="http://ecx.images-amazon.com/images/I/51pYSdnkuNL._SL160_.jpg" alt="すごいHaskellたのしく学ぼう！" title="すごいHaskellたのしく学ぼう！" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B009RO80XY/naotoknk-22/">すごいHaskellたのしく学ぼう！</a></p>
+<ul>
+<li>作者: Miran Lipovaca</li>
+<li>出版社/メーカー: オーム社</li>
+<li>発売日: 2012/09/21</li>
+<li>メディア: Kindle版</li>
+<li>購入: 4人 クリック: 9回</li>
+<li><a href="http://d.hatena.ne.jp/asin/B009RO80XY/naotoknk-22">この商品を含むブログを見る</a></li>
+</ul>
+<p>本書は一度は8章あたりで挫折したが、今回13章あたりまで読みファンクタ―、アプリカティブファンクタ―、モノイド、モナドといった概念がなんなのか理解とまでは言えないけど知ることができた。</p>
+<p>一度は挫折したが今回またリベンジしようと思った理由は、今後モバイルアプリを開発していくにあたって関数型プログラミングの概念を理解して採り入れていくことが必要になってくると思ったからだ。Swiftは<code>let</code>による不変型の宣言や<code>Optional</code>型などの文脈付きの型など関数型プログラミング言語としての側面をもっていると思う。また、データバインディング（<a href="https://github.com/SwiftBond/Bond">SwiftBond/Bond</a>など）やJSONのパース（<a href="https://github.com/thoughtbot/Argo">thoughtbot/Argo</a>など）といった場面で関数型プログラミングの概念が登場してきている。Swiftのポテンシャルを最大限に発揮して、堅牢で生産性の高いコードを書くには関数型プログラミングの知識が必要になってきていると最近感じている。</p>
+<p>本書を読んだ結果として、データの構造について新しい視点を得ることができた。<code>Maybe</code>や<code>Either</code>といった概念を&quot;文脈&quot;と呼んでいるのが自分の中にはなかった発想だった。例えば、<code>Maybe</code>と<code>Maybe Int</code>を区別して考えるのはとても抽象的だけど強力な考え方と思った。<code>Maybe</code>は「あるかもしれないし、ないかもしれない」という文脈を表し、<code>Maybe Int</code>は「<code>Int</code>型かもしれないし、何もないかもしれない」型を表している。これらを分けることで、文脈を保ったまま計算するという発想が出てくるのだと思う。文脈を保ったまま計算する段階として、本書では<code>Functor</code>や<code>Applicative</code>、そして<code>Monad</code>が登場してきた。</p>
+<p>Swiftでは、Haskellにおける型コンストラクタにあたる概念がない。Genericsを使うことで<code>Maybe</code>のような型を表現することはできるが、ある型が型引数をとるのかとらないのか、とるとしたらいくつとるのかを知る術はない（はず）。Haskellではそれらは種類という概念で説明されている。<code>Maybe</code>の種類は<code>Maybe :: * -&gt; *</code>だし、<code>Either</code>の種類は<code>Either: * -&gt; * -&gt; *</code>となっているので、それぞれ型引数を1つと2つとることがわかる。Haskellの<code>Functor</code>は種類が<code>* -&gt; *</code>の型コンストラクタしかインスタンスにできないのだけど、こういう概念をSwiftで表現できない。</p>
+<p>というわけで、Swiftで関数型プログラミングをするにはHaskellほどうまくはできないことがなんとなくわかった。Genericsなどで擬似的に表現するしかない。<code>Functor</code>の<code>fmap</code>を以下のように実装してみた。</p>
+<pre><code>extension Optional {
+    func fmap(f: T -&gt; U) -&gt; U? {
+        switch self {
+        case .Some(let value):
+            return f(value)
+        case .None:
+            return .None
+        }
+    }
+}
+
+let maybeOne: Int? = 1
+let maybeTen = maybeOne.fmap({ x in x * 10 })
+</code></pre>
+<p>Swiftの<code>Optional</code>型はつまり<code>T?</code>型のことなのだけど、<code>Optional</code>型を拡張して<code>fmap</code>を追加している。<code>return f(value)</code>のところは暗黙的に<code>U?</code>型にラップしている。このように実装することで、<code>Optional</code>型のもつ「あるかもしれないし、ないかもしれない」という文脈を保ちつつ、中身の<code>1</code>という<code>Int</code>を計算している。</p>
+<p>ここでは<code>Functor</code>だけを簡単に実装してみたが、これに加えて<code>Applicative</code>と<code>Monad</code>を実装するとより抽象的な計算が可能になってくる。JSONのパースなどを実装する際には<code>Applicative</code>の操作が必要になってきそうな感じがする。自分はまだ関数型プログラミングの実装を実際にしたわけではないので、理解したとは到底いえない。パーサーの実装をしてみたり、上で紹介したライブラリのコードを読んでみることで関数型プログラミングを実践的に理解していきたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

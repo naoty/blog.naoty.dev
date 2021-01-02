@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dry-validationで設定ファイルを検証する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="dry-validationで設定ファイルを検証する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/399/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">dry-validationで設定ファイルを検証する</h1>
+          <p class="metadata">
+            <time datetime="2020-02-13T12:50:00.000+0000">2020-02-13 12:50</time>
+            <a href="/ruby/">#ruby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Rubyでちょっとしたツールを作ったとき、設定ファイルの検証に<a href="https://github.com/dry-rb/dry-validation">dry-validation</a>を使ってたら便利だった。</p>
+<p>こんな感じのYAML形式の設定ファイルがあったとする。</p>
+<pre lang="yaml"><code>database:
+  host: localhost
+  port: 80
+</code></pre>
+<p>この設定ファイルのスキーマをDSLを使って定義できる。</p>
+<pre lang="ruby"><code>class ConfigContract &lt; Dry::Validation::Contract
+  json do
+    required(:database).hash do
+      required(:host).value(:string)
+      required(:port).value(:integer)
+    end
+  end
+
+  rule(database: :host) do
+    key.failure(&quot;must not be localhost&quot;) if value == &quot;localhost&quot;
+  end
+
+  rule(database: :port) do
+    key.failure(&quot;must not use well-known port&quot;) if value &lt; 1024
+  end
+end
+</code></pre>
+<p>このスキーマを使って設定ファイルを検証してみる。</p>
+<pre lang="ruby"><code>config = YAML.load_file(&quot;./config.yml&quot;)
+result = ConfigContract.new.call(config)
+puts result.errors.to_h
+#=&gt; {:database=&gt;{:host=&gt;[&quot;must not be localhost&quot;], :port=&gt;[&quot;must not use well-known port&quot;]}}
+</code></pre>
+<p>DSLについてはdry-validationやdry-schemaのドキュメントを眺めたり、ドキュメントにないDSLはソースコードを眺めてみるといい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

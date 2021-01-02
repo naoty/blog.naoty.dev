@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エラーの判別</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="エラーの判別">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/417/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">エラーの判別</h1>
+          <p class="metadata">
+            <time datetime="2020-05-23T18:10:00.000+0000">2020-05-23 18:10</time>
+            <a href="/go/">#go</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>ダメなケース</h1>
+<p>同じメッセージを持つ、別々のエラーは等しくない。</p>
+<pre lang="go"><code>err1 := errors.New(&quot;user not found&quot;)
+err2 := errors.New(&quot;user not found&quot;)
+fmt.Println(err1 == err2) //=&gt; false
+</code></pre>
+<p>なので、こういったコードはうまくいかない。</p>
+<pre lang="go"><code>package user
+
+func Lookup() (*User, error) {
+  return nil, errors.New(&quot;user not found&quot;)
+}
+</code></pre>
+<pre lang="go"><code>package main
+
+func main() {
+  user, err := user.Lookup()
+  if err == errors.New(&quot;user not found&quot;) {
+    fmt.Fprintln(os.Stderr, &quot;failed to lookup user&quot;)
+  }
+}
+</code></pre>
+<h1>シンプルなエラーの判別</h1>
+<p>エラーを比較するには、エラーを生成するコードとエラーを判別するコードの間でエラーを共有する。</p>
+<pre lang="go"><code>package user
+
+var ErrNotFound = errors.New(&quot;user not found&quot;)
+
+func Lookup() (*User, error) {
+  return nil, ErrNotFound
+}
+</code></pre>
+<pre lang="go"><code>package main
+
+func main() {
+  user, err := user.Lookup()
+  if err == user.ErrNotFound {
+    fmt.Fprintln(os.Stderr, &quot;failed to lookup user&quot;)
+  }
+}
+</code></pre>
+<h1>データをもつエラーの判別</h1>
+<p>データをもつエラーを表現するには、<code>Error()</code>を実装する型を定義する。<code>errors.As()</code>を使うと、エラーの判別をしつつ型アサーションにより内部のデータにアクセスできる。</p>
+<pre lang="go"><code>package user
+
+type ErrNotFound struct {
+  ID int
+}
+
+func (err ErrNotFound) Error() string {
+  return fmt.Sprintf(&quot;user not found: %d&quot;, err.ID)
+}
+
+func Lookup(id int) (*User, error) {
+  return nil, ErrorNotFound{ID: id}
+}
+</code></pre>
+<pre lang="go"><code>package main
+
+func main() {
+  user, err := user.Lookup(1)
+
+  var notFoundErr user.ErrNotFound
+  if errors.As(err, &amp;notFoundErr) {
+    fmt.Fprintf(os.Stderr, &quot;failed to lookup user ID:%d\n&quot;, notFoundErr.ID)
+  }
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

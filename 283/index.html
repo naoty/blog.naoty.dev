@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通信周りの処理をミドルウェアで整理する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="通信周りの処理をミドルウェアで整理する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/283/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">通信周りの処理をミドルウェアで整理する</h1>
+          <p class="metadata">
+            <time datetime="2016-07-14T11:00:00.000+0000">2016-07-14 11:00</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>課題感</h1>
+<p>APIリクエストの送信前、APIレスポンスの取得後にさまざまな処理をはさみたいことがある。例えば、こんな処理だ。</p>
+<ul>
+<li>ネットワークインジケータの表示・非表示</li>
+<li>リクエストとレスポンスのロギング</li>
+<li>二重送信の防止</li>
+<li>ログイントークンが有効期限切れだったときに、リフレッシュトークンを使ってログイントークンを更新した後、再送</li>
+<li>HTTPリクエストのスタブ</li>
+</ul>
+<p>ただ、こういった処理をAPIクライアントにそのまま実装していくとAPIクライアントが肥大化するし、かと言ってViewControllerに実装するといろんな箇所で似たようなコードを書くことになる。</p>
+<h1>解決策</h1>
+<p>APIクライアントをラップして機能を拡張するミドルウェアをつくる。ミドルウェアはAPIクライアントを呼び出して通信処理を実行しつつ、リクエストの送信前とレスポンスの取得後に処理をはさむ。</p>
+<p>例えば、<code>APIClient</code>というオブジェクトで本来の通信処理を実行するとする。ロギングを行うミドルウェアはこんな感じになる。</p>
+<pre><code>extension Middleware {
+    struct Logger: RequestSendable {
+        let client: RequestSendable
+
+        func send(request: T) -&gt; Task {
+            print(request)
+            return client.send(request)
+                .success { response -&gt; Task in
+                    print(response)
+                    return Task(value: response)
+                }
+                .failure { error, _ in
+                    print(error)
+                    return Task(error: error ?? ApplicationError.Unknown)
+                }
+        }
+    }
+}
+</code></pre>
+<p>そして、こんな感じで初期化する。</p>
+<pre><code>let client: RequestSendable = Middleware.Logger(client: APIClient())
+</code></pre>
+<p>だけど、ミドルウェアが増えると、以下のように初期化が大変になってくる。</p>
+<pre><code>let client: RequestSendable = A(client: B(client: C(client: D(client: APIClient()))))
+</code></pre>
+<p>そこで、ミドルウェア群を簡単に組み合わせるための仕組みをつくる。</p>
+<pre><code>extension Middleware {
+    struct Stack {
+        let middlewareTypes: [RequestSendable.Type]
+
+        init(_ middlewareTypes: [RequestSendable.Type]) {
+            self.middlewareTypes = middlewareTypes
+        }
+
+        func buildClient() -&gt; RequestSendable {
+            let client = APIClient()
+            return middlewareTypes.reverse().reduce(client) { (result: RequestSendable, middlewareType: RequestSendable.Type) in
+                return middlewareType.init(client: result)
+            }
+        }
+    }
+}
+</code></pre>
+<p>これによって、こんな感じで直感的にAPIクライアントを初期化できる。</p>
+<pre><code>let client = Middleware.Stack([A.self, B.self, C.self, D.self]).buildClient()
+</code></pre>
+<p>たいていの場合、利用するミドルウェアは同じなのでデフォルトで利用するミドルウェアスタックを簡単に初期化できるようにする。</p>
+<pre><code>extension Middleware {
+    struct Stack {
+        // ...
+
+        static func defaultStack() -&gt; Stack {
+            var middlewares: [RequestSendable.Type] = []
+
+            middlewares.append(A.self)
+
+            if someCondition {
+                middlewares.append(B.self)
+            }
+
+            middlewares.append(C.self)
+
+            reeturn Stack(middlewares)
+        }
+    }
+}
+</code></pre>
+<p>そして、APIクライアントの初期化はこうなる。</p>
+<pre><code>let client = Middleware.Stack.defaultStack().buildClient()
+</code></pre>
+<h1>まとめ</h1>
+<p>通信周りのさまざまな処理をミドルウェアという形で実装することで、疎結合なモジュールに分離することができた。将来的に新たな処理を追加する場合でもミドルウェアを新たに実装してスタックに追加するだけでよく、既存のAPIクライアントやミドルウェアに手を加える必要はない。テスト時のみ不要なミドルウェアを除くといった柔軟な設定も可能になるだろう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railsでオートリンクを有効にしつつサニタイズ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Railsでオートリンクを有効にしつつサニタイズ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/211/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Railsでオートリンクを有効にしつつサニタイズ</h1>
+          <p class="metadata">
+            <time datetime="2014-03-07T18:21:00.000+0000">2014-03-07 18:21</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>本文をサニタイズしつつ、オートリンクを有効化したいので以下のように設定した。オートリンクは<code>rails_autolink</code>というgemが必要。</p>
+<pre lang="rb:application.rb"><code>config.after_initialize do
+  ActionView::Base.sanitized_allowed_tags.clear
+  ActionView::Base.sanitized_allowed_tags = [&quot;a&quot;]
+  ActionView::Base.sanitized_allowed_attributes = [&quot;rel&quot;, &quot;target&quot;]
+end
+</code></pre>
+<p>許可するtagをクリアしたあとにホワイトリスト方式で許可するタグを指定した。あと、デフォルトでは<code>rel=&quot;nofollow&quot;</code>とか<code>target=&quot;_blank&quot;</code>がサニタイズされてしまうので、許可したい属性を追加した。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

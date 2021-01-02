@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello, Sinatra! (1)</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Hello, Sinatra! (1)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/148/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Hello, Sinatra! (1)</h1>
+          <p class="metadata">
+            <time datetime="2012-10-08T23:11:00.000+0000">2012-10-08 23:11</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>いまさらSinatraを始めてみた。</p>
+<h2>モチベ</h2>
+<ul>
+<li>個人で新しい何かを作り始めた。個人でやるからには、仕事じゃ使えないけど気になってる技術を使った方がいいので、RailsじゃなくてSinatraを使ってみることにした。</li>
+<li>Railsやってると、あんまりRackとか下のレイヤーを意識しないので、そこらへんに前から興味があった。</li>
+<li>Sinatraがダメだったら、Padrinoやるかも。</li>
+</ul>
+<h2>versions</h2>
+<ul>
+<li>2012年10月7日時点で最新のもの</li>
+</ul>
+<h2>sinatra install</h2>
+<pre><code># Gemfile
+
+source :rubygems
+
+gem 'sinatra'
+</code></pre>
+<pre><code>$ bundle install --path vendor/bundle --binstubs
+</code></pre>
+<ul>
+<li>とりあえずRailsのときと同様に<code>vendor/bundle</code>以下に入れる。</li>
+</ul>
+<pre><code># app.rb
+
+require 'bundler'
+Bundler.require
+
+get '/' do
+  'Hello, Sinatra!'
+end
+</code></pre>
+<pre><code>$ ruby -rubygems app.rb
+</code></pre>
+<ul>
+<li><a href="http://localhost:4567">http://localhost:4567</a> で起動を確認。</li>
+<li>スモールスタートがいい。</li>
+</ul>
+<h2>rabl</h2>
+<pre><code># Gemfile
+
+source :rubygems
+
+gem 'sinatra'
+gem 'rabl'
+</code></pre>
+<pre><code>$ bundle
+</code></pre>
+<ul>
+<li>JSONのレスポンスをテンプレートで記述したかったので<code>rabl</code>をインストール</li>
+</ul>
+<pre><code># app.rb
+
+require 'bundler'
+Bundler.require
+
+Rabl.register!
+
+get '/' do
+  render :rabl, :home, :format =&gt; :json
+end
+</code></pre>
+<pre><code># views/home.rabl
+
+node(:greeting) do
+  'Hello, Sinatra with rabl!'
+end
+</code></pre>
+<ul>
+<li>最近、rabl開発メンバーがsinatraに公式サポートのpull requestを送って、sinatraでrablが公式にサポートされるようになったっぽい。</li>
+<li>そのせいか、公式ドキュメント通りではうまくいかず結構時間かかった。</li>
+</ul>
+<h2>config.ru</h2>
+<pre><code># config.ru
+
+require 'bundler'
+Bundler.require
+
+require './app'
+run App
+</code></pre>
+<pre><code># app.rb
+
+require 'sinatra/base'
+
+class App &lt; Sinatra::Base
+  Rabl.register!
+
+  get '/' do
+    render :rabl, :home, :format =&gt; :json
+  end
+end
+</code></pre>
+<ul>
+<li>Herokuやpowで起動する際config.ruが必要っぽい。</li>
+<li><code>run [app name]</code>は必須。これがないと動かない。</li>
+</ul>
+<h2>pow</h2>
+<pre><code># Gemfile
+
+group :development do
+  gem 'powder'
+  gem 'guard-pow'
+end
+</code></pre>
+<pre><code>$ bundle
+$ powder link
+$ guard pow init
+</code></pre>
+<ul>
+<li>sinatraでは、ファイルを変更するたびにサーバーを再起動する必要があってめんどくさい。</li>
+<li>そこで、guard-powを使うことでその作業を自動化する。</li>
+<li>Guardfileはこんな感じにしてみた。</li>
+</ul>
+<pre><code># Guardfile
+
+guard 'pow' do
+  watch('Gemfile')
+  watch('Gemfile.lock')
+  watch('app.rb')
+  watch('config.ru')
+end
+</code></pre>
+<h2>heroku &amp; thin</h2>
+<pre><code># Gemfile
+
+group :production do
+  gem 'thin'
+end
+
+group :development do
+  gem 'heroku'
+  gem 'powder'
+end
+</code></pre>
+<pre><code># Procfile
+
+web: thin start -p $PORT -e $RACK_ENV
+</code></pre>
+<ul>
+<li>herokuはすんなりデプロイできた。</li>
+<li>developmentはpowサーバを使うのでproductionのみthinをインストール。</li>
+<li>Procfileにwebを書いておくと、Herokuのデフォルトのアプリケーションサーバを変更できる。デフォルトはWEBRickなのでthinに変える。thinの方がパフォーマンスがいいらしい。</li>
+</ul>
+<h2>activerecord</h2>
+<pre><code># Gemfile
+
+gem 'sinatra-activerecord'
+gem 'rake'
+
+group :production do
+  gem 'pg'
+end
+
+group :development, :test do
+  gem 'sqlite3'
+end
+</code></pre>
+<pre><code>$ bundle
+</code></pre>
+<ul>
+<li>sinatraで使えるactiverecordと各環境用のアダプターをインストール。</li>
+</ul>
+<pre><code># Rakefile
+
+require 'bundler'
+Bundler.require
+
+require 'sinatra/activerecord/rake'
+require './app'
+require './config/environment'
+</code></pre>
+<pre><code>$ rake -T
+rake db:create_migration
+rake db:migrate
+rake db:rollback
+</code></pre>
+<pre><code># config/environment.rb
+
+require 'uri'
+
+configure :development do
+  set :database, 'sqlite:///db/development.db'
+end
+
+configure :test do
+  set :database, 'sqlite:///db/test.db'
+end
+
+configure :production do
+  db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+
+  ActiveRecord::Base.establish_connection(
+    :adapter =&gt; db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+    :host =&gt; db.host,
+    :port =&gt; db.port,
+    :username =&gt; db.user,
+    :password =&gt; db.password,
+    :databasee =&gt; db.path[1..-1],
+    :encoding =&gt; 'utf8'
+  )
+end
+</code></pre>
+<ul>
+<li>githubの<a href="https://github.com/janko-m/sinatra-activerecord">README</a>にしたがってRakefileで必要なものを<code>require</code>すると、マイグレーションができるようになる。</li>
+<li>sqliteのパスは<code>///</code>とスラッシュ3つなのが注意。</li>
+<li>heroku用の設定はherokuのdevcenter（<a href="https://devcenter.heroku.com/articles/rack">ここ</a>）で紹介されたものをコピペした。</li>
+</ul>
+<pre><code>$ rake db:create_migration
+$ rake db:migrate
+</code></pre>
+<ul>
+<li>ちなみにテストなど環境を指定する場合は<code>RAILS_ENV</code>の代わりに<code>RACK_ENV</code>を使う。</li>
+</ul>
+<pre><code>$ rake db:migrate RACK_ENV=test
+</code></pre>
+<pre><code>$ git push heroku master
+$ heroku run rake db:migrate
+Running `rake --trace db:migrate RACK_ENV=production` attached to terminal... up, run.1
+** Invoke db:migrate (first_time)
+** Execute db:migrate
+rake aborted!
+could not connect to server: Connection refused
+        Is the server running on host &quot;localhost&quot; and accepting
+        TCP/IP connections on port 5432?
+</code></pre>
+<ul>
+<li>DBに接続できない。。。</li>
+</ul>
+<hr />
+<p>連休やったのはここまで。 時間があれば(2)もやる予定。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

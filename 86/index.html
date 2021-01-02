@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>さくらVPSでRailsを動かすまでのTodo</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="さくらVPSでRailsを動かすまでのTodo">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/86/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">さくらVPSでRailsを動かすまでのTodo</h1>
+          <p class="metadata">
+            <time datetime="2011-10-28T19:43:00.000+0000">2011-10-28 19:43</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>苦労の末、とうとうサーバーでRailsが動いたので、記念メモ。<br />
+どんどん加筆していく予定です。</p>
+<blockquote>
+<ul>
+<li>プラン：さくらのVPS 512（いちばん安いやつ。月980円）</li>
+<li>OS：CentOS 5.5 x86_64</li>
+<li>ruby 1.9.2</li>
+<li>Rails 3.1.0</li>
+<li>webサーバー：nginx</li>
+<li>appサーバー：unicorn</li>
+<li>DB：MySQL</li>
+<li>repo：bitbucket</li>
+</ul>
+</blockquote>
+<ul>
+<li>rootユーザーのパスワードを設定する</li>
+<li>作業用ユーザーを作成する</li>
+<li>作業用ユーザーのパスワードを設定する</li>
+<li>su, sudoの権限を制限する</li>
+<li>$PATHを追加する</li>
+<li>パスワード認証から公開鍵認証に変更する</li>
+<li>rootでのログインを禁止する</li>
+<li>sshのポートを22番から変更する</li>
+<li>iptablesによるパケットフィルタリングを設定する</li>
+<li>yumをアップデートする</li>
+<li>gitをインストールする</li>
+<li>rvmをインストールする</li>
+<li>ruby1.9.2をインストールする</li>
+<li>mysqlをrpmでインストールする</li>
+<li>nginxをビルド</li>
+<li>nginxの自動起動を設定する</li>
+<li>unicorn、bundlerをgemにインストール</li>
+<li>bitbucketからプロジェクトをgit clone</li>
+<li>bundle install --path vendor/bundle</li>
+<li>本番用DB作成</li>
+<li>マイグレーション</li>
+<li>unicornの設定ファイル（config/unicorn.rb）を作成して、unicornを起動</li>
+<li>unicornに合わせてnginxの設定ファイル（nginx.conf）を修正して、リロード</li>
+<li>静的ファイルのプリコンパイルの設定を変更</li>
+</ul>
+<p>参考図書</p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/"><img src="http://ecx.images-amazon.com/images/I/51xpswg%2BkkL._SL160_.jpg" alt="ハイパフォーマンスHTTPサーバ Nginx入門" title="ハイパフォーマンスHTTPサーバ Nginx入門" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/">ハイパフォーマンスHTTPサーバ Nginx入門</a></p>
+<ul>
+<li>作者: Clement Nedelcu,長尾高弘</li>
+<li>出版社/メーカー: アスキー・メディアワークス</li>
+<li>発売日: 2011/04/21</li>
+<li>メディア: 大型本</li>
+<li>購入: 2人 クリック: 589回</li>
+<li><a href="http://d.hatena.ne.jp/asin/4048702270">この商品を含むブログ (15件) を見る</a></li>
+</ul>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/"><img src="http://ecx.images-amazon.com/images/I/41oqE-9dM2L._SL160_.jpg" alt="エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド" title="エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/">エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド</a></p>
+<ul>
+<li>作者: 奥野幹也</li>
+<li>出版社/メーカー: 技術評論社</li>
+<li>発売日: 2010/06/12</li>
+<li>メディア: 大型本</li>
+<li>購入: 11人 クリック: 175回</li>
+<li><a href="http://d.hatena.ne.jp/asin/4774142948">この商品を含むブログ (24件) を見る</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

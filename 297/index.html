@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>`bin/webpack`を読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="`bin/webpack`を読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/297/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">`bin/webpack`を読んだ</h1>
+          <p class="metadata">
+            <time datetime="2017-08-17T20:12:00.000+0000">2017-08-17 20:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>webpackerを理解するため、<code>rails g webpacker:install</code>で追加される<code>bin/webpack</code>や設定の中身を読むことにした。</p>
+<h3><code>bin/webpack</code></h3>
+<pre><code>newenv = { &quot;NODE_PATH&quot; =&gt; NODE_MODULES_PATH.shellescape }
+cmdline = [&quot;yarn&quot;, &quot;run&quot;, &quot;webpack&quot;, &quot;--&quot;, &quot;--config&quot;, WEBPACK_CONFIG] + ARGV
+
+Dir.chdir(APP_PATH) do
+  exec newenv, *cmdline
+end
+</code></pre>
+<ul>
+<li><code>bin/webpack</code>では実際には<code>yarn run webpack -- --config WEBPACK_CONFIG</code>を実行している。</li>
+<li><code>WEBPACK_CONFIG</code>は<code>config/webpack/#{NODE_ENV}.js</code>となっているため、<code>config/webpack/development.js</code>などとなる。</li>
+</ul>
+<h3><code>config/webpack/development.js</code></h3>
+<pre><code>const sharedConfig = require('./shared.js')
+
+module.exports = merge(sharedConfig, {
+  // ...
+})
+</code></pre>
+<ul>
+<li><code>config/webpack/shared.js</code>というファイルが環境ごとの設定ファイルでmergeされているようだ。</li>
+</ul>
+<h3><code>config/webpack/shared.js</code></h3>
+<pre><code>const { env, settings, output, loaderDir } = require('./configuration.js')
+</code></pre>
+<ul>
+<li><code>settings</code>は<code>config/webpacker.yml</code>をロードしたオブジェクトを参照している。
+<ul>
+<li><code>settings.extensions</code>: <code>[.coffee, .erb, .js, .jsx, .ts, .vue, ...]</code></li>
+<li><code>settings.source_path</code>: <code>app/javascript</code></li>
+<li><code>settings.source_entry_path</code>: <code>packs</code></li>
+</ul>
+</li>
+<li><code>output</code>は<code>path</code>と<code>publicPath</code>というプロパティをもったオブジェクトを参照している。
+<ul>
+<li><code>path</code>: <code>public/packs</code></li>
+<li><code>publicPath</code>: ‘/packs’
+<ul>
+<li><code>ASSET_HOST</code>という環境変数を指定することでホストを変更できそう。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>loadersDir</code>は<code>config/webpack/loaders/</code>を参照している。</li>
+</ul>
+<pre><code>const extensionGlob = `**/*{${settings.extensions.join(',')}}*`
+const entryPath = join(settings.source_path, settings.source_entry_path)
+const packPaths = sync(join(entryPath, extensionGlob))
+
+module.exports = {
+  entry: packPaths.reduce(
+    // ...
+  )
+}
+</code></pre>
+<ul>
+<li><code>entry</code>はwebpackによってbundleされる対象のファイルを設定する。</li>
+<li><code>sync</code>は<a href="https://github.com/isaacs/node-glob">https://github.com/isaacs/node-glob</a>からexportされている。同期的にglobサーチをしている。</li>
+<li>ここでは、<code>app/javascript/packs/**/*{.coffee,.erb,.js,.jsx}*</code>のようなglobでファイルを検索し、マッチしたファイルのリストが<code>packPaths</code>に代入されている。</li>
+<li><strong>つまり、<code>app/javascript/packs/</code>以下の<code>settings.extensions</code>で指定された拡張子をもつファイルがwebpackによってbundleされるということになる。</strong></li>
+</ul>
+<pre><code>module.exports = {
+  entry: packPaths.reduce(
+    (map, entry) =&gt; {
+      const localMap = map
+      const namespace = relative(join(entryPath), dirname(entry))
+      localMap[join(namespace, basename(entry, extname(entry)))] = resolve(entry)
+      return localMap
+    }, {}
+  )
+}
+</code></pre>
+<ul>
+<li><code>entry</code>にオブジェクトが指定された場合、プロパティごとにbundleされるファイルが分割される。<code>output.filename</code>で<code>[name]</code>と指定された箇所にプロパティ名が入る。</li>
+</ul>
+<pre><code>const { env, settings, output, loaderDir } = require('./configuration.js')
+
+module.exports = {
+  output: {
+    filename: '[name].js',
+    path: output.path,
+    publicPath: output.publicPath
+  }
+}
+</code></pre>
+<ul>
+<li><code>output</code>はbundleされたファイルの出力先を設定する。</li>
+<li><code>output.filename</code>でbundleされたファイル名を設定する。<code>entry</code>がオブジェクトで指定されているため、<code>[name]</code>にはオブジェクトの各プロパティ名が代入される。</li>
+<li><code>output.path</code>は出力先のパスを設定する。上記の通り<code>public/packs</code>が設定されている。</li>
+<li><code>output.publicPath</code>は本番ビルド時のCSSやHTML内のURLを設定する。これは本番のみCDNを使う場合に便利。上述の通りこれは<code>/packs</code>が設定されているが、<code>ASSET_HOST</code>という環境変数でこれを変更することができるようになっている。</li>
+</ul>
+<pre><code>module.exports = {
+  module: {
+    rules: sync(join(loadersDir, '*.js')).map(loader =&gt; require(loader))
+  }
+}
+</code></pre>
+<ul>
+<li><code>rules</code>はwebpackのモジュールを設定する。</li>
+<li><code>config/webpack/loaders/*.js</code>にマッチするファイルを検索している。</li>
+<li>マッチしたファイルを<code>require</code>している。各ファイルは以下のようになっている。これによって、<code>config/webpack/loaders/*.js</code>内の設定を展開している。</li>
+</ul>
+<pre><code>module.exports = {
+  test: /\.(jpg|jpeg|png|gif|svg|eot|ttf|woff|woff2)$/i,
+  use: [{
+    loader: 'file-loader',
+    options: {
+      publicPath,
+      name: env.NODE_ENV === 'production' ? '[name]-[hash].[ext]' : '[name].[ext]'
+    }
+  }]
+}
+</code></pre>
+<pre><code>const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
+
+module.exports = {
+  plugins: [
+    new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(env))),
+    new ExtractTextPlugin(env.NODE_ENV === 'production' ? '[name]-[hash].css' : '[name].css'),
+    new ManifestPlugin({
+      publicPath: output.publicPath,
+      writeToFileEmit: true
+    })
+  ]
+}
+</code></pre>
+<ul>
+<li><code>plugins</code>はwebpackのプラグインを設定する。</li>
+<li><code>webpack.EnvironmentPlugin</code>は<code>process.env</code>から環境変数にアクセスできるようにするプラグイン。</li>
+<li><code>ExtractTextPlugin</code>はコンパイルされたテキストを別ファイルに出力するプラグイン。コンパイルしたCSSをJavaScriptでロードする他にLinkタグからロードしたい場合、コンパイルしたCSSをCSSファイルとして出力するためにこのプラグインを使う。
+<ul>
+<li><code>[name]-[hash].css</code>の<code>[hash]</code>はビルド毎のユニークなハッシュ値を表す。</li>
+</ul>
+</li>
+<li><code>ManifestPlugin</code>はマニフェストファイルを生成するプラグイン。マニフェストファイルには、ファイル名と対応するコンパイル後のファイル名が載っている。マニフェストファイルによって、コンパイル前のファイル名からコンパイル後のファイル名に名前解決し、ヘルパーからアクセスできる。</li>
+</ul>
+<pre><code>= stylesheet_pack_tag &quot;application&quot; # load /packs/application-xxxxxxxx.css
+</code></pre>
+<pre><code>{
+  &quot;application.css&quot;: &quot;/packs/application-xxxxxxxx.css&quot;
+}
+</code></pre>
+<pre><code>module.exports = {
+  resolve: {
+    extensions: settings.extensions,
+    modules: [
+      resolve(settings.source_path),
+      'node_modules'
+    ]
+  }
+}
+</code></pre>
+<ul>
+<li><code>resolve</code>はモジュール解決方法を設定する。webpackはデフォルトではいい感じに設定されている。</li>
+<li><code>resolve.extensions</code>はファイル名からモジュールを解決する際に自動的に付与する拡張子を設定する。</li>
+<li><code>resolve.modules</code>はモジュールを解決する際に検索されるディレクトリを設定する。</li>
+</ul>
+<h3><code>github.com/rails/webpacker/lib/webpacker/helper.rb</code></h3>
+<p><code>#stylesheet_pack_tag</code>がマニフェストファイルからどのようにアセットを参照するかを確認する。</p>
+<pre><code>def stylesheet_pack_tag(*names, **options)
+  unless Webpacker.dev_server.running? &amp;&amp; Webpacker.dev_server.hot_module_replacing?
+    stylesheet_link_tag(*sources_from_pack_manifest(names, type: :stylesheet), **options)
+  end
+end
+
+def sources_from_pack_manifest(names, type:)
+  names.map { |name| Webpacker.manifest.lookup(pack_name_with_extension(name, type: type)) }
+end
+
+def pack_name_with_extension(name, type:)
+  &quot;#{name}#{compute_asset_extname(name, type: type)}&quot;
+end
+</code></pre>
+<ul>
+<li><code>#sources_from_pack_manifest</code>でマニフェストからアセットのファイル名を解決しているようだ。</li>
+<li><code>ActionView::Helpers::AssetUrlHelper#compute_asset_extname</code>はファイル名と<code>type</code>から適切な拡張子を返す。</li>
+<li><code>Webpacker.manifest</code>は<code>Webpacker::Manifest</code>インスタンスを返す。</li>
+</ul>
+<h3><code>github.com/rails/webpacker/lib/webpacker/manifest.rb</code></h3>
+<pre><code>def lookup(name)
+  compile if compiling?
+  find name
+end
+
+def find(name)
+  data[name.to_s] || handle_missing_entry(name)
+end
+
+def data
+  if env.development?
+    refresh
+  else
+    @data ||= load
+  end
+end
+
+def refresh
+  @data = load
+end
+
+def load
+  if config.public_manifest_path.exist?
+    JSON.parse config.public_manifest_path.read
+  else
+    {}
+  end
+end
+</code></pre>
+<ul>
+<li><code>#lookup</code>はマニフェストファイルの中身にアクセスしている。</li>
+<li>マニフェストファイルの中身は<code>JSON.parse</code>した結果をメモリに保持している。開発環境ではアクセス毎に<code>JSON.parse</code>し直している。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

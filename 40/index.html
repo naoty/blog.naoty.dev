@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>選択されたチェックを画面遷移後も維持する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="選択されたチェックを画面遷移後も維持する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/40/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">選択されたチェックを画面遷移後も維持する</h1>
+          <p class="metadata">
+            <time datetime="2011-03-04T13:11:00.000+0000">2011-03-04 13:11</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　チェックボックスやラジオボタンで選択したものを画面遷移後もチェックしたままにしておきたい、ってことあるじゃないですか。けっこうそういうシーンは多いので、メモ。</p>
+<pre><code>
+    
+
+</code></pre>
+<ul>
+<li>radio_button_tag（check_box_tag）の第3引数はチェックを入れるかどうかをtrue/falseで表します</li>
+<li>このチェックボックスから送信されたパラメータはparams[:cool]に入ります</li>
+<li>（something == params[:cool]）で画面遷移前にチェックされた選択肢と現在の選択肢を比較してtrueを返すことで、チェックを入れます</li>
+<li>結果的に、これで画面遷移後もチェックを保持できますね</li>
+<li>viewにif文を書くのはあんまりキレイじゃないので、これは便利</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

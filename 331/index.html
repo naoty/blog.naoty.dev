@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>awscliのwaitコマンドが便利だった</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="awscliのwaitコマンドが便利だった">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/331/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">awscliのwaitコマンドが便利だった</h1>
+          <p class="metadata">
+            <time datetime="2018-04-22T09:55:00.000+0900">2018-04-22 09:55</time>
+            <a href="/aws/">#aws</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ECSにデプロイするスクリプトを書くとき、<code>wait</code>コマンドがとても便利だった。</p>
+<p>デプロイする前にいくつかのECSタスクを実行し完了を待ってからデプロイしたい場合、ECSタスクのステータスをポーリングして完了したかどうかを監視する必要がある。<code>aws ecs run-task</code>は即座に終了し、タスクの実行自体は非同期に行われるからだ。</p>
+<p>そうしたとき、<code>wait</code>コマンドを使うと簡単にポーリングを行うことができる。</p>
+<pre lang="bash"><code>aws ecs wait tasks-stopped --tasks ${task_arn1} ${task_arn2}
+</code></pre>
+<p>これは<code>aws ecs describe-tasks</code>を定期的に実行してレスポンスからステータスを取得し、それが完了するまで待つ。<code>--tasks</code>オプションはECSタスクのARNを複数指定できるので、複数のタスクがすべて完了するのを待つことができる。</p>
+<p>ECSタスクのARNは<code>aws ecs run-task</code>のレスポンスから取得できる。実際にはこんな感じで書くと思う。</p>
+<pre lang="bash"><code>task_arn1=$(aws ecs run-task \
+  --task-definition my-task-definition \
+  --query &quot;tasks[0].taskArn&quot; \
+  --output text)
+
+aws ecs wait tasks-stopped --tasks ${task_arn1}
+</code></pre>
+<p>気をつける必要があるのは、ECSタスクが完了したかどうかは分かるものの、それが成功したのか失敗したのかは分からないということだ。なので、<code>wait</code>の後で<code>describe-tasks</code>によって失敗したかどうかをチェックする必要があるとおもう。</p>
+<p><code>wait</code>コマンドはタスクの完了だけでなくサービスのステータスの監視でも使えるし、またECS以外にもEC2などで使えるのでawscliを使ったスクリプトを書くときには今後もお世話になりそう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

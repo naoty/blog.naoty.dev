@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>naoty/todoとnaoty/nowisで定期的なtodoを管理できるようにした</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="naoty/todoとnaoty/nowisで定期的なtodoを管理できるようにした">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/262/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">naoty/todoとnaoty/nowisで定期的なtodoを管理できるようにした</h1>
+          <p class="metadata">
+            <time datetime="2015-05-30T19:32:00.000+0000">2015-05-30 19:32</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://naoty.hatenablog.com/entry/2015/05/23/171705">前回</a>のエントリで紹介した<a href="https://github.com/naoty/todo">naoty/todo</a>と今回作ったnaoty/nowisを組み合わせることで、定期的なtodoをコマンドラインで管理できるようにした。</p>
+<p><a href="https://github.com/naoty/nowis">naoty/nowis</a></p>
+<h1>使い方</h1>
+<pre><code>$ nowis saturday &amp;&amp; echo 'Today is Saturday!'
+Today is Saturday!
+</code></pre>
+<p><code>nowis</code>コマンドは、現在時刻が引数で与えた曜日かどうかを判定して真なら終了コード<code>0</code>を返し偽なら<code>1</code>を返す。上のように<code>&amp;&amp;</code>で任意のコマンドと組み合わせることで、特定の曜日だけ実行できるようになる。</p>
+<h1>定期的なtodoの管理</h1>
+<p><code>nowis</code>を組み合わせて定期的なtodoを管理するにはいくつか方法が考えられるが、zshの設定ファイルを使う。</p>
+<pre><code># .zlogin
+
+nowis sunday &amp;&amp; todo add --once 部屋を掃除する
+(nowis tuesday || nowis thursday) &amp;&amp; todo add --once 燃えるゴミを出す
+</code></pre>
+<p>上のように設定することでzshにログインするたびに上のスクリプトが実行される。<code>todo add --once</code>で既に存在する場合は追加しないようにできるので、これで特定の曜日になると自動的に<code>todo add</code>されるようになる。</p>
+<p>15分くらいで作ったので現状は曜日の判定しかできないけど、応用範囲が広そうなのでもうちょっと細かく判定できるようにするかも。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

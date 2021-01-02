@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>foremanでthinを起動しても何も表示されない件の解決策</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="foremanでthinを起動しても何も表示されない件の解決策">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/118/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">foremanでthinを起動しても何も表示されない件の解決策</h1>
+          <p class="metadata">
+            <time datetime="2012-05-04T12:16:00.000+0000">2012-05-04 12:16</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="ruby:Procfile"><code>web: rails s thin -p $PORT -e $RACK_ENV
+</code></pre>
+<p>こんなProcfileでforemanを起動すると、下記のように<code>Ctrl-c</code>押すまで何も表示されない。実際には動いてるので問題はないっちゃないけど。</p>
+<pre><code>$ foreman start
+12:06:59 web.1     | started with pid 1683
+^CSIGINT received
+12:07:23 system    | sending SIGTERM to all processes
+12:07:23 system    | sending SIGTERM to pid 1683
+12:07:23 web.1     | =&gt; Booting Thin
+12:07:23 web.1     | =&gt; Rails 3.2.3 application starting in development on http://0.0.0.0:5000
+12:07:23 web.1     | =&gt; Call with -d to detach
+12:07:23 web.1     | =&gt; Ctrl-C to shutdown server
+12:07:23 web.1     | &gt;&gt; Thin web server (v1.3.1 codename Triple Espresso)
+12:07:23 web.1     | &gt;&gt; Maximum connections set to 1024
+12:07:23 web.1     | &gt;&gt; Listening on 0.0.0.0:5000, CTRL+C to stop
+12:07:23 web.1     | &gt;&gt; Stopping ...
+12:07:23 web.1     | &gt;&gt; Stopping ...
+12:07:23 web.1     | Exiting
+12:07:23 web.1     | process terminated
+</code></pre>
+<p>ただ、気持ち悪いので修正する方法を探したところ、foremanの開発者がgithubのissuesで答えてたのでメモ。config.ruに追記すればいい。</p>
+<pre lang="ruby:config.ru"><code># This file is used by Rack-based servers to start the application.
+
+require ::File.expand_path('../config/environment',  __FILE__)
+run OGiri::Application
+
+# ここ追記
+$stdout.sync = true
+</code></pre>
+<pre><code>$ foreman start
+12:06:43 web.1     | started with pid 1669
+12:06:48 web.1     | =&gt; Booting Thin
+12:06:48 web.1     | =&gt; Rails 3.2.3 application starting in development on http://0.0.0.0:5000
+12:06:48 web.1     | =&gt; Call with -d to detach
+12:06:48 web.1     | =&gt; Ctrl-C to shutdown server
+12:06:48 web.1     | &gt;&gt; Thin web server (v1.3.1 codename Triple Espresso)
+12:06:48 web.1     | &gt;&gt; Maximum connections set to 1024
+12:06:48 web.1     | &gt;&gt; Listening on 0.0.0.0:5000, CTRL+C to stop
+</code></pre>
+<p>無事解決！</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

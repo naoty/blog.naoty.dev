@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSpecでmoduleをテストする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="RSpecでmoduleをテストする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/208/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">RSpecでmoduleをテストする</h1>
+          <p class="metadata">
+            <time datetime="2014-01-28T13:18:00.000+0000">2014-01-28 13:18</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>モジュールをテストするとき、適当なクラスを作ってそこにincludeした状態をletで使い回したい。というのをこんな感じで書いています。何か他にいい方法があれば教えてください。</p>
+<pre lang="rb"><code>describe HogeModule do
+  let(:klass) do
+    klass = Class.new
+    klass.send(:include, HogeModule)
+    klass
+  end
+
+  # ...
+end
+</code></pre>
+<p><code>Class.new</code>を使うのはこれが初めてかもしれない。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

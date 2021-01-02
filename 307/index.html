@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブログで使うHTML5</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ブログで使うHTML5">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/307/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ブログで使うHTML5</h1>
+          <p class="metadata">
+            <time datetime="2017-12-03T20:03:00.000+0900">2017-12-03 20:03</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>ブログを作るにあたって適切なセマンティックを使おうと思い、HTML5のタグを調べた。</p>
+<h1>レイアウト</h1>
+<pre lang="html"><code>
+  
+    ブログタイトル
+    公開：2017-12-01 12:00:00
+  
+  
+    見出し1
+    本文
+  
+  
+    トップ
+  
+
+</code></pre>
+<ul>
+<li>``：ブログのエントリーを表すために使う。</li>
+<li><code>, </code>：ブログのヘッダーおよびフッターを表すために使う。このブログでは、ブログタイトルやメタデータをヘッダーに表示して、ナビゲーションのリンクをフッターに表示している。</li>
+<li>``：ブログ本文をヘッダーやフッターと区別して表すために使う。</li>
+<li>``：ブログのエントリーの公開日時を表すために使う。<code>datetime</code>属性によって公開日時を指定できる。</li>
+</ul>
+<h1>コード</h1>
+<pre lang="html"><code>
+  app/models/pokemon.rb
+  
+    
+    
+  
+
+</code></pre>
+<ul>
+<li>``：文書とは別に参考資料として付け加えたコンテンツを表すために使う。画像やコードに対して使えるようだ。</li>
+<li>``：参考資料のキャプションを表すために使う。</li>
+</ul>
+<h1>画像</h1>
+<pre lang="html"><code>
+  図1
+  
+    
+    
+  
+
+</code></pre>
+<ul>
+<li>``：条件に合わせて表示する画像を切り替えることができる。レスポンシブデザインをサポートしたり、画像の最適化のために使う。</li>
+<li>``：複数のリソースを指定するために使う。</li>
+</ul>
+<h1>その他</h1>
+<ul>
+<li>``：追記されたテキストを表すために使う。<code>datetime</code>属性に追記日時を指定できる。</li>
+<li>``：削除されたテキストを表すために使う。<code>datetime</code>属性に削除日時を指定できる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

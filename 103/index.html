@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bundle execを使わずにすむ方法</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="bundle execを使わずにすむ方法">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/103/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">bundle execを使わずにすむ方法</h1>
+          <p class="metadata">
+            <time datetime="2012-03-05T16:50:00.000+0000">2012-03-05 16:50</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>rbenvの場合は<a href="http://qiita.com/items/9000280b3c3a0e74a618">こちら</a></p>
+<h2>前置き</h2>
+<ul>
+<li>プロジェクトで使うライブラリはできるだけbundlerで管理したい。</li>
+<li>でも、いちいち<code>bundle exec rails s</code>とかやるのめんどい。</li>
+<li><code>alias be=&quot;bundle exec&quot;</code>として<code>be rails s</code>ってやるのもめんどくさくなってきた。</li>
+<li>なんかいい方法ないの？ってことで調べたら、すぐ見つかったのでご紹介。</li>
+</ul>
+<h2>まとめ</h2>
+<ol>
+<li>rvmのフックスクリプトに実行権限を与える</li>
+<li><code>--binstubs</code>をつけて<code>bundle install</code></li>
+</ol>
+<h2>具体例</h2>
+<pre lang="sh"><code>$ cd
+$ chmod +x .rvm/hooks/after_cd_bundler
+$ cd workspaces/sampleapp
+$ vi Gemfile
+</code></pre>
+<pre lang="ruby:Gemfile"><code>source &quot;http://rubygems.org&quot;
+gem &quot;heroku&quot;
+</code></pre>
+<pre lang="sh"><code>$ bundle install --path vendor/bundle --binstubs
+$ ls
+Gemfile Gemfile.lock bin vendor
+$ cd
+$ cd workspaces/sampleapp
+$ heroku --version
+heroku-gem/2.20.0
+</code></pre>
+<h2>解説</h2>
+<ul>
+<li><code>.rvm/hooks/after_cd_bundle</code>は<code>.bundle</code>ディレクトリが存在するプロジェクトに<code>cd</code>で移動したとき実行されるスクリプトで、<code>--binstubs</code>オプションで生成された<code>bin</code>ディレクトリにパスを渡す。</li>
+<li><code>--binstubs</code>オプションは<code>bundle install</code>でインストールされたライブラリの実行スクリプトを<code>bin</code>ディレクトリのなかに生成する。</li>
+</ul>
+<h2>参考</h2>
+<ul>
+<li><a href="http://beginrescueend.com/integration/bundler/">http://beginrescueend.com/integration/bundler/</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

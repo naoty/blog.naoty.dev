@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>production環境のみダイジェスト認証を有効にする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="production環境のみダイジェスト認証を有効にする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/88/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">production環境のみダイジェスト認証を有効にする</h1>
+          <p class="metadata">
+            <time datetime="2011-10-31T20:41:00.000+0000">2011-10-31 20:41</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>class ApplicationController &lt; ActionController::Base
+  USERS = { 'naoty' =&gt; 'coolguy' }
+
+  protect_from_forgery
+  before_filter { digest_authentication if Rails.env.production? }
+
+  private
+
+  def digest_authentication
+    authenticate_or_request_with_http_digest do |name|
+      USERS[name]
+    end
+  end
+end
+</code></pre>
+<p>ポイントは3つ。</p>
+<ul>
+<li>Rails.env.production?でproduction環境かどうかを判定できる。同様にRails.env.development?なんかもできる。</li>
+<li>before_filterにブロックを渡すことで、条件付きでフィルタを適用できる。</li>
+<li>authenticate_or_request_with_http_digestでBasic認証（authenticate_or_request_with_http_basicメソッド）より安全な認証を実装でき、かつ複数のパスを簡単に扱えるようになる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドメインをnaoty.devにした</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ドメインをnaoty.devにした">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/363/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ドメインをnaoty.devにした</h1>
+          <p class="metadata">
+            <time datetime="2019-03-02T20:27:00.000+0900">2019-03-02 20:27</time>
+            <a href="/meta/">#meta</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>3/1から.devドメインが一般公開されたので、さっそくnaoty.devをGoogle Domainsで購入した。1,400円/年だった。Google Domainsは初めて使ってみたけど、分かりやすくて簡単に購入できた。</p>
+<p>このホームページはGitHub pagesを使ってホスティングしているんだけど、Google Domainsで購入したドメインを設定するときに若干ハマったので、同じような人がいたら参考にしてもらいたい。</p>
+<h1>やること</h1>
+<ul>
+<li>GitHubの<a href="https://help.github.com/en/articles/setting-up-an-apex-domain#configuring-a-records-with-your-dns-provider">ヘルプ</a>に書いてある通りにやる。Google Domainsで設定する場合は、Aレコードを設定すればいい。</li>
+</ul>
+<p><img src="google-domains.png" alt="google domains" /></p>
+<ul>
+<li>気長に待つ。</li>
+</ul>
+<h1>ハマったところ</h1>
+<p>気長に待っても表示されない場合、自分の場合は自分のPCだけ何故かアクセスできなかったんだけど、原因をよく調べた結果、<a href="http://pow.cx/">Pow</a>を使っていたためだった。</p>
+<p>PowはローカルにRackサーバーを立ててくれるツールで、<code>localhost</code>以外のドメインでローカルのRailsサーバーにアクセスしたいとき（サブドメインを扱う場合とか）に便利なんだけど、デフォルトで<code>.dev</code>をトップレベルドメインに使う（現在は<code>.test</code>を使うことが推奨されているみたい）ため、naoty.devにアクセスしたときにPowのサーバーに転送されていたのだった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

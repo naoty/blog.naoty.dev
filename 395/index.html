@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>naoty/esa-history</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="naoty/esa-history">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/395/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">naoty/esa-history</h1>
+          <p class="metadata">
+            <time datetime="2020-01-19T18:01:00.000+0000">2020-01-19 18:01</time>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/naoty/esa-history">esa-history</a>というesaの閲覧履歴を管理するChrome拡張を作った。最新5件の閲覧履歴を保存し、メニューからアクセスできるようにする。</p>
+<p>自分のために書いたので、Chromeウェブストアには公開していない。ただ、Chromeの開発者モードを有効にすれば、GitHubの<a href="https://github.com/naoty/esa-history/releases/latest">Release</a>にアップロードしてあるものをインストールできる。</p>
+<h1>きっかけ</h1>
+<p>転職を機にドキュメント管理がConfluenceからesaに替わった。Confluenceの便利だった機能のひとつに閲覧履歴に簡単にアクセスするショートカットがあった。あの機能をヘビーユースしていたので、esaでも同じような体験ができるようにChrome拡張を作ってみた。</p>
+<h1>Chrome拡張の開発</h1>
+<p><a href="https://developer.chrome.com/extensions">公式ドキュメント</a>や<a href="https://developer.chrome.com/extensions/api_index">APIドキュメント</a>を読んでChrome拡張の開発方法を理解した。</p>
+<p>ポップアップ画面をVueで実装したんだけど、CSPに準拠していないコードはChrome拡張に含められないので、完全ビルドのVueを使うことができない。なので、webpackを使ってvue-loaderで変換したコード + ランタイム限定ビルドを含めるようにする。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>terraformとapex infraの依存関係</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="terraformとapex infraの依存関係">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/362/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">terraformとapex infraの依存関係</h1>
+          <p class="metadata">
+            <time datetime="2019-02-28T23:52:00.000+0900">2019-02-28 23:52</time>
+            <a href="/terraform/">#terraform</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>背景</h1>
+<p>AWSの構成管理にterraformを使っているんだけど、Lambda関数とそれに関連するAWSリソースの管理は<a href="https://apex.run">apex</a>を使っている。apexの方がLambda関数のバージョニングができたり、コードの依存関係を簡単にzipにまとめてアップロードできたりして便利なのだ。</p>
+<p>apexには、<code>apex infra</code>というコマンドがあり、Lambda関数にAWS関連するリソース（パーミッションとかCloudWatch Logsとか）を管理できる。実際には内部的にterraformを使っている。</p>
+<h1>課題</h1>
+<p>terraformで管理するリソースと<code>apex infra</code>で管理するリソースに明確なボーダーラインを引くことは難しい。apexで管理するLambda関数はterraformで管理するさまざまなリソースと依存関係になっていることがほとんどだからだ。どこで何が管理されているのかわからなってくる。</p>
+<h1>方針</h1>
+<p>こういうときの考え方として、依存関係の方向性を単方向にすると良かったりする。<code>apex infra</code>で管理するリソースはterraformで管理するリソースを参照することができるけど、逆にterraformで管理するリソースは<code>apex infra</code>で管理するリソースを参照できない、というルールを作る。</p>
+<h1>実装</h1>
+<p><code>apex infra</code>からterraformのリソースを参照するために<code>terraform_remote_state</code>を使う。ここでは例として、apexで管理するLambda関数をterraformで管理するSNSトピックにsubscribeしたいとする。</p>
+<pre lang="hcl"><code>data &quot;terraform_remote_state&quot; &quot;global&quot; {
+  backend = &quot;s3&quot;
+
+  config {
+    region = &quot;ap-northeast-1&quot;
+    bucket = &quot;my-terraform&quot;
+    key    = &quot;global&quot;
+  }
+}
+</code></pre>
+<pre lang="hcl"><code>resource &quot;aws_sns_topic_subscription&quot; &quot;lambda&quot; {
+  topic_arn = &quot;${data.terraform_remote_state.global.my_topic}&quot;
+  protocol  = &quot;lambda&quot;
+  endpoint  = &quot;${var.apex_function_arns[&quot;my_function&quot;]}&quot;
+}
+</code></pre>
+<p>SNSトピックのARNは事前に<code>output</code>でremote stateとして公開しておく必要がある。</p>
+<p>こうすることで、terraform側からapexで管理するLambda関数を参照せずに済んでいる。Lambda関数を参照するリソースは<code>apex infra</code>で管理し、そうでないリソースはterraformで管理するという方針でうまく整理できそうだ。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

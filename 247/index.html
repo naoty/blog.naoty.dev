@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>activeadmin読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="activeadmin読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/247/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">activeadmin読んだ</h1>
+          <p class="metadata">
+            <time datetime="2014-12-31T01:32:00.000+0000">2014-12-31 01:32</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/activeadmin/activeadmin">activeadmin/activeadmin</a>を初めて使うことになったので、どういう仕組みになっているのか調べてみた。</p>
+<h1>TL;DR</h1>
+<ul>
+<li><code>rails g active_admin:install</code>を実行するとlib/generators/active_admin/install_generator.rbが実行され、<code>ActiveAdmin.routes(self)</code>がconfig/routes.rbに追加される。</li>
+<li>app/admin/以下にあるResource定義ファイル内で実行される<code>ActiveAdmin.register</code>では、<code>ActiveAdmin::Resource</code>インスタンスが生成され、動的にResourceごとのcontrollerが生成される。それらはすべて<code>ActiveAdmin::ResourceController</code>を継承している。</li>
+<li>config/routes.rbに追加された<code>ActiveAdmin.routes(self)</code>は内部でapp/admin/以下のファイルをロードし（このタイミングで上述の<code>ActiveAdmin.register</code>が実行される）、<code>ActiveAdmin::Resource</code>インスタンスから動的にroutingが定義される。</li>
+</ul>
+<p>長いので、以下<code>ActiveAdmin::</code>を<code>AA::</code>と略記する。</p>
+<h1>Generator</h1>
+<p>Active Adminをセットアップするにはまず<code>rails g active_admin:install</code>を実行する。</p>
+<p>このとき、lib/generators/active_admin/install_generator.rbに定義された<code>Rails::Generators::Base</code>のサブクラスにあるpublicメソッドが上から順番に実行される。Railsはlib/generators/**/*_generator.rbにマッチするファイルに定義された<code>Rails::Generators::Base</code>のサブクラスをRails Generatorとして実行することができる。</p>
+<pre><code># lib/generators/active_admin/install_generator.rb
+
+module ActiveAdmin
+  module Generators
+    class InstallGenerator &lt; ActiveRecord::Generators::Base
+      # ...
+
+      def setup_routes
+        if options[:user]
+          inject_into_file &quot;config/routes.rb&quot;, &quot;\n ActiveAdmin.routes(self)&quot;, after: /devise_for .*, ActiveAdmin::Devise\.config/
+        else
+          route &quot;ActiveAdmin.routes(self)&quot;
+        end
+      end
+
+      # ...
+    end
+  end
+end
+</code></pre>
+<p>いくつかメソッドが定義されている中で<code>setup_routes</code>を見ると、config/routes.rbに<code>ActiveAdmin.route(self)</code>を追記しているようだ。<code>self</code>は<code>Rails.application.routes.draw do ... end</code>のブロック内での<code>self</code>なので<code>ActionDispatch::Routing::Mapper</code>インスタンスを表している。</p>
+<h1>Register a resource</h1>
+<p>Generatorでファイルの追加と変更を行ったあとは、管理画面で管理するResourceを作成する。例えば、<code>rails g active_admin:resource Post</code>を実行すると以下のようなapp/admin/post.rbが生成される。</p>
+<pre><code># app/admin/post.rb
+
+ActiveAdmin.register Post do
+end
+</code></pre>
+<p>このブロックの中にviewやcontrollerの設定を追加していくのだけど、まず<code>ActiveAdmin.register</code>の定義を調べる。</p>
+<pre><code># lib/active_admin.rb
+
+module ActiveAdmin
+  class &lt;&lt; self
+    # ...
+
+    def application
+      @application ||= ::ActiveAdmin::Application.new
+    end
+
+    # ...
+
+    delegate :register, to: :application
+
+    # ...
+  end
+end
+</code></pre>
+<p>ActiveSupportが拡張したメソッド<code>delegate</code>によって、<code>ActiveAdmin.register</code>の処理は実際には<code>AA::Application#register</code>が行っている。</p>
+<pre><code># lib/active_admin/application.rb
+
+def register(resource, options = {}, &amp;block)
+  ns = options.fetch(:namespace){ default_namespace }
+  namespace(ns).register resource, options, &amp;block
+end
+</code></pre>
+<p><code>options[:namespace]</code>がなければ<code>default_namespace</code>つまり<code>:admin</code>が<code>ns</code>に入る。<code>#namespace</code>は<code>namespaces[ns]</code>があればそれを返し、なければ<code>AA::Namespace</code>インスタンスを初期化し<code>namespaces</code>に追加した上で返す。よって、<code>AA::Namespace#register</code>が処理が渡っている。</p>
+<pre><code># lib/active_admin/namespace.rb
+
+def register(resource_class, options = {}, &amp;block)
+  config = find_or_build_resource(resource_class, options)
+
+  register_resource_controller(config)
+  parse_registration_block(config, resource_class, &amp;block) if block_given?
+  reset_menu!
+
+  ActiveAdmin::Event.dispatch ActiveAdmin::Resource::RegisterEvent, config
+
+  config
+end
+</code></pre>
+<p><code>find_or_build_resource</code>は<code>AA::Resource</code>インスタンスを返す。<code>#register_resource_controller</code>は以下のように定義されており、<code>Resource</code>インスタンスから動的に<code>AA::ResourceController</code>を継承するResourceごとのcontrollerを定義している。</p>
+<pre><code># lib/active_admin/namespace.rb
+
+def register_resource_controller
+  eval &quot;class ::#{config.controller_name} &lt; ActiveAdmin::ResourceController; end&quot;
+  config.controller.active_admin_config = config
+end
+</code></pre>
+<p><code>parse_registration_block</code>は上述の例のapp/admin/post.rbで<code>ActiveAdmin.register</code>に渡されていたブロックを評価する部分だと思う。ブロックの中身を独自のDSLとして評価してカスタマイズを行っていると思う。</p>
+<h1>Routing</h1>
+<p>Generatorによってconfig/routes.rbに追加された<code>ActiveAdmin.routes</code>の定義を調べる。</p>
+<pre><code># lib/active_admin.rb
+
+module ActiveAdmin
+  # ...
+
+  def application
+    @application ||= ::ActiveAdmin::Application.new
+  end
+
+  # ...
+
+  delegate :routes, to: :application
+
+  # ...
+end
+</code></pre>
+<p><code>delegate</code>はActiveSupportが拡張しているメソッドで、メソッドの呼び出しを<code>to</code>で指定したオブジェクトに委譲する。なので、<code>ActiveAdmin.routes</code>は実際には<code>AA::Application#routes</code>を指している。</p>
+<pre><code># lib/active_admin/application.rb
+
+def routes(rails_router)
+  load!
+  router.apply(rails_router)
+end
+</code></pre>
+<p><code>load!</code>はapp/admin/**/*.rbを<code>Kernel.load</code>する。このとき上述したapp/admin/post.rbのようなResource定義ファイルがロードされる。そして、<code>ActiveAdmin.register</code>が実行され各Resourceのcontrollerが定義される。</p>
+<p><code>router</code>は<code>Router</code>インスタンスなので、<code>Router#apply</code>を調べる。</p>
+<pre><code># lib/active_admin/router.rb
+
+def apply(router)
+  define_root_routes router
+  define_resource_routes router
+end
+</code></pre>
+<p>まず<code>define_root_routes</code>は以下のように定義されている。</p>
+<pre><code># lib/active_admin/router.rb
+
+def define_root_routes(router)
+  router.instance_exec @application.namespaces.values do |namespaces|
+    namespaces.each do |namespace|
+      if namespace.root?
+        root namespace.root_to_options.merge(to: namespace.root_to)
+      else
+        namespace namespace.name do
+          root namespace.root_to_options.merge(to: namespace.root_to)
+        end  
+      end
+    end
+  end
+end
+</code></pre>
+<p>この<code>router</code>は<code>ActionDispatch::Routing::Mapper</code>であり、<code>@application.namespaces.values</code>は<code>AA::Namespace</code>インスタンスの配列だ。</p>
+<p><code>ActiveAdmin.register</code>に特にoptionを指定しない場合、<code>namespace.root?</code>は<code>true</code>となる。<code>namespace.root_to_options</code>と<code>namespace.root_to</code>がどこで定義されているのか不明。。。なんだけど、<code>AA::Application</code>内にこれらが定義されており、<code>root_to_options</code>は<code>{}</code>で<code>root_to</code>は<code>&quot;dashboard#index&quot;</code>となっている。どのようにして<code>AA::Namespace</code>にそれらが定義されるのか不明ではあるが、おそらくこれらの値が使われるのだと思う。よって、結局このメソッドは<code>root to: &quot;dashboard#index&quot;</code>としているだけだ。</p>
+<pre><code># lib/active_admin/router.rb
+
+def define_resource_routes(router)
+  router.instance_exec @application.namespaces, self do |namespaces, aa_router|
+    resources = namespaces.value.flat_map{ |n| n.resources.values }
+    resources.each do |config|
+      routes = aa_router.resource_routes(config)
+
+      # ...
+
+      instance_exec &amp;routes
+    end
+  end
+end
+</code></pre>
+<p><code>config</code>は先述した<code>AA::Resource</code>インスタンスだ。<code>aa_router</code>は<code>AA::Router</code>インスタンスなので<code>AA::Router#resource_routes</code>を見る。</p>
+<pre><code># lib/active_admin/router.rb
+
+def resource_routes(config)
+  Prox.new do
+    build_route = proc{ |verbs, *args|
+      [*verbs].each{ |verb| send verb, *args }
+    }
+    build_action = proc{ |action|
+      build_route.call(action.http_verb, action.name)
+    }
+    case config
+    when ::ActiveAdmin::Resource
+      resources config.resource_name.route_key, only: config.defined_actions do
+        member do
+          config.member_actions.each &amp;build_action
+        end
+
+        collection do
+          config.collection_actions.each &amp;build_action
+          post :batch_action if config.batch_action_enabled?
+        end
+      end
+    when ::ActiveAdmin::Page
+      # ...
+    else
+      # ...
+    end
+  end
+end
+</code></pre>
+<p>このメソッドで返されるProcオブジェクトは<code>ActionDispatch::Routing::Mapper</code>インスタンスのコンテキストで<code>instance_exec</code>されるため、要するにこのProcオブジェクト内の処理がそのままconfig/routes.rb内のroutingの設定となる。Resourceインスタンスの情報から動的にroutingを組み立てているようだ。</p>
+<h1>所感</h1>
+<p>軽く触ってみたけど、Resource定義ファイルに独自DSLでviewを書いていくのが非常にカスタマイズが大変だし覚えることが多そうだな、あまり筋がよくなさそうという印象を受けた。</p>
+<p>で、調べてみた結果、Resource定義ファイルから動的にcontrollerとかroutingとかを定義していて、それらをカスタマイズするのに独自DSLを使うという構図になっていることが分かった。管理画面って、ビジネスサイドの要求によってどんどんカスタマイズが必要になるので、カスタマイズに独自のDSLを覚えなくてはいけないとか、場合によってはカスタマイズできないみたいな状況は大きな問題だと思う。だから、動的にいろいろ生成する方針は管理画面の実装には適していないのではないかと思った。なんでこれがこんなに支持されているのかよくわからない。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

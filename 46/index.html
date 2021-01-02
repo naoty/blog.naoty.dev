@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvasでお絵かき</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="canvasでお絵かき">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/46/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">canvasでお絵かき</h1>
+          <p class="metadata">
+            <time datetime="2011-03-25T23:32:00.000+0000">2011-03-25 23:32</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　どうやらjsdo.itからそのままはてなダイアリーに埋め込みができるようになったみたいですね。</p>
+<p><a href="http://jsdo.it/naoty/zV9A" title="お絵かき">お絵かき - jsdo.it - share JavaScript, HTML5 and CSS</a></p>
+<p>　これを作るにあたってのポイントは2つでした。第一に、ドラッグの実装。第二に、マウスの動きに合わせて線を引くこと。</p>
+<p>1.　ドラッグの実装</p>
+<p>　mousedownイベント・mousemoveイベント・mouseupイベントを組み合わせ、ドラッグの状態をdragFlagという変数で管理することでドラッグを実装します。マウスが押されているとき、dragFlagはtrueとなっており、この状態ではdraw関数より線を引くことができます。マウスが押されていないとき、あるいはマウスが対象から離れたとき、dragFlagはfalseとなり、この状態では線を引くことはできません。</p>
+<pre><code>// jQuery v1.5.1
+$canvas.mousedown(startDrawing);
+$canvas.mousemove(draw);
+$canvas.bind('mouseup mouseleave', endDrawing);
+
+function startDrawing(event) {
+    // set x and y
+    dragFlag = true;
+}
+
+function draw(event) {
+    if (dragFlag) {
+        // draw
+    }
+}
+
+function endDrawing() {
+    dragFlag = false;
+}
+</code></pre>
+<p>2.　マウスの動きに合わせて線を引く</p>
+<p>　fromX, fromYとtoX, toYという2種類の座標の間に線を引き、これらの座標をmousemoveされる度に書き換えることでマウスの動きに合わせて線を引くことができます。マウスが押されたときの座標を出発点となる座標（fromX, fromY）にセットします。mousemoveすると、動いた先の座標を到達点となる座標（toX, toY）にセットして、出発点と到達点との間に線を引きます。その後、到達点の座標を出発点の座標にセットすることで、連続的に出発点と到達点をセットすることができるため、なめらかに線を引くことができるようになります。</p>
+<pre><code>function startDrawing(event) {
+    fromX = event.pageX - $canvas.offset().left;
+    fromY = event.pageY - $canvas.offset().top;
+    dragFlag = true;
+}
+
+function draw(event) {
+    if (dragFlag) {
+        var toX = event.pageX - $canvas.offset().left,
+            toY = event.pageY - $canvas.offset().top;
+        context.beginPath();
+        context.moveTo(fromX, fromY);
+        context.lineTo(toX, toY);
+        context.stroke();
+        fromX = toX;
+        fromY = toY;
+    }
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

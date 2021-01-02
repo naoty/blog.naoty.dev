@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLOCSSを導入した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="FLOCSSを導入した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/319/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">FLOCSSを導入した</h1>
+          <p class="metadata">
+            <time datetime="2018-02-01T08:48:00.000+0900">2018-02-01 08:48</time>
+            <a href="/css/">#css</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>このホームページのCSSを見直して<a href="https://github.com/hiloki/flocss">FLOCSS</a>を導入した。</p>
+<p>さまざまなCSSアーキテクチャが提唱されているけど、仕事でFLOCSSが採用されそうなので試しにやってみようということでやってみた。</p>
+<p>ディレクトリ構成はこんな感じ。</p>
+<pre><code>stylesheets/
+├── application.css
+├── foundation
+│   ├── _base.css
+│   └── _variable.css
+├── layout
+│   └── _base.css
+└── object
+    ├── project
+    │   ├── _homepage.css
+    │   ├── _post.css
+    │   └── _posts.css
+    └── utility
+        └── _align.css
+</code></pre>
+<p>markdownを変換したHTMLにstyleを与えるという制約上、クラスを使ったstyleを定義しにくい。なので、componentっぽいものもprojectにすべて含めてしまっている。これでいいのかはまだ分かっていないので、他のプロジェクトでも導入して試行錯誤してみたい。</p>
+<p>ついでなので、最近意識しているCSSの書き方を挙げておきたい。</p>
+<ul>
+<li><code>font-size</code>, <code>margin</code>, <code>padding</code>では単位に<code>rem</code>を使う。</li>
+<li><code>margin-top</code>を使わない。一貫して<code>margin-bottom</code>を使うことで、シンプルにレイアウトを組むことができる。</li>
+<li><code>margin-bottom</code>の値は<code>~</code>と``を<code>1</code>とすると、その他のブロック要素を`2`にする。例えば、このブログでは以下のような感じにしている。</li>
+</ul>
+<pre lang="css"><code>h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li {
+  margin-bottom: 1rem;
+}
+
+p,
+ul,
+ol,
+pre,
+table {
+  margin-bottom: 2rem;
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

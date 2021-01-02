@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掲示板 ver.2</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="掲示板 ver.2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/2/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">掲示板 ver.2</h1>
+          <p class="metadata">
+            <time datetime="2010-06-10T13:53:00.000+0000">2010-06-10 13:53</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>できること</p>
+<ul>
+<li>データの送信</li>
+<li>データの表示</li>
+<li>データの削除</li>
+</ul>
+<pre><code>
+
+include_once(&quot;./ini.php&quot;);
+include_once(&quot;./sql_request.php&quot;);
+
+sql_request(&quot;CREATE DATABASE IF NOT EXISTS &quot;.DB_NAME.&quot; ;&quot;);
+
+//テーブル作成
+$sql = &quot;
+CREATE TABLE IF NOT EXISTS mb (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	actime TIMESTAMP(11) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR(255) NULL,
+	msg VARCHAR(4095) NULL
+)
+&quot;;
+sql_request($sql);
+
+?&gt;
+
+
+氏名：
+
+メッセージ：
+
+
+form&gt;
+
+//データの書き込み
+if(($_POST[&quot;name&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;msg&quot;] != &quot;&quot;)){
+	$sql = &quot;INSERT INTO mb (name,msg) VALUES ('&quot;;
+	$sql .= mysql_escape_string($_POST[&quot;name&quot;]).&quot;','&quot;;
+	$sql .= mysql_escape_string(mb_substr($_POST[&quot;msg&quot;],0,2048)).&quot;')&quot;;
+	sql_request($sql);
+}
+
+//データの削除
+if((int)($_POST[&quot;delete&quot;])&gt;0){
+	$sql = &quot;DELETE FROM mb WHERE id = &quot;.(int)($_POST[&quot;delete&quot;]);
+	sql_request($sql);
+}
+
+//データと削除ボタンの表示
+$arr = sql_request(&quot;SELECT * FROM mb ORDER BY actime DESC&quot;);
+if($arr !== false){
+	for($i=0;$i\n&quot;;
+		echo &quot;\n&quot;;
+		echo &quot;\n&quot;;
+		echo &quot;\n\n&quot;;
+	}
+}
+
+?&gt;
+
+body&gt;
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

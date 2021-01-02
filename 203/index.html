@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChefでRaspberry Piをセットアップする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ChefでRaspberry Piをセットアップする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/203/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ChefでRaspberry Piをセットアップする</h1>
+          <p class="metadata">
+            <time datetime="2013-10-20T17:16:00.000+0000">2013-10-20 17:16</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://instagram.com/p/er08ccqmqe/"><img src="http://instagram.com/p/er08ccqmqe/media/?size=l" alt="" /></a></p>
+<p>仕事で複数台のRaspberry Piをセットアップすることになったので、Chefを使ってセットアップを自動化することにした。Chef、Vagrant、Serverspecなどいろいろな周辺ツールの全体像を整理したり、それらを使ったワークフローを体験できてよかったので、ブログとして残しておく。</p>
+<p>また、セットアップに使ったChefのレポジトリはgithubにホストしてあるので参考にどうぞ。</p>
+<p><a href="https://github.com/naoty/chef-repo">https://github.com/naoty/chef-repo</a></p>
+<p>今回、Chefで自動化したのは以下の通り。</p>
+<ul>
+<li>apt-getの更新</li>
+<li>gitのインストール</li>
+<li>rbenvを使ってRuby 2.0.0-p247をインストール</li>
+<li>nodebrewを使って最新安定版のnode.jsをインストール</li>
+<li>Wiringpi（GPIOを簡単に操作するためのライブラリ）のインストール</li>
+<li>mjpg-streamer（Webカメラを使ったストリーミングのためのライブラリ）のインストール</li>
+</ul>
+<h2>1. Vagrantで仮想環境を用意する</h2>
+<p>いきなりRaspberry PiにChefを使って環境構築を行うのは失敗したときにやり直すのが大変。なので、Raspberry Piに近い仮想環境を用意して、そこでChefを使ったセットアップを試行錯誤したい。そういうときに便利なのがVagrant。Vagrantを使えば簡単に仮想環境を作ったり壊したりできるので、失敗してもすぐにやり直せる。</p>
+<p>今回、重要だったのがRaspberry Piに近い仮想環境を用意することだった。Vagrantにはboxという仕組みがあって、CentOSとかUbuntuとかいろんなOS、CPUに合わせたひな形がたくさん用意されている。通常は<a href="http://www.vagrantbox.es/">ここ</a>にあるboxを使えばいいんだろうけど、Raspberry Piに近いboxがなかった。Raspberry Piに近いboxを探したところ、<a href="https://github.com/nickhutchinson/raspberry-devbox">これ</a>がよさそうだったので使うことにした。</p>
+<pre><code>$ git clone https://github.com/nickhutchinson/raspberry-devbox raspberry_pi
+$ cd rasbperry_pi
+$ vagrant up
+</code></pre>
+<p>以上、これだけでRaspberry Piに近い仮想環境を用意することができた。</p>
+<h2>2. Chefのセットアップ</h2>
+<p>ここはいろんなところで解説されてる通りに行っただけ。</p>
+<pre><code>$ vagrant ssh-config --host vm-raspberry_pi &gt;&gt; ~/.ssh/config
+$ knife solo init chef-repo
+$ knife solo prepare vm-raspberry_pi
+</code></pre>
+<h2>3. クックブックの作成とテスト</h2>
+<p>ここから環境構築の手順をコードとして記述していく。クックブックの書き方については「入門ChefSolo」やOpscodeの<a href="http://docs.opscode.com/chef/resources.html">公式ドキュメント</a>を参考にした。このときの注意点としては、Raspberry PiはRubyやnode.jsのインストールに非常に時間がかかるため、timeoutをとても長くする必要がある。数時間はかかると考えた方がいい。</p>
+<p>書いたクックブックを実行する前にVagrantをサンドボックスモードにしておく。こうすると、失敗したときに実行した部分だけやり直すこと（ロールバック）ができる。サンドボックスモードにするためにはsaharaというVagrantのプラグインが必要なのでインストールしておく。</p>
+<p>サンドボックスモードをオンにしてクックブックを実行したあと、本当に期待した通りに環境構築できたかどうかをServerspecを使ってテストする。Serverspecにはいくつかテストを実行する方法があるようだけど、今回はSSHでログインしてテストを実行する形式を採った。テストを通らなかった場合は、saharaを使ってロールバックしてやり直す。テストが通った場合は、saharaを使って変更を確定させる（コミット）。</p>
+<p>これをサイクルさせながら、どんどんクックブックを追加していく。以上をコマンドで表すとこんな感じ。</p>
+<pre><code>$ knife cookbook create ruby -o site-cookbooks
+$ vi site-cookbooks/ruby/recipes/default.rb
+$ vi nodes/vm-raspberry_pi.json
+$ vi spec/vm-raspberry_pi/ruby_spec.rb
+$ vagrant sandbox on
+$ knife solo cook vm-raspberry_pi
+$ rspec
+$ vagrant sandbox commit
+</code></pre>
+<h2>4. Raspberry PiをChefで環境構築する</h2>
+<p>仮想環境での環境構築が完了したら、いよいよ本物のRaspberry Piにクックブックを適用する。そのためにはnodes以下に本物用の設定を追加するだけでいい。</p>
+<pre><code>$ vi nodes/raspberry_pi.json
+$ knife solo cook raspberry_pi
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

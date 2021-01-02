@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gemのディレクトリに一瞬で移動する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="gemのディレクトリに一瞬で移動する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/124/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">gemのディレクトリに一瞬で移動する</h1>
+          <p class="metadata">
+            <time datetime="2012-05-23T12:02:00.000+0000">2012-05-23 12:02</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><code>bundle show [gem]</code>で指定したgemの絶対パスを取得できる。ので、以下のようにすれば、一瞬でgemのホームディレクトリに移動できる。</p>
+<pre><code>$ bundle show rails
+/Users/naoty/workspace/sampleapp/vendor/bundle/ruby/1.9.1/gems/rails-3.1.0
+$ cd `bundle show rails`
+</code></pre>
+<p>ちなみに、<code>bundle open [gem]</code>で指定したgemのディレクトリをエディタで開ける。こっちの方が使うかもしれない。事前に環境変数<code>EDITOR</code>を設定しておく必要がある。</p>
+<pre><code>$ echo $EDITOR
+/usr/bin/vi
+$ bundle open rails
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

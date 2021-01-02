@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titaniumでdate.jsを使う</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Titaniumでdate.jsを使う">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/111/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Titaniumでdate.jsを使う</h1>
+          <p class="metadata">
+            <time datetime="2012-04-08T21:39:00.000+0000">2012-04-08 21:39</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>標準のDateライブラリが使いにくいので便利なdate.jsをTitaniumで使う。<br />
+date.jsをダウンロードしてResourcesディレクトリ以下に配置して以下のとおり。</p>
+<pre lang="javascript:app.js"><code>require('date');
+</code></pre>
+<pre lang="javascript"><code>Date.today(); //=&gt; 2012-04-07 15:00:00 +0000
+Date.tomorrow(); //=&gt; 2012-04-08 15:00:00 +0000
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

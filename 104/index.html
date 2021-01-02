@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capistranoでassets:precompileを自動化</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Capistranoでassets:precompileを自動化">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/104/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Capistranoでassets:precompileを自動化</h1>
+          <p class="metadata">
+            <time datetime="2012-03-12T22:16:00.000+0000">2012-03-12 22:16</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="ruby:Capfile"><code>load 'deploy'
+# Uncomment if you are using Rails' assets pipeline
+  # load 'deploy/assets'
+</code></pre>
+<p>このコメントアウトを外すだけ。外すと、</p>
+<ul>
+<li><code>deploy:update_code</code>のあとに<code>deploy:assets:precompile</code>というタスクを実行し、precompileする</li>
+<li>public/assetsへのシンボリックリンクをshared/assetsに作る</li>
+</ul>
+<p>なんでコメントアウトしたし…</p>
+<h2>追記</h2>
+<ul>
+<li>投稿したあとに同じような投稿を見つけてしまった。そちらではバグみたいなことを報告されてた。</li>
+<li>一応、環境も追記しておきます。</li>
+</ul>
+<pre lang="sh"><code>% rails --version
+Rails 3.2.2
+% cap --version
+Capistrano v2.11.2
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

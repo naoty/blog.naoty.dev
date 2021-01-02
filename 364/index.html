@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヘルスチェックのエンドポイントを分ける</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ヘルスチェックのエンドポイントを分ける">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/364/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ヘルスチェックのエンドポイントを分ける</h1>
+          <p class="metadata">
+            <time datetime="2019-03-05T20:45:00.000+0900">2019-03-05 20:45</time>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>課題</h1>
+<p>ヘルスチェックによってWebアプリケーションが依存するDBなどのサービスの健康状態もチェックすると、Webアプリケーションが正常であっても依存するサービスが異常である限りヘルスチェックが失敗することになり、サービス全体に影響が出てしまう。また、ECSでは、ヘルスチェックが失敗したコンテナは再起動することになるため、依存するサービスが失敗している限り、コンテナが何度も再起動してしまう。</p>
+<p>一方で、Webアプリケーションが依存するサービスと正常に接続しているかどうかを確認するには、依存するサービスも合わせてヘルスチェックするしかない。外形監視サービスを使う場合、DBなど外部から直接アクセスできないサービスの状態を確認するにはWebアプリケーションを経由するしかない。</p>
+<h1>方針</h1>
+<p>ロードバランサー用のエンドポイントと外形監視用のエンドポイントを分ける。</p>
+<p>ロードバランサー用のエンドポイントでは、Webアプリケーションの健康状態のみを返すようにする。外形監視用のエンドポイントは依存するサービスも合わせてシステム全体の健康状態を返すようにする。</p>
+<h1>実装</h1>
+<p>Railsアプリの場合、<a href="https://github.com/sportngin/okcomputer">okcomputer</a>というrubygemが使いやすい。</p>
+<pre lang="ruby"><code>gem &quot;okcomputer&quot;
+</code></pre>
+<p>gemをインストールするだけでエンドポイントが2つ定義される。<code>GET /okcomputer</code>でRailsアプリの健康状態だけを返す。このエンドポイントをロードバランサー用のヘルスチェックに使う。</p>
+<pre><code>$ curl http://localhost:3000/okcomputer
+default: PASSED Application is running (0s)
+</code></pre>
+<p>また、<code>GET /okcomputer/all</code>で依存するサービスの状態も含めて返す。カスタマイズすることで、Redisなど他のサービスもヘルスチェックできる。こちらのエンドポイントを外形監視用のヘルスチェックに使う。</p>
+<pre><code>$ curl http://localhost:3000/okcomputer/all
+Default Collection
+  database: PASSED Schema version: 20190101000000 (0s)
+  default: PASSED Application is running (0s)
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

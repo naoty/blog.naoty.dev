@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特定のIPアドレスからのアクセスを許可する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="特定のIPアドレスからのアクセスを許可する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/375/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">特定のIPアドレスからのアクセスを許可する</h1>
+          <p class="metadata">
+            <time datetime="2019-07-03T23:46:00.000+0900">2019-07-03 23:46</time>
+            <a href="/aws/">#aws</a>
+            <a href="/terraform/">#terraform</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ステージング環境などの社内だけに公開されるような環境を構築するとき、特定のIPアドレスからのアクセスを許可するセキュリティグループを作ると思う。</p>
+<p>僕はいつもこんな感じでTerraformのリソースを書く。</p>
+<pre lang="hcl"><code>locals {
+  office_ips = [
+    &quot;192.0.2.1&quot;,
+    &quot;198.51.100.1&quot;,
+    &quot;203.0.113.1&quot;,
+  ]
+}
+
+resource &quot;aws_security_group&quot; &quot;office&quot; {
+  name   = &quot;office&quot;
+  vpc_id = aws_vpc.main.id
+}
+
+resource &quot;aws_security_group_rule&quot; &quot;office_ingress&quot; {
+  count = length(local.office_ips)
+
+  security_group_id = aws_security_group.office.id
+  type              = &quot;ingress&quot;
+  from_port         = 0
+  to_port           = 0
+  protocol          = &quot;-1&quot;
+  cidr_blocks       = [&quot;${local.office_ips[count.index]}/32&quot;]
+}
+
+resource &quot;aws_security_group_rule&quot; &quot;office_egress&quot; {
+  security_group_id = aws_security_group.office.id
+  type              = &quot;egress&quot;
+  from_port         = 0
+  to_port           = 0
+  protocol          = &quot;-1&quot;
+  cidr_blocks       = [&quot;0.0.0.0/0&quot;]
+}
+</code></pre>
+<ul>
+<li>特定のIPアドレスはローカル変数でまとめておく。</li>
+<li>IPアドレスごとにインバウンドトラフィックを許可するルールを設定するため、<code>aws_security_group.ingress</code>を使わずに<code>aws_security_group_rule</code>を使う。その方が<code>count</code>を使って効率的に書ける。</li>
+<li>この書き方はNetwork ACLでも使える。</li>
+</ul>
+<p>日々のTerraform業務の中で見つけたパターンをちょっとずつブログに残していきたいと思い、1トピック1ブログの体裁で書いていくことにした。まずは、だいたい必要になるようなアクセス制限の書き方を書いてみた。次もこれくらいの粒度のブログをリズムよく書いていきたい。</p>
+<hr />
+<h2>追記：2019-07-19</h2>
+<p>terraform v0.12で導入された<a href="https://www.terraform.io/docs/configuration/expressions.html#dynamic-blocks">dynamic block</a>を使うと、<code>aws_security_group_rule</code>を使う必要がないことに気づいた。</p>
+<pre lang="hcl"><code>resource &quot;aws_security_group&quot; &quot;office&quot; {
+  name   = &quot;office&quot;
+  vpc_id = aws_vpc.main.id
+
+  dynamic &quot;ingress&quot; {
+    for_each = local.office_ips
+
+    content {
+      from_port   = 0
+      to_port     = 0
+      protocol    = &quot;-1&quot;
+      cidr_blocks = [&quot;${ingress.value}/32&quot;]
+    }
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = &quot;-1&quot;
+    cidr_blocks = [&quot;0.0.0.0/0&quot;]
+  }
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

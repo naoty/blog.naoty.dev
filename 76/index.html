@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>plistから数値を読み込む</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="plistから数値を読み込む">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/76/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">plistから数値を読み込む</h1>
+          <p class="metadata">
+            <time datetime="2011-08-17T22:30:00.000+0000">2011-08-17 22:30</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>NSString *path = [[NSBundle mainBundle] pathForResource:@&quot;places&quot; ofType:@&quot;plist&quot;];
+placesDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
+NSArray *places = [placesDictionary objectForKey:@&quot;places&quot;];
+NSDictionary *place = [places objectAtIndex:indexPath.row];
+NSNumber *lat = [place objectForKey:@&quot;latitude&quot;];
+NSNumber *lng = [place objectForKey:@&quot;longitude&quot;];
+
+PlaceAppDelegate *appDelegate = (PlaceAppDelegate *) [[UIApplication sharedApplication] delegate];
+appDelegate.latitude = [lat doubleValue];
+appDelegate.longitude = [lng doubleValue];
+</code></pre>
+<ul>
+<li>(id)objectForKey:(id)aKeyはid型を返すので、doubleなどプリミティブ型に直接入れることができない</li>
+<li>数値をオブジェクトとして扱うためにNSNumberを使う</li>
+<li>NSNumberを通してプリミティブ型に変換する</li>
+</ul>
+<pre><code>xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+version=&quot;1.0&quot;&gt;
+
+	places
+	
+		
+			name
+			Tokyo
+			latitude
+			35.689488
+			longitude
+			139.691706
+		
+		
+			name
+			New York
+			latitude
+			40.714353
+			longitude
+			-74.005973
+		
+		
+			name
+			London
+			latitude
+			51.500152
+			longitude
+			-0.126236
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

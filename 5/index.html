@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掲示板 ver.1.2</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="掲示板 ver.1.2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/5/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">掲示板 ver.1.2</h1>
+          <p class="metadata">
+            <time datetime="2010-06-19T04:32:00.000+0000">2010-06-19 04:32</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　前回のLv.1.1は文字化けするので、修正しました。修正点はこちら。</p>
+<ul>
+<li>htmlspecialcharsしてからDB書き込みは文字化けの原因なので、表示前に移動</li>
+<li>SQLインジェクション対策でmysql_escape_stringを追加</li>
+</ul>
+<pre><code>
+
+/ *****DB情報の読み込み***** /
+include_once(&quot;ini.php&quot;);
+
+/ *****DBへ接続、DBの選択***** /
+$con = mysql_connect(DB_HOST,DB_USER,DB_PASS);
+mysql_select_db(DB_NAME);
+
+/ *****フォーム表示***** /
+echo '';
+echo '氏名：';
+echo '';
+echo 'メッセージ：';
+echo '';
+echo '';
+echo '';
+
+/ *****エスケープ***** /
+$name_d = mysql_escape_string($_POST[&quot;name&quot;]);
+$msg_d = mysql_escape_string($_POST[&quot;msg&quot;]);
+
+/ *****utf-8にエンコーディング***** /
+$name_d = mb_convert_encoding($name_d,&quot;utf-8&quot;,&quot;utf-8,euc-jp,sjis&quot;);
+$msg_d = mb_convert_encoding($msg_d,&quot;utf-8&quot;,&quot;utf-8,euc-jp,sjis&quot;);
+
+/ *****「name」にデータがあるときデータをDBに挿入***** /
+if($name_d !== &quot;&quot;){
+	mysql_query(&quot;INSERT INTO twi_tb (name,msg) VALUES ('$name_d','$msg_d')&quot;);
+}
+
+/ *****タグ削除、twi_tbの全データ表示***** /
+$re = mysql_query(&quot;SELECT * FROM twi_tb&quot;);
+while($arr = mysql_fetch_array($re)){
+	echo htmlspecialchars($arr[0]);
+	echo &quot;：&quot;;
+	echo htmlspecialchars($arr[1]);
+	echo &quot;：&quot;;
+	echo htmlspecialchars($arr[2]);
+	echo &quot;：&quot;;
+	echo htmlspecialchars($arr[3]);
+	echo &quot;&quot;;
+}
+
+/ *****DB切断***** /
+mysql_close($con);
+
+?&gt;
+
+body&gt;
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

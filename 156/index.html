@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評：ふつうのLinuxプログラミング、あるいはHTTPサーバーについておおざっぱに</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="書評：ふつうのLinuxプログラミング、あるいはHTTPサーバーについておおざっぱに">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/156/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">書評：ふつうのLinuxプログラミング、あるいはHTTPサーバーについておおざっぱに</h1>
+          <p class="metadata">
+            <time datetime="2012-11-11T01:06:00.000+0000">2012-11-11 01:06</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/41KHt9YEIyL._SL160_.jpg" alt="ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道" title="ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-blog-22/">ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道</a></p>
+<ul>
+<li>作者: 青木峰郎</li>
+<li>出版社/メーカー: ソフトバンククリエイティブ</li>
+<li>発売日: 2005/07/27</li>
+<li>メディア: 単行本</li>
+<li>購入: 32人 クリック: 378回</li>
+<li><a href="http://d.hatena.ne.jp/asin/4797328355/hatena-blog-22">この商品を含むブログ (138件) を見る</a></li>
+</ul>
+<p>OSの仕組みをちゃんと理解しておこうと思って買ってみた。</p>
+<p>以前、「<a href="http://workingwithunixprocesses.com/">Working With UNIX Processes</a>」という本を読んで、プロセスの仕組みがだんだんわかってきたので、OSの他の部分も知りたいということで次に読んだのがこれ。</p>
+<h2>読む前のレベル</h2>
+<ul>
+<li>メインで使うのはRuby。最近、Objective-Cも書き始めた。つまり、ゆとりプログラマー。</li>
+<li>C言語はWebの入門記事をちょろっとやった程度。ポインタとか構造体とかよくわからない…</li>
+<li>実務ではサーバーがLinux(Ubuntu)で、基本的な作業はひととおりできる。</li>
+<li>「<a href="http://workingwithunixprocesses.com/">Working With UNIX Processes</a>」を読んだので、多少プロセスについては前提知識がある。</li>
+</ul>
+<h2>もうちょっとC言語を勉強すべきだった</h2>
+<p>内容としては、OSの基本的な概念を紹介し、それらを操作するためのC言語の関数とコード例が出てくる。対象読者のところで、C言語の基本的な理解を前提としているのは、本当そのとおりだった。構造体がバンバン出てくる。あと拙者には<code>fputc</code>,<code>putc</code>,<code>fputs</code>,<code>puts</code>の区別がつかなかった。</p>
+<p>出直してきます…orz</p>
+<h2>HTTPサーバーをなんとなく理解</h2>
+<p>とはいえ、最後の方に出てくるHTTPサーバーのコード例はとても勉強になった。</p>
+<p>ソケットAPIの説明が簡略だったため、詳しく理解することはできなかったものの、なんとなくHTTPサーバーが何をしているのかがわかった。</p>
+<ol>
+<li><code>getaddrinfo(3)</code>で自分（つまりサーバー）の情報（ホスト、プロトコルなど）を取得する。</li>
+<li>取得した情報を使って<code>socket(2)</code>でソケットを作る。ソケットはファイルディスクリプタ（ただの通し番号）として参照される。</li>
+<li>そのソケットに対して<code>bind(2)</code>して<code>listen(2)</code>する。（詳しい説明がなかったので、ここらへんよくわからない…）</li>
+<li>そのソケットに対して<code>accept(2)</code>する。これをすると、サーバーはクライアントからの接続を待つ。接続に成功したら、接続したソケットを返す。</li>
+<li>接続したソケットはファイルディスクリプタなので、<code>fdopen(3)</code>を使って読み書きできる。リクエストを読んで、レスポンスを返す処理はここで行う。（接続したソケットへの書き込みはそのままクライアントに返されるのだろうか…？ここらへんもよくわかってない…）</li>
+<li>複数のリクエストをさばくには、5.の処理を並列化する必要があるので、<code>fork(2)</code>を使って子プロセスにこの処理を任せる。親プロセスはすぐにもう一度<code>accept(2)</code>してリクエストを待つ。</li>
+</ol>
+<p>おおざっぱな流れはこんな感じで理解した。</p>
+<p>リクエストを読んでレスポンスを返す処理は、とても地味な処理だった。TCP/IPに従ってリクエストをパースして、その結果にもとづいてレスポンスを決めるような処理だったと記憶してる。</p>
+<p>並列化はコード例ではマルチプロセスでの実装だったけど、他の実装も知りたい。</p>
+<h2>残る疑問</h2>
+<p>入門書ということもあり、途中はしょった部分があったので、いくつか疑問が残った。</p>
+<ul>
+<li>ソケットAPIがやってることが謎。<code>bind(2)</code>して<code>listen(2)</code>する部分が何をやってるか不明。</li>
+<li>接続したソケットへの出力はそのまま接続先のクライアントに出力されるんだろうか？この背後でまだいろいろやってそうな気配を感じる。</li>
+<li>処理が終わった子プロセスはゾンビ化すると思うんだけど、どうやって<code>wait(2)</code>して終了させるんだろう？</li>
+<li>マルチプロセス以外の並列化の実装も知りたい。C10K問題というキーワードも関連してくる気がするし、node.jsもここらへんに関する技術な気がする。</li>
+</ul>
+<p>本書では、次に読むべき本としていくつか紹介されているので、それらを読めば疑問が解決しそう。とてもありがたい。ネットワークに関する本であればこれとか。</p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4894712059/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/213B9PVJD1L._SL160_.jpg" alt="UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI" title="UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4894712059/hatena-blog-22/">UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI</a></p>
+<ul>
+<li>作者: W.リチャードスティーヴンス,W.Richard Stevens,篠田陽一</li>
+<li>出版社/メーカー: ピアソンエデュケーション</li>
+<li>発売日: 1999/07</li>
+<li>メディア: 単行本</li>
+<li>購入: 7人 クリック: 122回</li>
+<li><a href="http://d.hatena.ne.jp/asin/4894712059/hatena-blog-22">この商品を含むブログ (35件) を見る</a></li>
+</ul>
+<p>↑高いw</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

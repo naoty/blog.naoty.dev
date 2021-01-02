@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECSタスクでRakeタスクを定期実行する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ECSタスクでRakeタスクを定期実行する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/376/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ECSタスクでRakeタスクを定期実行する</h1>
+          <p class="metadata">
+            <time datetime="2019-07-04T23:27:00.000+0900">2019-07-04 23:27</time>
+            <a href="/aws/">#aws</a>
+            <a href="/rails/">#rails</a>
+            <a href="/terraform/">#terraform</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ECSサービスとしてRailsアプリケーションを運用しているとき、定期実行したいRakeタスクはcronで管理するよりもECS scheduled taskとして管理すると思う。</p>
+<p>まず、RakeタスクをECS（Fargate）上で実行するため、ECSタスク定義をつくる。</p>
+<pre lang="hcl"><code>resource &quot;aws_ecs_task_definition&quot; &quot;rake&quot; {
+  family                   = &quot;rake&quot;
+  task_role_arn            = aws_iam_role.ecs_task.arn
+  execution_role_arn       = aws_iam_role.ecs_execution.arn
+  network_mode             = &quot;awsvpc&quot;
+  cpu                      = 256
+  memory                   = 512
+  requires_compatibilities = [&quot;FARGATE&quot;]
+
+  container_definitions  = &lt;
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

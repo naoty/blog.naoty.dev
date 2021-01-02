@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>peco+giboで.gitignoreのテンプレを1秒で取得</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="peco+giboで.gitignoreのテンプレを1秒で取得">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/235/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">peco+giboで.gitignoreのテンプレを1秒で取得</h1>
+          <p class="metadata">
+            <time datetime="2014-09-30T10:50:00.000+0000">2014-09-30 10:50</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="zsh:.zshrc"><code>pecogibo() {
+    gibo -l | peco | xargs gibo
+}
+</code></pre>
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/cdd66863-9ebd-a59c-f032-728e2ac5bfb1.gif" alt="tty.gif" /></p>
+<p><a href="https://github.com/simonwhitaker/gibo">gibo</a>は <a href="https://github.com/github/gitignore">https://github.com/github/gitignore</a> から.gitignoreのテンプレを取得するコマンドラインツールで、<code>brew install gibo</code>からインストールできる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

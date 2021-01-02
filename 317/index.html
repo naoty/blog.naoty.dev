@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スキーマファイルをSQL形式に変更する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="スキーマファイルをSQL形式に変更する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/317/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">スキーマファイルをSQL形式に変更する</h1>
+          <p class="metadata">
+            <time datetime="2018-01-13T09:53:00.000+0900">2018-01-13 09:53</time>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Railsアプリのスキーマファイルはデータベースの現在のスキーマを表し、デフォルトでは<code>db/schema.rb</code>にActiveRecordのDSLで記述されている。スキーマファイルは<code>rails db:schema:dump</code>で生成されるものなので、開発者が直接いじってはならない。</p>
+<p>開発が進みデータベースのスキーマが複雑になると、ActiveRecordのDSLでの表現に限界が出てくる。DSLのメリットはデータベースに依存せず抽象的な表現ができることだが、データベース固有の設定をする場合にDSLで表現できなくなってくる。</p>
+<p>DSLで表現できなくなるとスキーマファイルと実際のスキーマに乖離が生まれる。スキーマに乖離があると、開発環境やCI上でデータベースをセットアップするのが困難になる。</p>
+<p>そこで、ActiveRecordはスキーマファイルの形式にSQLを選ぶことができる。<code>config/application.rb</code>で以下のように指定すると、<code>db/structure.sql</code>というSQL形式のスキーマファイルが生成される。</p>
+<pre lang="ruby"><code>config.active_record.schema_format = :sql
+</code></pre>
+<p>なお、この設定はデフォルトでは<code>:ruby</code>が指定されている。</p>
+<p>SQL形式に変更した場合、コマンドを以下のように変える必要がある。</p>
+<table>
+<thead>
+<tr>
+<th>Ruby形式</th>
+<th>SQL形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rails db:schema:load</code></td>
+<td><code>rails db:structure:load</code></td>
+</tr>
+<tr>
+<td><code>rails db:schema:dump</code></td>
+<td><code>rails db:structure:dump</code></td>
+</tr>
+</tbody>
+</table>
+<p>また、<code>db/structure.sql</code>の生成にはDBごとのスキーマダンプツールを使うため、MySQLであれば<code>mysqldump</code>を用意する必要がある。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

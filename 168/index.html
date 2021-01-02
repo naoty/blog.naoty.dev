@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object#freezeについて</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Object#freezeについて">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/168/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Object#freezeについて</h1>
+          <p class="metadata">
+            <time datetime="2013-01-17T18:29:00.000+0000">2013-01-17 18:29</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="ruby"><code>DAYS = ['日', '月', '火', '水', '木', '金', '土']
+DAYS &lt;&lt; '日'
+p DAYS
+#=&gt; [&quot;日&quot;, &quot;月&quot;, &quot;火&quot;, &quot;水&quot;, &quot;木&quot;, &quot;金&quot;, &quot;土&quot;, &quot;日&quot;]
+</code></pre>
+<ul>
+<li>定数のArrayやHashでも中身を簡単に書きかえられてしまう。ゆるふわな感じがする。</li>
+<li>こんな定数はイヤだ。</li>
+</ul>
+<pre lang="ruby"><code>DAYS = ['日', '月', '火', '水', '木', '金', '土'].freeze
+DAYS &lt;&lt; '日'
+p DAYS
+#=&gt; /Users/naoty/workspace/misc/freeze_sample.rb:3:in `': can't modify frozen Array (RuntimeError)
+</code></pre>
+<ul>
+<li><code>Object#freeze</code>を使うと、オブジェクトの中身を変更できなくなる（ただし、オブジェクトそのものを再代入することは可能）。</li>
+<li>こっちの方が定数っぽい感じがする。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

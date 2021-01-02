@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS 6とiOS 5でFacebook SDK使おうとしたらハマった</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="iOS 6とiOS 5でFacebook SDK使おうとしたらハマった">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/153/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">iOS 6とiOS 5でFacebook SDK使おうとしたらハマった</h1>
+          <p class="metadata">
+            <time datetime="2012-11-05T17:34:00.000+0000">2012-11-05 17:34</time>
+          </p>
+        </header>
+        <section class="body">
+          <h2>versions</h2>
+<ul>
+<li>Xcode (4.5.1)</li>
+<li>Facebook SDK for iOS (3.1)</li>
+</ul>
+<h2>SDKインストール</h2>
+<ul>
+<li><a href="https://developers.facebook.com/ios/">ここ</a>からインストーラをダウンロードしてインストール。<code>~/Documents</code>にSDKが入る。</li>
+<li><a href="http://developers.facebook.com/docs/getting-started/getting-started-with-the-ios-sdk/jp/">チュートリアル</a>に沿って進める。</li>
+</ul>
+<h2>チュートリアル通りにやったのにエラる</h2>
+<pre><code>Undefined symbols for architecture armv7:
+  &quot;_OBJC_CLASS_$_ACAccountStore&quot;, referenced from:
+      objc-class-ref in FacebookSDK(FBSession.o)
+  &quot;_ACFacebookAudienceFriends&quot;, referenced from:
+      -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
+  &quot;_ACFacebookAppIdKey&quot;, referenced from:
+      -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
+  &quot;_ACAccountTypeIdentifierFacebook&quot;, referenced from:
+      +[FBSession renewSystemAuthorization] in FacebookSDK(FBSession.o)
+  &quot;_ACFacebookAudienceKey&quot;, referenced from:
+      -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
+  &quot;_ACFacebookAudienceOnlyMe&quot;, referenced from:
+      -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
+  &quot;_ACFacebookPermissionsKey&quot;, referenced from:
+      -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
+  &quot;_OBJC_CLASS_$_ASIdentifierManager&quot;, referenced from:
+      objc-class-ref in FacebookSDK(FBSettings.o)
+  &quot;_ACFacebookAudienceEveryone&quot;, referenced from:
+      -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
+ld: symbol(s) not found for architecture armv7
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+</code></pre>
+<p>などとエラーが出てくる。</p>
+<h2>解決策</h2>
+<p><code>Accounts.framework</code>と<code>AdSupport.framework</code>を追加する。これでiOS 6は動くのだけど、iOS 5では…</p>
+<pre><code>dyld: Library not loaded: /System/Library/Frameworks/AdSupport.framework/AdSupport
+</code></pre>
+<p>や</p>
+<pre><code>dyld: Symbol not found: _ACFacebookAppIdKey
+</code></pre>
+<p>のようなエラーがおきる。</p>
+<p>なので、<code>Accounts.framework</code>と<code>AdSupport.framework</code>を<code>optional</code>で追加する。</p>
+<p>これでうまくいった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

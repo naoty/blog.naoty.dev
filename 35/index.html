@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanizeでMixiボイスに投稿する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="MechanizeでMixiボイスに投稿する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/35/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">MechanizeでMixiボイスに投稿する</h1>
+          <p class="metadata">
+            <time datetime="2011-02-17T02:41:00.000+0000">2011-02-17 02:41</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　RubyとMechanizeを使ってMixiボイスに投稿するプログラムを書きました。Mixiボイスに投稿するのはこれが初めてでしたｗ<br />
+　このプログラムを実行するにはmechanizeをインストールする必要があります。</p>
+<pre><code>$ gem install mechanize
+</code></pre>
+<p>　で、プログラムはこんな感じ。</p>
+<pre><code>require 'rubygems'
+require 'mechanize'
+
+agent = Mechanize::new
+
+puts &quot;Login...&quot;
+page = agent.get &quot;http://mixi.jp/&quot;
+form = page.forms[0]
+form.email = &quot;xxx@xxx&quot;
+form.password = &quot;xxxxxxx&quot;
+agent.form.submit
+
+puts &quot;Post...&quot;
+page = agent.get &quot;http://mixi.jp/home.pl&quot;
+form = page.forms[0]
+form[&quot;body&quot;] = &quot;this voice is from a ruby program.&quot;
+agent.form.submit
+
+puts &quot;Done&quot;
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

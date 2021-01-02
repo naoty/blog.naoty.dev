@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Railsのrubyコンソールでgitを使う</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Instant Railsのrubyコンソールでgitを使う">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/22/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Instant Railsのrubyコンソールでgitを使う</h1>
+          <p class="metadata">
+            <time datetime="2010-10-11T21:50:00.000+0000">2010-10-11 21:50</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>0.環境</p>
+<ul>
+<li>Windows XP</li>
+<li>Instant Rails 2.0（C:\InstantRails-2.0-win）</li>
+</ul>
+<p>1.msysgitをインストール<br />
+　インストールのときに「Adjusting your PATH environment」で2番目の「Run Git from the Windows Command Prompt」を選択。ここでは標準どおり「C:\Program Files」にインストールする。コマンドプロンプトで「git --version」としてみて、バージョンが表示されればOK。これでコマンドプロンプトでgitを使えるようになった。</p>
+<p>2.Instant Railsのパスの設定<br />
+　「C:\InstantRails-2.0-win\use_ruby.cmd」を開く。「PATH」に「C:\Program Files\Git\cmd;」を追加。上書き保存。終了。これでInstant Railsのrubyコンソールからもgitが使えるようになった。</p>
+<blockquote>
+<p>参考</p>
+<ul>
+<li><a href="http://taka3090.blog88.fc2.com/blog-entry-8.html">Linux、Rails覚書き</a></li>
+<li><a href="http://ja-jp.facebook.com/note.php?note_id=80921572086">Rails Plugin Updates, SVN, and Piston 2.0.2 on Windows (Facebook）</a></li>
+</ul>
+</blockquote>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

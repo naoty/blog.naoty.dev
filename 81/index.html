@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails3.1にjquery-uiを導入する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails3.1にjquery-uiを導入する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/81/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails3.1にjquery-uiを導入する</h1>
+          <p class="metadata">
+            <time datetime="2011-09-25T01:50:00.000+0000">2011-09-25 01:50</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>js</p>
+<ul>
+<li>app/assets/javascripts/application.jsに一行追加するだけ</li>
+</ul>
+<pre><code># app/assets/javascrypts/application.js
+
+// This is a manifest file that'll be compiled into including all the files listed below.
+// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
+// be included in the compiled file accessible from http://example.com/assets/application.js
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
+//
+//= require jquery
+//= require jquery-ui // ←追加
+//= require jquery_ujs
+//= require_tree .
+</code></pre>
+<p>css</p>
+<ul>
+<li>vendor/assets/stylesheets/vendor.cssを作成</li>
+<li>vendor/assets/stylesheets/jquery-uiを作成して、そのなかにダウンロードしてきたjquery-ui-1.8.16.custom.cssをおく</li>
+</ul>
+<pre><code># app/assets/stylesheets/application.css
+
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require vendor // ←追加
+ *= require_tree . 
+*/
+</code></pre>
+<pre><code># vendor/assets/stylesheets/vendor.css
+
+/*
+ *= require_tree ./jquery-ui
+ */
+</code></pre>
+<p>image</p>
+<ul>
+<li>エラーメッセージを見ながらディレクトリを用意してあげる</li>
+<li>今回は、vendor/assets/images/jquery-ui/imagesのなかにダウンロードしてきた画像をおく</li>
+</ul>
+<blockquote>
+<p>参考<br />
+<a href="http://stackoverflow.com/questions/6048490/rails-3-1-and-jquery-ui-images">Ruby on Rails 3.1 and jQuery UI images - Stack Overflow</a></p>
+</blockquote>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p>2011.10.1<br />
+追記<br />
+datepickerなどの日本語化ファイルを使いたい場合</p>
+<pre><code>// app/assets/javascripts/application.js
+
+// This is a manifest file that'll be compiled into including all the files listed below.
+// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
+// be included in the compiled file accessible from http://example.com/assets/application.js
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
+//
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui
+//= require vendor // ←追加
+//= require_tree .
+</code></pre>
+<pre><code>// vendor/assets/javascripts/vendor.js
+
+//= require_tree ./jquery-ui
+</code></pre>
+<p>で、あとは、vendor/assets/javascripts/jquery-ui/配下に日本語ファイルをおけばおｋ。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

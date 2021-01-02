@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パラメータストアで環境変数を管理する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="パラメータストアで環境変数を管理する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/336/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">パラメータストアで環境変数を管理する</h1>
+          <p class="metadata">
+            <time datetime="2018-06-08T21:57:00.000+0900">2018-06-08 21:57</time>
+            <a href="/aws/">#aws</a>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、ECSで運用しているRailsアプリの起動時にパラメータストアから環境変数を取得して設定するようにした。</p>
+<h2>背景</h2>
+<p>それまでは環境変数はコンテナ定義に指定されていたが、それをパラメータストアを使った方法に移行した。理由としては、機密情報をコンテナ定義の環境変数に設定するのは推奨されていないからだ。</p>
+<p>また、開発環境で利用する環境変数が開発者によってバラバラに管理されていた（ローカルの<code>.env</code>ファイルによって管理されていた）ため、新しく開発に参加する際に正しい環境変数が何なのか把握するのが大変だった。</p>
+<h2>パラメータストア</h2>
+<p>パラメータストアとは、AWSが提供する階層型ストレージのことで、設定のような軽いデータを安全に管理できる。KMSによる暗号化も可能なので機密情報を含む環境変数の管理に向いていそうだと判断した。</p>
+<h2>環境変数をパラメータストアに移す</h2>
+<p>バラバラに管理されていた環境変数をパラメータストアに移した。パラメータストアは階層構造になっており、ある階層下にある値をまとめて取得することができる。</p>
+<p>今回は<code>///</code>という階層で環境変数を管理することにした。例えば、<code>/myapp/production/PASSWORD</code>のような感じだ。</p>
+<h2>コンテナからパラメータストアにアクセスする</h2>
+<p>ECSコンテナからパラメータストアにアクセスするには権限が必要になる。パラメータストアへの移行と同時並行でECSコンテナでIAMロールを使うように修正していたので、このIAMロールにパラメータストアにアクセスするためのポリシーを付与した。</p>
+<h2>Rails起動時に環境変数をセットする</h2>
+<p>環境変数はRailsの起動プロセスの中で参照されることがある（データベースとの接続など）ため、起動プロセスの初期に環境変数を設定する必要がある。</p>
+<p>いくつかRubygemがあるようだったが、たいした実装ではないので簡単なコードを書いて環境変数を起動プロセスの初期に設定するようにした。</p>
+<p>注意点としては、パラメータストアから取得した環境変数よりも既存の環境変数を優先させた点だ。ECSからタスクとしてコンテナを起動するときなど、コンテナ定義から環境変数を指定することでパラメータストアの環境変数を上書きできると便利なケースがあったからだ。また、開発環境では<code>docker-compose.yml</code>で指定した環境変数を優先することも可能になる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

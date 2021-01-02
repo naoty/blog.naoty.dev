@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailsからReduxのinitial stateを設定する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="RailsからReduxのinitial stateを設定する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/329/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">RailsからReduxのinitial stateを設定する</h1>
+          <p class="metadata">
+            <time datetime="2018-03-29T23:19:00.000+0900">2018-03-29 23:19</time>
+            <a href="/rails/">#rails</a>
+            <a href="/react/">#react</a>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="ruby"><code>def new
+  @user = User.new
+end
+</code></pre>
+<p>上のようなコントローラーで作ったデータをReduxのinitial stateとして設定したいと思い、いろいろ考えて書いてみた。</p>
+<p>まず、ヘルパーとかデコレーターでモデルをReactコンポーネントに渡すpropsに変換してみる。今回はactive_decoratorを使う。</p>
+<pre lang="ruby"><code>module UserDecorator
+  def to_react_props
+    as_json(only: %i[first_name last_name email])
+      .transform_keys { |key| key.camelcase(:lower) }
+      .transform_values { |value| value || &quot;&quot; }
+      .to_json
+  end
+end
+</code></pre>
+<p>これでモデルから必要な属性だけをcamelCaseのJSON文字列に変換できるようになった。</p>
+<p>次にRailsのviewでdata属性に上のpropsを渡す。あとでここからJSでデータを引っ張ってくる計画だ。</p>
+<pre lang="erb"><code>
+
+</code></pre>
+<p>あとは、Reduxのstoreを作成するときに上のpropsを設定する。</p>
+<pre lang="javascript"><code>document.addEventListener('DOMContentLoaded', () =&gt; {
+  const rootElement = document.getElementById('js-redux-root');
+  const initialState = JSON.parse(rootElement.dataset.reactProps);
+  const store = createStore(rootReducer, initialState);
+
+  render(
+    
+      
+    
+  );
+});
+</code></pre>
+<p>これでRailsで作ったデータをReduxのinitial stateに設定できた。フォームの初期値を埋めておきたいときなど、コントローラーからReactコンポーネントにデータを渡せるとラクなので、こういう実装が必要になると思う。</p>
+<p>最近、ReactとかReduxを勉強しているので、これでいいのかよくわかりません。コードレビューお願いします。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

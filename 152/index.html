@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プログラムにフリックさせてイベントを受け取る</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="プログラムにフリックさせてイベントを受け取る">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/152/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">プログラムにフリックさせてイベントを受け取る</h1>
+          <p class="metadata">
+            <time datetime="2012-10-26T14:33:00.000+0000">2012-10-26 14:33</time>
+          </p>
+        </header>
+        <section class="body">
+          <ul>
+<li>フリックで左右にスクロールできるだけでなく、ナビゲーションバーにあるボタンからも左右にスクロールできるUIを想定。（標準のメールアプリみたいなイメージ）</li>
+<li>ボタンからスクロールした場合も、フリックしたときと同様に、スクロール前後のイベントを受け取ってあれこれやりたい。</li>
+</ul>
+<pre lang="obj-c:MainViewController.m"><code>- (void)viewDidLoad {
+	[super viewDidLoad];
+
+	self.scrollContainer.animationDelegate = self;
+}
+
+- (void)scrollViewWillBeginDragging:(ScrollContainer *)scrollContainer {
+	NSLog(@&quot;offset: %d&quot;, self.scrollContainer.contentOffset.x);
+}
+
+- (void)scrollViewDidEndDecelerating:(ScrollContainer *)scrollContainer {
+	NSLog(@&quot;offset: %d&quot;, self.scrollContainer.contentOffset.x);
+}
+
+- (void)segmentDidChange:(id)sender {
+	if (![sender isKindOfClass:[UISegmentControl class]]) {
+		return;
+	}
+	UISegmentControl *segmentControl = sender;
+
+	if (segmentControl.selectedSegmentIndex == 0) {
+		[self.scrollContainer moveToPreviousContent];
+	} else if (segmentControl.selectedSegmentIndex == 1) {
+		[self.scrollContainer moveToNextContent];
+	}
+}
+</code></pre>
+<ul>
+<li><code>UISegmentControl</code>で作ったボタンが押されると、<code>ScrollContainer</code>クラスのメソッドを呼び出して、左右どちらかにスクロールされる。</li>
+<li><code>ScrollContainer</code>は以下のような<code>UIScrollView</code>のサブクラス。</li>
+</ul>
+<pre lang="obj-c:ScrollContainer.m"><code>static CGFloat kContentWidth = 320.0f;
+
+- (void)moveToNextContent {
+	[UIView beginAnimation:nil context:NULL];
+	[UIView setAnimationDuration:0.3f];
+	[UIView setAnimationDelegate:self.animationDelegate];
+	[UIView setAnimationWillStartSelector:@selector(scrollViewWillBeginDragging:)];
+	[UIView setAnimationDidStopSelector:@selector(scrollViewDidEndDecelerating:)];
+
+	CGPoint nextContentOffset = CGPointMake(self.contentOffset.x + kContentWidth, 0);
+	self.contentOffset = nextContentOffset;
+
+	[UIView commitAnimations];
+}
+
+- (void)moveToPreviousContent {
+	[UIView beginAnimation:nil context:NULL];
+	[UIView setAnimationDuration:0.3f];
+	[UIView setAnimationDelegate:self.animationDelegate];
+	[UIView setAnimationWillStartSelector:@selector(scrollViewWillBeginDragging:)];
+	[UIView setAnimationDidStopSelector:@selector(scrollViewDidEndDecelerating:)];
+
+	CGPoint previousContentOffset = CGPointMake(self.contentOffset.x - kContentWidth, 0);
+	self.contentOffset = previousContentOffset;
+
+	[UIView commitAnimations];
+}
+</code></pre>
+<ul>
+<li><code>setContentOffset:animated:</code>メソッドでもプログラムによるフリックを実現できるんだけど、スクロール前後のイベントを受け取ってあれこれすることはできないっぽい。</li>
+<li>そこで、<code>UIView</code>クラスのアニメーションを使って、アニメーション前後のイベントを利用する。</li>
+<li><code>setAnimationWillStartSelector:</code>や<code>setAnimationDidStopSelector:</code>に直接<code>scrollViewDidEndDecelerating:</code>などを指定することで、プログラムによるフリックの場合でもイベントを受け取ることができる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

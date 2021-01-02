@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>select_datetimeからの日付検索</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="select_datetimeからの日付検索">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/42/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">select_datetimeからの日付検索</h1>
+          <p class="metadata">
+            <time datetime="2011-03-09T19:59:00.000+0000">2011-03-09 19:59</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　日付を入力するフォームを簡単に作成できるselect_date/select_datetimeというヘルパーを使って日付検索を実装しました。まだ不完全なところがありそうですが。一応、記録しておきます。</p>
+<ul>
+<li>期間で検索するには、select_datetimeを2回使います。なので、パラメータを区別するためにprefixオプションを使います。</li>
+<li>パラメータをそのまま検索条件に使うことはできないので、mktime_from_selectというプライベートメソッドを用意して、Timeオブジェクトに変換します。</li>
+<li>@fromと@toという変数を使ってパラメータを保持しておくことで、入力した日付を引き続き表示させます。select_datetimeの第1引数で表示する日付を設定できます。</li>
+</ul>
+<p>View</p>
+<pre><code> &quot;from&quot;}) %&gt; 〜 
+ &quot;to&quot;}) %&gt;
+</code></pre>
+<p>Controller</p>
+<pre><code>def index
+  conditions = []
+  conditions &lt;&lt; [&quot;created_at&gt;=?&quot;, mktime_from_select(params[:from])] unless params[:from][:year].empty?
+  conditions &lt;&lt; [&quot;created_at&lt;=?&quot;, mktime_from_select(params[:from])] unless params[:from][:year].empty?
+  @users = User.find(:all, :condition =&gt; flatten_conditions(conditions))
+  @from = mktime_from_select(params[:from]) || Time.now
+  @to = mktime_from_select(params[:to]) || Time.now
+end
+
+private
+
+def mktime_from_select(params)
+  return false if params.nil?
+  year = 0; month = 0; day = 0; hour = 0; minute = 0
+  params.each do |key, val|
+    case key
+    when &quot;year&quot;
+      year = val
+    when &quot;month&quot;
+      month = val
+    when &quot;day&quot;
+      day = val
+    when &quot;hour&quot;
+      hour = val
+    when &quot;minute&quot;
+      minute = val
+    end
+  end
+  return Time.mktime(year, month, day, hour, minute)
+end
+</code></pre>
+<blockquote>
+<p>※flatten_conditionsについて<br />
+<a href="http://d.hatena.ne.jp/zenpou/20080131/1201773558">http://d.hatena.ne.jp/zenpou/20080131/1201773558</a></p>
+</blockquote>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

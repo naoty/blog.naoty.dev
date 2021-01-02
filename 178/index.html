@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vimの便利機能</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="vimの便利機能">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/178/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">vimの便利機能</h1>
+          <p class="metadata">
+            <time datetime="2013-04-10T00:46:00.000+0000">2013-04-10 00:46</time>
+          </p>
+        </header>
+        <section class="body">
+          <h2>入力補完</h2>
+<ul>
+<li>インサートモードで<code>または</code>と打つと、補完候補が出てきます。</li>
+</ul>
+<h2>バッファ</h2>
+<ul>
+<li>新しいファイルを開くと、バッファという領域にその中身が読み込まれます。過去に開いたファイルをまた開くときに便利です。</li>
+<li>直前に開いたファイルに戻りたい場合によく使います。</li>
+<li>個人的には、前後のバッファに移動したりバッファから履歴を削除するために以下のようなマッピングを設定しています。</li>
+</ul>
+<pre><code>nnoremap  :bnext
+nnoremap  :bprevious
+nnoremap d :bdelete
+</code></pre>
+<ul>
+<li>これでTabやShift+Tabで前後のバッファに移動できます。</li>
+</ul>
+<h2>タブ</h2>
+<ul>
+<li>vimにもブラウザのようなタブがあります。同時に多くのファイルを開きたいときによく使います。</li>
+<li>デスクトップPCであまり画面が大きくない場合、分割して複数のファイルを開くよりタブの方が出番が多いような気がします。</li>
+<li>個人的には、前後のタブに移動したり新しいタブを開くために以下のようなマッピングを設定しています。</li>
+</ul>
+<pre><code>nnoremap t :tabnew
+nnoremap n :tabnext
+nnoremap p :tabprev
+</code></pre>
+<h2>コマンド定義</h2>
+<ul>
+<li>文字コードを変換したりインデント量を変更する操作はけっこうやるので、自分でコマンドを定義して一発で操作できるようにするとラクですね。</li>
+</ul>
+<pre><code>command! Indent2 :setlocal tabstop=2 shiftwidth=2
+command! Indent4 :setlocal tabstop=4 shiftwidth=4
+command! ToSjis :e ++enc=sjis
+</code></pre>
+<ul>
+<li>これで普通に<code>:Intent2</code>と打てばインデント量が2になります。</li>
+<li>基本は<code>command!  </code>です。コマンド名は大文字から始めなくちゃいけないようです。あとはいろいろオプションがあるので、詳しくは<code>:help command-nargs</code>を見てください。</li>
+</ul>
+<h2>abbreviate</h2>
+<ul>
+<li>abbreviateは長くてめんどくさい表記に略を設定できる機能です。</li>
+</ul>
+<pre><code>abbreviate #i #include
+</code></pre>
+<ul>
+<li>例えば上のように設定すると、&quot;#i[space]&quot;と入力すると勝手に&quot;#import[space]&quot;と変換してくれます。あとはコメントブロックを入力するのによく使われるみたいです。</li>
+</ul>
+<pre><code>abbreviate #b / ****************************
+</code></pre>
+<ul>
+<li>abbreviateは応用としてtypoを修正するのにも便利です。&quot;abbreviate&quot;っていう単語がもうtypoしそうですね。あと、個人的に&quot;receive&quot;を&quot;recieve&quot;と書いてしまうことが多いので以下のように設定します。</li>
+</ul>
+<pre><code>&quot; abbreviate  
+abbreviate abbriviate abbreviate
+abbreviate recieve receive
+</code></pre>
+<ul>
+<li>abbreviateの設定をそのまま.vimrcに書くと、ハードコーディング感があって個人的に気持ち悪いので、.vim/abbreviate.vimという別ファイルに分けて書いてます。</li>
+</ul>
+<pre><code>&quot; .vim/abbreviate.vim
+abbreviate abbriviate abbreviate
+abbreviate recieve receive
+
+&quot; .vimrc
+source ~/.vim/abbreviate.vim
+</code></pre>
+<h2>filetype毎の設定ファイル</h2>
+<ul>
+<li>言語によってインデント量を変えたいってケースはほとんどのvimmerにあると思うんですが、そういうときに僕はfiletype毎の設定ファイルを用意しています。</li>
+<li>インデント量だけなら<code>autocmd</code>を使うのもアリだと思うのですが、上のabbreviateで設定したコメントブロックのように言語によって細かく設定を変えたいケースが地味にあるので、設定ファイルを用意する方法を採っています。</li>
+</ul>
+<pre><code>.vim
+|- ftdetect
+    |- filetype.vim
+|- ftplugin
+    |- javascript.vim
+    |- make.vim
+    |- ruby.vim
+.vimrc
+</code></pre>
+<ul>
+<li>上のようなディレクトリ構造にしておくと、各filetypeごとに設定ファイルが読み込まれるようになります。詳しくは<code>:help filetype-plugin</code>らへんを見てください。</li>
+<li>例えばMakefileを書く場合、インデントはspaceではなくtabしか使えないので、expandtabを無効にしたいところです。そこで、以下のようなファイルを用意します。</li>
+</ul>
+<pre><code>&quot; .vim/ftplugin/make.vim
+setlocal noexpandtab
+setlocal tabstop=8
+setlocal shiftwidth=8
+</code></pre>
+<h2>filetypeの指定</h2>
+<ul>
+<li>Gemfileなど拡張子では判別できないファイルのfiletypeを指定したい場合、ftdetectが便利です。</li>
+</ul>
+<pre><code>.vim
+|- ftdetect
+    |- filetype.vim
+.vimrc
+</code></pre>
+<pre><code>&quot; .vim/ftdetect/filetype.vim
+
+autocmd BufRead,BufNewFile Gemfile setfiletype ruby
+autocmd BufRead,BufNewFile Guardfile setfiletype ruby
+autocmd BufRead,BufNewFile *.rabl setfiletype ruby
+autocmd BufRead,BufNewFile *.jbuilder setfiletype ruby
+autocmd BufRead,BufNewFile *.ru setfiletype ruby
+</code></pre>
+<ul>
+<li>上のように設定ファイルを用意すると、指定したファイルを自動的にrubyをfiletypeとして開いてくれます。</li>
+</ul>
+<hr />
+<p>以上の設定はすべて僕の<a href="https://github.com/naoty/dotfiles">dotfiles</a>に書いてあるので参考にしてみてください。</p>
+<p>読み返してみると、その筋の方に怒られそうな気がしてきた…(´･ω･`)</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

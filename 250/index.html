@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>`rails s`読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="`rails s`読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/250/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">`rails s`読んだ</h1>
+          <p class="metadata">
+            <time datetime="2015-01-10T21:55:00.000+0000">2015-01-10 21:55</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><code>rails s</code>でRailsサーバーが起動するまでに何が起きているのかを紐解くことでRailsとは何なのかを理解していきたい。今回読んでいくソースコードのコミットは<code>2d9b9fb5b5f6015e66d3ad5cb96bc1ba117fd626</code>だ。</p>
+<h1>TL;DR</h1>
+<ul>
+<li><code>bin/rails s</code>がユーザーによって実行される。
+<ul>
+<li>Gemfileで管理されるrubygemを<code>require</code>する。</li>
+<li><code>Rails::CommandsTasks#server</code>を実行する。
+<ul>
+<li>config/application.rbを<code>require</code>する。
+<ul>
+<li>Railsを構成する各rubygemのrailtieを<code>require</code>する。
+<ul>
+<li>各rubygemのinitializerが登録される。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>config.ruが実行される。
+<ul>
+<li>登録されたinitializerが実行される。</li>
+<li>RailsアプリケーションがRackアプリケーションとして起動する。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1>コマンドの実行</h1>
+<p>まずbin/railsを見る。bin/railsは<code>rails new</code>を実行したときに生成されるのだが、このひな形はrailties/lib/rails/generators/rails/app/templates/bin/railsにある。</p>
+<pre><code># bin/rails
+
+#!/usr/bin/env ruby
+APP_PATH = File.expand_path('../../config/application', __FILE__ )
+require_relative '../config/boot'
+require 'rails/commands'
+</code></pre>
+<p>config/boot.rbとrails/commands.rbを見る。</p>
+<pre><code># config/boot.rb
+
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__ )
+
+require 'bundler/setup' # Set up gems listed in the Gemfile.
+</code></pre>
+<ul>
+<li>config/boot.rbはGemfileにあるgemをrequireするようだ。</li>
+</ul>
+<pre><code># railties/lib/rails/commands.rb
+
+ARGV &lt;&lt; '--help' if ARGV.empty?
+
+aliases = {
+  &quot;g&quot; =&gt; &quot;generate&quot;,
+  &quot;d&quot; =&gt; &quot;destroy&quot;,
+  &quot;c&quot; =&gt; &quot;console&quot;,
+  &quot;s&quot; =&gt; &quot;server&quot;,
+  &quot;db&quot; =&gt; &quot;dbconsole&quot;,
+  &quot;r&quot; =&gt; &quot;runner&quot;
+}
+
+command = ARGV.shift
+command = aliases[command] || command
+
+require 'rails/commands/commands_tasks'
+
+Rails::CommandsTasks.new(ARGV).run_command!(command)
+</code></pre>
+<ul>
+<li><code>rails s</code>と実行すると<code>aliases</code>の中から<code>&quot;server&quot;</code>という文字列を取得して<code>rails server</code>を実行することになる。</li>
+</ul>
+<p>rails/commands/commands_tasksを見る。</p>
+<pre><code># railsties/lib/rails/commands/commands_tasks.rb
+
+module Rails
+  class CommandsTasks
+    # ...
+
+    def initialize(argv)
+      @argv = argv
+    end
+
+    def run_command!(command)
+      command = parse_command(command)
+      if COMMAND_WHITELIST.include?(command)
+        send(command)
+      else
+        write_error_message(command)
+      end
+    end
+
+    # ...
+  end
+end
+</code></pre>
+<ul>
+<li><code>#parse_command</code>は<code>--version</code>や<code>--help</code>をそれぞれ<code>&quot;version&quot;</code>と<code>&quot;help&quot;</code>というコマンドに変換するもの。それ以外はそのまま返す。</li>
+<li><code>COMMAND_WHITELIST</code>に含まれていれば実行、そうでなければエラーを出力する。</li>
+<li>今回は<code>&quot;server&quot;</code>が<code>command</code>に入るので<code>send(&quot;server&quot;)</code>が実行され、<code>#server</code>が実行されることになる。</li>
+</ul>
+<pre><code># railsties/lib/rails/commands/commands_tasks.rb
+
+module Rails
+  class CommandsTasks
+    # ...
+
+    def server
+      set_application_directory!
+      require_command!(&quot;server&quot;)
+
+      Rails::Server.new.tap do |server|
+        require APP_PATH
+        Dir.chdir(Rails.application.root)
+        server.start
+      end
+    end
+
+    # ...
+  end
+end
+</code></pre>
+<ul>
+<li><code>#set_application_directory!</code>はconfig.ruがないディレクトリからでも<code>rails s</code>を実行できるようにするためのものらしい。</li>
+<li><code>APP_PATH</code>bin/railsの中で代入されたconfig/application.rbなので、<code>require &quot;config/application&quot;</code>を<code>server.start</code>の前に実行している。</li>
+</ul>
+<h1>設定の読み込み</h1>
+<pre><code># config/application.rb
+
+require File.expand_path('../boot', __FILE__ )
+
+require 'rails/all'
+
+Bundler.require(*Rails.groups)
+
+module SampleApp
+  class Application &lt; Rails::Application
+    config.active_record.raise_in_transactional_callbacks = true
+  end
+end
+</code></pre>
+<ul>
+<li>前述の通り、config/boot.rbは<code>require &quot;bundler/setup&quot;</code>を実行しておりGemfile.lockに記載されたバージョンのrubygemを<code>require</code>している。</li>
+</ul>
+<p>rails/all.rbを見る。</p>
+<pre><code># railties/lib/rails/all.rb
+
+require &quot;rails&quot;
+
+%w(
+  active_record
+  action_controller
+  action_view
+  action_mailer
+  active_job
+  rails/test_unit
+  sprockets
+).each do |framework|
+  begin
+    require &quot;#{framework}/railtie&quot;
+  rescue LoadError
+  end
+end
+</code></pre>
+<ul>
+<li>Railsを構成する各rubygemのrailtieを<code>require</code>している。</li>
+</ul>
+<p>rails.rbを見る。</p>
+<pre><code># railsties/lib/rails.rb
+
+module Rails
+  # ...
+
+  class &lt;&lt; self
+    # ...
+  end
+end
+</code></pre>
+<ul>
+<li>ここには<code>Rails.application</code>, <code>Rails.configuration</code>, <code>Rails.env</code>などの重要なメソッドが定義されているため、登場次第また見ていくことにする。</li>
+</ul>
+<p>rails/all.rbとrails.rbについて見たので、config/applicationに戻る。</p>
+<pre><code># config/application.rb
+
+# ...
+
+Bundler.require(*Rails.groups)
+
+module SampleApp
+  class Application &lt; Rails::Application
+    config.active_record.raise_in_transactional_callbacks = true
+  end
+end
+</code></pre>
+<ul>
+<li><code>Rails.groups</code>は上述したrails.rbで定義されているのでさっそく見る。</li>
+</ul>
+<pre><code># railties/lib/rails.rb
+
+module Rails
+  class &lt;&lt; self
+    # ...
+
+    def env
+      @_env ||= ActiveSupport::StringInquirer.new(ENV[&quot;RAILS_ENV&quot;] || ENV[&quot;RACK_ENV&quot;] || &quot;development&quot;)
+    end
+
+    # ...
+
+    def groups(*groups)
+      hash = groups.extract_options!
+      env = Rails.env
+      groups.unshift(:default, env)
+      groups.concat ENV[&quot;RAILS_GROUPS&quot;].to_s.split(&quot;,&quot;)
+      groups.concat hash.map { |k, v| k if v.map(&amp;:to_s).include?(env) }
+      groups.compact!
+      groups.uniq!
+      groups
+    end
+
+    # ...
+  end
+end
+</code></pre>
+<ul>
+<li><code>Rails.groups</code>は<code>Rails.env</code>の値に合わせてBundlerが読みこむべきgroupを返す。</li>
+<li><code>Rails.env</code>は環境変数<code>&quot;RAILS_ENV&quot;</code>または<code>&quot;RACK_ENV&quot;</code>から実行環境を返す。</li>
+</ul>
+<p>config/application.rbに戻る。</p>
+<pre><code># config/application.rb
+
+# ...
+
+module SampleApp
+  class Application &lt; Rails::Application
+    config.active_record.raise_in_transactional_callbacks = true
+  end
+end
+</code></pre>
+<ul>
+<li><code>SampleApp::Application</code>が<code>Rails::Application</code>を継承するとき、以下のような実装によって<code>Rails::Application.inherited</code>が呼ばれ、<code>Rails.app_class</code>が<code>SampleApp::Application</code>となる。</li>
+</ul>
+<pre><code># railties/lib/rails/application.rb
+
+module Rails
+  class Application &lt; Engine
+    class &lt;&lt; self
+      def inherited(base)
+        super
+        Rails.app_class = base
+        add_lib_to_load_path!(find_root(base.called_from))
+      end
+    end
+  end
+end
+</code></pre>
+<h1>サーバーの起動</h1>
+<p>サーバー起動前にどういった設定を読み込んでいるか見たので、サーバーの起動について詳細に見ていく。</p>
+<pre><code># railsties/lib/rails/commands/commands_tasks.rb
+
+module Rails
+  class CommandsTasks
+    # ...
+
+    def server
+      set_application_directory!
+      require_command!(&quot;server&quot;)
+
+      Rails::Server.new.tap do |server|
+        require APP_PATH
+        Dir.chdir(Rails.application.root)
+        server.start
+      end
+    end
+
+    # ...
+  end
+end
+</code></pre>
+<ul>
+<li><code>#require_command!(&quot;server&quot;)</code>で<code>require &quot;rails/commands/server&quot;</code>をしている。</li>
+</ul>
+<p><code>Rails::Server</code>はrails/commands/server.rbで定義されているので見る。</p>
+<pre><code># railsties/lib/rails/commands/server
+
+module Rails
+  class Server &lt; ::Rack::Server
+    # ...
+
+    def initialize(*)
+      super
+      set_environment
+    end
+
+    # ...
+
+    def start
+      print_boot_information
+      trap(:INT) { exit }
+      create_tmp_directories
+      log_to_stdout if options[:log_stdout]
+
+      super
+    ensure
+      puts 'Exiting' unless @options &amp;&amp; options[:daemonize]
+    end
+
+    # ...
+  end
+end
+</code></pre>
+<ul>
+<li>スーパークラスの<code>::Rack::Server</code>がサーバー起動において主な役割を果たしているようだ。</li>
+<li>これ以降はRackのソースコードを追うことになるが本題から反れるので、結論だけ言うとconfig.ruが実行されることになる。</li>
+</ul>
+<p>config.ruを見る。</p>
+<pre><code># config.ru
+
+require ::File.expand_path('../config/environment', __FILE__ )
+run Rails.application
+</code></pre>
+<ul>
+<li>config/environment.rbを読み込んでいる。</li>
+<li>その後<code>Rails.application</code>をrackアプリケーションとして実行している。</li>
+</ul>
+<p>とりあえずconfig/environment.rbを見る。</p>
+<pre><code># config/environment.rb
+
+require File.expand_path('../application', __FILE__ )
+Rails.application.initialize!
+</code></pre>
+<ul>
+<li>config/application.rbは既に読み込まれているはず。</li>
+</ul>
+<p><code>Rails.application.initialize!</code>について見ていくため、まずは<code>Rails.application</code>の定義を見る。</p>
+<pre><code># railties/lib/rails.rb
+
+module Rails
+  class &lt;&lt; self
+    def application
+      @application ||= (app_class.instance if app_class)
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>app_class</code>は、config/application.rbで<code>Rails::Application</code>のサブクラスが定義されたときにそのサブクラスが代入される。</li>
+<li><code>SampleApp::Application.instance</code>が呼ばれているが、これのメソッドは<code>Rails::Application</code>に定義されていると思われる。</li>
+</ul>
+<p><code>Rails::Application</code>を見る。</p>
+<pre><code># railties/lib/rails/application.rb
+
+module Rails
+  class Application &lt; Engine
+    class &lt;&lt; self
+      def instance
+        super.run_load_hooks!
+      end
+    end
+
+    def run_load_hooks!
+      return self if @ran_load_hooks
+      @ran_load_hooks = true
+      ActiveSupport.run_load_hooks(:before_configuration, self)
+
+      @initial_variable_values.each do |variable_name, value|
+        if INITIAL_VARIABLES.include?(variable_name)
+          instance_variable_set(&quot;@#{variable_name}&quot;, value)
+        end
+      end
+
+      instance_eval(&amp;@block) if @block
+      self
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>SampleApp::Application.instance</code>内で<code>super.run_load_hooks!</code>が呼ばれている。この<code>super</code>はスーパークラスで定義された<code>.instance</code>を呼んでおり、スーパークラスをたどると<code>Rails::Railtie.instance</code>が呼ばれていることがわかる。これはそのまま<code>new</code>を呼んでインスタンスを返すだけだ。なので、<code>super.run_load_hooks!</code>というのは<code>SampleApp::Application#run_load_hooks!</code>を指す。</li>
+<li><code>SampleApp::Application#run_load_hooks!</code>は<code>Rails::Application</code>で上のように定義されており自分自身を返す。中で<code>ActiveSupport.run_load_hooks(:before_configuration, self)</code>を呼んでおり、これによって<code>:before_configuration</code>をフックとして登録しておいた処理が実行される。</li>
+<li>結局、<code>Rails.application</code>は<code>SampleApp::Application</code>インスタンスということになる。</li>
+</ul>
+<h2>initializerの実行</h2>
+<p>config/environment.rbに戻る。</p>
+<pre><code># config/environment.rb
+
+require File.expand_path('../application', __FILE__ )
+Rails.application.initialize!
+</code></pre>
+<ul>
+<li><code>Rails.application.initialize!</code>はつまり<code>SampleApp::Application#initialize!</code>ということ。</li>
+</ul>
+<p><code>Rails::Application</code>を見る。</p>
+<pre><code># railties/lib/rails/application.rb
+
+module Rails
+  class Application
+    def initialize!(group=:default) #:nodoc:
+      raise &quot;Application has been already initialized.&quot; if @initialized
+      run_initializers(group, self)
+      @initialized = true
+      self
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>#run_initializers</code>は<code>Rails::Initializable</code>で以下のように定義されている。</li>
+</ul>
+<pre><code># railties/lib/rails/initializable.rb
+
+module Rails
+  module Initializable
+    def run_initializers(group=:default, *args)
+      return if instance_variable_defined?(:@ran)
+      initializers.tsort_each do |initializer|
+        initializer.run(*args) if initializer.belongs_to?(group)
+      end
+      @ran = true
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>#initializers</code>は<code>Rails::Application</code>で以下のように定義されている。</li>
+</ul>
+<pre><code># railties/lib/rails/application.rb
+
+module Rails
+  class Application
+    def initializers
+      Bootstrap.initializers_for(self) +
+      railties_initializers(super) +
+      Finisher.initializers_for(self)
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>Bootstrap.initializers_for</code>とか<code>Finisher.initializers_for</code>は<code>Rails::Initializable</code>モジュールで以下のように定義されている。</li>
+</ul>
+<pre><code># railties/lib/rails/initializable.rb
+
+def initializers_for(binding)
+  Collection.new(initializers_chain.map { |i| i.bind(binding) })
+end
+</code></pre>
+<ul>
+<li><code>Initializable::Collection</code>を初期化しているようだ。</li>
+</ul>
+<pre><code># railties/lib/rails/initializable.rb
+
+class Collection &lt; Array
+  include TSort
+
+  alias :tsort_each_node :each
+  def tsort_each_child(initializer, &amp;block)
+    select { |i| i.before == initializer.name || i.name == initializer.after }.each(&amp;block)
+  end
+
+  def +(other)
+    Collection.new(to_a + other.to_a)
+  end
+end
+</code></pre>
+<ul>
+<li><code>TSort</code>モジュールはRubyの標準モジュールで、依存関係を解決する順番に並び替える（＝トポロジカルソート）実装を提供する。<code>#tsort_each_node</code>と<code>#tsort_each_child</code>の2つを実装する必要がある。</li>
+<li><code>#tsort_each_node</code>はすべての要素を走査するメソッド、<code>#tsort_each_child</code>は子要素を走査するメソッド。</li>
+<li><code>Collection#tsort_each_child</code>では与えられた<code>initializer</code>の前後の<code>initlaizer</code>に対してブロックを実行する。</li>
+</ul>
+<p><code>Initializable.initializers_for</code>に戻る。</p>
+<pre><code># railties/lib/rails/initializable.rb
+
+def initializers_chain
+  initializers = Collection.new
+  ancestors.reverse_each do |klass|
+    next unless klass.respond_to?(:initializers)
+    initializers = initializers + klass.initializers
+  end
+  initializers
+end
+
+def initializers_for(binding)
+  Collection.new(initializers_chain.map { |i| i.bind(binding) })
+end
+</code></pre>
+<ul>
+<li>続いて<code>.initializers_chain</code>を見る。</li>
+<li><code>.ancestors</code>はスーパークラスや<code>include</code>しているモジュールを直接の親から順に並べて配列で返す。</li>
+<li><code>.ancestors.reverse_each</code>なので、最も遠いクラスまたはモジュールから順に<code>initializers</code>を取得して一つの<code>Collection</code>に連結させている。</li>
+</ul>
+<p><code>initializers_chain</code>の要素はおそらく<code>Initializer</code>インスタンスだと思われるので、<code>Initializer#bind</code>を見る。</p>
+<pre><code># railties/lib/rails/Initializable.rb
+
+class Initializer
+  def bind(context)
+    return self if @context
+    Initializer.new(@name, context, @options, &amp;block)
+  end
+end
+</code></pre>
+<ul>
+<li><code>Initializer#initialize</code>の第2引数は、<code>Initializer#run</code>で<code>instance_exec</code>のレシーバとして利用される。今回の場合、これは<code>Rails::Application</code>インスタンスとなる。</li>
+</ul>
+<p><code>Rails::Application#initializers</code>に戻る。</p>
+<pre><code># railties/lib/rails/application.rb
+
+module Rails
+  class Application
+    def initializers
+      Bootstrap.initializers_for(self) +
+      railties_initializers(super) +
+      Finisher.initializers_for(self)
+    end
+  end
+end
+</code></pre>
+<p><code>#railties_initializers</code>がまだ残っているので見る。</p>
+<pre><code># railties/lib/rails/application.rb
+
+module Rails
+  class Application
+    def ordered_railties
+      @ordered_railties ||= begin
+        order = config.railties_order.map do |railtie|
+          # ...
+        end
+
+        all = (railties - order)
+        all.push(self) unless (all + order).include?(self)
+        order.push(:all) unless order.include?(:all)
+
+        index = order.index(:all)
+        order[index] = all
+        order
+      end
+    end
+
+    def railties_initializers(current)
+      initializers = []
+      ordered_railties.reverse.flatten.each do |r|
+        if r == self
+          initializers += current
+        else
+          initializers += r.initializers
+        end
+      end
+      initializers
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>config.railties_order</code>はデフォルトでは<code>[:all]</code>を返すようになっているが、ここを変更することで実行するRailtieの<code>initializer</code>の順番を変更することもできるようだ。</li>
+<li><code>#ordered_railties</code>が返すのは<code>all = (railties - order)</code>の部分なので、あとで詳しく<code>#railties</code>について見る。</li>
+<li>ある順番でソートされた各Railtieの<code>initializers</code>を結合して返している。</li>
+</ul>
+<p><code>#railties</code>は<code>Rails::Engine</code>から継承されたメソッドなので見る。</p>
+<pre><code># railties/lib/rails/engine.rb
+
+def railties
+  @railties ||= Railties.new
+end
+</code></pre>
+<p><code>Rails::Engine::Railties</code>を見る。</p>
+<pre><code># railties/lib/rails/engine/railties.rb
+
+def initialize
+  @_all ||= ::Rails::Railtie.subclasses.map(&amp;:instance) +
+    ::Rails::Engine.subclasses.map(&amp;:instance)
+end
+</code></pre>
+<ul>
+<li><code>::Rails::Railtie</code>または<code>Rails::Engine</code>のサブクラスをすべて返している（！）</li>
+</ul>
+<p><code>railties_initializers</code>に戻る。</p>
+<pre><code># railties/lib/rails/application.rb
+
+def railties_initializers(current)
+  initializers = []
+  ordered_railties.reverse.flatten.each do |r|
+    if r == self
+      initializers += current
+    else
+      initializers += r.initializers
+    end
+  end
+  initializers
+end
+</code></pre>
+<ul>
+<li><code>ordered_railties</code>は<code>::Rails::Railtie</code>または<code>::Rails::Engine</code>のサブクラスすべてだということがわかった。</li>
+<li>よって、それらの<code>initializers</code>をすべて連結したものを返していることになる。</li>
+</ul>
+<p><code>Rails::Application#initializers</code>について見たので、<code>#run_initializers</code>に戻る。</p>
+<pre><code># railties/lib/rails/initializable.rb
+
+def run_initializers(group=:default, *args)
+  return if instance_variable_defined?(:@ran)
+  initializers.tsort_each do |initializer|
+    initializer.run(*args) if initializer.belongs_to?(group)
+  end
+  @ran = true
+end
+</code></pre>
+<ul>
+<li><code>initializers</code>は<code>Initializable::Collection</code>インスタンスなので、<code>#tsort_each</code>によって依存関係を解決する順番で<code>#each</code>を行う。</li>
+</ul>
+<p><code>Initializer#run</code>を見る。</p>
+<pre><code># railties/lib/rails/initializable.rb
+
+class Initializer
+  def run(*args)
+    @context.instance_exec(*args, &amp;block)
+  end
+end
+</code></pre>
+<ul>
+<li><code>@context</code>は<code>#bind</code>によってセットされる。</li>
+<li><code>block</code>は<code>Initializer</code>が初期化される際に渡されたブロックだ。この<code>block</code>は<code>#bind</code>によってセットされた<code>@context</code>をレシーバとして実行される。</li>
+<li>今回の場合、<code>@context</code>は<code>Rails::Application</code>インスタンスをレシーバとして<code>block</code>が実行されることになる。</li>
+</ul>
+<p>続いて、実行される<code>Initializer</code>がどのように初期化されて登録されているのか見ていく。これは<code>Rails::Initializable::ClassMethods.initializer</code>によって行われる。</p>
+<pre><code># railties/lib/rails/initializable.rb
+
+def initializer(name, opts = {}, &amp;blk)
+  raise ArgumentError, &quot;A block must be passed when defining an initializer&quot; unless blk
+  opts[:after] ||= initializers.last.name unless initializers.empty? || initializers.find { |i| i.name == opts[:before] }
+  initializers &lt;&lt; Initializer.new(name, nil, opts, &amp;blk)
+end
+</code></pre>
+<ul>
+<li><code>opts[:after]</code>は<code>Initializer</code>インスタンス間の依存関係の解決に利用される。<code>initializer</code>で特に指定しなければ既存の<code>initializers</code>の最後の要素が<code>initializer#after</code>になる。</li>
+</ul>
+<h2>Railsアプリケーションの起動</h2>
+<p><code>initializers</code>の実行について一通り眺めたのでこれでconfig/environment.rbを読んだことになる。config.ruに戻る。</p>
+<pre><code># config.ru
+
+require ::File.expand_path('../config/environment', __FILE__ )
+run Rails.application
+</code></pre>
+<ul>
+<li>ようやく<code>run Rails.application</code>でアプリケーションを起動できる。</li>
+<li><code>Rails.application</code>が<code>SampleApp::Application</code>インスタンスであることは上述の通り。</li>
+</ul>
+<h1>参考</h1>
+<ul>
+<li><a href="https://speakerdeck.com/a_matsuda/ruby-on-rails-hacking-guide">Ruby on Rails Hacking Guide // Speaker Deck</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

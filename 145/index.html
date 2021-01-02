@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tmuxのlaunchctlエラー対策</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="tmuxのlaunchctlエラー対策">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/145/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">tmuxのlaunchctlエラー対策</h1>
+          <p class="metadata">
+            <time datetime="2012-09-25T11:51:00.000+0000">2012-09-25 11:51</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Homebrewでインストールしたあと、自動起動させる設定を<code>launchctl</code>でロードしようとすると、tmuxではこんなエラーが出てくる。</p>
+<pre><code>% launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+Bug: launchctl.c:2425 (25957):13: (dbfd = open(g_job_overrides_db_path, O_RDONLY | O_EXLOCK | O_CREAT, S_IRUSR | S_IWUSR)) != -1
+launch_msg(): Socket is not connected
+</code></pre>
+<p>この問題、<code>pbcopy</code>のときと同じ手法で解決できた。</p>
+<pre lang="sh:.zshrc"><code>if [[ &quot;$TMUX&quot; != &quot;&quot; ]]; then
+  alias pbcopy=&quot;ssh 127.0.0.1 pbcopy&quot;
+  alias launchctl=&quot;ssh 127.0.0.1 launchctl&quot;
+fi
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

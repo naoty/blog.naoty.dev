@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS用グラフ描画ライブラリを書き始めた</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="iOS用グラフ描画ライブラリを書き始めた">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/197/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">iOS用グラフ描画ライブラリを書き始めた</h1>
+          <p class="metadata">
+            <time datetime="2013-08-06T23:10:00.000+0000">2013-08-06 23:10</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>卓球ハウスに来てから楽しすぎてコード書いてないことに気づいたので、なんか書こうと思った。最近はセンサーのデータをどうにかiOSに転送したくていろいろ試しているのだけど、送られたデータを表示するときに何かとグラフを描画したくなる。</p>
+<p>iOSでグラフを描画したいとき、まず<a href="http://code.google.com/p/core-plot/">CorePlot</a>を試してみる。だけど、ドキュメントがあんまりないし、見た目がダサい。githubじゃないのもなんかなぁと思ってすぐにやめてしまう。で、CorePlotはやめてwebviewでJSのグラフ描画ライブラリを使うことにする。<a href="http://www.highcharts.com/">highcharts</a>が便利なのでよく使う。でも、やっぱりいちいちHTMLとJSのファイルを用意しなくちゃいけないのがダルいとは思っていた。</p>
+<p>そこでせっかくだしグラフ描画ライブラリをObj-Cで実装してみることにした。</p>
+<p><a href="https://github.com/naoty/NTChartView">naoty/NTChartView</a></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130806/20130806230903.png" alt="f:id:naoty_k:20130806230903p:plain" title="f:id:naoty_k:20130806230903p:plain" /></p>
+<p>まだぜんぜんできてない。かろうじて上のような折れ線グラフを表示できるレベル。負値すらうまく表示できない。もちろんテストもない。地味に頭を使う実装が多い気がする。</p>
+<p>将来的には折れ線グラフだけじゃなくて円グラフと棒グラフも実装したい。けっこう時間かかりそうなので、ヒマなときにゆっくり実装したい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

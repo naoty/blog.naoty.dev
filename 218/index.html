@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftでRubyのInteger#timesを実装してみた</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="SwiftでRubyのInteger#timesを実装してみた">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/218/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">SwiftでRubyのInteger#timesを実装してみた</h1>
+          <p class="metadata">
+            <time datetime="2014-06-13T00:09:00.000+0000">2014-06-13 00:09</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Swiftでは数値リテラルがオブジェクトとして扱えるので、Rubyっぽく数値にいろんなメソッドを定義することができる。そこで、簡単な<code>#times</code>をSwiftで実装してみた。</p>
+<pre lang="swift"><code>extension Int {
+	func times(repeat: (Int) -&gt; ()) {
+		for var index = 0; index &lt; self; index++ {
+			repeat(index)
+		}
+	}
+}
+
+5.times { n in println(&quot;naoty \(n)&quot;) }
+//=&gt; naoty 0
+//=&gt; naoty 1
+//=&gt; naoty 2
+//=&gt; naoty 3
+//=&gt; naoty 4
+</code></pre>
+<p>きっと誰かがActiveSupportのような<code>1.minutes</code>みたいなExtensionを書くのでしょう（予言）。</p>
+<hr />
+<p>せっかくなので、Swiftのクロージャの文法について軽く補足してみる。</p>
+<p>まず、<code>#times</code>メソッドは<code>(Int) -&gt; ()</code>型の関数を引数にとる。このとき、以下のように書くことができる。</p>
+<pre lang="swift"><code>5.times({ (n: Int) -&gt; () in
+	println(&quot;naoty \(n)&quot;)
+	})
+</code></pre>
+<p><code>in</code>以下が十分に短い場合は一行に続けることもできる。</p>
+<pre lang="swift"><code>5.times({ (n: Int) -&gt; () in println(&quot;naoty \(n)&quot;) })
+</code></pre>
+<p>ところで、<code>#times</code>の定義で引数の関数の型は<code>(Int) -&gt; ()</code>であると明示的に宣言しているので、型推論を利用できる。実際に引数に関数を渡すとき、その関数の型をわざわざ宣言する必要がない。そのため、以下のように書き直せる。</p>
+<pre lang="swift"><code>5.times({ n in println(&quot;naoty \(n)&quot;) })
+</code></pre>
+<p>もし、あるクロージャを関数の最後の引数として渡す場合、クロージャを<code>()</code>の外に追い出すことができる。なので、さらに以下のように書き直せる。</p>
+<pre lang="swift"><code>5.times() { n in println(&quot;naoty \(n)&quot;) }
+</code></pre>
+<hr />
+<h3>追記</h3>
+<p>さらに、クロージャが関数の唯一の引数である場合は<code>()</code>を省略できるので、以下のように書き直せる。</p>
+<pre lang="swift"><code>5.times { n in println(&quot;naoty \(n)&quot;) }
+</code></pre>
+<p>ここまで来るとほとんどRubyと同じように書ける。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

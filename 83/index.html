@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>centosにgitosisを入れてpushするまでのメモ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="centosにgitosisを入れてpushするまでのメモ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/83/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">centosにgitosisを入れてpushするまでのメモ</h1>
+          <p class="metadata">
+            <time datetime="2011-10-15T01:41:00.000+0000">2011-10-15 01:41</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>１．gitosisをyumでインストール</p>
+<pre><code>remote$ sudo yum install gitosis
+</code></pre>
+<ul>
+<li>標準リポジトリにはないと思うので、僕の場合はepelリポジトリを追加しました。</li>
+<li>いっしょにgitとかもインストールされる</li>
+</ul>
+<p>２．gitというユーザーを追加</p>
+<pre><code>remote$ sudo useradd git
+</code></pre>
+<p>３．gitosisの初期化</p>
+<pre><code>remote$ sudo -H -u git gitosis-init &lt; id_dsa.pub
+</code></pre>
+<p>４．ローカルでgit clone</p>
+<pre><code>local$ git clone ssh://git@ホスト名:ポート番号/gitosis-admin.git
+</code></pre>
+<p>５．pushしたいリポジトリを設定</p>
+<pre><code>local$ cd gitosis-admin.git
+local$ vi gitosis.conf
+</code></pre>
+<pre><code>[gitosis]
+
+[group gitosis-admin]
+writable = gitosis-admin
+members = naoty
+
+[group hoge]
+writable = hoge
+members = naoty
+</code></pre>
+<pre><code>local$ git add .
+local$ git commit -m 'hogeリポジトリを追加'
+local$ git push
+</code></pre>
+<p>６．プロジェクトの変更をpushする場合</p>
+<pre><code>local$ cd
+local$ cd workspace/hoge
+local$ git remote add origin ssh://git@ホスト名:ポート番号/hoge.git
+local$ git push origin master
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

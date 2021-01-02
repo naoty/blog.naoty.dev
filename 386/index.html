@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ダークモードのサポート</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ダークモードのサポート">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/386/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ダークモードのサポート</h1>
+          <p class="metadata">
+            <time datetime="2019-10-13T16:00:00.000+0000">2019-10-13 16:00</time>
+            <a href="/meta/">#meta</a>
+            <a href="/css/">#css</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>このホームページがOSのダークモードをサポートした。macOSとAndroidで動作確認した。</p>
+<p><img src="dark-theme.gif" alt="ダークテーマ" /></p>
+<p>ダークモードをサポートするには、以下のようにメディアクエリを使ってダークモードで適用するスタイルを指定する。</p>
+<pre lang="css"><code>@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #2e3440;
+  }
+}
+</code></pre>
+<p>ダークモード用のカラースキーマには、VSCodeでも使っている<a href="https://www.nordtheme.com">Nord</a>を参考にしている。</p>
+<h1>参考</h1>
+<ul>
+<li><a href="https://developer.mozilla.org/ja/docs/Web/CSS/@media/prefers-color-scheme">https://developer.mozilla.org/ja/docs/Web/CSS/@media/prefers-color-scheme</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

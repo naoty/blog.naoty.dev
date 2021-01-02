@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tmuxinatorで一瞬で開発環境を起動する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="tmuxinatorで一瞬で開発環境を起動する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/136/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">tmuxinatorで一瞬で開発環境を起動する</h1>
+          <p class="metadata">
+            <time datetime="2012-07-21T16:57:00.000+0000">2012-07-21 16:57</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>前回は<a href="http://qiita.com/users/d6rkaiz">dr6kaiz</a>さんの<a href="http://qiita.com/items/0f0b15b800fcd8a742f9">pow + rbenvで手軽なRack環境構築</a>でした。</p>
+<p>今回は<a href="https://github.com/aziz/tmuxinator/">tmuxinator</a>を使って、コマンド一発で開発環境を起動する話をします。</p>
+<h2>tmuxinator とは</h2>
+<p>tmuxinatorとは、tmuxで起動するセッションを予め定義しておき、コマンド一発でそのセッションを起動できるようにしたものです。ちなみに、screenで同じことをする<a href="https://github.com/jondruse/screeninator">screeninator</a>というツールもあります。こちらが先に開発されたようです。</p>
+<h2>インストール</h2>
+<pre lang="sh"><code>$ cd
+$ gem install tmuxinator
+$ echo &quot;[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] &amp;&amp; source $HOME/.tmuxinator/scripts/tmuxinator&quot; &gt;&gt; .zshrc
+$ source .zshrc
+$ echo $EDITOR
+/usr/bin/vi
+$ echo $SHELL
+/bin/zsh
+</code></pre>
+<ul>
+<li>tmuxinatorはgemで提供されているので、<code>gem install</code>します。</li>
+<li>その後、補完スクリプトを<code>.zshrc</code>や<code>.bashrc</code>に追加して読み込みます。</li>
+<li>tmuxinatorは環境変数<code>$EDITOR</code>と<code>$SHELL</code>を使うそうなので、確認しておきます。</li>
+</ul>
+<h2>設定</h2>
+<pre lang="sh"><code>$ mux new cui-aboutme
+</code></pre>
+<ul>
+<li><code>tmuxinator</code>とそのaliasの<code>mux</code>というコマンドが用意されています。</li>
+<li><code>mux new [project name]</code>でプロジェクトの設定ファイルを作成します。</li>
+<li>このコマンドを実行すると、<code>$EDITOR</code>で設定されたエディタで以下のような設定ファイルが開きます。</li>
+</ul>
+<pre lang="yml:~/.tmuxinator/cui-about.yml"><code># ~/.tmuxinator/sample.yml
+# you can make as many tabs as you wish...
+
+project_name: Tmuxinator
+project_root: ~/code/rails_project
+socket_name: foo # Not needed.  Remove to use default socket
+rvm: 1.9.2@rails_project
+pre: sudo /etc/rc.d/mysqld start
+tabs:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
+  - shell: git pull
+  - database: rails db
+  - server: rails s
+  - logs: tail -f logs/development.log
+  - console: rails c
+  - capistrano:
+  - server: ssh me@myhost
+</code></pre>
+<ul>
+<li><code>rvm</code>で利用するrubyのバージョンを指定したり、<code>pre</code>でセッション起動時に実行するコマンドを指定できたりします。</li>
+<li><code>tabs</code>でセッション内で起動するウィンドウを定義します。この初期設定だと、8つウィンドウを起動します。</li>
+<li><code>tabs</code>内では、<code>editor</code>や<code>shell</code>といったキーがウィンドウ名を表し、値がそのウィンドウが起動したときに実行されるコマンドとなります。この初期設定だと、セッション起動と同時に8つのウィンドウが起動して、自動的に<code>git pull</code>したり<code>rails s</code>したり<code>ssh</code>したりします。</li>
+<li><code>layout</code>と<code>panes</code>で、そのウィンドウ内のペインとその配置を定義します。<code>editor</code>を例にとると、ウィンドウ内に<code>vim</code>のペインと何もしないペインと<code>top</code>のペインが<code>main-vertical</code>で表示されます。</li>
+</ul>
+<h2>起動</h2>
+<pre lang="sh"><code>$ mux cui-aboutme
+</code></pre>
+<ul>
+<li>このコマンド一発で、上記で設定したセッションを起動します。</li>
+<li>起動と同時に設定されたコマンドも自動で実行されます。</li>
+</ul>
+<h2>カスタマイズ例</h2>
+<pre lang="yml:~/.tmuxinator/cui-aboutme.yml"><code># ~/.tmuxinator/sample.yml
+# you can make as many tabs as you wish...
+
+project_name: cui-aboutme
+project_root: ~/workspace/rails/cui-aboutme
+tabs:
+  - main:
+      layout: tiled
+      panes:
+        - git fetch --prune &amp;&amp; git status --short --branch
+        - curl http://cui-about.me/users
+        - tig
+  - vim: vi
+  - app:
+      layout: even-horizontal
+      panes:
+        - rails c
+        - powder log
+  - test: guard
+</code></pre>
+<ul>
+<li>僕の場合は「tigを中心としたgitの作業をするウィンドウ」「エディタのウィンドウ」「コンソールやログをみるウィンドウ」「自動テストを行うウィンドウ」の4つを一度に起動できるようにしてます。</li>
+<li>あと、起動時に<code>git fetch</code>でリポジトリの更新を確認したり、<code>guard</code>で自動テストを開始したりしてます。</li>
+</ul>
+<h2>tips</h2>
+<ul>
+<li>一度に同時に起動するウィンドウを一度にすべて閉じるための設定</li>
+</ul>
+<pre lang=".tmux.conf"><code>bind-keys C-b kill-session
+</code></pre>
+<ul>
+<li>複数のプロジェクトに共通する設定は<code>~/.tmuxinator/default.yml</code>で設定できます。</li>
+</ul>
+<h2>おまけ</h2>
+<ul>
+<li>テキストベースの自己紹介サービス<a href="http://cui-about.me">cui-about.me</a>やってます。よかったらどうぞ。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

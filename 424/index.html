@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clapカスタマイズメモ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="clapカスタマイズメモ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/424/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">clapカスタマイズメモ</h1>
+          <p class="metadata">
+            <time datetime="2020-07-05T22:49:00.000+0000">2020-07-05 22:49</time>
+            <a href="/rust/">#rust</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>rustでCLIツールを作るときにフレームワークを調べるとclapしか出てこない。これがデファクトスタンダードなのだろうということで使ってみるが、微妙にカスタマイズしたかったのでメモ。</p>
+<pre lang="rust"><code>let matches = App::new(&quot;mycli&quot;)
+    .version(crate_version!())
+    .author(&quot;Naoto Kaneko &quot;)
+    .about(DESCRIPTION)
+    .template(USAGE_TEMPLATE.trim())
+    .version_short(&quot;v&quot;)
+    .get_matches();
+</code></pre>
+<p>ポイントは3つ。</p>
+<ul>
+<li><code>crate_version!()</code>マクロを使うと、Cargo.tomlで定義しているパッケージのバージョンを取得してくれるのでCLIが返すバージョンに設定できて便利。</li>
+<li><code>template()</code>を使うと、デフォルトのヘルプメッセージが気に食わない、でもサブコマンドや各フラグの定義時に渡したヘルプメッセージも使いたいみたいなときにテンプレートを指定することでいい感じにカスタマイズができて便利。</li>
+<li><code>version_short()</code>を使うと、バージョンの短縮形のフラグがデフォルトで<code>-V</code>だったのが<code>-v</code>など自由に変更できる。これがclapを使って最初に感じた違和感だったのでカスタマイズできてよかった。</li>
+</ul>
+<h1>補足</h1>
+<p>僕はいつもCLIを作るときはdocopt形式のヘルプメッセージを使っているので、こんな感じのテンプレートを指定してclapでもdocopt風のヘルプメッセージを表示している。</p>
+<pre lang="rust"><code>const USAGE_TEMPLATE: &amp;str = r#&quot;
+Usage:
+    {usage}
+
+Flags:
+{flags}
+&quot;#;
+</code></pre>
+<p><code>{usage}</code>, <code>{flags}</code>の部分がそれぞれclapによって置換される。</p>
+<h1>追記（2020-08-10）</h1>
+<p>ドキュメントを読むと、<code>crate_version!</code>以外にもCargo.tomlの情報を取得するマクロがあった。</p>
+<pre lang="rust"><code>let matches = App::new(crate_name!())
+    .version(crate_version!())
+    .author(crate_authors!())
+    .about(crate_description!())
+    .template(USAGE_TEMPLATE.trim())
+    .version_short(&quot;v&quot;)
+    .get_matches();
+    .get_matches();
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

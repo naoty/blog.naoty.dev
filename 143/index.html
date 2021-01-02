@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regexp#+を定義して「または」を簡単に作る</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Regexp#+を定義して「または」を簡単に作る">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/143/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Regexp#+を定義して「または」を簡単に作る</h1>
+          <p class="metadata">
+            <time datetime="2012-09-06T18:22:00.000+0000">2012-09-06 18:22</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>「AまたはB」のような正規表現を簡単に作ろうと思って以下のようにしてみたら、うまくいかなかった。</p>
+<pre lang="ruby"><code>001 &gt; /qiita/ + /kobito/
+NoMethodError: undefined method `+' for /qiita/:Regexp
+</code></pre>
+<p>意外にも<code>Regexp#+</code>が定義されてなかったので、以下のようにクラスを拡張してみた。</p>
+<pre lang="ruby"><code>class Regexp
+  def +(other)
+    Regexp.new(self.source + '|' + other.source)
+  end
+end
+</code></pre>
+<p><code>Regexp#source</code>はその正規表現の文字列を返すメソッド。で、期待通りにうまくいった。</p>
+<pre lang="ruby"><code>002 &gt; /qiita/ + /kobito/
+=&gt; /qiita|kobito/
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

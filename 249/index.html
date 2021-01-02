@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faraday middlewareの作り方</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Faraday middlewareの作り方">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/249/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Faraday middlewareの作り方</h1>
+          <p class="metadata">
+            <time datetime="2015-01-03T23:02:00.000+0000">2015-01-03 23:02</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Faraday middlewareの要件としては、Rack middleware同様に</p>
+<ul>
+<li><code>#initialize(app)</code>で他のmiddlewareを引数にとる</li>
+<li><code>#call(env)</code>でリクエストの前処理を実装する。</li>
+</ul>
+<p>の2点だけを満たせばいい。ただし、レスポンスを処理する場合は<code>#on_complete</code>内のブロックで実装する必要がある。</p>
+<pre lang="rb"><code>def call(request_env)
+  @app.call(request_env).on_complete do |response_env|
+    # パースなどレスポンスの処理
+  end
+end
+</code></pre>
+<p>ここまではREADME.mdにも書いてあるのだけど、レスポンスの処理を効率的に実装するための方法が用意されている。それは<code>Faraday::Response::Middleware</code>だ。使い方は以下の通り。</p>
+<pre lang="rb"><code>require &quot;faraday&quot;
+
+module Faraday
+  class Response
+    class JSON &lt; Middleware
+      def parse(body)
+        body.to_json
+      end
+    end
+
+    register_middleware json: JSON
+  end
+end
+</code></pre>
+<ul>
+<li><code>#initialize(app)</code>で<code>@app = app</code>のようなことをしているため、特に書く必要はない。特別になにか必要であればoverrideする。</li>
+<li><code>#parse(body)</code>でレスポンスをパースの処理を書くと、上述した<code>#on_complete</code>のブロックの中でこのメソッドが呼ばれ、<code>env.body</code>を<code>#parse(body)</code>の結果によって更新する。</li>
+<li>パース以外にレスポンス時の処理を記述したい場合、<code>#on_complete</code>を実装する。このメソッドは上述の<code>#on_complete</code>のブロック内で呼ばれるのだけど、これを実装すると<code>#parse</code>が呼ばれないので注意。</li>
+<li><code>Faraday::Response.register_middleware</code>でキーとミドルウェアを登録できる。このキーを使って以下のように<code>:json</code>とミドルウェアを指定できる。</li>
+</ul>
+<pre lang="rb"><code>connection = Faraday.new do |connection|
+  connection.response :json
+  connection.adapter Faraday.default_adapter
+end
+</code></pre>
+<hr />
+<p>簡単なので<code>Faraday::Response::Middleware</code>のソースコードを見てみる。</p>
+<pre lang="rb"><code>module Faraday
+  class Response
+    class Middleware &lt; Faraday::Middleware
+      def call(env)
+        @app.call(env).on_complete do |environment|
+          on_complete(enrivonment)
+        end
+      end
+
+      def on_complete(env)
+        env.body = parse(env.body) if respond_to?(:parse) &amp;&amp; env.parse_body?
+      end
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>#on_complete</code>ブロック内で<code>Middleware#on_complete</code>が呼ばれていることがわかる。</li>
+<li>さらにその中で<code>#parse</code>が実装されていれば呼ぶようになっている。</li>
+</ul>
+<pre lang="rb"><code>module Faraday
+  class Middleware
+    extend MiddlwareRegistry
+
+    # ...
+
+    def initialize(app = nil)
+      @app = app
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>#initialize</code>であとに続くmiddlewareを取り込んでいる。</li>
+<li><code>Faraday::MiddlewareRegistry</code>というモジュールで<code>.register_middleware</code>が定義されており、このメソッドでFaraday middlewareを指定する際のキーを登録できる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

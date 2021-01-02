@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQueryで現在のページのURLを取得する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="jQueryで現在のページのURLを取得する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/25/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">jQueryで現在のページのURLを取得する</h1>
+          <p class="metadata">
+            <time datetime="2011-01-18T14:58:00.000+0000">2011-01-18 14:58</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>$(location).attr('href');
+$(location).attr('href', 'http://www.google.co.jp'); // googleに移動
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

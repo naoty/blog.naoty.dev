@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ミニマムなwebpack loader</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ミニマムなwebpack loader">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/383/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ミニマムなwebpack loader</h1>
+          <p class="metadata">
+            <time datetime="2019-09-18T13:04:00.000+0900">2019-09-18 13:04</time>
+            <a href="/javascript/">#javascript</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>webpack loaderを自作したいと思っていろいろ試してみた。以下では、ミニマムにwebpack loaderを自作する手順をまとめてみた。</p>
+<h1>1. webpackのセットアップ</h1>
+<p>webpackとCLIをインストールする。</p>
+<pre><code>$ npm install -D webpack webpack-cli
+</code></pre>
+<p>エントリーポイントと依存するアセットを<code>dist/bundle.js</code>にまとめるように設定する。</p>
+<pre lang="js"><code>// webpack.config.js
+module.exports = {
+  entry: &quot;./src/index.js&quot;,
+  output: {
+    path: path.resolve(__dirname, &quot;dist&quot;),
+    filename: &quot;bundle.js&quot;
+  },
+  mode: &quot;development&quot;
+};
+</code></pre>
+<p>適当なエントリーポイントを用意する。あとでここからMarkdownを<code>import</code>していく。</p>
+<pre lang="js"><code>// src/index.js
+console.log(&quot;Here is entrypoint.&quot;);
+</code></pre>
+<p>webpackが実行できるか確認する。</p>
+<pre><code>$ npx webpack
+$ node dist/bundle.js
+Here is entrypoint.
+</code></pre>
+<h1>2. 何もしないloader</h1>
+<p><code>import</code>するMarkdownテキストを<code>src/sample.md</code>に用意する。</p>
+<pre lang="markdown"><code># header
+Here is sample markdown text.
+</code></pre>
+<p>エントリーポイントでこのMarkdownテキストを<code>import</code>する。</p>
+<pre lang="diff"><code>// src/index.js
+-console.log(&quot;Here is entrypoint.&quot;);
++import contents from &quot;./sample.md&quot;;
++console.log(contents);
+</code></pre>
+<p>とりあえず何もしないloaderを作る。</p>
+<pre lang="js"><code>// lib/loader.js
+module.exports = function(source) {
+  return &quot;&quot;;
+};
+</code></pre>
+<p>このままだと<code>*.md</code>をwebpackはビルドできないので、さっき作ったloaderで処理するように設定を追加する。</p>
+<pre lang="diff"><code>// webpack.config.js
+ module.exports = {
+   entry: &quot;./src/index.js&quot;,
+   output: {
+     path: path.resolve(__dirname, &quot;dist&quot;),
+     filename: &quot;bundle.js&quot;
+   },
+-  mode: &quot;development&quot;
++  mode: &quot;development&quot;,
++  module: {
++    rules: [
++      {
++        test: /\.md$/,
++        use: [
++          {
++            loader: path.resolve(__dirname, &quot;lib/loader.js&quot;)
++          }
++        ]
++      }
++    ]
++  }
+ };
+</code></pre>
+<p>何がおきるか確認する。</p>
+<pre><code>$ npx webpack
+$ node dist/bundle.js
+{}
+</code></pre>
+<p><code>import contents from &quot;./sample.md&quot;</code>の結果、<code>contents</code>は<code>{}</code>になるということがわかった。</p>
+<h1>3. 何かを返すloader</h1>
+<p>loaderが返す値はどのように使われるのか確かめるため、適当な文字列を返すようにしてみる。</p>
+<pre lang="diff"><code>// lib/loader.js
+ module.exports = function(source) {
+-  return &quot;&quot;;
++  return &quot;foo&quot;;
+ };
+</code></pre>
+<p><code>webpack</code>を実行して生成されたbundle.jsを確認してみると、以下のようになっていた。</p>
+<pre lang="js"><code>// dist/bundle.js
+/***/ (function(module, exports) {
+
+eval(&quot;foo\n\n//# sourceURL=webpack:///./src/sample.md?&quot;);
+
+/***/ })
+</code></pre>
+<p>loaderが返した文字列を<code>eval</code>でJavaScriptのコードとして実行しているようだ。また、<code>eval</code>内では関数に渡された<code>module</code>と<code>exports</code>が使えるようになっている。</p>
+<p>ということは、この<code>module</code>を使うことでloaderから何かを<code>export</code>できそう。</p>
+<pre lang="diff"><code>// lib/loader.js
+ module.exports = function(source) {
+-  return &quot;&quot;;
++  return `module.exports = ${JSON.stringify({ source })}`;
+ }
+</code></pre>
+<p>webpackを実行してbundle.jsを確認してみる。</p>
+<pre lang="js"><code>// dist/bundle.js
+eval(&quot;module.exports = {\&quot;source\&quot;:\&quot;# header\\nHere is sample markdown text.\\n\&quot;}\n\n//# sourceURL=webpack:///./src/sample.md?&quot;);
+</code></pre>
+<p><code>src/sample.md</code>の中身を<code>export</code>する文字列が生成できた。最後に<code>import</code>できるかも確認する。</p>
+<pre><code>$ node dist/bundle.js
+{ source: '# header\nHere is sample markdown text.\n' }
+</code></pre>
+<p><code>import contents from &quot;./sample.md&quot;</code>で確かに<code>export</code>したオブジェクトが<code>import</code>できていた。</p>
+<h1>まとめ</h1>
+<p>以下のような関数が、ファイルの中身をオブジェクトとして返す機能をもったミニマムなwebpack loaderと言えそう。</p>
+<pre lang="js"><code>module.exports = function(source) {
+  return `module.exports = ${JSON.stringify({ source })}`;
+};
+</code></pre>
+<p>あとは、Markdownのパースなどの機能をここに実装していけばよさそう。</p>
+<h1>参考</h1>
+<p>他に留意すべき項目はドキュメントにまとまっている。</p>
+<ul>
+<li><a href="https://webpack.js.org/contribute/writing-a-loader/">https://webpack.js.org/contribute/writing-a-loader/</a></li>
+<li><a href="https://github.com/webpack/docs/wiki/how-to-write-a-loader">https://github.com/webpack/docs/wiki/how-to-write-a-loader</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

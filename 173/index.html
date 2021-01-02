@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIViewの位置取得・操作のための便利カテゴリー</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="UIViewの位置取得・操作のための便利カテゴリー">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/173/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">UIViewの位置取得・操作のための便利カテゴリー</h1>
+          <p class="metadata">
+            <time datetime="2013-02-26T13:45:00.000+0000">2013-02-26 13:45</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>UIViewの位置を操作するとき</p>
+<pre lang="objc"><code>CGRect frame = view.frame;
+frame.origin.x = 10;
+view.frame = frame;
+</code></pre>
+<p>みたいにすると思うのですが、いちいちめんどくさいので、カテゴリーにしてみました。</p>
+<pre lang="objc:UIView+Origin.h"><code>@interface UIView (Origin)
+
+@property (nonatomic) CGFloat top;
+@property (nonatomic) CGFloat right;
+@property (nonatomic) CGFloat bottom;
+@property (nonatomic) CGFloat left;
+
+@end
+</code></pre>
+<pre lang="objc:UIView+Origin.m"><code>@implementation UIView (Origin)
+
+- (CGFloat)top
+{
+    return self.frame.origin.y;
+}
+
+- (void)setTop:(CGFloat)y
+{
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
+}
+
+- (CGFloat)right
+{
+    return self.frame.origin.x + self.frame.size.width;
+}
+
+- (void)setRight:(CGFloat)right
+{
+    CGRect frame = self.frame;
+    frame.origin.x = right - self.frame.size.width;
+    self.frame = frame;
+}
+
+- (CGFloat)bottom
+{
+    return self.frame.origin.y + self.frame.size.height;
+}
+
+- (void)setBottom:(CGFloat)bottom
+{
+    CGRect frame = self.frame;
+    frame.origin.y = bottom - self.frame.size.height;
+    self.frame = frame;
+}
+
+- (CGFloat)left
+{
+    return self.frame.origin.x;
+}
+
+- (void)setLeft:(CGFloat)x
+{
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+}
+
+@end
+</code></pre>
+<p>これを使うと、例えば縦にならぶviewの位置を操作するとき、</p>
+<pre lang="objc"><code>#import &quot;UIView+Origin.h&quot;
+
+viewA.top = 10;
+viewB.top = viewA.bottom + 10;
+viewC.top = viewB.bottom + 10;
+</code></pre>
+<p>なんて書けます。このカテゴリーを使わないとかなりめんどくさいです。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

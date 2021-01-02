@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railsで時間を「◯分前」「◯時間前」にフォーマットする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Railsで時間を「◯分前」「◯時間前」にフォーマットする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/102/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Railsで時間を「◯分前」「◯時間前」にフォーマットする</h1>
+          <p class="metadata">
+            <time datetime="2012-03-01T19:41:00.000+0000">2012-03-01 19:41</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="ruby:config/initializers/time_formats.rb"><code># coding: UTF-8
+Time::DATE_FORMATS[:human] = lambda {|date|
+  seconds = (Time.now - date).round;
+  days    = seconds / (60 * 60 * 24); return &quot;#{date.month}月#{date.day}日&quot; if days &gt; 0;
+  hours   = seconds / (60 * 60);      return &quot;#{hours}時間前&quot; if hours &gt; 0;
+  minutes = seconds / 60;             return &quot;#{minutes}分前&quot; if minutes &gt; 0;
+  return &quot;#{seconds}秒前&quot;
+}
+</code></pre>
+<pre lang="ruby"><code>naotyA = User.create(:created_at =&gt; Time.now - 5.minutes)
+naotyB = User.create(:created_at =&gt; Time.now - 5.hours)
+naotyC = User.create(:created_at =&gt; Time.now - 5.days)
+naotyA.created_at.to_s(:human) #=&gt; &quot;5分前&quot;
+naotyB.created_at.to_s(:human) #=&gt; &quot;5時間前&quot;
+naotyC.created_at.to_s(:human) #=&gt; &quot;2月25日&quot;
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

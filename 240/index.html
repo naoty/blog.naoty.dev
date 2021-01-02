@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自分をコピーするbotを作る</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="自分をコピーするbotを作る">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/240/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">自分をコピーするbotを作る</h1>
+          <p class="metadata">
+            <time datetime="2014-11-11T15:10:00.000+0000">2014-11-11 15:10</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>自分のTwitterアカウントをコピーするbotを簡単に作れるmirror botというものを作りました。<a href="https://twitter.com/naoty_bot">@naoty_bot</a>はこれを使って作りました。</p>
+<p>naoty/mirror_bot</p>
+<blockquote>
+<p><a href="https://twitter.com/naoty_k">@naoty_k</a> なんでわざわざ大金払って太ろうとしてるの？バカなの？</p>
+<p>— なおてぃー（bot） (@naoty_bot) <a href="https://twitter.com/naoty_bot/status/531779458177323009">2014, 11月 10</a></p>
+</blockquote>
+<h1>コピーbotを作る手順</h1>
+<p>１. bot用のアカウントを作ります。</p>
+<p>２. 人間とbotそれぞれのアカウントでTwitterアプリケーションを作ります。<a href="https://apps.twitter.com/app/new">ここ</a>から作れます。そして、人間とbotの両方のアカウント用の「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を取得します（下のスクショのモザイクかかってるところです）。</p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230321.png" alt="f:id:naoty_k:20141110230321p:plain" title="f:id:naoty_k:20141110230321p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230752.png" alt="f:id:naoty_k:20141110230752p:plain" title="f:id:naoty_k:20141110230752p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230803.png" alt="f:id:naoty_k:20141110230803p:plain" title="f:id:naoty_k:20141110230803p:plain" /></p>
+<p><strong>追記</strong> : bot用のアプリケーションを作成する際、権限を <strong>Read and Write</strong> にする必要があります。一度Read Onlyでアクセストークンを発行している場合は権限を変更した後もう一度発行しなおして、Herokuアプリケーションの環境変数を新しいアクセストークンに替えてください。</p>
+<p>３. こちらのHerokuボタンを押します（別サイトに飛びます）。もしHerokuのアカウントがなければ作ってください。</p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/naoty/mirror_bot"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy" /></a></p>
+<p>４. 適当なHerokuアプリ名を入れて、「Env」の各項目に2.で取得した「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を入力します。人間のアカウントのものは「HUMAN_*」に、botのアカウントのものは「BOT_*」に入れていきます。</p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232038.png" alt="f:id:naoty_k:20141110232038p:plain" title="f:id:naoty_k:20141110232038p:plain" /></p>
+<p>５．「Deploy for Free」ボタンを押してしばらく待ちます。Herokuにアプリケーションがデプロイされます。その後、アプリのダッシュボード画面で以下のようにdynosを1xにすると、アプリケーションが起動します。</p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232352.gif" alt="f:id:naoty_k:20141110232352g:plain" title="f:id:naoty_k:20141110232352g:plain" /></p>
+<p>６．終わり。</p>
+<h1>コピーbotの機能</h1>
+<ul>
+<li>過去のtweetからランダムに選んで投稿します。ランダムに選ぶとき、現在の時間帯を考慮します。だから、朝には朝っぽいことをtweetするはずです。</li>
+<li>一日のtweet数やどの時間帯にtweetされる傾向があるかを計算し、そのパターンに従います。例えば、一日にたくさんtweetする人のbotはたくさんtweetしますし、あなたが通勤時間と帰宅時間にtweetする傾向があると、botもその時間帯にtweetする確率が高いです。</li>
+<li>話しかけるとreplyを返します。replyは過去にあなたがその人に返したreplyからランダムに選ばれます。</li>
+<li>あなたがfavりやすいtweetを学習し、favります。</li>
+</ul>
+<h1>技術的な話</h1>
+<h2>tweetするタイミングの決定</h2>
+<p>人間のtweetはHeroku Postgresqlのfree planの上限である10000レコードまで保存されます（上限を超えると古い順に消します）。そのとき、一日の中で何分目に投稿されたかを同時に記録します。たとえば、01:00の投稿は60分目だし、02:00の投稿は120分目、23:59の投稿は1439分目となります。すると、投稿数が多い分と少ない分がわかります。なので、<code>n分に投稿される確率＝n分の投稿数／総投稿数</code>を計算することができます。ここから0分から1359分までの確率分布を作ることができます。この確率分布を累積分布にすると実装が簡単になります。そして、0から1までの乱数を生成して累積分布上の重なる分数をbotがtweetする分数として決定します。これを一日にtweetする回数分行い、その日tweetする分を事前に決定しておきます。</p>
+<p>以上のようなことを行っているのが<code>./lib/mirror_bot/scheduler.rb</code>というファイルです。</p>
+<h2>favりやすいtweetの学習と分類</h2>
+<p>人間は大量に流れてくるtweetの中から特定のtweetだけを選んでfavっています。この行動は大量のメールの中から迷惑メールだけをゴミ箱送りにする行動と似ています。つまり、大量のデータから特定のカテゴリーに含まれるものを識別する、という問題に一般化できると考えました。そこで、スパムフィルタリングと同じアルゴリズムで、大量のtweetから特定のtweetだけをfavoriteというカテゴリーに分類する実装をしました。</p>
+<p>スパムフィルタリングの実装はごく普通のベイジアンフィルタです。簡単に言ってしまうと、favられたtweetに含まれやすい単語とか含まれにくい単語を調べていくということをしていきます。形態素解析には<a href="https://github.com/todesking/okura">okura</a>を使いました。とても便利でした。各単語の各カテゴリーに含まれた回数はRedis（redistogo）に保存しています。</p>
+<p>以上のようなことを行っているのが<code>./lib/mirror_bot/classifier.rb</code>というファイルです。</p>
+<h2>事前学習とHerokuボタン</h2>
+<p>以上の2つのモジュール、schedulerとclassifierを機能させるには事前に多くのデータを学習させることが必要です。schedulerについては過去3,200件のtweet、classifierについては800件ずつのfavったtweetとfavってないtweetを学習させています。これを行っているのがtrainerです。trainerは<code>./lib/mirror_bot/trainer.rb</code>で定義されており、<code>./bin/mirror_bot</code>スクリプトから実行します。</p>
+<p>Herokuボタンからbotをデプロイする場合、デプロイして起動するまでにtrainerを実行する必要があります。Herokuボタンによるデプロイを設定する<code>app.json</code>には<code>scripts</code>という項目があり、こうしたセットアップのための設定が可能です。以下のように指定するだけです。</p>
+<pre><code>{
+    &quot;scripts&quot;: {
+        &quot;postdeploy&quot;: &quot;bundle exec sequel -m migrations $DATABASE_URL &amp;&amp; bin/mirror_bot train scheduler &amp;&amp; bin/mirror_bot train classifier&quot;
+    }
+}
+</code></pre>
+<p>これでデプロイしてから起動する直前に事前学習を実行することができました。</p>
+<h1>なぜ作ったか</h1>
+<p>最近、機械学習とか自然言語処理に興味が出てきて勉強をしはじめたのですが、何か具体的な目標がほしいと思って「ちょっと賢いbot」を作ることにしました。いろいろ試行錯誤した結果、自分の行動パターンを学習してまねするbotを作ることにしました。</p>
+<h1>得られた知見</h1>
+<ul>
+<li>botっぽいアイコンは<a href="http://robohash.org/">http://robohash.org/</a>で生成できて便利。</li>
+<li>botによる発言を自動生成させようと試行錯誤したけど、結局コピーにすることにしました。まず、マルコフ連鎖を使った文章生成はbotっぽいけど人間らしさはないので、今回は却下。次に、word2vecを使って文章に含まれる単語を類義語と入れ替えることで似たような文章の生成を試みました。word2vecをRubyから使う術がないので、別プロセスでPythonのgensimを使った類義語サーバーを立ててプロセス間通信でRubyに返すみたいな実装をしてみました。ですが、これだとそもそもHerokuの無料枠では不可能でした。さらに、word2vecで使われるモデルファイルが大きすぎてディスクにのっかりません。VPSで挑戦してみましたが、今度は1GBのメモリにのっかりきらずに動きませんでした。思ったほど意味の通じる文章を生成できるわけでもなかったので、この方法は諦めました。</li>
+<li>herokuのオペレーションをスムーズに進めるときに<a href="https://github.com/ddollar/heroku-config">https://github.com/ddollar/heroku-config</a>と<a href="https://github.com/ddollar/heroku-redis-cli">https://github.com/ddollar/heroku-redis-cli</a>が便利でした。</li>
+</ul>
+<h1>参考</h1>
+<ul>
+<li></li>
+</ul>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg" alt="集合知プログラミング" title="集合知プログラミング" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/">集合知プログラミング</a></p>
+<ul>
+<li>
+<p>作者: Toby Segaran,當山仁健,鴨澤眞夫</p>
+</li>
+<li>
+<p>出版社/メーカー: オライリージャパン</p>
+</li>
+<li>
+<p>発売日: 2008/07/25</p>
+</li>
+<li>
+<p>メディア: 大型本</p>
+</li>
+<li>
+<p>購入: 91人 クリック: 2,220回</p>
+</li>
+<li>
+<p><a href="http://d.hatena.ne.jp/asin/4873113644/hatena-blog-22">この商品を含むブログ (277件) を見る</a></p>
+</li>
+<li></li>
+</ul>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51Al%2BAe8d1L._SL160_.jpg" alt="はじめてのAIプログラミング―C言語で作る人工知能と人工無能" title="はじめてのAIプログラミング―C言語で作る人工知能と人工無能" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/">はじめてのAIプログラミング―C言語で作る人工知能と人工無能</a></p>
+<ul>
+<li>
+<p>作者: 小高知宏</p>
+</li>
+<li>
+<p>出版社/メーカー: オーム社</p>
+</li>
+<li>
+<p>発売日: 2006/10</p>
+</li>
+<li>
+<p>メディア: 単行本</p>
+</li>
+<li>
+<p>クリック: 112回</p>
+</li>
+<li>
+<p><a href="http://d.hatena.ne.jp/asin/4274066649/hatena-blog-22">この商品を含むブログ (24件) を見る</a></p>
+</li>
+<li>
+<p><a href="http://www.oreilly.co.jp/books/9784873116839/">word2vecによる自然言語処理</a></p>
+</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

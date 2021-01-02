@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dotfilesをgithubで管理する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="dotfilesをgithubで管理する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/95/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">dotfilesをgithubで管理する</h1>
+          <p class="metadata">
+            <time datetime="2011-12-29T10:32:00.000+0000">2011-12-29 10:32</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>例えば、家PCとオフィスPCで.vimrcと.zshrcを共有したいとします。</p>
+<p>（例：家PC）<br />
+１．dotfilesというディレクトリを用意</p>
+<pre><code>naoty@home% cd
+naoty@home% mkdir dotfiles
+</code></pre>
+<p>２．git init</p>
+<pre><code>naoty@home% cd dotfiles
+naoty@home% git init
+</code></pre>
+<p>３．.vimrcや.zshrcなどをdotfilesに移動</p>
+<pre><code>naoty@home% mv ~/.vimrc dotfiles/
+naoty@home% mv ~/.zshrc dotfiles/
+</code></pre>
+<p>４．HOMEにシンボリックリンクを作成する</p>
+<pre><code>naoty@home% ln -s .vimrc ~/.vimrc
+naoty@home% ln -s .zshrc ~/.zshrc
+</code></pre>
+<p>５．addしてcommit</p>
+<pre><code>naoty@home% git add .
+naoty@home% git commit -m '.vimrcと.zshrcを追加'
+</code></pre>
+<p>６．githubにpush</p>
+<pre><code>naoty@home% git remote add github git@github.com:naoty:dotfiles.git
+naoty@home% git push github master
+</code></pre>
+<p>（例：オフィスPC）<br />
+７．githubからdotfilesをcloneしてくる</p>
+<pre><code>naoty@office% cd
+naoty@office% git clone git@github.com:naoty:dotfiles.git
+</code></pre>
+<p>８．HOMEにシンボリックリンクを作成する</p>
+<pre><code>naoty@office% ln -s dotfiles/.vimrc ~/.vimrc
+naoty@office% ln -s dotfiles/.zshrc ~/.zshrc
+naoty@office% source .zshrc
+</code></pre>
+<p>９．オフィス用の設定のためにブランチを作成</p>
+<pre><code>naoty@office% cd dotfiles
+naoty@office% git checkout -b office
+</code></pre>
+<p>※共通する設定はmasterブランチで管理</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

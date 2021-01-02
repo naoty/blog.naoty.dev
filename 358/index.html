@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result型のメソッドをまとめる</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Result型のメソッドをまとめる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/358/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Result型のメソッドをまとめる</h1>
+          <p class="metadata">
+            <time datetime="2019-01-25T22:32:00.000+0900">2019-01-25 22:32</time>
+            <a href="/rust/">#rust</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Rustに慣れてくるにつれて、<code>Result</code>型を使いこなすことで効率的にコードが書くことができそうということがわかってきた。ただ、いろんなメソッドがあり、それぞれ<code>Ok</code>の場合と<code>Err</code>の場合で挙動が異なるため、表にまとめることにした。</p>
+<h1>条件分岐</h1>
+<table>
+<thead>
+<tr>
+<th>メソッド</th>
+<th><code>Ok</code>の場合</th>
+<th><code>Err</code>の場合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>and</code></td>
+<td>引数のResultを返す</td>
+<td>selfを返す</td>
+</tr>
+<tr>
+<td><code>and_then</code></td>
+<td>引数のクロージャを実行して結果のResultを返す</td>
+<td>selfを返す</td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>selfを返す</td>
+<td>引数のResultを返す</td>
+</tr>
+<tr>
+<td><code>or_else</code></td>
+<td>selfを返す</td>
+<td>引数のクロージャを実行して結果のResultを返す</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>and_then</code>と似たメソッドとして<code>map</code>がある。<code>map</code>は<code>and_then</code>とは違って、引数に渡すクロージャが値を返す。</li>
+<li><code>and_then</code>の引数に渡すクロージャが返す<code>Result</code>はエラーの型<code>E</code>が元のエラーの型と一致する必要がある。まったく違う<code>Result</code>型を返すことはできないということに注意する。</li>
+</ul>
+<h1>unwrap</h1>
+<table>
+<thead>
+<tr>
+<th>メソッド</th>
+<th><code>Ok</code>の場合</th>
+<th><code>Err</code>の場合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unwrap</code></td>
+<td>値を返す</td>
+<td><code>Err</code>に含まれるメッセージと共にpanicを起こす</td>
+</tr>
+<tr>
+<td><code>expect</code></td>
+<td>値を返す</td>
+<td>引数のメッセージと共にpanicを起こす</td>
+</tr>
+<tr>
+<td><code>unwrap_err</code></td>
+<td><code>Ok</code>の値を含むメッセージと共にpanicを起こす</td>
+<td>値を返す</td>
+</tr>
+<tr>
+<td><code>expect_err</code></td>
+<td>引数のメッセージと共にpanicを起こす</td>
+<td>値を返す</td>
+</tr>
+<tr>
+<td><code>unwrap_or</code></td>
+<td>値を返す</td>
+<td>引数の値を返す</td>
+</tr>
+<tr>
+<td><code>unwrap_or_else</code></td>
+<td>値を返す</td>
+<td>引数のクロージャを実行して結果の値を返す</td>
+</tr>
+<tr>
+<td><code>unwrap_or_default</code></td>
+<td>値を返す</td>
+<td>値の型のデフォルト値を返す</td>
+</tr>
+</tbody>
+</table>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

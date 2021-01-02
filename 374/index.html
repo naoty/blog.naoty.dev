@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bit全探索</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="bit全探索">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/374/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">bit全探索</h1>
+          <p class="metadata">
+            <time datetime="2019-06-30T23:01:00.000+0900">2019-06-30 23:01</time>
+            <a href="/algorythm/">#algorythm</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ある集合のすべての組み合わせを列挙したいときに、bit全探索と呼ばれるアルゴリズムを使うといいことを学んだ。</p>
+<pre lang="cpp"><code>int main() {
+  int n = 3;
+
+  // 組み合わせの数だけループする
+  for (int bit = 0; bit &lt; (1 &lt;&lt; n); bit++) {
+    // 組み合わせに含まれる要素
+    vector numbers;
+
+    // 全要素についてループする
+    for (int i = 0; i &lt; n; i++) {
+      // 要素が組み合わせに含まれるかチェックする
+      if (bit &amp; (1 &lt;&lt; i)) {
+        // 組み合わせに要素を追加する
+        numbers.push_back(i);
+      }
+    }
+
+    printf(&quot;{&quot;);
+    for (int i = 0; i &lt; numbers.size(); i++) {
+      printf((i == 0) ? &quot;%d&quot; : &quot; %d&quot;, numbers[i]); 
+    }
+    printf(&quot;} &quot;);
+  }
+  printf(&quot;\n&quot;);
+}
+</code></pre>
+<pre lang="bash"><code>$ ./a.out
+{} {0} {1} {0 1} {2} {0 2} {1 2} {0 1 2}
+</code></pre>
+<h1>組み合わせの数</h1>
+<pre lang="cpp"><code>for (int bit = 0; bit &lt; (1 &lt;&lt; n); bit++) {
+}
+</code></pre>
+<p>ある集合のすべての組み合わせは、各要素について含めるか含めないかの2択によって生まれるので、<code>2^</code>になる。<code>1 &lt;&lt; n</code>は<code>2^n</code>と同じなので、組み合わせの数だけループしていることになる。</p>
+<h1>組み合わせの作り方</h1>
+<pre lang="cpp"><code>for (int i = 0; i &lt; n; i++) {
+  if (bit &amp; (1 &lt;&lt; i)) {
+  }
+}
+</code></pre>
+<p><code>bit &amp; (1 &lt;&lt; i)</code>は要素<code>i</code>が組み合わせに含まれるかをチェックしている。<code>&amp;</code>はAND演算なので、<code>bit</code>と<code>(1 &lt;&lt; i)</code>をそれぞれ2進数として考える。</p>
+<p><code>bit</code>は上のコードだと<code>0</code>から<code>7</code>までの数になるので、2進数では<code>000</code>から<code>111</code>までということになる。</p>
+<p>一方、<code>i</code>は上のコードだと<code>0</code>, <code>1</code>, <code>2</code>なので、<code>(1 &lt;&lt; i)</code>はそれぞれ<code>001</code>, <code>010</code>, <code>100</code>になる。</p>
+<p>なので、<code>bit</code>が<code>000</code>だったらどの要素も含まれないことになるし、<code>101</code>だったら<code>0</code>と<code>2</code>が含まれることになる。つまり、要素の組み合わせを<code>bit</code>が示す2進数で表していると言える。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

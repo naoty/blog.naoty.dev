@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQueryでchangeイベント内で変更後の値を取得する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="jQueryでchangeイベント内で変更後の値を取得する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/26/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">jQueryでchangeイベント内で変更後の値を取得する</h1>
+          <p class="metadata">
+            <time datetime="2011-01-18T15:13:00.000+0000">2011-01-18 15:13</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>HTML（セレクトボックス）</p>
+<pre><code>
+  2005option&gt;
+  2006option&gt;
+  2007option&gt;
+  2008option&gt;
+  2009option&gt;
+  2010option&gt;
+  2011option&gt;
+select&gt;
+</code></pre>
+<p>jQuery</p>
+<pre><code>var date_year = $('#date_year');
+date_year.change(function(){
+  value = $(':selected', date_year).val(); // ':selected'で選択されたoptionを指定
+});
+</code></pre>
+<p>イベントオブジェクトを利用した方法ってあるんだろうか？</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

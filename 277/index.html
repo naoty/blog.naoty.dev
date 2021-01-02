@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIGで推奨されているアラートをSwiftで効率的に組み立てる</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="HIGで推奨されているアラートをSwiftで効率的に組み立てる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/277/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">HIGで推奨されているアラートをSwiftで効率的に組み立てる</h1>
+          <p class="metadata">
+            <time datetime="2016-02-17T10:00:00.000+0000">2016-02-17 10:00</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、Swiftにおけるエラーハンドリングについて興味をもっている。エラーハンドリングの中でアラートを組み立てて表示するコードをよく書いたり、目にしている。アラートを実装する際に気をつけているのは、ユーザーが目にしたときになるべく怒らせないようにすることだ。 <strong>ユーザーフレンドリーなアラートを実装する上で参考にするため、Human Interface Guidelines（以下、HIG）を読んでいる</strong> 。HIGを読むと、アラートの実装にあたって問題点が見えてきた。</p>
+<h1>問題点</h1>
+<ul>
+<li><code>UIAlertController</code>でアラートを組み立てるとき、テンプレのようなコードを長々書かないといけない。</li>
+<li><code>UIAlertController</code>を使ってHIGで推奨されるアラートを組み立てるには、HIGの理解と注意深い実装が必要になる。</li>
+</ul>
+<h1>解決策</h1>
+<p>Swiftの表現力を駆使して、テンプレのようなコードをなるべく排除し、HIGの中で望ましいとされるUIを効率的に組み立てられるような設計を考えた。HIGでは、アラートは1つまたは2つのボタンを持つべきで、ボタンが3つ以上の場合はアクションシートを検討すべきだと書かれている。 <strong>アラートを1つのボタンを持つ<code>Confirmation</code>と2つのボタンを持つ<code>Suggestion</code>という2つのタイプに分類して、以下のようなenumで表現する</strong> ことを考えてみた。</p>
+<pre><code>enum Alert {
+    case Confirmation
+    case Suggestion
+}
+</code></pre>
+<p>この<code>Alert</code>という型の値から<code>UIAlertController</code>を生成する必要がある。 <strong>アラートに表示する情報はエラーオブジェクトから取得できると、エラーごとに表示すべき情報が統一されて効率的</strong> だと思う。そこで、以下のように<code>NSError</code>を各caseに関連付け（<a href="http://naoty.hatenablog.com/entry/2016/02/10/132555">前回記事</a>を読むと<code>NSError</code>ではなく<code>FriendlyErrorType</code>を使うべき場面だと分かる）、<code>viewController</code>というプロパティを定義した。</p>
+<pre><code>enum Alert {
+    case Confirmation(NSError)
+    case Suggestion(NSError)
+
+    var viewController: UIAlertController {
+        switch self {
+        case .Confirmation(let error):
+            let alertController = buildAlertControllerWithError(error)
+
+            let cancel = UIAlertAction(title: &quot;OK&quot;, style: .Cancel, handler: nil)
+            alertController.addAction(cancel)
+
+            return alertController
+        case .Suggestion(let error):
+            // 省略
+        }
+    }
+}
+</code></pre>
+<p>ここでの<code>buildAlertControllerWithError(_:)</code>は<code>NSError</code>のもつ各情報を使って<code>UIAlertController</code>を初期化するようなイメージだ。</p>
+<p><code>Suggestion</code>の場合、エラーから復帰するためのアクションをユーザーに提案することになるため、 <strong>その「復帰するためのアクション」を<code>Recovery</code>として以下のように表現してみる</strong> 。</p>
+<pre><code>struct Recovery {
+    let name: String
+    let style: RecoveryStyle
+    let recover: UIAlertAction -&gt; Void
+
+    enum RecoveryStyle {
+        case Nondestructive
+        case Destructive
+    }
+}
+</code></pre>
+<p><code>RecoveryStyle</code>は復帰するためのアクションが破壊的（＝アクション前に戻せない）か、非破壊的（＝アクション前に戻せる）かを表している。なぜこれらを区別するかというと、 <strong>HIGでは破壊的なアクションは赤字のタイトルにし、アラートの左側にボタンを置くべきとされている</strong> からだ。逆に非破壊的なアクションのためのボタンは右側に置くべきとされている。</p>
+<p><code>Recovery</code>を踏まえると、<code>Alert</code>の実装は以下のようになる。</p>
+<pre><code>enum Alert {
+    case Confirmation(NSError)
+    case Suggestion(NSError, Recovery)
+
+    var viewController: UIAlertController {
+        switch self {
+        case .Confirmation(let error):
+            // 省略
+        case .Suggestion(let error, let recovery):
+            let alertController = buildAlertControllerWithError(error)
+            let cancel = UIAlertAction(title: &quot;Cancel&quot;, style: .Default, handler: nil)
+
+            switch recovery.style {
+            case .Nondestructive:
+                let recover = UIAlertAction(title: recovery.name, style: .Default, handler: recovery.recover)
+                alertController.addAction(cancel)
+                alertController.addAction(recover)
+            case .Destructive:
+                let recover = UIAlertAction(title: recovery.name, style: .Destructive, handler: recovery.recover)
+                alertController.addAction(recover)
+                alertController.addAction(cancel)
+            }
+
+            return alertController
+        }
+    }
+}
+</code></pre>
+<p><code>RecoveryStyle</code>によって<code>addAction</code>の順番を変えている。これによってHIGで推奨されているボタンの配置になる。</p>
+<h1>利用例</h1>
+<pre><code>let alert = Alert.Confirmation(error)
+presentViewController(alert.viewController, animated: true, completion: nil)
+</code></pre>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000628.png" alt="f:id:naoty_k:20160216000628p:plain" title="f:id:naoty_k:20160216000628p:plain" /></p>
+<pre><code>let recovery = Alert.Recovery(name: &quot;Recover&quot;, style: .Nondestructive) { action in
+    print(&quot;Recover!!&quot;)
+}
+let alert = Alert.Suggestion(error, recovery)
+presentViewController(alert.viewController, animated: true, completion: nil)
+</code></pre>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216001159.png" alt="f:id:naoty_k:20160216001159p:plain" title="f:id:naoty_k:20160216001159p:plain" /></p>
+<pre><code>let recovery = Alert.Recovery(name: &quot;Recover&quot;, style: .Destructive) { action in
+    print(&quot;Recover!!&quot;)
+}
+let alert = Alert.Suggestion(error, recovery)
+presentViewController(alert.viewController, animated: true, completion: nil)
+</code></pre>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000952.png" alt="f:id:naoty_k:20160216000952p:plain" title="f:id:naoty_k:20160216000952p:plain" /></p>
+<h1>まとめ</h1>
+<ul>
+<li>HIGに沿って実装するとユーザーフレンドリーなアラートになる（はず）。</li>
+<li>HIGに沿って実装するのは、HIGの理解と注意深い実装が必要になる。</li>
+<li>上記のようなSwiftの表現力を駆使した設計によって、効率的にHIGに沿ったユーザーフレンドリーな実装を可能にできる。</li>
+</ul>
+<h1>関連記事</h1>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

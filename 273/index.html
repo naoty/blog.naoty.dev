@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vagrant rsync + Railsでコードの変更が反映されない件</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Vagrant rsync + Railsでコードの変更が反映されない件">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/273/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Vagrant rsync + Railsでコードの変更が反映されない件</h1>
+          <p class="metadata">
+            <time datetime="2015-10-08T00:12:00.000+0000">2015-10-08 00:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>問題</h1>
+<p>Vagrantの共有フォルダでVM上とコードをrsync経由で同期させているとき、なぜかローカルで編集した変更がVM上のRailsサーバーに反映されないことがある。Railsサーバーを再起動すれば、ちゃんと反映される。</p>
+<h1>原因</h1>
+<p>VM上の変更したファイルのmtimeが更新されていないため、Railsのautoloadが実行されなかった。</p>
+<p>Railsのautoloadは<code>ActiveSupport::FileUpdateChecker</code>を使って以下のようにファイルのmtimeを見て変更されたかどうかを判定している。</p>
+<pre lang="rb:lib/active_support/file_update_checker.rb"><code>def updated?
+  current_watched = watched
+  if @last_watched.size != current_watched.size
+    @watched = current_watched
+    true
+  else
+    current_updated_at = updated_at(current_watched)
+    if @last_update_at &lt; current_updated_at
+      @watched    = current_watched
+      @updated_at = current_updated_at
+      true
+    else
+      false
+    end
+  end
+end
+
+# ...
+
+def updated_at(paths)
+  @updated_at || max_mtime(paths) || Time.at(0)
+end
+
+# ...
+
+def max_mtime(paths)
+  time_now = Time.now
+  paths.map {|path| File.mtime(path)}.reject {|mtime| time_now &lt; mtime}.max
+end
+</code></pre>
+<p>変更したファイルのmtimeをローカルとVMで比べてみると、下のようになった。</p>
+<pre lang="bash:local"><code>$ stat -x app/controllers/accounts_controller.rb
+  File: &quot;app/controllers/accounts_controller.rb&quot;
+  Size: 117          FileType: Regular File
+  Mode: (0644/-rw-r--r--)         Uid: (  501/   naoty)  Gid: (   20/   staff)
+Device: 1,4   Inode: 17448444    Links: 1
+Access: Wed Oct  7 23:17:24 2015
+Modify: Wed Oct  7 23:17:21 2015
+Change: Wed Oct  7 23:17:21 2015
+</code></pre>
+<pre lang="bash:vm"><code>$ stat app/controllers/accounts_controller.rb
+  File: `app/controllers/accounts_controller.rb'
+  Size: 117             Blocks: 8          IO Block: 4096   通常ファイル
+Device: fd00h/64768d    Inode: 2331313     Links: 1
+Access: (0644/-rw-r--r--)  Uid: ( 1000/ vagrant)   Gid: ( 1000/ vagrant)
+Context: unconfined_u:object_r:default_t:s0
+Access: 2015-10-06 17:47:42.590929945 +0000
+Modify: 2015-10-07 14:17:21.000000000 +0000
+Change: 2015-10-06 17:47:43.386929905 +0000
+</code></pre>
+<p>確かにVM上のmtimeはぜんぜん更新されてない…。</p>
+<h1>解決</h1>
+<p>rsyncの<code>--times</code>オプションをVagrantのrsyncオプションに渡すことで、ファイルのmtimeも転送されるようにする。</p>
+<pre lang="ruby:Vagrantfile"><code>config.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, type: &quot;rsync&quot;,
+  rsync__args: %w(--verbose --archive --delete -z --copy-links --times),
+  rsync__exclude: %w(.git/ log/ tmp/ vendor/)
+</code></pre>
+<p><code>rsync__args</code>で<code>rsync</code>に渡す引数を指定できる。ここでは、デフォルトで渡される引数に加えて<code>--times</code>オプションを指定している。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

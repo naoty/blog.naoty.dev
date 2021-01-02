@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alamofire/**/*Tests.swiftを読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Alamofire/**/*Tests.swiftを読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/230/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Alamofire/**/*Tests.swiftを読んだ</h1>
+          <p class="metadata">
+            <time datetime="2014-08-15T17:01:00.000+0000">2014-08-15 17:01</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://naoty.hatenablog.com/entry/2014/08/14/225112">前回</a>Alamofireの実装を読んだので、ついでにテストコードも読んでみた。</p>
+<pre><code>$ tree -P &quot;*Tests.swift&quot; -I .git
+.
+├── Source
+└── Tests
+    ├── DownloadTests.swift
+    ├── ParameterEncodingTests.swift
+    ├── RequestTests.swift
+    ├── ResponseTests.swift
+    └── UploadTests.swift
+</code></pre>
+<p>とりあえず<code>RequestTests.swift</code>から読んでみる。</p>
+<h1>RequestTests.swift</h1>
+<h2>L:26</h2>
+<pre><code>extension Alamofire {
+    struct RequestTests {
+        class RequestInitializationTestCase: XCTestCase {
+            // ...
+        }
+
+        class RequestResponseTestCase: XCTestCase {
+            // ...
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>このプロジェクトはビルドターゲットをもたないため、ターゲットごとに名前空間が作られるわけではない。そのため、<code>Alamofire</code>という構造体の中にテストクラスをネストさせることで実装コードを参照できるようにしている。</li>
+<li>テストケース、この場合は<code>init</code>とか<code>response</code>といったメソッドの単位でテストケースのクラスを作っているようだ。</li>
+</ul>
+<h2>L:49</h2>
+<pre><code>class RequestResponseTestCase: XCTestCase {
+    func testRequestResponse() {
+        let URL = &quot;http://httpbin.org/get&quot;
+        let serializer = Alamofire.Request.stringResponseSerializer(encoding: NSUTF8StringEncoding)
+
+        let expectation = expectationWithDescription(&quot;\(URL)&quot;)
+
+        Alamofire.request(.GET, URL, parameters: [&quot;foo&quot;: &quot;bar&quot;])
+                 .response(serializer: serializer){ (request, response, string, error) in
+                   expectation.fulfill()
+
+                   XCTAssertNotNil(request, &quot;request should not be nil&quot;)
+                   XCTAssertNotNil(response, &quot;response should not be nil&quot;)
+                   XCTAssertNotNil(string, &quot;string should not be nil&quot;)
+                   XCTAssertNil(error, &quot;error should be nil&quot;)
+                 }
+
+        waitForExpectationWithTimeout(10){ error in
+            XCTAssertNil(error, &quot;\(error)&quot;)
+        }
+    }
+}
+</code></pre>
+<ul>
+<li><code>expectationWithDescription</code>と<code>waitForExpectationWithTimeout</code>はXcode 6からXCTestに追加された非同期テスト用のAPI。</li>
+<li>まず、<code>expectationWithDescription</code>メソッドで<code>XCTestExpectation</code>オブジェクトを生成する。</li>
+<li><code>waitForExpectationWithTimeout</code>は指定された秒数、上で生成された<code>XCTestExpectation</code>オブジェクトの<code>fulfill</code>メソッドが呼ばれるのを待つ。呼ばれれば成功、呼ばれずに指定された秒数が経過すると失敗となり引数に渡されたクロージャを実行する。</li>
+</ul>
+<hr />
+<p>他のテストコードも読んでみたけど、上と同じようなコードがあり特に読む必要はなさそうだった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

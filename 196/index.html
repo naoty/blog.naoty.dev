@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Pipelineでコントローラー・アクションごとにassetを管理する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Asset Pipelineでコントローラー・アクションごとにassetを管理する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/196/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Asset Pipelineでコントローラー・アクションごとにassetを管理する</h1>
+          <p class="metadata">
+            <time datetime="2013-07-18T13:46:00.000+0000">2013-07-18 13:46</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>今更ながらAsset Pipelineでコントローラー・アクションごとにassetを管理する方法を調べた。</p>
+<p>Assets PrecompileはすべてのJSやCSSがひとつのファイルにまとめてくれるので、通信量が減ったりキャッシュが効きやすくなったりメリットはあるけど、適切に管理しないと思わぬところに影響が出てしまうことがある。</p>
+<p>いろいろ方法はありそうだけど、調べたなかでは以下のやり方がよさそうでした。他にいい方法があればコメントください。</p>
+<h1>JavaScript</h1>
+<p>下記のとおり実装すると、おおまかに次のような流れで各コントローラー・アクション用のJSが実行されるはず。</p>
+<ol>
+<li>bodyタグのdata属性にコントローラー名とアクション名が入る</li>
+<li>グローバルオブジェクトに名前空間が用意される</li>
+<li>各コントローラーごとのオブジェクトが名前空間に用意される</li>
+<li>JSがbodyタグのdata属性からコントローラー名とアクション名を取得する</li>
+<li>名前空間からコントローラー名に対応するJSオブジェクトを取得する</li>
+<li>そのオブジェクトに定義された、アクション名に対応するメソッドを実行する</li>
+</ol>
+<h2>1. bodyタグのdata属性にコントローラー名とアクション名を挿入する</h2>
+<p>あとでJS側からコントローラー名とアクション名を取得するため、bodyタグのdata属性に入れておく。<code>controller_path</code>を使うと名前空間も含んだコントローラー名になる。</p>
+<pre lang="rb:application.html.haml"><code>
+%body{data: { controller: controller.controller_path, action: controller.action_name } }
+  = yield
+</code></pre>
+<h2>2. グローバルオブジェクトに名前空間を用意する</h2>
+<p>各コントローラー用のオブジェクトを管理するための名前空間をグローバルオブジェクトに用意しておく。<code>?=</code>は<code>null</code>または<code>undefined</code>であれば代入する意味。</p>
+<pre lang="coffeescript:app/assets/javascripts/my_application.js.coffee"><code>
+this.MyApplication ?= {}
+</code></pre>
+<h2>3. 各コントローラー用のオブジェクトを用意する</h2>
+<p>各コントローラー用のオブジェクトを各JSファイルに定義して、先ほど用意した名前空間に登録しておく。オブジェクト内では下のようにアクション名に対応した関数を用意しておく。</p>
+<pre lang="coffeescript:users.js.coffee"><code>
+class UsersController
+  index: -&gt;
+    console.log(&quot;UsersController#index&quot;)
+
+  show: -&gt;
+    console.log(&quot;UsersController#show&quot;)
+
+this.MyApplication.users = new UsersController
+</code></pre>
+<h2>4. コントローラー名からオブジェクトを取得してフックを実行する</h2>
+<p>さっき作ったファイルを<code>application.js</code>で<code>require</code>したあとで、下のようなコードを書く。1.でbodyタグのdata属性に挿入しておいたコントローラー名とアクション名を取得する。で、そのコントローラー名に対応するJSのオブジェクトを名前空間から探し、見つかったらアクション名に対応するJSの関数を実行する。</p>
+<pre lang="js:application.js"><code>
+//= ...
+//= require my_application
+//= require_tree .
+
+$(function () {
+    var $body = $(&quot;body&quot;);
+    var controller = $body.data(&quot;controller&quot;).replace(/\//, &quot;_&quot;);
+    var action = $body.data(&quot;action&quot;);
+
+    var activeController = MyApplication[controller];
+
+    if (activeController !== undefined) {
+        if ($.isFunction(activeController[action])) {
+            activeController[action]();
+        }
+    }
+});
+</code></pre>
+<h1>CSS</h1>
+<h2>1. bodyタグのクラスにコントローラー名とアクション名を使って名前空間を用意する</h2>
+<p>JSのときと同様に名前空間を含めたいので<code>controller_path</code>を使う。</p>
+<pre lang="rb:application.html.haml"><code>
+%body{class: css_namespace}
+  = yield
+</code></pre>
+<pre lang="rb:application_helper.rb"><code>
+def css_namespace
+  controller_namespace = controller.controller_path.gsub(/\//) { &quot;_&quot; }
+  &quot;#{controller_namespace} #{controller.action_name}&quot;
+end
+</code></pre>
+<h2>2. 名前空間ごとにCSSを定義する</h2>
+<p>sassやscssを使えば簡単に定義できる。</p>
+<pre lang="sass:users.css.sass"><code>
+.users
+  // コントローラー全体のCSS
+
+  &amp;.index
+    // 各アクションのCSS
+
+  &amp;.show
+  &amp;.new
+</code></pre>
+<hr />
+<h2>参考</h2>
+<ul>
+<li><a href="http://blog.jerodsanto.net/2012/02/a-simple-pattern-to-namespace-and-selectively-execute-certain-bits-of-javascript-depending-on-which-rails-controller-and-action-are-active/">A Simple Pattern to Namespace and Selectively Execute Certain Bits of JavaScript Depending on Which Rails Controller and Action are Active - Jerod Santo</a></li>
+<li><a href="http://stackoverflow.com/questions/6102158/how-to-manage-css-stylesheet-assets-in-rails-3-1">sass - How to manage CSS Stylesheet Assets in Rails 3.1? - Stack Overflow</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

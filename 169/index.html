@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最近のテスト事情</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="最近のテスト事情">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/169/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">最近のテスト事情</h1>
+          <p class="metadata">
+            <time datetime="2013-01-19T01:14:00.000+0000">2013-01-19 01:14</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>むかしに比べると、かなりテストが書けるようになってきたし、TDDもだんだん慣れてきた。最近テスト書いてて便利だと思ったことについてメモっておく。</p>
+<h2>スタブを使ってbefore_filterをスキップする</h2>
+<pre><code>describe 'GET index' do
+  context 'ログインしている場合' do
+    before(:each) do
+      controller.any_instances.stub(:authenticate_user).and_return(true)
+    end
+
+    it 'hogehogeなfugafugaを取得する' do
+      get index, params
+      assigns[:fugafuga].should be_hogehoge
+    end
+  end
+end
+</code></pre>
+<p>ログイン判定のような、リクエストをはじく処理を<code>before_filter</code>で実装することがよくあるけど、そういうコントローラーをテストする場合、スタブが便利だということにようやく気づいた。スタブによって、メソッドの中身をごまかして好きな値を返すようにできる。だから、<code>before_filter</code>をスキップしたい場合は、とにかくスタブして<code>true</code>を返すようにしとけばいい。<code>skip_before_filter</code>でもスキップすることはできるけど、僕はスタブを使う方が好み。</p>
+<h2>FactoryGirlを使いこなす</h2>
+<pre><code>FactoryGirl.define do
+  factory :user do
+    # 連番を使えばuniquenessのバリデーションにかからなくなる
+    sequence(:name) {|n| &quot;user #{n}&quot; }
+    sequence(:email) {|n| &quot;user#{n}@example.com&quot; }
+    age { rand(18..30) }
+
+    after(:build) do |user|
+      # 余計なデータを作るコールバックがあればスキップできる
+      User.skip_callback(:after, :create, :create_data)
+    end
+
+    # ネストしたfactoryで上書きできる
+    factory :naoty do
+      name 'naoty'
+      email 'naoty@example.com'
+      age 18
+    end
+
+    # traitで属性のグループに名前をつけられる
+    trait :resigned do
+      resigned_at { Time.now }
+    end
+  end
+end
+
+user = FactoryGirl.create(:user)
+p user.name #=&gt; &quot;user 1&quot;
+
+naoty = FactoryGirl.create(:naoty)
+p naoty.name #=&gt; &quot;naoty&quot;
+
+resigned_user = FactoryGirl.create(:user, :resigned)
+p resigned_user.name #=&gt; &quot;user 2&quot;
+p resigned_user.resigned_at #=&gt; &quot;2013-01-19 00:43:59 +0900&quot;
+</code></pre>
+<p><code>factory_girl</code>はテスト用のデータを簡単につくるためのgem。似たようなgemは他にもあるけど、こういうgemを使うと、テストデータを作るロジックとテストコードを分離できる。なので、いろんなテストで使われるテストデータを重複なく簡単に作ることができる。</p>
+<p>FactoryGirlでテストデータを作成するときに、よくひっかかるのがバリデーションや<code>after_save</code>などのコールバック内の余計な処理だと思う。こういう鬱陶しい処理は、FactoryGirlのコールバックを使ってスキップしてる。</p>
+<p><code>trait</code>は特殊なデータを作る場合にすごく役に立つ。上記の例のような「退会ユーザー」をテストに使いたいときなど、特殊なデータの属性をひとまとめにして<code>FactoryGirl.create(:user, :resigned)</code>のように簡単に作成できる。</p>
+<h2>changeマッチャが便利</h2>
+<pre><code>describe '#resign' do
+  let(:user) { FactoryGirl.create(:user) }
+
+  it 'resigned_atを更新する' do
+    lambda {
+      user.resign
+    }.should change(user, :resigned?).from(false).to(true)
+  end
+end
+</code></pre>
+<p>モデルの更新系のメソッドをテストするとき、<code>change</code>マッチャが非常に便利。上の例で言うと、<code>user.resigned?</code>の結果がlambda内の処理を実行した前後で<code>false</code>から<code>true</code>に変わることをテストしている。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

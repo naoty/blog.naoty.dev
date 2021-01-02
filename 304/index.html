@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Pagesに移行した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="GitHub Pagesに移行した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/304/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">GitHub Pagesに移行した</h1>
+          <p class="metadata">
+            <time datetime="2017-11-29T17:12:00.000+0900">2017-11-29 17:12</time>
+            <a href="/meta/">#meta</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ブログをはてなブログからGitHub Pagesに移行した。</p>
+<p>dev.toを見てからWebプログラマーのブログは高速に表示されるべきだと思うようになったので、GitHub Pagesに移行して、マークアップからすべてフルスクラッチすることにした。</p>
+<p>移行にあたっていくつかStatic Site Generatorを試してみたが、どれもしっくりこなかったので、gulpのプラグインを組み合わせてHTMLやCSSを組み立てることにした。コードは<a href="https://github.com/naoty/homepage">naoty/homepage</a>にある。</p>
+<p>以下、やったこととか気をつけたこと。</p>
+<ul>
+<li>ページの各コンテンツをmarkdownで書くようにして、ejsで書いたレイアウトに展開するようにした。これは既存のgulpプラグインではできなかったため、独自にgulpプラグインを書いた。</li>
+<li>各投稿からindexページを生成するようにした。ejsで書いたレイアウトに展開するようになっている。また、同時にファイルのmtimeを見てソートするようにしている。これも独自のgulpプラグインを書いて実現した。</li>
+<li>CSSはSASSで書いてCSSに変換して圧縮している。CSSはすべてHTMLの``タグ内につっこんでいる。こうすることで、CSSのレンダリングブロックを回避できるため、初回のレンダリングが少し速くなる。</li>
+<li>CSSを書く際に、モバイルファーストを念頭にまずスマホ表示を前提に書き始めた。そして、画面を広げながら、余白が気になる部分でメディアクエリを使って広い画面向けのスタイルを追加している。</li>
+<li>最終的なHTMLは圧縮している。ここらへん、できる限りファイルサイズを抑えてパフォーマンスを最適化しようとしている。結果的に、PageSpeed Insightsでほぼ100点をとれるようになった。</li>
+</ul>
+<p><img src="pagespeed-insights.png" alt="pagespeed-insights" /></p>
+<ul>
+<li>ファイル名をURLに使おうとすると、濁点や半濁点を含むファイル名が表示できなくなることがある。これは、macOSのファイル名はUTF-8-MACと呼ばれるエンコーディングが使われているためで、濁点や半濁点が通常のUTF-8と異なるために起きているらしい。</li>
+<li>ファイル名には自然数を使うようにし、タイトルはfront matterで指定するようにした。front matterでは、タイトルの他に<code>description</code>や<code>og:image</code>を設定できるようにした。</li>
+<li>Lighthouseを参考にmanifest.jsonを書くなどPWAの要件を満たすようにした。</li>
+</ul>
+<p><img src="lighthouse.png" alt="lighthouse" /></p>
+<ul>
+<li><a href="https://github.com/naoty/homepage">naoty/homepage</a>のpublicディレクトリをgitサブモジュールにして<a href="https://github.com/naoty/naoty.github.io">naoty/naoty.github.io</a>にpushするようにしている。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

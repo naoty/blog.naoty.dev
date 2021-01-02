@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qiita:TeamのテンプレートとJSONからテキストを組み立てるヤツ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Qiita:TeamのテンプレートとJSONからテキストを組み立てるヤツ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/248/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Qiita:TeamのテンプレートとJSONからテキストを組み立てるヤツ</h1>
+          <p class="metadata">
+            <time datetime="2015-01-02T18:07:00.000+0000">2015-01-02 18:07</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>あけましておめでとうございます。</p>
+<p>プログラミング初めとして<a href="https://github.com/naoty/qiita-build">naoty/qiita-build</a>という簡単なrubygemを作りました。Qiita:Teamで下のようなテンプレートがあったときに</p>
+<pre><code># 自己紹介
+* 氏名: %{fullname}
+* ニックネーム: %{nickname}
+* 居住地: %{location}
+* 生年月日: %{birthday}
+</code></pre>
+<p>標準入力でJSON文字列を渡すと、変数の中身をそれで展開するだけ。</p>
+<pre><code>$ echo '{&quot;fullname&quot;: &quot;Naoto Kaneko&quot;, &quot;nickname&quot;: &quot;naoty&quot;, &quot;location&quot;: &quot;Tokyo&quot;, &quot;birthday&quot;: &quot;1987/6/2&quot;}' | qiita-build -t  -a  
+# 自己紹介
+* 氏名: Naoto Kaneko
+* ニックネーム: naoty
+* 居住地: Tokyo
+* 生年月日: 1987/6/2
+</code></pre>
+<p>とある用途で使いたくて作ったものの、Qiita:Team周りのワークフローを自動化するときに便利そうだなと思ったのでrubygemにしました。</p>
+<p>本年も宜しくお願い致します。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

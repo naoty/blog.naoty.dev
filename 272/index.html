@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vagrantfileを分割する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Vagrantfileを分割する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/272/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Vagrantfileを分割する</h1>
+          <p class="metadata">
+            <time datetime="2015-10-03T15:12:00.000+0000">2015-10-03 15:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>自分の環境固有の設定や自分しか使わないであろうプラグインの設定などは、Vagrantfileに書いてgitで管理したくないので、別の設定ファイルに分けてignoreしておきたい。そういうときに以下のようにしておくと便利。</p>
+<pre lang="rb:Vagrantfile"><code>Vagrant.configure(2) do |config|
+  # ...
+end
+
+# Load local configurations
+load &quot;./Vagrantfile.local&quot; if File.exist?(&quot;./Vagrantfile.local&quot;)
+</code></pre>
+<pre lang="rb:Vagrantfile.local"><code>Vagrant.configure(2) do |config|
+  # ...
+end
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

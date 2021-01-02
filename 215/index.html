@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreDataに簡単に初期データを追加する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="CoreDataに簡単に初期データを追加する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/215/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">CoreDataに簡単に初期データを追加する</h1>
+          <p class="metadata">
+            <time datetime="2014-04-20T13:12:00.000+0000">2014-04-20 13:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/naoty/NTYPopulator">NTYPopulator</a>というライブラリで簡単に初期データを追加できる。CocoaPodsからインストールできる。</p>
+<pre lang="rb:Podfile"><code>pod &quot;NTYPopulator&quot;
+</code></pre>
+<pre lang="sh"><code>$ pod install
+</code></pre>
+<p>使い方は<code>AppDelegate.m</code>に一行加えるだけ。</p>
+<pre lang="objective-c:AppDelegate.m"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+	[[NTYPopulator new] run];
+	return YES;
+}
+</code></pre>
+<p>リソースバンドル内にある<code>seeds/*.csv</code>を探しだして、ファイル名と同名のEntityにデータを追加する。例えば、<code>seeds/user.csv</code>のデータは<code>User</code>というEntityに追加される。</p>
+<p>デフォルトではモデルファイルとして<code>Model.momd</code>が参照され、SQLiteファイルとして<code>$(CFBundleName).sqlite</code>が参照される。これを変更することも可能。</p>
+<pre lang="objective-c:AppDelegate.m"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@&quot;MyModel&quot; withExtension:@&quot;momd&quot;];
+    NSURL *documentDirectoryURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSURL *sqliteURL = [documentDirectoryURL URLByAppendingPathComponent:@&quot;MySQLite.sqlite&quot;];
+    
+    NTYPopulator *populator = [[NTYPopulator alloc] initWithModelURL:modelURL sqliteURL:sqliteURL];
+    [populator run];
+    
+    return YES;
+}
+</code></pre>
+<hr />
+<p>以上、ステマでした。</p>
+<hr />
+<h3>追記</h3>
+<p>NTYPopulatorで想定していたユースケースは開発時に初期データをさくっと入れたいというものなので、リリース時には作成済みのSQLiteファイルを使った方がいいと思う。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

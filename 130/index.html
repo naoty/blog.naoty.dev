@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>binding.pryがあったらコミットを中止する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="binding.pryがあったらコミットを中止する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/130/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">binding.pryがあったらコミットを中止する</h1>
+          <p class="metadata">
+            <time datetime="2012-06-25T16:55:00.000+0000">2012-06-25 16:55</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>ばいんでぃんぐぷらい便利ですね。</p>
+<p>コミットすると、<code>binding.pry</code>がコミット予定のファイルに含まれていれば、コミットを中止すフックスクリプトを書きました。<code>.git/hooks/pre-commit</code>にコピペしてお使いください。ハードコーディングしちゃってるんで、適当に修正するといいですね。</p>
+<p>gistにもあげてるので、forkなんかしてもらえるといいですね。<br />
+<a href="https://gist.github.com/2970881">https://gist.github.com/2970881</a></p>
+<pre lang="sh:.git/hooks/pre-commit"><code>#!/usr/bin/env ruby
+
+cached_files = `git diff --cached --name-only`
+if cached_files.split($/).any? {|path| File.read(path).include?('binding.pry') }
+  puts 'ERROR: binding.pry is found'
+  exit 1
+end
+</code></pre>
+<ul>
+<li><code>#!/usr/bin/env ruby</code>はrvmのrubyを使う場合のshebang</li>
+<li><code>git diff --cached</code>でコミット予定のファイルの差分とってこれる</li>
+<li><code>--name-only</code>でファイル名だけとってこれる</li>
+<li><code>$/</code>は区切り文字</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

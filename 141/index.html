@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FactoryGirlでコールバックをスキップする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="FactoryGirlでコールバックをスキップする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/141/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">FactoryGirlでコールバックをスキップする</h1>
+          <p class="metadata">
+            <time datetime="2012-09-04T11:53:00.000+0000">2012-09-04 11:53</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>FactoryGirlでテストデータを作るとき、<code>before_create</code>などのコールバックも実行されて、いろいろめんどくさいときがある。</p>
+<pre lang="ruby"><code>FactoryGirl.define do
+  factory :user do
+    name 'naoty'
+    age  18
+
+    after(:build) do
+      User.skip_callback(:create, :before, :hoge_method, :fuga_method)
+    end
+  end
+end
+</code></pre>
+<ul>
+<li><code>skip_callback</code>はメソッドごとにスキップするか設定できる。</li>
+<li>似たようなものに<code>reset_callbacks</code>があるけど、これはイベントに設定されてるコールバックメソッドの<strong>すべて</strong>をスキップする。</li>
+<li><code>after(:build)</code>のところはスキップしたいコールバックのタイミングによって、調整する必要あると思う。</li>
+</ul>
+<hr />
+<h3>バージョン</h3>
+<ul>
+<li>factory_girl (3.3.0)</li>
+<li>factory_girl_rails (3.3.0)</li>
+</ul>
+<hr />
+<h3>参考</h3>
+<ul>
+<li><a href="http://apidock.com/rails/ActiveSupport/Callbacks/ClassMethods/skip_callback">skip_callback</a></li>
+<li><a href="http://apidock.com/rails/v3.2.8/ActiveSupport/Callbacks/ClassMethods/reset_callbacks">reset_callbacks</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

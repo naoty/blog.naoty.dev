@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grepコマンドもどき ver.2（完成版）</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Grepコマンドもどき ver.2（完成版）">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/21/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Grepコマンドもどき ver.2（完成版）</h1>
+          <p class="metadata">
+            <time datetime="2010-10-02T18:10:00.000+0000">2010-10-02 18:10</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　Twitterでアドバイスを募ったところ、解決策が見つかったので、さっそく記録します。完成版のコードはこちら。</p>
+<pre><code>require 'find'
+
+def grep(pattern, directory)
+  Find.find(directory) do |path|
+    if FileTest.file?(path)
+      file = open(path)
+      path = File.expand_path(path).sub(Regexp.new(File.expand_path(directory)), '')
+      while line = file.gets
+        puts &quot;#{path}: #{file.lineno}&quot; if line =~ pattern
+      end
+      file.close
+    end
+  end
+end
+
+grep(Regexp.new(ARGV[0]), ARGV[1])
+</code></pre>
+<p>実行結果</p>
+<pre><code>C:\codes\ruby&gt;ruby grep.rb @task c:\codes\rails\rails_apps\task
+/app/views/admin/tasks/show.html.erb: 3
+/app/views/admin/tasks/show.html.erb: 8
+/app/views/admin/tasks/show.html.erb: 13
+/app/views/admin/tasks/show.html.erb: 17
+/app/views/admin/tasks/new.html.erb: 5
+/app/views/admin/tasks/index.html.erb: 8
+/app/views/admin/tasks/edit.html.erb: 5
+/app/views/admin/tasks/edit.html.erb: 26
+/app/controllers/admin/tasks_controller.rb: 16
+/app/controllers/admin/tasks_controller.rb: 20
+/app/controllers/admin/tasks_controller.rb: 27
+/app/controllers/admin/tasks_controller.rb: 31
+/app/controllers/admin/tasks_controller.rb: 37
+/app/controllers/admin/tasks_controller.rb: 43
+/app/controllers/admin/tasks_controller.rb: 46
+/app/controllers/admin/tasks_controller.rb: 48
+/app/controllers/admin/tasks_controller.rb: 49
+/app/controllers/admin/tasks_controller.rb: 52
+/app/controllers/admin/tasks_controller.rb: 60
+/app/controllers/admin/tasks_controller.rb: 63
+/app/controllers/admin/tasks_controller.rb: 65
+/app/controllers/admin/tasks_controller.rb: 69
+/app/controllers/admin/tasks_controller.rb: 77
+/app/controllers/admin/tasks_controller.rb: 78
+</code></pre>
+<p>　ブラボー！！<br />
+　どうやらうまくいかなかった原因は、subの中でマッチングされずうまくパス名が変換できなかったからのようですね。</p>
+<pre><code>path = File.expand_path(path).sub(Regexp.new(File.expand_path(directory)), '')
+</code></pre>
+<p>　こうしておけば、確実にマッチングできます。うん、Twitterいいね。</p>
+<p>　アドバイスいただいた方、ありがとうございました。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

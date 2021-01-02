@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自分専用のtodo管理ツールを書いた</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="自分専用のtodo管理ツールを書いた">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/261/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">自分専用のtodo管理ツールを書いた</h1>
+          <p class="metadata">
+            <time datetime="2015-05-23T17:17:00.000+0000">2015-05-23 17:17</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、プライベートでの開発したいことや勉強したいことが増えてきたので、それらを管理するツールを書いた。</p>
+<p><a href="https://github.com/naoty/todo">naoty/todo</a></p>
+<h1>使い方</h1>
+<pre><code>$ todo add Go言語を勉強する
+$ todo add todo管理ツールを書く
+$ todo add ブログ記事を書く
+$ todo list
+[] 001: Go言語を勉強する
+[] 002: todo管理ツールを書く
+[] 003: ブログ記事を書く
+$ todo done 1
+$ todo done 2
+[x] 001: Go言語を勉強する
+[x] 002: todo管理ツールを書く
+[] 003: ブログ記事を書く
+$ todo clear
+$ todo list
+[] 001: ブログ記事を書く
+</code></pre>
+<p>その他、todoの削除や移動などができる（詳細はGitHubのページを参照）。個人的に便利だと思っている機能がtodoをmarkdownのtask list形式で出力する機能だ。</p>
+<pre><code>$ todo list -m
+- [x] Go言語を勉強する
+- [x] todo管理ツールを書く
+- [] ブログ記事を書く
+</code></pre>
+<p>これを使ってQiita:Teamの日報に今日やったこと、やれなかったことを簡単にコピペできる。一日の作業フローはこうだ。</p>
+<ol>
+<li><code>todo list</code>で残タスクを確認する。</li>
+<li>適宜<code>todo add</code>でタスクを追加したり、<code>todo move</code>で順番を入れ替えて優先度を調整する。</li>
+<li>完了したら<code>todo done</code>でタスクを完了させる。</li>
+<li>一日の終わりに<code>todo list -m</code>で作業内容を出力してQiita:Teamにコピペして、感想などを付け加えて日報として公開する。</li>
+<li><code>todo clear</code>で完了したタスクを消去する。</li>
+</ol>
+<h2>tips</h2>
+<ul>
+<li>todoはLTSV形式のファイルとして保存され、ファイルのパスは<code>TODO_PATH</code>という環境変数で指定できる（デフォルトは<code>HOME</code>）。なので、環境変数でDropbox内のパスを指定すれば簡単にtodoを同期できる。</li>
+<li><a href="https://github.com/zimbatm/direnv">zimbatm/direnv</a>を使うと、プロジェクトルートに<code>cd</code>したときに<code>TODO_PATH</code>を書き換えられるのでプロジェクトのスコープのtodoを別に管理できる。</li>
+</ul>
+<h1>実装</h1>
+<p>最近はGoが気に入っているので、コマンドラインツールを作るときはすべてGoで書いている。CLIを作る際のフレームワークはいくつかあるようだが、一番Starが多そうだった<a href="https://github.com/codegangsta/cli">codegangsta/cli</a>を使っている。標準の出力とmarkdown形式の出力の切り替えを実装する際に<code>interface</code>を使ってみた。ファイルの入出力には<code>ioutil</code>パッケージが手っ取り早かった。ファイルの扱いを通じて<code>io.Writer</code>インターフェイスについても理解が深まった。</p>
+<h1>done</h1>
+<pre><code>$ todo done 1
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

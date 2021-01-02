@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftCSVをフルスクラッチした</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="SwiftCSVをフルスクラッチした">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/278/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">SwiftCSVをフルスクラッチした</h1>
+          <p class="metadata">
+            <time datetime="2016-02-24T23:15:00.000+0000">2016-02-24 23:15</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>おととしSwiftCSVというCSVをSwiftで扱うためのライブラリを作った。</p>
+<p><a href="https://github.com/naoty/SwiftCSV">naoty/SwiftCSV</a></p>
+<p>けっこう思いつきで作ったので、あんまりちゃんとパースできないし、思ったよりissueがたくさん来てつらくなってしまったので、放置していた。仕事でもSwiftをまったく書けずにいて、Swiftを触るモチベーションも低かった。</p>
+<p><strong>今年に入ってSwiftをガンガン仕事で書くようになってモチベーションが復活したので、ひどい有様だったSwiftCSVをフルスクラッチすることにした</strong> 。幸い、テストコードはギリギリあったので振る舞いは変えずに内部のコードを綺麗にし、Swift 2.1に対応した。</p>
+<p>SwiftCSVを書くにあたって活躍したのは<code>GeneratorType</code>と<code>SequenceType</code>というprotocolだった。これらは<code>for ... in</code>文に渡すことができる独自のイテレータを定義できる。これらの使い方は以前Qiitaにまとめたので参考になるかもしれない。</p>
+<p><a href="http://qiita.com/naoty_k/items/970796fe56b4ab083278">GeneratorとSequence - Qiita</a></p>
+<p>これらを使うことで、 <strong>「イテレートされる要素を作る責務」と「その要素を使う責務」を切り分けて、別々のオブジェクトとして定義できる</strong> 。実際にSwiftCSVでは以下のように切り分けられている。</p>
+<pre><code>// CSV.swift
+
+init(string: String, delimiter: NSCharacterSet = comma) {
+    let headerSequence = HeaderSequence(text: string, delimiter: delimiter)
+    for fieldName in headerSequence {
+        header.append(fieldName)
+        columns[fieldName] = []
+    }
+
+    // ...
+}
+</code></pre>
+<pre><code>// HeaderSequence.swift
+
+struct HeaderGenerator: GeneratorType {
+    typealias Element = String
+    
+    private var fields: [String]
+    
+    init(text: String, delimiter: NSCharacterSet) {
+        let header = text.lines[0]
+        fields = header.componentsSeparatedByCharactersInSet(delimiter)
+    }
+    
+    mutating func next() -&gt; String? {
+        return fields.isEmpty ? .None : fields.removeAtIndex(0)
+    }
+}
+
+struct HeaderSequence: SequenceType {
+    typealias Generator = HeaderGenerator
+    
+    private let text: String
+    let delimiter: NSCharacterSet
+    
+    init(text: String, delimiter: NSCharacterSet) {
+        self.text = text
+        self.delimiter = delimiter
+    }
+    
+    func generate() -&gt; HeaderGenerator {
+        return HeaderGenerator(text: text, delimiter: delimiter)
+    }
+}
+</code></pre>
+<p><code>GeneratorType</code>と<code>SequenceType</code>を使うことで設計上はうまく整理できたものの、CSVパーサとしての機能はかなりショボい。ダブルクォーテーションに囲まれた<code>,</code>や改行を認識できていない。けっこう大変そうで僕だけでは対応ができないので、Pull requestを募集している。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubyの型に入門する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rubyの型に入門する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/407/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rubyの型に入門する</h1>
+          <p class="metadata">
+            <time datetime="2020-03-10T20:02:00.000+0000">2020-03-10 20:02</time>
+            <a href="/ruby/">#ruby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、Rubyを書いてなかったので前から興味があった型に入門してみた。</p>
+<h1>型シグネチャを書く</h1>
+<p>型シグネチャファイルの拡張子は<code>*.rbs</code>とのこと。型シグネチャの書き方は<a href="https://github.com/ruby/ruby-signature/blob/master/docs/syntax.md">ここ</a>を見たり、<a href="https://github.com/ruby/ruby-signature/tree/master/stdlib/builtin">実際の例</a>を見るとわかってくる。</p>
+<pre lang="rb"><code>class Pokemon
+  @id: Integer
+  @name: String
+
+  def initialize: (String name) -&gt; void
+end
+</code></pre>
+<h1>型検査器をつかう</h1>
+<p>適当に空のクラスを用意して試してみる。</p>
+<pre lang="rb"><code>class Pokemon
+end
+</code></pre>
+<p><code>Steepfile</code>というファイルに検査したいコードのディレクトリと型シグネチャが入っているディレクトリを指定する。</p>
+<pre lang="rb"><code>target :lib do
+  check &quot;lib&quot;
+  signature &quot;sig&quot;
+end
+</code></pre>
+<p>ディレクトリ構成はこんな感じ。</p>
+<pre lang="bash"><code>% tree .
+.
+├── Gemfile
+├── Gemfile.lock
+├── Steepfile
+├── lib
+│   └── pokemon.rb
+└── sig
+    └── pokemon.rbs
+</code></pre>
+<p><code>steep check</code>で型検査を実行できる。ちゃんとメソッドがないことと怒られるようになった。</p>
+<pre lang="bash"><code>% bundle exec steep check
+lib/pokemon.rb:1:0: MethodDefinitionMissing: module=::Pokemon, method=initialize (class Pokemon)
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

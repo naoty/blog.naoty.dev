@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shields.ioでバッジをフラットデザインにする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="shields.ioでバッジをフラットデザインにする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/223/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">shields.ioでバッジをフラットデザインにする</h1>
+          <p class="metadata">
+            <time datetime="2014-07-10T12:51:00.000+0000">2014-07-10 12:51</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://shields.io">http://shields.io</a>というサービスを使うとフラットデザインのバッジをSVG形式で返してくれるので、これを以下のような感じで使うだけです。</p>
+<h2>Travis</h2>
+<p><a href="https://travis-ci.org/naoty/NTYCSVTable"><img src="https://travis-ci.org/naoty/NTYCSVTable.svg?branch=master" alt="Build Status" /></a> -&gt; <a href="https://travis-ci.org/naoty/NTYCSVTable"><img src="http://img.shields.io/travis/naoty/NTYCSVTable/master.svg?style=flat" alt="Build Status" /></a></p>
+<pre lang="diff"><code>-[![Build Status](https://travis-ci.org/naoty/NTYCSVTable.svg?branch=master)](https://travis-ci.org/naoty/NTYCSVTable)
++[![Build Status](http://img.shields.io/travis/naoty/NTYCSVTable/master.svg?style=flat)](https://travis-ci.org/naoty/NTYCSVTable)
+</code></pre>
+<h2>CocoaPods</h2>
+<p><a href="http://cocoadocs.org/docsets/NTYCSVTable"><img src="http://cocoapod-badges.herokuapp.com/v/NTYCSVTable/badge.png" alt="Version" /></a> -&gt; <a href="http://cocoadocs.org/docsets/NTYCSVTable"><img src="http://img.shields.io/cocoapods/v/NTYCSVTable.svg?style=flat" alt="Version" /></a><br />
+<a href="http://cocoadocs.org/docsets/NTYCSVTable"><img src="http://cocoapod-badges.herokuapp.com/p/NTYCSVTable/badge.png" alt="Platform" /></a> -&gt; <a href="http://cocoadocs.org/docsets/NTYCSVTable"><img src="http://img.shields.io/cocoapods/p/NTYCSVTable.svg?style=flat" alt="Platform" /></a></p>
+<pre lang="diff"><code>-[![Version](http://cocoapod-badges.herokuapp.com/v/NTYCSVTable/badge.png)](http://cocoadocs.org/docsets/NTYCSVTable)
+-[![Platform](http://cocoapod-badges.herokuapp.com/p/NTYCSVTable/badge.png)](http://cocoadocs.org/docsets/NTYCSVTable)
++[![Version](http://img.shields.io/cocoapods/v/NTYCSVTable.svg?style=flat)](http://cocoadocs.org/docsets/NTYCSVTable)
++[![Platform](http://img.shields.io/cocoapods/p/NTYCSVTable.svg?style=flat)](http://cocoadocs.org/docsets/NTYCSVTable)
+</code></pre>
+<h2>その他</h2>
+<p><a href="http://shields.io">http://shields.io</a>を見ると、他にもcoverallとかcode climateなどよく使われるバッジが提供されているようです。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

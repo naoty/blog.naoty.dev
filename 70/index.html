@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduleによるクラスの拡張</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Moduleによるクラスの拡張">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/70/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Moduleによるクラスの拡張</h1>
+          <p class="metadata">
+            <time datetime="2011-07-20T13:42:00.000+0000">2011-07-20 13:42</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>Module CoolModule
+  # このModuleをインクルードしたクラスを引数にブロック内を実行
+  def self.included(class)
+    # 第1引数のメソッドを第2引数以降を引数に実行
+    class.send :alias_method_chain, :hoge_method, :cool
+  end
+
+  # インクルードしたクラス内で定義（≠実行）
+  def hoge_method_with_cool
+    # ...
+  end
+end
+</code></pre>
+<p>　クラスがモジュールをインクルードすると、モジュールに定義されたメソッドをクラスでも使えるようになる（クラス内に定義される）。一方、インクルードされたときにメソッドを実行したい場合（alias_method_chain、define_method、class_eval等）、Module#includedを使う。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

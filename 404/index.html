@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mermaid.jsに対応した</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="mermaid.jsに対応した">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/404/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">mermaid.jsに対応した</h1>
+          <p class="metadata">
+            <time datetime="2020-02-29T14:27:00.000+0000">2020-02-29 14:27</time>
+            <a href="/meta/">#meta</a>
+            <a href="/gatsby/">#gatsby</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>追記</h1>
+<p>デプロイしてから分かったけど、production buildのみ図の描画がうまくいったりいかなかったりする。リロードしてみるとたまに表示できる。よくわからないので、SSRでの実装にするかも。</p>
+<hr />
+<p>markdownみたいなかんたんな記法でフローチャートなどの図を描ける<a href="https://mermaid-js.github.io/mermaid/#/">mermaid.js</a>をこのブログでサポートした。</p>
+<p>たとえばこんな感じ。</p>
+<pre lang="mermaid"><code>graph TD
+  client
+  lb[alb]
+  app1[rails]
+  app2[rails]
+  db[mysql]
+
+  client --&gt; lb --&gt; app1 &amp; app2 --&gt; db
+</code></pre>
+<p>この図はこんなcode blockで書いている（エスケープだけしてある）。</p>
+<pre lang="markdown"><code>\```mermaid
+graph TD
+  client
+  lb[alb]
+  app1[rails]
+  app2[rails]
+  db[mysql]
+
+  client --&gt; lb --&gt; app1 &amp; app2 --&gt; db
+\```
+</code></pre>
+<h1>mermaid.jsをgatsbyで動かす</h1>
+<p>mermaid.jsはブラウザ上じゃないと動かすことができないため、gatsbyで動かすには</p>
+<ol>
+<li>クライアントサイドで動かす</li>
+<li>headless browserを利用してSSRする</li>
+</ol>
+<p>の2通りしかない。</p>
+<p>今回はより簡単にクライアントサイドで動かすようにした。既存のgatsby-remark-mermaidプラグインは後者を採用していてpuppeteerをつかっていた。ただ、試してみたところ自分の環境では動かなかったため、自作することにした。</p>
+<p>Gatsbyで生成しているページはReactのコンポーネントでできているので、<code>componentDidMount</code>や<code>componentDidUpdate</code>のようなタイミングでmermaidを動かしている。</p>
+<pre lang="js"><code>import mermaid from &quot;mermaid&quot;;
+
+class PostTemplate extends Component {
+  componentDidMount() {
+    const element = document.getElementById(&quot;mermaid&quot;);
+
+    mermaid.initialize({ startOnLoad: true });
+    mermaid.mermaidAPI.render(&quot;container&quot;, &quot;graph TD\n  a --&gt; b&quot;, svg =&gt; {
+      element.innerHTML = svg;
+    })
+  }
+}
+</code></pre>
+<p>あとは、remarkプラグインを書いて、<code>mermaid</code>がついたcode blockを``で囲うように変換するようにした。</p>
+<pre lang="js"><code>const visit = require(&quot;unist-util-visit&quot;);
+
+module.exports = ({ markdownAST }, pluginOptions) =&gt; {
+  visit(markdownAST, &quot;code&quot;, node =&gt; {
+    if (node.lang !== &quot;mermaid&quot;) return;
+
+    node.type = &quot;html&quot;;
+    node.value = `\n${node.value}\n`;
+  });
+
+  return markdownAST;
+};
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

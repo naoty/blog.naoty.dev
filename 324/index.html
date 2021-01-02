@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailHogによるメールの受信確認</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="MailHogによるメールの受信確認">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/324/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">MailHogによるメールの受信確認</h1>
+          <p class="metadata">
+            <time datetime="2018-02-18T21:53:00.000+0900">2018-02-18 21:53</time>
+            <a href="/docker/">#docker</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>メール送信機能を開発する際、メールの受信を確認したい。従来のRailsアプリ開発では、<a href="https://github.com/ryanb/letter_opener">letter_opener</a>のようなライブラリを使っていた。</p>
+<p>現在のコンテナを中心とした開発環境では、Railsの外側にSMTPサーバーのコンテナを用意し、環境変数によって接続先を設定する方法が一般的ではないかと思った。調べてみると、<a href="https://github.com/mailhog/MailHog">MailHog</a>というツールが見つかった。MailHogはSMTPサーバーであり、かつ受信したメールを確認できるHTTPサーバーも兼ね備えている。</p>
+<p>MailHogはDocker Hubでコンテナを公開しているため、docker-composeを使うと簡単に開発環境に組み込むことができる。</p>
+<pre lang="yaml"><code># docker-compose.yml
+services:
+  web:
+    build: .
+    command: bin/rails s -p 3000 -b 0.0.0.0
+    environment:
+      SMTP_HOST: mail
+      SMTP_PORT: 1025
+    depends_on:
+      - mail
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+</code></pre>
+<p>Railsではこんな感じで環境変数によってメールの送信先を設定するだけでいい。</p>
+<pre lang="ruby"><code># application.rb
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  address: ENV[&quot;SMTP_HOST&quot;],
+  port: ENV[&quot;SMTP_PORT&quot;],
+}
+</code></pre>
+<p>本番環境などでは、この環境変数を実際に運用するSMTPサーバーのものに替えるだけでいい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

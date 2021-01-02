@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRFトークンの検証プロセス</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="CSRFトークンの検証プロセス">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/113/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">CSRFトークンの検証プロセス</h1>
+          <p class="metadata">
+            <time datetime="2012-04-12T11:33:00.000+0000">2012-04-12 11:33</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>actionpack-3.2.2/lib/action_controller/metal/request_forgery_protection.rb</h1>
+<h2>line:67</h2>
+<pre><code>def protect_from_forgery(options = {})
+  self.request_forgery_protection_token ||= :authenticity_token
+  prepend_before_filter :verify_authenticity_token, options
+end
+</code></pre>
+<ul>
+<li><code>protect_from_forgery</code>はデフォルトで<code>ApplicationController</code>で宣言されている。</li>
+<li><code>verify_authenticity_token</code>をすべてのアクションの前に実行するようになる。</li>
+</ul>
+<h2>line:72</h2>
+<pre><code>def verify_authenticity_token
+  unless verified_request?
+    logger.warn &quot;WARNING: Can't verify CSRF token authenticity&quot; if logger
+    handle_unverified_request
+  end
+end
+</code></pre>
+<h2>line:84</h2>
+<pre><code>def handle_unverified_request
+  reset_session
+end
+</code></pre>
+<ul>
+<li><code>verified_request?</code>が<code>false</code>の場合はセッションがリセットされる。</li>
+</ul>
+<h2>line:93</h2>
+<pre><code>def verified_request?
+  !protect_against_forgery? || request.get? ||
+    form_authenticity_token == params[request_forgery_protection_token] ||
+    form_authenticity_token == request.headers['X-CSRF-Token']
+end
+</code></pre>
+<ul>
+<li><code>params[request_forgery_protection_token]</code>は<code>protect_from_forgery</code>の中で定義されている通り<code>params[:authenticity_token]</code>になる。</li>
+<li><code>params[:authenticity_token]</code>はformヘルパーが自動生成するhiddenフィールドから送信される。</li>
+<li><code>params[:authenticity_token]</code>がない場合でも、HTTPヘッダーの<code>X-CSRF-Token</code>を設定すればいい。</li>
+</ul>
+<h2>line:100</h2>
+<pre><code>def form_authenticity_token
+  session[:_csrf_token] ||= SecureRandom.base64(32)
+end
+</code></pre>
+<ul>
+<li><code>params[:authenticity_token]</code>または<code>request.headers['X-CSRF-Token']</code>が<code>session[:_csrf_token]</code>と一致しているかどうかが、CSRFトークンの検証の本体である。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

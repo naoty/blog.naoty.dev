@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter APIのエラーの回避方法</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Twitter APIのエラーの回避方法">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/80/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Twitter APIのエラーの回避方法</h1>
+          <p class="metadata">
+            <time datetime="2011-09-09T03:26:00.000+0000">2011-09-09 03:26</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>// http://api.twitter.com/statuses/friends.json
+{
+    error: &quot;This method requires authentication.&quot;
+    request: &quot;/statuses/friends.json&quot;
+}
+
+// http://api.twitter.com/statuses/friends.json?screen_name=naoty_k
+{
+  - errors: [
+      - {
+          code: 37
+          message: &quot;Not authorized to use this endpoint&quot;
+        }
+  ]
+}
+
+// http://api.twitter.com/1/statuses/friends.json?screen_name=naoty_k
+[
+  - {
+      show_all_inline_media: false
+      contributors_enabled: false
+      geo_enabled: false
+      profile_background_tile: false
+      protected: false
+    },
+  - {
+
+    } 
+]
+</code></pre>
+<p>認証済みなのに「This method requires authentication.」「Not authorized to use this endpoint」みたいなエラーがおきたら、パラメータにscreen_nameを渡して、1を追加してあげるとうまくいった。なにこれ？</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

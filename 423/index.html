@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イテレータについて整理</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="イテレータについて整理">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/423/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">イテレータについて整理</h1>
+          <p class="metadata">
+            <time datetime="2020-07-04T21:58:00.000+0000">2020-07-04 21:58</time>
+            <a href="/rust/">#rust</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>for式を書くと所有権まわりのエラーが出てしまい、よくわからなかったので整理する。</p>
+<h1>into_iter()</h1>
+<pre lang="rust"><code>let numbers = vec![1, 2, 3];
+for number in numbers {
+  // numberは要素そのもの
+}
+// numbersは再利用不可
+</code></pre>
+<p><a href="https://doc.rust-lang.org/std/iter/index.html#for-loops-and-intoiterator">公式ドキュメント</a>にある通り、for式はコレクションに対して<code>IntoIterator</code>トレイトの<code>into_iter()</code>を呼び<code>Iterator</code>トレイトを実装するものを生成する。そして、それに対し<code>next()</code>を呼ぶことで要素を取り出す。</p>
+<pre lang="rust"><code>fn into_iter(self) -&gt; Self::IntoIter
+</code></pre>
+<p>定義によると<code>into_iter()</code>は<code>self</code>を受けるため、<code>Copy</code>トレイトが実装されていなければmoveが発生する。なので、for式のあとで再利用しようとしてエラーが発生してしまう。</p>
+<h1>iter(), iter_mut()</h1>
+<pre lang="rust"><code>let numbers = vec![1, 2, 3];
+for number = numbers.iter() {
+  // numberは要素への参照
+}
+// numbersは再利用可
+</code></pre>
+<p>ここからの話は<code>Vec</code>型を想定する。moveを発生させたくない場合、<code>iter()</code>や<code>iter_mut()</code>を使う。</p>
+<pre lang="rust"><code>pub fn iter(&amp;self) -&gt; Iter
+</code></pre>
+<p><code>into_iter()</code>とは違い、<code>&amp;self</code>を受けるのでmoveは発生しない。<code>Vec</code>型の実装だと、<code>std::slice::Iter</code>型を返す。なので、for式はこの<code>Iter</code>型の<code>into_iter()</code>を呼ぶことになるが、<a href="https://doc.rust-lang.org/src/core/iter/traits/collect.rs.html#247-249">実装</a>を見ると<code>self</code>を返しているだけ。<code>Iter</code>型は<code>Iterator</code>トレイトも実装しているということになる。</p>
+<pre lang="rust"><code>let numbers = vec![1];
+let mut iterator = numbers.iter();
+assert_eq!(iterator.next(), Some(&amp;1));
+assert_eq!(iterator.next(), None);
+</code></pre>
+<p><code>Iter</code>型の<code>next()</code>の実装を見てみたけど、現時点では理解できそうになかった。ただ、上のコードの通り、<code>next()</code>は要素の不変の参照を返す。一方で、<code>iter_mut()</code>ではこれが可変の参照になる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

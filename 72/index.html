@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class_evalとinstance_eval</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="class_evalとinstance_eval">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/72/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">class_evalとinstance_eval</h1>
+          <p class="metadata">
+            <time datetime="2011-07-22T01:42:00.000+0000">2011-07-22 01:42</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>以下のようなクラスとインスタンスについて考えていく。</p>
+<pre><code>Person = Class.new # Personクラスの作成（Classクラスのインスタンスの作成）
+naoty = Person.new # Personクラスのインスタンスの作成
+</code></pre>
+<p>今回はclass_evalとinstance_evalについて。どっちとも引数のブロック内の文字列をRubyコードとして評価して実行するのだが、実行するコンテキストが異なる。</p>
+<pre><code>Person.class_eval do
+  def greet
+    p 'Hello, my world!'
+  end
+end
+naoty.greet #=&gt; &quot;Hello, my world!&quot;
+</code></pre>
+<ul>
+<li>class_evalはレシーバ（＝Person）をクラスとしてブロック内を実行する。クラス内で実行されたのと同じ。</li>
+<li>この場合、Personをクラスとしてgreetを定義しているので、greetはインスタンスメソッドとなり、naotyというインスタンスから呼び出すことができる。</li>
+<li>privateメソッドを呼び出すときに使われることが多い。</li>
+</ul>
+<pre><code>Person.instance_eval do
+  def greet
+    p 'Hello, world!'
+  end
+end
+Person.greet #=&gt; &quot;Hello, world!&quot;
+naoty.greet #=&gt; NoMethodError: undefined method 'greet' for ...
+</code></pre>
+<ul>
+<li>instance_evalはレシーバ（＝Person）をインスタンスとしてブロック内を実行する。</li>
+<li>instance_evalでメソッドを定義すると、そのインスタンスの特異メソッドが定義されることになる。</li>
+<li>PersonをClassクラスのインスタンスとして考えると、instance_eval内で定義されたメソッドはPersonの特異メソッドであり、すなわちクラスメソッドということになる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

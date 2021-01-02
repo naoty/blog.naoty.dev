@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISUCON 8予選のKPT</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ISUCON 8予選のKPT">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/344/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ISUCON 8予選のKPT</h1>
+          <p class="metadata">
+            <time datetime="2018-09-17T11:13:00.000+0900">2018-09-17 11:13</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>ISUCON 8に参加して予選敗退した。会社の同僚と「チームプロ開」として参加し、自分はアプリケーションを担当していた。結果的にベストスコアは16000くらいで終わった。悔しい結果になってしまったので、KPTして次回に活かしたい。</p>
+<h1>Keep</h1>
+<ul>
+<li>N+1クエリを直したり<code>SELECT * FROM reservations</code>のような全カラムを取得する箇所を直すなど、基本的な修正は短時間でできた。</li>
+<li>事前に確認しておいたRedisの導入がスムーズにできた。そこまで大きいインパクトはなかったけど。</li>
+<li><code>git tag 1310</code>のようにスコアをタグ付けする運用がけっこうよかった。failが続いた局面でどこまでrollbackすればいいか分かりやすかった。</li>
+</ul>
+<h1>Problem</h1>
+<ul>
+<li>Macに開発環境をセットアップするのに時間がかかってしまった。普段はDocker中心の開発環境で仕事しているので、久々にMySQLをインストールしようとしたらハマってしまった。</li>
+<li>h2oからnginxへの移行や複数台構成への移行で時間がとられてしまった。アプリケーションの修正を開始したのは15:30くらいからになってしまった。</li>
+<li>ロックがボトルネックになっていることに気づかなかった。ベンチマークガチャとか言って思考停止していた。</li>
+</ul>
+<h1>Try</h1>
+<ul>
+<li>事前に開発環境をセットアップしておく。</li>
+<li>慣れない作業でハマったときは思い切ってやらない決断も必要。</li>
+<li>時間がなくてできなかったけど、実装を書き直したりスキーマを変更して根本的に改善できるようにしたい。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

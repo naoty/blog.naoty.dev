@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>normalizrの使い方</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="normalizrの使い方">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/366/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">normalizrの使い方</h1>
+          <p class="metadata">
+            <time datetime="2019-04-12T20:23:00.000+0900">2019-04-12 20:23</time>
+            <a href="/javascript/">#javascript</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、Nuxt.jsでカンバンアプリを作る練習をしていて、そこで<a href="https://github.com/paularmstrong/normalizr">normalizr</a>を使っている。GraphQLのレスポンスをnormalizrで正規化してVuexのStoreに保存している。normalizrを使って正規化されたデータは、特にネストしたデータをループしたい場合、Vueコンポーネント内で扱いやすいので、重宝している。</p>
+<p>normalizrの使い方を理解するのに少し手間取ったので、自分のためにメモしておきたい。</p>
+<h1>オブジェクト</h1>
+<pre lang="js"><code>const { normalize, schema } = require(&quot;normalizr&quot;);
+const data = {
+  id: 1,
+  name: &quot;TODO&quot;
+};
+const status = new schema.Entity(&quot;statuses&quot;);
+normalize(data, status);
+// {
+//   entities: {
+//     statuses: {
+//       &quot;1&quot;: {
+//         id: 1,
+//         name: &quot;TODO&quot;
+//       }
+//     }
+//   },
+//   result: 1
+// }
+</code></pre>
+<ul>
+<li><code>normalize(, )</code>という使い方をする。</li>
+<li><code>new schema.Entity()</code>でスキーマを初期化する。キーは正規化したデータのプロパティ名に使われる。</li>
+<li>正規化されたデータは<code>id</code>の値をキーとしたオブジェクトになっている。デフォルトでは<code>id</code>プロパティをキーに使うけど、<code>idAttribute</code>オプションで<code>id</code>以外のプロパティをキーに使うことができる。</li>
+</ul>
+<h1>配列</h1>
+<pre lang="js"><code>const { normalize, schema } = require(&quot;normalizr&quot;);
+const data = [
+  {
+    id: 1,
+    name: &quot;TODO&quot;
+  }
+];
+const status = new schema.Entity(&quot;statuses&quot;);
+const statuses = new schema.Array(status);
+normalize(data, statuses);
+// {
+//   entities: {
+//     statuses: {
+//       &quot;1&quot;: {
+//         id: 1,
+//         name: &quot;TODO&quot;
+//       }
+//     }
+//   },
+//   result: 1
+// }
+</code></pre>
+<ul>
+<li>正規化したいデータが配列の場合、<code>schema.Array</code>を<code>normalize</code>に渡す。</li>
+</ul>
+<h1>名前つきの配列</h1>
+<pre lang="js"><code>const { normalize, schema } = require(&quot;normalizr&quot;);
+const data = {
+  statuses: [
+    {
+      id: 1,
+      name: &quot;TODO&quot;
+    }
+  ]
+};
+const status = new schema.Entity(&quot;statuses&quot;);
+const statuses = new schema.Array(status);
+const root = new schema.Object({ statuses });
+normalize(data, root);
+// {
+//   entities: {
+//     statuses: {
+//       &quot;1&quot;: {
+//         id: 1,
+//         name: &quot;TODO&quot;
+//       }
+//     }
+//   },
+//   result: {
+//     statuses: [1]
+//   }
+// }
+</code></pre>
+<ul>
+<li><code>statuses: [...]</code>のような名前がついた配列の場合、<code>schema.Object</code>を使ってどのプロパティに対してどのスキーマを使うかをマッピングすることで正規化できるようになる。</li>
+</ul>
+<h1>ネストしたオブジェクト</h1>
+<pre lang="js"><code>const { normalize, schema } = require(&quot;normalizr&quot;);
+const data = {
+  statuses: [
+    {
+      id: 1,
+      name: &quot;TODO&quot;,
+      tasks: [
+        {
+          id: 1,
+          title: &quot;normalizrの使い方を理解する&quot;
+        }
+      ]
+    }
+  ]
+};
+const task = new schema.Entity(&quot;tasks&quot;);
+const tasks = new schema.Array(task);
+const status = new schema.Entity(&quot;statuses&quot;, { tasks });
+const statuses = new schema.Array(status);
+const root = new schema.Object({ statuses });
+normalize(data, root);
+// {
+//   entities: {
+//     tasks: {
+//       &quot;1&quot;: {
+//         id: 1,
+//         title: &quot;normalizrの使い方を理解する&quot;
+//       }
+//     }
+//     statuses: {
+//       &quot;1&quot;: {
+//         id: 1,
+//         name: &quot;TODO&quot;,
+//         tasks: [1]
+//       }
+//     }
+//   },
+//   result: {
+//     statuses: [1]
+//   }
+// }
+</code></pre>
+<ul>
+<li>ネストしたオブジェクトをnormalizrで正規化すると、フラットな構造に変換される。</li>
+<li>task用のスキーマを用意し、status用のスキーマに渡すことで、ネストしたtaskの配列を正規化している。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

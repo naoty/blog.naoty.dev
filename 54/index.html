@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails3のルーティングの初歩</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails3のルーティングの初歩">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/54/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails3のルーティングの初歩</h1>
+          <p class="metadata">
+            <time datetime="2011-05-12T13:36:00.000+0000">2011-05-12 13:36</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>resources :users
+</code></pre>
+<p>　これで、基本的なアクション（index, show, new, create, edit, update, delete）のマッピングができる。</p>
+<pre><code>resources :users do
+  get 'mail', :on =&gt; :member
+end
+</code></pre>
+<p>　他にアクションを加えたい場合、ブロック内に「HTTP verb」「アクション名」「member（単数）かcollection（複数）か」を加えればおｋ。この場合のルーティングヘルパーは「mail_user_path(id)」となる。</p>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p>2011.5.13追記</p>
+<pre><code>resources :users do
+  get 'mail', :on =&gt; :member #=&gt; mail_user_path(id)
+  get 'group', :on =&gt; :collection #=&gt; group_users_path
+end
+</code></pre>
+<p>member（単数）だったらヘルパーも単数、collection（複数）だったらヘルパーも複数だった。Railsの単数複数は徹底してるねー。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

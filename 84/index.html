@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CentOSにmysqlを入れて起動するまでのメモ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="CentOSにmysqlを入れて起動するまでのメモ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/84/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">CentOSにmysqlを入れて起動するまでのメモ</h1>
+          <p class="metadata">
+            <time datetime="2011-10-17T21:58:00.000+0000">2011-10-17 21:58</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>１．rpmでインストール</p>
+<pre><code>naoty$ yum list | grep mysql-server
+mysql-server.x86_64 5.0.77-4.el5_6.6 base
+</code></pre>
+<ul>
+<li>yumだと古いバージョンしかインストールできないみたいです。</li>
+<li>なので、rpmでインストールします。</li>
+</ul>
+<pre><code>naoty$ mkdir src
+naoty$ cd src
+naoty$ wget http://dev.mysql.com/get/Downloads/MySQL-5.5/MySQL-server-5.5.16-1.linux2.6.x86_64.rpm/from/http://ftp.iij.ad.jp/pub/db/mysql/
+naoty$ sudo rpm -i MySQL-server-5.5.16-1.linux2.6.x86_64.rpm
+naoty$ wget http://dev.mysql.com/get/Downloads/MySQL-5.5/MySQL-client-5.5.16-1.linux2.6.x86_64.rpm/from/http://ftp.iij.ad.jp/pub/db/mysql/
+naoty$ sudo rpm -i MySQL-client-5.5.16-1.linux2.6.x86_64.rpm
+</code></pre>
+<ul>
+<li>インストールするのは、mysql-serverとmysql-clientです。</li>
+<li>他にもいろいろあるようですが、いまのところは必要なさそうです。</li>
+</ul>
+<p>２．起動</p>
+<pre><code>naoty$ sudo mysqld_safe &gt; /dev/null &amp;
+</code></pre>
+<ul>
+<li>インストールしたときのメッセージにしたがってmysqld_safeで起動</li>
+<li>/dev/nullはゴミ箱みたいなものだそうです。ゴミ箱に出力して、&amp;でバックグラウンドで実行です。</li>
+</ul>
+<p>３．初期設定</p>
+<pre><code>naoty$ sudo mysql_secure_installation
+...
+Set root password? [Y/n] Y
+...
+Remove anonymous users? [Y/n] Y
+...
+Disallow root login remotely? [Y/n] Y
+...
+Remove test database and access to it? [Y/n] Y
+...
+Reload privilege tables now? [Y/n] Y
+...
+</code></pre>
+<ul>
+<li>インストールしたときに強く推奨されたmysql_secure_installationで堅牢な初期設定をします。</li>
+<li>質問にはぜんぶ「Y」</li>
+</ul>
+<p>４．クライアント起動</p>
+<pre><code>naoty$ mysql -u root -p
+</code></pre>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p>2011.10.18追記</p>
+<pre><code>naoty$ bundle install --path vendor/bundle
+...
+Installing mysql2 (0.3.7) with native extensions
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+...
+checking for rb_thread_blocking_region()... yes
+checking for mysql_query() in -lmysqlclient... no
+checking for main() in -lm... yes
+checking for mysql_query() in -lmysqlclient... no
+checking for main() in -lz... yes
+checking for mysql_query() in -lmysqlclient... no
+checking for main() in -lsocket... no
+checking for mysql_query() in -lmysqlclient... no
+checking for main() in -lnsl... yes
+checking for mysql_query() in -lmysqlclient... no
+checking for main() in -lmygcc... no
+checking for mysql_query() in -lmysqlclient... no
+...
+</code></pre>
+<ul>
+<li>rails3.1でmysqlアダプターをインストールしようとしたところ上記のようなエラーが発生しました。</li>
+<li>どうやらライブラリが足りないようなので、共有ライブラリをrpmでインストールします。</li>
+</ul>
+<pre><code>naoty$ cd src
+naoty$ wget http://dev.mysql.com/get/Downloads/MySQL-5.5/MySQL-shared-5.5.16-1.linux2.6.x86_64.rpm/from/http://ftp.jaist.ac.jp/pub/mysql/
+naoty$ sudo rpm -i MySQL-shared-5.5.16-1.linux2.6.x86_64.rpm
+</code></pre>
+<pre><code>naoty$ bundle install --path vendor/bundle
+...
+Installing mysql2 (0.3.7) with native extensions
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+...
+checking for rb_thread_blocking_region()... yes
+checking for mysql_query() in -lmysqlclient... yes
+checking for mysql.h... no
+checking for mysql/mysql.h... no
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

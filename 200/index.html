@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quickrun.vimでC++11をコンパイルする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="quickrun.vimでC++11をコンパイルする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/200/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">quickrun.vimでC++11をコンパイルする</h1>
+          <p class="metadata">
+            <time datetime="2013-08-21T11:36:00.000+0000">2013-08-21 11:36</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="vim"><code>let g:quickrun_config.cpp = {
+\   'command': 'g++',
+\   'cmdopt': '-std=c++11'
+\ }
+</code></pre>
+<ul>
+<li>Mac OS X 10.8</li>
+<li>gcc 4.9（Homebrewで最新版をインストールした）</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

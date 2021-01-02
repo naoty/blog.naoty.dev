@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セレクタのリファクタリング</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="セレクタのリファクタリング">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/30/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">セレクタのリファクタリング</h1>
+          <p class="metadata">
+            <time datetime="2011-01-20T19:56:00.000+0000">2011-01-20 19:56</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　セレクタがごちゃごちゃするとき、以下のように書き換えると処理速度が向上するそうです。なるべくセレクタはシンプルにまとめて、find()を利用するといいそうです。</p>
+<p>Before</p>
+<pre><code>$(&quot;tr td&quot;).remove();
+$(&quot;tr:first&quot;, this).remove();
+</code></pre>
+<p>After</p>
+<pre><code>$(&quot;tr&quot;).find(&quot;td&quot;).remove();
+$(this).find(&quot;tr&quot;).first().remove();
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

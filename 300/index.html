@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoのためのDockerfile</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="GoのためのDockerfile">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/300/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">GoのためのDockerfile</h1>
+          <p class="metadata">
+            <time datetime="2017-09-18T12:18:00.000+0000">2017-09-18 12:18</time>
+          </p>
+        </header>
+        <section class="body">
+          <h2>base image</h2>
+<p><code>library/golang</code>で公式イメージが用意されている。ユースケースに合わせていくつかの種類が用意されている。</p>
+<ul>
+<li><code>golang:</code>: 何が必要なのか分かっていない場合はこれを使った方がよさそう。</li>
+<li><code>golang:alpine</code>: Alpine Linuxをベースとしているため非常に軽い。イメージサイズを小さくしたい場合に推奨されている。</li>
+<li><code>golang:onbuild</code>: ネット上ではよく紹介されているが、公式では非推奨とされている。</li>
+</ul>
+<h2>ディレクトリレイアウト</h2>
+<pre><code>$ docker run -i -t --rm golang:1.9 /bin/bash
+root@xxxxxxxxx:/go# pwd
+/go
+root@xxxxxxxxx:/go# ls
+bin src
+root@xxxxxxxxx:/go# env | grep GO
+GOLANG_VERSION=1.9
+GOPATH=/go
+</code></pre>
+<p><code>GOPATH</code>が<code>/go</code>に設定されているので、<code>/go/src/</code>以下に<code>WORKDIR</code>を設定していく。</p>
+<h2>Dockerfile</h2>
+<pre><code>FROM golang:1.9
+WORKDIR /go/src/github.com/naoty/golang-sample
+COPY . .
+RUN go install github.com/naoty/golang-sample
+ENTRYPOINT [&quot;golang-sample&quot;]
+</code></pre>
+<p><code>go install ...</code>で<code>/go/bin/</code>以下にバイナリがビルドされる。<code>PATH</code>は<code>/go/bin</code>も含まれているため、そのままビルドされたバイナリを指定するだけでOK。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="http://docs.docker.jp/engine/articles/dockerfile_best-practice.html">Dockerfile のベストプラクティス — Docker-docs-ja 1.9.0b ドキュメント</a></li>
+<li><a href="https://hub.docker.com/_/golang/">https://hub.docker.com/_/golang/</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

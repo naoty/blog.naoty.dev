@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ハッピーになれるpry拡張詰め合わせGemfile</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ハッピーになれるpry拡張詰め合わせGemfile">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/106/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ハッピーになれるpry拡張詰め合わせGemfile</h1>
+          <p class="metadata">
+            <time datetime="2012-03-20T18:05:00.000+0000">2012-03-20 18:05</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>この<a href="http://blog.kiftwi.net/2012/03/20/summary-of-pry-plugins/">記事</a>に感動したので、gemfileにまとめてみました。各gemの使い方はこの記事を参照してください。</p>
+<pre lang="ruby:Gemfile"><code>source 'http://rubygems.org'
+
+group :development do
+  gem 'pry-rails'
+  gem 'pry-debugger'
+  gem 'pry-exception_explorer'
+  gem 'hirb-unicode'
+end
+</code></pre>
+<pre lang="ruby:.pryrc"><code># https://github.com/pry/pry/wiki/FAQ#wiki-hirb
+require 'hirb'
+
+Hirb.enable
+
+old_print = Pry.config.print
+Pry.config.print = proc do |output, value|
+  Hirb::View.view_or_page_output(value) || old_print.call(output, value)
+end
+</code></pre>
+<hr />
+<h3>追記：2012/3/20</h3>
+<ul>
+<li><code>pry-coolline</code>は日本語を入力すると表示が崩れてしまうのでいったん外しました</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ビルドに必要なファイルの種類を整理する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ビルドに必要なファイルの種類を整理する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/377/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ビルドに必要なファイルの種類を整理する</h1>
+          <p class="metadata">
+            <time datetime="2019-08-04T16:38:00.000+0900">2019-08-04 16:38</time>
+            <a href="/c/">#c</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、mrubyを触ってるんだけど、ビルド周りの知識があいまいで自分が何をしているのかよくわからないときがあったので、<a href="https://www.oreilly.co.jp/books/9784873116099/">Head First C</a>を読み直した。あらためて基本的なことを確認できたので、メモに残しておく。</p>
+<h1><code>*.c</code></h1>
+<ul>
+<li>C言語のソースコード</li>
+</ul>
+<h1><code>*.h</code></h1>
+<ul>
+<li>ヘッダーファイル。ソースコードで実装されている関数や構造体の宣言が書いてある。</li>
+<li>宣言をソースコードと分けることで、ソースコード内で関数や構造体を実装する順番を気にしなくてよくなる。</li>
+<li><code>#include </code>や<code>#include &quot;myheader.h&quot;</code>でヘッダーファイル内の宣言をソースコードに展開する。前者は<code>/usr/include</code>や<code>/usr/local/include</code>以下にあるヘッダーファイルを検索し、後者はソースコードからの相対パスで検索する。</li>
+</ul>
+<h1><code>*.o</code></h1>
+<ul>
+<li>オブジェクトコード。CPUが実際に実行できるバイナリ形式のコード。</li>
+<li>以下のように<code>gcc -c</code>でソースコードから生成できる。<code>-c</code>オプションはコンパイルするけどリンクしない。
+<pre lang="bash"><code># foo.oを生成する
+$ gcc -c foo.c
+</code></pre>
+</li>
+</ul>
+<h1><code>lib*.a</code></h1>
+<ul>
+<li>スタティックリンクライブラリ。オブジェクトファイルを含んだzipファイルのようなアーカイブファイル。<code>/usr/lib</code>や<code>/usr/local/lib</code>のようなライブラリディレクトリに置かれている。</li>
+<li><code>ar</code>コマンドを使ってスタティックリンクライブラリを生成できる。
+<pre lang="bash"><code># foo1.oとfoo2.oを含むlibfoo.aを生成する
+$ ar -rcs libfoo.a foo1.o foo2.o
+</code></pre>
+</li>
+<li>スタティックリンクライブラリを使ったコンパイルは以下のようになる。
+<pre lang="bash"><code># libfoo.aを使ってbazを生成する
+$ gcc bar.c -lfoo -o baz
+</code></pre>
+</li>
+</ul>
+<h1><code>lib*.so</code></h1>
+<ul>
+<li>
+<p>ダイナミックリンクライブラリ。複数のオブジェクトファイルを含むが、スタティックリンクライブラリとは異なり、オブジェクトファイルが適切にリンクされた1つのオブジェクトコードを持つ。<code>/usr/lib</code>や<code>/usr/local/lib</code>に置かれる。</p>
+</li>
+<li>
+<p><code>gcc -shared</code>でオブジェクトファイルからダイナミックリンクライブラリを生成する</p>
+<pre lang="bash"><code># foo1.oを含むlibfoo.soを生成する
+$ gcc -shared foo1.o -o libfoo.so
+</code></pre>
+</li>
+<li>
+<p>ダイナミックリンクライブラリを使ったコンパイルは以下のようにスタティックリンクライブラリのときと同じ。</p>
+<pre lang="bash"><code>$ gcc bar.c -lfoo -o baz
+</code></pre>
+<p>ただし、コンパイラはライブラリを実行可能ファイルに含めない。代わりに、実行時にライブラリを見つけ出してリンクするプレースホルダーを挿入する。</p>
+<p>このように生成された実行可能ファイルはダイナミックリンクライブラリを変更しても再コンパイルする必要はなく、ダイナミックリンクライブラリをコンパイルするだけでいい。</p>
+</li>
+</ul>
+<h1>実行可能ファイル</h1>
+<ul>
+<li>複数のオブジェクトファイルをリンクして実行可能な形式に変換される。</li>
+<li>以下のように<code>gcc -o</code>でオブジェクトファイルから生成できる。
+<pre lang="bash"><code># すべてのオブジェクトファイルからfooを生成する
+$ gcc *.o -o foo
+</code></pre>
+</li>
+</ul>
+<h1>まとめ</h1>
+<p>以上のような種類のファイルから最終的に実行可能ファイルができるまでの図を書いてみた。</p>
+<pre><code>foo.c  -&gt; foo.o  ----------------+-&gt; qux
+                                 |
+bar1.c -&gt; bar1.o -+-&gt; libbar.a --+
+                  |              |
+bar2.c -&gt; bar2.o -+              |
+                                 |
+baz1.c -&gt; baz1.o -+-&gt; libbaz.so -+
+                  |
+baz2.c -&gt; baz2.o -+
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

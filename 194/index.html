@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails 4.0だとCSRFトークンでエラーになる</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Rails 4.0だとCSRFトークンでエラーになる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/194/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Rails 4.0だとCSRFトークンでエラーになる</h1>
+          <p class="metadata">
+            <time datetime="2013-06-28T23:41:00.000+0000">2013-06-28 23:41</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>ついにRails 4がリリースされたので軽く触ってみたら、3.xから変わったところを見つけたので共有。まだ日本語の情報は見当たらなかった。</p>
+<p>APIを試しに作ってみようと思い<code>curl</code>でPOSTリクエストを送ろうとしたら以下のようなエラーが。</p>
+<pre><code>$ curl -X POST -d &quot;name='hoge'&quot; http://localhost:3000/bikes
+Can't verify CSRF token authenticity
+Completed 422 Unprocessable Entity in 1ms
+
+ActionController::InvalidAuthenticityToken (ActionController::InvalidAuthenticityToken):
+...
+</code></pre>
+<p>Rails 3.xのときはWarningは出たものの、エラーにはならなかったような…。</p>
+<p><code>application_controller.rb</code>を見てみると、以下のようなコメントがありました。</p>
+<pre lang="rb:application_controller.rb"><code>class ApplicationController &lt; ActionController::Base
+  # Prevent CSRF attacks by raising an exception.
+  # For APIs, you may want to use :null_session instead.
+  protect_from_forgery with: :exception
+end
+</code></pre>
+<p>どうやらAPIを作りたい場合は、<code>:exception</code>ではなく<code>:null_session</code>を使うといいようです。</p>
+<p>気になってactionpackのソースコードを読んでみました。Rails 3.xのときにソースコードを読んだときの記事を最後に載せたので参考にしてみてください。</p>
+<pre lang="rb:actionpack-4.0.0/lib/action_controller/metal/request_forgery_protection.rb"><code>def protect_from_forgery(options = {})
+  self.forgery_protection_strategy = protection_method_class(options[:with] || :null_session)
+  self.request_forgery_protection_token ||= :authenticity_token
+  prepend_before_action :verify_authenticity_token, options
+end
+</code></pre>
+<p>3.xのときと比べると32行目の<code>forgery_protection_strategy</code>というのが新しく追加されたようです。<code>with</code>オプションで指定したクラスをセットしているようなので詳しく見てみます。</p>
+<pre lang="rb:actionpack-4.0.0/lib/action_controller/metal/request_forgery_protection.rb"><code>def protection_method_class(name)
+  ActionController::RequestForgeryProtection::ProtectionMethods.const_get(name.to_s.classify)
+rescue NameError
+  raise ArgumentError, 'Invalid request forgery protection method, use :null_session, :exception, or :reset_session'
+end
+</code></pre>
+<p>デフォルトのように<code>:exception</code>が指定されてる場合は<code>Exception</code>クラスが、今回のようにAPI用に使う<code>:null_session</code>が指定された場合は<code>NullSession</code>クラスがどこかに定義されているようです。</p>
+<pre lang="rb:actionpack-4.0.0/lib/action_controller/metal/request_forgery_protection.rb"><code>class Exception
+  def initialize(controller)
+    @controller = controller
+  end
+
+  def handle_unverified_request
+    raise ActionController::InvalidAuthenticityToken
+  end
+end
+</code></pre>
+<p>あったあった。どこかのタイミングで<code>handle_unverified_request</code>が呼ばれて、冒頭のように例外が発生するわけですね。</p>
+<pre lang="rb:actionpack-4.0.0/lib/action_controller/metal/request_forgery_protection.rb"><code>class ResetSession
+  def initialize(controller)
+    @controller = controller
+  end
+
+  def handle_unverified_request
+    @controller.reset_session
+  end
+end
+</code></pre>
+<p>さらに<code>ResetSession</code>というクラスも見つかりました。これは例外を発生させる代わりにセッションをリセットするみたいです。これはRails 3.xのときと同じ挙動だったと思います。</p>
+<pre lang="rb:actionpack-4.0.0/lib/action_controller/metal/request_forgery_protection.rb"><code>class NullSession
+  # ...
+
+  # This is the method that defines the application behavior when a request is found to be unverified.
+  def handle_unverified_request
+    request = @controller.request
+    request.session = NullSessionHash.new(request.env)
+    request.env['action_dispatch.request.flash_hash'] = nil
+    request.env['rack.session.options'] = { skip: true }
+    request.env['action_dispatch.cookies'] = NullCookieJar.build(request)
+  end
+
+  # ...
+end
+</code></pre>
+<p>で、<code>NullSession</code>クラスを見てみると、<code>NullSessionHash</code>オブジェクトと<code>NullCookieJar</code>オブジェクトというのが出てきますが、こいつらはどうやら中身が空っぽのモックオブジェクトっぽいです。</p>
+<hr />
+<h3>参考</h3>
+<p>Rails 3.xのときに<code>protect_from_forgery</code>の中身を追いかけた記録です。</p>
+<p><a href="http://qiita.com/naoty_k/items/ce037ea79bb5893f2b89">CSRFトークンの検証プロセス</a></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

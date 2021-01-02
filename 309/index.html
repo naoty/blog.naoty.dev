@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActiveRecordのattributeメソッド</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ActiveRecordのattributeメソッド">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/309/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ActiveRecordのattributeメソッド</h1>
+          <p class="metadata">
+            <time datetime="2017-12-08T23:00:00.000+0900">2017-12-08 23:00</time>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="ruby"><code>class User
+  attribute :unencrypted_password, :string
+end
+</code></pre>
+<ul>
+<li><code>attribute</code>メソッドはモデルに属性を追加する。</li>
+<li>DBのカラムがなくても追加できる。</li>
+<li>DBのカラムのアクセサをoverrideすることもできる。</li>
+</ul>
+<h1>例：パスワードのvalidation</h1>
+<p>パスワードのvalidationを実装する場合を考える。パスワードのvalidationというのは、暗号化される前の値に対して行われる。生パスワードはDBに保存しないが、アクセサがあると便利なので<code>attribute</code>メソッドで追加する。<code>attribute</code>メソッドで追加した仮想的なカラムにはvalidationが使える。</p>
+<pre lang="ruby"><code>class User
+  attribute :unencrypted_password, :string
+
+  before_save :encrypt_password, if: unencrypted_password_changed?
+
+  validates :unencrypted_password,
+    format: { with: /\A[0-9a-zA-Z]\z/ },
+    length: { minimum: 8, maximum: 36 },
+    presence: true
+
+  private
+
+  def encrypt_password
+    cost = BCrypt::Engine.cost
+    self.password = BCrypt::Password.create(unencrypted_password, cost)
+  end
+end
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

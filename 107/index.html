@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vimrc晒し</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="vimrc晒し">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/107/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">vimrc晒し</h1>
+          <p class="metadata">
+            <time datetime="2012-03-27T14:47:00.000+0000">2012-03-27 14:47</time>
+          </p>
+        </header>
+        <section class="body">
+          <ul>
+<li>vimを使い始めて1年くらい</li>
+<li>Rails開発のときにvimを使う</li>
+</ul>
+<pre lang="vim:.vimrc"><code>set nocompatible
+
+&quot; ----------------------------------------
+&quot; Colors
+&quot; ----------------------------------------
+colorscheme railscasts
+
+syntax on
+
+highlight StatusLine   cterm=NONE ctermfg=white ctermbg=233
+highlight StatusLineNC cterm=NONE ctermfg=white ctermbg=233
+highlight VertSplit    cterm=NONE ctermfg=233   ctermbg=233
+
+&quot; ----------------------------------------
+&quot; Display
+&quot; ----------------------------------------
+set laststatus=2
+set number
+set ruler
+set showcmd
+set showmatch
+set list
+set listchars=tab:-&gt;,trail:-
+
+&quot; ----------------------------------------
+&quot; Edit
+&quot; ----------------------------------------
+set autoindent smartindent
+set expandtab
+set tabstop=2 softtabstop=0 shiftwidth=2
+set wildmenu
+set wildmode=list:full
+
+&quot; ----------------------------------------
+&quot; Search
+&quot; ----------------------------------------
+set hlsearch
+set incsearch
+
+nnoremap n nzz 
+nnoremap N Nzz 
+nnoremap  :nohlsearch
+
+&quot; ----------------------------------------
+&quot; Vundle
+&quot; ----------------------------------------
+filetype off 
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+&quot; manage plugins
+Bundle 'gmarik/vundle'
+
+&quot; search files
+Bundle 'unite.vim'
+
+&quot; complete keys
+Bundle 'Shougo/neocomplcache'
+
+&quot; complete snippets
+Bundle 'Shougo/neocomplcache-snippets-complete'
+
+&quot; git command on vim
+Bundle 'fugitive.vim'
+
+&quot; format codes
+Bundle 'Align'
+
+&quot; toggle comment outs
+Bundle 'git://github.com/scrooloose/nerdcommenter.git'
+
+&quot; HTML snippets
+Bundle 'ZenCoding.vim'
+
+&quot; tree explorer
+Bundle 'git://github.com/scrooloose/nerdtree.git'
+
+&quot; bettar indentation for JavaScript
+Bundle 'git://github.com/pangloss/vim-javascript.git'
+
+&quot; syntax and indent for coffee script
+Bundle 'kchmck/vim-coffee-script'
+
+&quot; plugins for Titanium Desktop/Mobile
+Bundle 'git://github.com/pekepeke/titanium-vim.git'
+
+filetype plugin indent on
+
+&quot; ----------------------------------------
+&quot; Unite.vim
+&quot; ----------------------------------------
+let g:unite_enable_start_insert = 1
+
+&quot; open unite buffer
+nnoremap  :Unite buffer file_rec
+
+&quot; ----------------------------------------
+&quot; neocomplcache.vim
+&quot; ----------------------------------------
+let g:neocomplcache_enable_at_startup = 1
+
+highlight Pmenu     ctermbg=8
+highlight PmenuSel  ctermbg=1
+highlight PmenuSbar ctermbg=0
+
+imap  neocomplcache#sources#snippets_complete#expandable() ? &quot;\(neocomplcache_snippets_expand)&quot; : pumvisible() ? &quot;\&quot; : &quot;\&quot;
+smap  neocomplcache#sources#snippets_complete#expandable() ? &quot;\(neocomplcache_snippets_expand)&quot; : pumvisible() ? &quot;\&quot; : &quot;\&quot;
+
+inoremap   neocomplcache#smart_close_popup().&quot;\&quot;
+inoremap  neocomplcache#close_popup()
+inoremap  neocomplcache#cancel_popup()
+
+&quot; ----------------------------------------
+&quot; Align.vim
+&quot; ----------------------------------------
+let g:Align_xstrlen = 3
+
+&quot; ----------------------------------------
+&quot; NERD_commenter.vim
+&quot; ----------------------------------------
+let g:NERDSpaceDelims = 1
+let g:NERDShutup = 1
+
+map x NERDCommenterToggle
+
+&quot; ----------------------------------------
+&quot; Other Key Mappings
+&quot; ----------------------------------------
+
+&quot; reload .vimrc
+nnoremap r :source ~/.vimrc
+
+&quot; move by one display line
+nnoremap j gj
+nnoremap k gk
+
+&quot; move to line head/end like mac
+nnoremap  0
+nnoremap  $
+
+&quot; go to another window
+nnoremap h h
+nnoremap j j
+nnoremap k k
+nnoremap l l
+
+&quot; move the window to another position
+nnoremap H H
+nnoremap J J
+nnoremap K K
+nnoremap L L
+
+&quot; adjust the window height/width
+nnoremap + 5+
+nnoremap - 5-
+nnoremap &gt; 10&gt;
+nnoremap &lt; 10&lt;
+
+&quot; complete surroundings
+inoremap ' ''
+inoremap &quot; &quot;&quot;
+inoremap ( ()
+inoremap { {}
+inoremap [ []
+inoremap \| \|\|
+
+&quot; hjkl move in insert mode
+inoremap  
+inoremap  
+inoremap  
+inoremap  
+
+&quot; ctags
+nnoremap  :pop
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web API: The Good Partsを読んだ</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Web API: The Good Partsを読んだ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/243/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Web API: The Good Partsを読んだ</h1>
+          <p class="metadata">
+            <time datetime="2014-11-27T14:55:00.000+0000">2014-11-27 14:55</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873116864/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51GHwTNJgSL._SL160_.jpg" alt="Web API: The Good Parts" title="Web API: The Good Parts" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873116864/hatena-blog-22/">Web API: The Good Parts</a></p>
+<ul>
+<li>作者: 水野貴明</li>
+<li>出版社/メーカー: オライリージャパン</li>
+<li>発売日: 2014/11/21</li>
+<li>メディア: 大型本</li>
+<li><a href="http://d.hatena.ne.jp/asin/4873116864/hatena-blog-22">この商品を含むブログ (1件) を見る</a></li>
+</ul>
+<p>業務ではiOSアプリとバックエンドの開発を両方担当しているので、APIの設計を何回かやってきた。しかし、自分なりのやり方でやってきた部分が多かったので、最近発売された<a href="http://www.oreilly.co.jp/books/9784873116860/">Web API: The Good Parts</a>を読んでちゃんとした設計について学ぶことにした。</p>
+<p>得られた学びをメモとして残す。</p>
+<h1>HATEOAS</h1>
+<p>HATEOAS（Hypermedia As The Engine Of Application State）という設計方法を初めて知った。HATEOASではまず、サーバー側はレスポンスに関連するエンドポイントを含め次にアクセスするAPIを簡単に辿れるようにする。クライアント側は最初のエンドポイント以外はハードコーディングせずにレスポンスに含まれるエンドポイントだけにアクセスを制限する。このようにすることで、アプリケーションのワークフローをクライアント側で制御するのではなく、サーバーサイドで制御できるようになる。</p>
+<p>HATEOASのメリットとしては、特にモバイルアプリケーション開発の文脈で重要なこととして、最初にアクセスするものを除いてエンドポイントをハードコーディングせずに済むということだと思う。一度リリースしてしまったアプリにハードコーディングされたエンドポイントは互換性を死守しなければならないが、レスポンス中に含まれるものを使うのであれば柔軟にエンドポイントを変更することが可能になる。</p>
+<p>例として、配列を返すレスポンスに前後のページへのリンクを含める場合はこのようになる。</p>
+<pre><code>{
+  friends: [
+    {
+      id: 12345,
+      name: &quot;Alice&quot;
+    },
+    {
+      id: 12346,
+      name: &quot;Bob&quot;
+    }
+  ],
+  hasNext: true,
+  links: [
+    {
+      uri: &quot;http://api.example.com/v1/users?page=3&amp;per_page=20&quot;,
+      rel: &quot;next&quot;
+    },
+    {
+      uri: &quot;http://api.example.com/v1/users?page=1&amp;per_page=20&quot;,
+      rel: &quot;prev&quot;
+    }
+  }
+}
+</code></pre>
+<h1>エラー時のレスポンス</h1>
+<p>エラーが発生した場合は適切なHTTPステータスコードを返すのは当然としてエラーの詳細情報を返す必要がある。それらはレスポンスボディに含めることが多い。複数のエラーが同時に発生する場合を考慮して、詳細情報を配列で返す方が親切だと思う。詳細情報には、エラーメッセージだけでなく、API提供側で独自に定義した詳細コードが含まれることがある。詳細コードはステータスコードと混同しないように4桁にして、1000番台は汎用的なエラー、2000番台はユーザー情報に関連するエラーというようにカテゴリー分けすると便利。</p>
+<pre><code>{
+  errors: [
+    {
+      message: &quot;Not Found&quot;,
+      code: 1013
+    }
+  ]
+}
+</code></pre>
+<p>クライアント側の実装としては、HTTPステータスコードではなく詳細コードごとにエラーメッセージを出し分ける方がユーザーにとってフレンドリーなUIになるだろう。</p>
+<h1>キャッシュ</h1>
+<p>HTTPのキャッシュの仕様には2種類あり、期限切れモデルと検証モデルがある。</p>
+<p>期限切れモデルでは、キャッシュの保存期限をサーバー側で指定し、クライアントはその期限中は通信を行わなくなり期限が切れたらアクセスを再開する。期限の指定方法は<code>Cache-Control</code>ヘッダーと<code>Expires</code>ヘッダーの2種類ある。<code>Cache-Control</code>は<code>Date</code>ヘッダーの日時からの経過時間を指定する。<code>Expires</code>は期限を表す日時を指定する。<code>Cache-Control</code>は頻繁には更新されないデータに使われ、<code>Expires</code>は天気情報など決まった時間に更新されることがわかっている場合に使われることが多い。</p>
+<p>検証モデルでは、クライアントは今持っているキャッシュが有効かどうかを問い合わせて無効だったときだけ取得する。サーバー側はデータを返す際<code>Last-Modified</code>ヘッダーと<code>ETag</code>ヘッダーを返し、クライアントに保持してもらう。そして、クライアントが問い合わせるときに送られた<code>If-Modified-Since</code>や<code>If-None-Match</code>と比較して変化しているかどうかを判定する。変化していればキャッシュは無効とみなし再取得させる。期限切れモデルとは異なり、毎回アクセスは発生しているため、データ自体がそこまで大きくないとあまり効果はない。</p>
+<p>使い分けとしては、頻繁に更新されないものや定期的に更新されるようなデータは期限切れモデルを使い、頻繁に更新される可能性があるものは検証モデルを利用するのがよさそうだ。</p>
+<h1>その他</h1>
+<p>OAuth2.0のフロー、各HTTPステータスコードの説明、APIにまつわるセキュリティなどAPIを設計する上で必要となる周辺知識がのっている。個人的に気になっていたAPIオーケストレーションの話はそこまで取り上げられていなかった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

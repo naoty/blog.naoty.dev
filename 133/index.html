@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>見やすいgit-tag</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="見やすいgit-tag">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/133/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">見やすいgit-tag</h1>
+          <p class="metadata">
+            <time datetime="2012-07-10T20:44:00.000+0000">2012-07-10 20:44</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang=".zshrc"><code>alias gt=&quot;git for-each-ref --sort=-taggerdate --format='%(taggerdate:short) %(tag) %(taggername) %(subject)' refs/tags&quot;
+</code></pre>
+<p><img src="http://gyazo.com/e6fd03bfaea9f3b44f9c60d8b539dd3c.png?1341920431" alt="git-tag" /></p>
+<ul>
+<li><code>git tag</code>でタグ名を一覧で表示できる。<code>git tag -n</code>でコメントもいっしょに表示できる。だけど、タグをつけた日付とかタグをつけた人も表示するには<code>git tag</code>では無理みたい。</li>
+<li><code>git for-each-ref</code>はcommitとかtagとかのrefがバーっとみれる（まだよく理解してない）</li>
+<li><code>--sort=</code>で表示されるソート順。<code>-taggerdate</code>でタグをつけた日付の降順。<code>-</code>をつけないと昇順。</li>
+<li><code>--format=</code>で出力されるフォーマットを指定できる。細かいところはmanをみてください。けっこう細かいので説明するのが大変。。。</li>
+<li><code>refs/tags</code>は表示する条件。これでタグだけを表示できる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

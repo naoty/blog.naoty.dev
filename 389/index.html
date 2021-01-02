@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NATゲートウェイの冗長化</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="NATゲートウェイの冗長化">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/389/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">NATゲートウェイの冗長化</h1>
+          <p class="metadata">
+            <time datetime="2019-11-28T18:05:00.000+0000">2019-11-28 18:05</time>
+            <a href="/aws/">#aws</a>
+            <a href="/terraform/">#terraform</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>AWS上にネットワークをゼロから構築する機会があり、NATゲートウェイの冗長化を行った。</p>
+<h1>考え方</h1>
+<ul>
+<li>NATゲートウェイがダウンすると、プライベートサブネットにあるサーバーがインターネットに接続できなくなる。</li>
+<li>AZ障害に備えて複数のAZのパブリックサブネットにNATゲートウェイを作る。</li>
+<li>他のAZでの障害の影響を受けないようにするため、NATゲートウェイは同じAZのプライベートネットワークから参照する。</li>
+</ul>
+<h1>図</h1>
+<pre><code>         public              private
+ 
+     +-[public-1a]-+     +-[private-1a]-+
+ 1a  |     NAT     |  |              |
+     +-------------+     +--------------+
+     
+     +-[public-1c]-+     +-[private-1c]-+
+ 1c  |     NAT     |  |              |
+     +-------------+     +--------------+
+</code></pre>
+<h1>Terraform</h1>
+<p>サブネットのAZを固定したいので、データソースを用意しておく。なくてもいいと思う。</p>
+<pre lang="hcl"><code>data &quot;aws_availability_zone&quot; &quot;ap_northeast_1a&quot; {
+  name = &quot;ap-northeast-1a&quot;
+}
+
+data &quot;aws_availability_zone&quot; &quot;ap_northeast_1c&quot; {
+  name = &quot;ap-northeast-1c&quot;
+}
+</code></pre>
+<p>パブリック/プライベートとAZのペアごとに4つのサブネットにVPCを分割する。<code>cidrblock</code>関数を使うとCIDRブロックの計算が簡単になる。</p>
+<pre lang="hcl"><code>resource &quot;aws_subnet&quot; &quot;public_1a&quot; {
+  vpc_id            = aws_vpc.default.id
+  availability_zone = data.aws_availability_zone.ap_northeast_1a.name
+  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 0)
+}
+
+resource &quot;aws_subnet&quot; &quot;public_1c&quot; {
+  vpc_id            = aws_vpc.default.id
+  availability_zone = data.aws_availability_zone.ap_northeast_1c.name
+  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 1)
+}
+
+resource &quot;aws_subnet&quot; &quot;private_1a&quot; {
+  vpc_id            = aws_vpc.default.id
+  availability_zone = data.aws_availability_zone.ap_northeast_1a.name
+  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 2)
+}
+
+resource &quot;aws_subnet&quot; &quot;private_1c&quot; {
+  vpc_id            = aws_vpc.default.id
+  availability_zone = data.aws_availability_zone.ap_northeast_1c.name
+  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 3)
+}
+</code></pre>
+<p>NATゲートウェイをパブリックサブネットごとに作る。</p>
+<pre lang="hcl"><code>resource &quot;aws_eip&quot; &quot;nat_gateway_1a&quot; {
+  vpc = true
+}
+
+resource &quot;aws_nat_gateway&quot; &quot;nat_gateway_1a&quot; {
+  allocation_id = aws_eip.nat_gateway_1a.id
+  subnet_id     = aws_subnet.public_1a.id
+}
+
+resource &quot;aws_eip&quot; &quot;nat_gateway_1c&quot; {
+  vpc = true
+}
+
+resource &quot;aws_nat_gateway&quot; &quot;nat_gateway_1c&quot; {
+  allocation_id = aws_eip.nat_gateway_1c.id
+  subnet_id     = aws_subnet.public_1c.id
+}
+</code></pre>
+<p>同じAZのNATゲートウェイを参照するようにルートテーブルを作る。</p>
+<pre lang="hcl"><code>resource &quot;aws_route_table&quot; &quot;private_1a&quot; {
+  vpc_id = aws_vpc.default.id
+
+  route {
+    cidr_block     = &quot;0.0.0.0/0&quot;
+    nat_gateway_id = aws_nat_gateway.private_1a.id
+  }
+}
+
+resource &quot;aws_route_table&quot; &quot;private_1c&quot; {
+  vpc_id = aws_vpc.default.id
+
+  route {
+    cidr_block     = &quot;0.0.0.0/0&quot;
+    nat_gateway_id = aws_nat_gateway.private_1c.id
+  }
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

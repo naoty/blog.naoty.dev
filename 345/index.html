@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sidekiqコンテナのヘルスチェック</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="sidekiqコンテナのヘルスチェック">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/345/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">sidekiqコンテナのヘルスチェック</h1>
+          <p class="metadata">
+            <time datetime="2018-09-28T22:41:00.000+0900">2018-09-28 22:41</time>
+            <a href="/aws/">#aws</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ECSでsidekiqをコンテナとして実行するとき、ALBからHTTP経由でヘルスチェックができないので、Dockerのヘルスチェックを利用するといい。</p>
+<p>Dockerのヘルスチェックはシェルスクリプトで行うことができ、終了ステータスが0ならhealthy、1ならunhealthyと判断する。そこで、sidekiqのpidfileを出力するように設定し</p>
+<pre><code>test -f sidekiq.pid
+</code></pre>
+<p>でヘルスチェックすればいい。</p>
+<p>sidekiqのDockerイメージはRailsアプリケーションのものを再利用することも多いだろうから、ECSではタスク定義内のコンテナ定義で下のようにヘルスチェックを指定する。</p>
+<pre lang="json"><code>[
+  {
+    &quot;name&quot;: &quot;sidekiq&quot;,
+    &quot;command&quot;: [&quot;sidekiq&quot;, &quot;--pidfile&quot;, &quot;./sidekiq.pid&quot;],
+    &quot;healthCheck&quot;: {
+      &quot;command&quot;: [&quot;test&quot;, &quot;-f&quot;, &quot;./sidekiq.pid&quot;]
+    }
+  }
+]
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

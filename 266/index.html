@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneratorとSequence</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="GeneratorとSequence">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/266/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">GeneratorとSequence</h1>
+          <p class="metadata">
+            <time datetime="2015-07-11T19:07:00.000+0000">2015-07-11 19:07</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>GeneratorType</h1>
+<p>generatorとは新しい要素を返す処理のことで、以下の<code>GeneratorType</code>プロトコルに従う。</p>
+<pre lang="swift"><code>protocol GeneratorType {
+	typealias Element
+	func next() -&gt; Element?
+}
+</code></pre>
+<p>例えば、文字列を各行を返すgeneratorはこんな感じで実装する。</p>
+<pre lang="swift"><code>class LineGenerator: GeneratorType {
+    typealias Element = String
+    
+    var lines: [String]
+    
+    init(text: String) {
+        self.lines = text.componentsSeparatedByString(&quot;\n&quot;)
+    }
+    
+    func next() -&gt; Element? {
+        return lines.isEmpty ? nil : lines.removeAtIndex(0)
+    }
+}
+
+let text = &quot;いろはにほへと ちりぬるを\nわかよたれそ つねならむ\nういのおくやま けふこえて\nあさきゆめみし よひもせず&quot;
+let generator1 = LineGenerator(text: text)
+generator1.next() //=&gt; いろはにほへと ちりぬるを
+generator1.next() //=&gt; わかよたれそ つねならむ
+generator1.next() //=&gt; ういのおくやま けふこえて
+generator1.next() //=&gt; あさきゆめみし よひもせず
+generator1.next() //=&gt; nil
+</code></pre>
+<h1>GeneratorOf</h1>
+<p>generatorを書くとき上のようにクラスを定義するのが面倒なら、<code>GeneratorOf</code>構造体が便利。以下のような感じで定義されている。</p>
+<pre lang="swift"><code>struct GeneratorOf: GeneratorType, SequenceType {
+	init(_ nextElement: () -&gt; T?)
+	
+	mutating func next() -&gt; T?
+}
+</code></pre>
+<p><code>GeneratorOf</code>構造体は<code>GeneratorType</code>プロトコルに従っており、初期化時に渡されたクロージャを<code>next()</code>で実行するようになっている。なので、上のコードは以下のように書き直せる。</p>
+<pre lang="swift"><code>func lineGenerator(#text: String) -&gt; GeneratorOf {
+    var lines = text.componentsSeparatedByString(&quot;\n&quot;)
+    return GeneratorOf { return lines.isEmpty ? nil : lines.removeAtIndex(0) }
+}
+
+var generator2 = lineGenerator(text: text)
+generator2.next() //=&gt; いろはにほへと ちりぬるを
+generator2.next() //=&gt; わかよたれそ つねならむ
+generator2.next() //=&gt; ういのおくやま けふこえて
+generator2.next() //=&gt; あさきゆめみし よひもせず
+generator2.next() //=&gt; nil
+</code></pre>
+<h1>SequenceType</h1>
+<p>sequenceはループによって中身の要素を走査できる構造のことで、以下の<code>SequenceType</code>プロトコルに従う。</p>
+<pre lang="swift"><code>protocol SequenceType {
+	typealias Generator: GeneratorType
+	func generate() -&gt; Generator
+}
+</code></pre>
+<p>sequenceはgeneratorを<code>generate()</code>で生成して、それを使って中身の要素に順にアクセスする。<code>SequenceType</code>プロトコルに従うオブジェクトは<code>for-in</code>ループに渡すことができる。</p>
+<pre lang="swift"><code>class LineSequence: SequenceType {
+    typealias Generator = LineGenerator
+    
+    var text: String
+    
+    init(text: String) {
+        self.text = text
+    }
+    
+    func generate() -&gt; Generator {
+        return LineGenerator(text: text)
+    }
+}
+
+for line in LineSequence(text: text) {
+    print(line)
+}
+</code></pre>
+<h1>SequenceOf</h1>
+<p><code>GeneratorOf</code>と同様に<code>SequenceOf</code>も存在する。</p>
+<pre lang="swift"><code>struct SequenceOf: SequenceType {
+	init(_ makeUnderlyingGenerator: () -&gt; G)
+	func generate() -&gt; GeneratorOf
+}
+</code></pre>
+<pre lang="swift"><code>func lineSequence(#text: String) -&gt; SequenceOf {
+	return SequenceOf { return lineGenerator(text: text) }
+}
+
+for line in lineSequence(text: text) {
+	print(line)
+}
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

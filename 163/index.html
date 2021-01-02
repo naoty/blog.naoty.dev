@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herokuでhubotを使ったIRC botを動かす</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Herokuでhubotを使ったIRC botを動かす">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/163/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Herokuでhubotを使ったIRC botを動かす</h1>
+          <p class="metadata">
+            <time datetime="2012-12-30T03:41:00.000+0000">2012-12-30 03:41</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、会社でIRCブームが来てるので、僕もhubotを使ってなにかbotを作ってみることにした。<a href="http://hubot.github.com/">hubot</a>はGithubが作ったbotフレームワークで、TwitterのbotとかIRCのbotを簡単に作ることができる。</p>
+<p>で、できたのがこれ。</p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121230/20121230030802.png" alt="f:id:naoty_k:20121230030802p:plain" title="f:id:naoty_k:20121230030802p:plain" /></p>
+<p><a href="https://github.com/naoty/diobot">https://github.com/naoty/diobot</a></p>
+<p>ディオ（DIO）様の名言をランダムに返してくれる、最高に「ハイ！」なbotが出来上がりました。</p>
+<p>Herokuでhubotをデプロイするときにhubotのwiki<a href="#f1" title="https://github.com/github/hubot/wiki/Deploying-Hubot-onto-Heroku">*1</a>を参考にしてみたんだけど、Herokuにpushすると、下のようなエラーが出てぜんぜんうまくいかなかった。</p>
+<pre><code>Starting process with command `bin/hubot -a irc -n Hubot`
+Stopping all processes with SIGTERM
+bin/hubot: 3: npm: not found
+Process exited with status 0
+</code></pre>
+<p>結局、このwikiは参考にせずに自力でなんとかしたので、その記録をちゃんとメモに残しておこうと思う。</p>
+<h2>package.json</h2>
+<pre><code>$ mkdir diobot
+$ cd diobot
+$ vi package.json
+{
+  &quot;name&quot;: &quot;diobot&quot;,
+  &quot;version&quot;: &quot;0.0.1&quot;,
+  &quot;author&quot;: &quot;naoty&quot;,
+  &quot;description&quot;: &quot;DIO sama at irc&quot;,
+  &quot;license&quot;: &quot;MIT&quot;,
+
+  &quot;dependencies&quot;: {
+    &quot;hubot&quot;: &quot;*&quot;,
+    &quot;hubot-scripts&quot;: &quot;*&quot;,
+    &quot;optparse&quot;: &quot;*&quot;,
+    &quot;hubot-irc&quot;: &quot;*&quot;,
+    &quot;coffee-script&quot;: &quot;*&quot;,
+    &quot;underscore&quot;: &quot;*&quot;
+  },
+
+  &quot;engines&quot;: {
+    &quot;node&quot;: &quot;0.8.x&quot;,
+    &quot;npm&quot;: &quot;1.1.x&quot;
+  }
+}
+$ npm install
+</code></pre>
+<ul>
+<li><code>dependencies</code>にあるパッケージは、先述のwikiに従ってたときに使ってたpackage.jsonに書いてあったのでそのまま使った。</li>
+<li>あと、<code>coffee-script</code>はデプロイ時にエラーになったので追加した。</li>
+<li><code>underscore</code>は便利なので、とりあえず追加した。</li>
+</ul>
+<h2>Procfile</h2>
+<pre><code>$ vi Procfile
+bot: hubot -a irc -n DIO
+</code></pre>
+<ul>
+<li>Herokuによると<a href="#f2" title="https://devcenter.heroku.com/articles/nodejs-support">*2</a>、Heroku側で<code>bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin</code>にPATHを通してくれるので、Procfileでは<code>hubot</code>とすればいい。</li>
+<li><code>-a  -n </code>をオプションにつける。</li>
+</ul>
+<h2>Herokuにデプロイ</h2>
+<pre><code>$ git push heroku master
+...
+$ heroku ps:scale bot=1
+$ git config:add HUBOT_IRC_SERVER='irc.example.com' HUBOT_IRC_ROOMS='#hoge' HUBOT_IRC_NICK='DIO' HUBOT_IRC_PORT='6667' HUBOT_IRC_PASSWORD='hogehoge'
+</code></pre>
+<ul>
+<li>IRCサーバーやチャンネルへの接続のための情報を環境変数として渡す。</li>
+<li>必要な情報はこちら<a href="#f3" title="https://github.com/github/hubot/wiki/Adapter:-IRC">*3</a>に載ってる。</li>
+</ul>
+<h2>スクリプトを追加</h2>
+<pre><code>$ mkdir scripts
+$ vi scripts/ping.coffee
+module.exports = (robot) -&gt;
+  robot.respond /PING$/i, (msg) -&gt;
+    msg.send 'PONG'
+</code></pre>
+<ul>
+<li><code>scripts/</code>以下にあるスクリプトは自動で読み込まれて有効になる。</li>
+<li>これをデプロイして<code>dio ping</code>って送ったら<code>PONG</code>とDIOが返したら成功。</li>
+<li>あとは、工夫して面白いbotを作るだけ。</li>
+</ul>
+<p>Enjoy!</p>
+<p><a href="#fn1">*1</a>:<a href="https://github.com/github/hubot/wiki/Deploying-Hubot-onto-Heroku">https://github.com/github/hubot/wiki/Deploying-Hubot-onto-Heroku</a></p>
+<p><a href="#fn2">*2</a>:<a href="https://devcenter.heroku.com/articles/nodejs-support">https://devcenter.heroku.com/articles/nodejs-support</a></p>
+<p><a href="#fn3">*3</a>:<a href="https://github.com/github/hubot/wiki/Adapter:-IRC">https://github.com/github/hubot/wiki/Adapter:-IRC</a></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.vimrc整理術</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content=".vimrc整理術">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/189/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">.vimrc整理術</h1>
+          <p class="metadata">
+            <time datetime="2013-05-22T11:46:00.000+0000">2013-05-22 11:46</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>.vimrcが400行近くになり見づらくなってきたので見やすくしてみた。markerは使ってる人おおい感じがするけど、modelineと組み合わせたらかなり見やすくなったのでメモ。</p>
+<h2>1. 各種設定をmarkerで囲む</h2>
+<p>markerで囲まれた部分は折りたためるので見やすくなる。基本的な設定やマッピングの設定、プラグインを入れてる人はプラグインの設定、あとカラースキームの設定など、おおざっぱに設定をまとめてmarkerで囲む。</p>
+<pre lang="vim:.vimrc"><code>&quot; 基本設定 {{{1
+
+set nocompatible
+set number
+
+&quot; マッピング {{{1
+
+nnoremap H b
+nnoremap J }
+nnoremap K {
+nnoremap L w
+
+&quot; カラースキーム {{{1
+
+syntax on
+colorscheme hybrid
+
+&quot; プラグイン {{{1
+
+&quot; neobundle {{{2
+
+...
+
+&quot; unite.vim {{{2
+
+...
+
+&quot; neocomplcache {{{2
+
+...
+</code></pre>
+<p>プラグインの設定のなかでプラグイン毎の設定もまとめたいので、折り畳みレベルを設定する。こうすると、折り畳みが入れ子になる。</p>
+<h2>2. modelineを有効にする</h2>
+<p>.vimrcのための設定を書きたいのでmodelineを有効にする。modelineの詳細は<code>:h modeline</code>を参照。</p>
+<pre lang="vim:.vimrc"><code>&quot; モードラインを有効にする
+set modeline
+
+&quot; 3行目までをモードラインとして検索する
+set modelines=3
+</code></pre>
+<h2>3. modelineで.vimrc用の設定をする</h2>
+<p>ファイルの最後（最初でもいいけど）に以下を追加する。</p>
+<pre lang="vim:.vimrc"><code>&quot; vim: foldmethod=marker
+&quot; vim: foldcolumn=3
+&quot; vim: foldlevel=0
+</code></pre>
+<ul>
+<li>markerで折りたたむようにする。</li>
+<li>行番号の左に折りたたまれてる箇所が表示されてわかりやすくなる。</li>
+<li>デフォルトで折りたたんで表示する。（<code>foldlevel</code>より<code>foldlevelstart</code>の方が適切だと思ったけど、なんかうまくいかないのでとりあえず<code>foldlevel</code>を使ってます）</li>
+</ul>
+<h2>スクリーンショット</h2>
+<p>以上の設定をすると、.vimrcはこんな感じで表示されるようになるはず。</p>
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/80b00f4c-6c5f-5dc2-912c-4fcc212c5f90.png" alt="fold.png" /></p>
+<hr />
+<p>参考までに拙者の.vimrcのリンクも載せておく。</p>
+<p><a href="https://github.com/naoty/dotfiles/blob/master/.vimrc">dotfiles/.vimrc at master · naoty/dotfiles · GitHub</a></p>
+<p>これと同じことを.zshrcでもやってるので、.vimrcにかぎらず設定ファイル全般で使えるテクニックだと思う。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

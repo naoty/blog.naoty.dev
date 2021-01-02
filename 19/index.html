@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>変数の区別</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="変数の区別">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/19/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">変数の区別</h1>
+          <p class="metadata">
+            <time datetime="2010-09-26T17:36:00.000+0000">2010-09-26 17:36</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>ローカル変数</p>
+<ul>
+<li>小文字または「_」で始まる。</li>
+<li>宣言された変数スコープのみアクセスできる。変数スコープとは、ファイル内、クラス定義、モジュール定義、メソッド定義、ブロック内のこと。例えば、以下のように入れ子になっても、3つのvarは異なる値を持つ。</li>
+</ul>
+<pre><code>var = 1 # ファイル内のvar
+class Foo
+  var = 2 # クラス定義内のvar
+  def meth
+    var = 3 # メソッド定義内のvar
+  end
+end
+</code></pre>
+<p>インスタンス変数</p>
+<ul>
+<li>「@」で始まる。</li>
+<li>メソッド定義内で宣言された場合には、同じインスタンス内のみでアクセスできる。クラス定義内で宣言された場合には、同じクラスのクラスメソッドまたはインスタンスメソッドでアクセスできる。サブクラスからはアクセスできない。</li>
+</ul>
+<p>クラス変数</p>
+<ul>
+<li>「@@」で始まる。</li>
+<li>クラス内の全インスタンス、サブクラスの全インスタンスで共有される。</li>
+</ul>
+<p>グローバル変数</p>
+<ul>
+<li>「$」で始まる。</li>
+<li>どこからでもアクセスできる。</li>
+</ul>
+<p>定数</p>
+<ul>
+<li>大文字から始まる。</li>
+<li>自分のクラスに定義されている定数がなければ、次の順序で探す。１．トップレベル以外のネストの外側の定数、２．スーパークラスの定数</li>
+<li>ネストの内側の定数を参照するには、「::」演算子を用いる。</li>
+<li>再代入することは可能だが、警告が出る。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

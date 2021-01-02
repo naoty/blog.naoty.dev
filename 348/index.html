@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非効率なメモ化の改善</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="非効率なメモ化の改善">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/348/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">非効率なメモ化の改善</h1>
+          <p class="metadata">
+            <time datetime="2018-10-09T22:52:00.000+0900">2018-10-09 22:52</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Railsでは、よく以下のようなコードを書いたり見たりする。メモ化って言うらしい。</p>
+<pre lang="ruby"><code>def current_user
+  @current_user ||= User.find_by(cookies.signed[:user_id])
+end
+</code></pre>
+<p><code>#current_user</code>が呼ばれるまではDBへのアクセスは発生しない。そして、アクセスした結果を<code>@current_user</code>に代入しておくことで、2回目以降の呼び出しではDBへのアクセスが発生しないようになっている。</p>
+<p>割とよく書きがちなこのコードだけど、非効率なケースがある。DBから取得した結果が<code>nil</code>のケースだ。このケースだと、<code>@current_user</code>は<code>nil</code>のままなので<code>#current_user</code>が呼び出されるたびにDBに再度アクセスすることになる。</p>
+<p>DBにアクセスした結果<code>nil</code>だとわかっているなら、2回目以降はDBにアクセスしなくていいだろう。というわけで、こんな感じで直す。</p>
+<pre lang="ruby"><code>def current_user
+  return nil if @current_user_exists == false
+  @current_user ||= User.find_by(cookies.signed[:user_id])
+  @current_user_exists ||= !@current_user.nil?
+  @current_user
+end
+</code></pre>
+<p>以前のものとは見栄えが悪くなったけど、より効率的になった。もっとシンプルに書けそうな気はしている。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

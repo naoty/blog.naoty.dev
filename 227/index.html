@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.jsで"+09:00"がパースできない件</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="D3.jsで"+09:00"がパースできない件">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/227/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">D3.jsで"+09:00"がパースできない件</h1>
+          <p class="metadata">
+            <time datetime="2014-07-24T14:34:00.000+0000">2014-07-24 14:34</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre lang="js"><code>var dateString = &quot;2014-07-23T00:00:00.000+09:00&quot;;
+
+var wrongFormat = d3.time.format(&quot;%Y-%m-%dT%H:%M:%S.%L%Z&quot;);
+wrongFormat.parse(dateString); //=&gt; null
+
+var rightFormat = d3.time.format(&quot;%Y-%m-%dT%H:%M:%S.%L+09:00&quot;);
+rightFormat.parse(dateString); //=&gt; Date
+</code></pre>
+<p>タイムゾーンを表す<code>%Z</code>は<code>+0900</code>のようなフォーマットはパースできるけど、<code>:</code>が含まれるとパースできない。上のようにしたら解決した。</p>
+<h3>参考</h3>
+<ul>
+<li><a href="https://github.com/mbostock/d3/wiki/Time-Formatting">https://github.com/mbostock/d3/wiki/Time-Formatting</a></li>
+<li><a href="https://groups.google.com/forum/#!topic/d3-js/mPiCEO8ZfnU">https://groups.google.com/forum/#!topic/d3-js/mPiCEO8ZfnU</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

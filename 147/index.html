@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評：iOS SDK Development</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="書評：iOS SDK Development">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/147/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">書評：iOS SDK Development</h1>
+          <p class="metadata">
+            <time datetime="2012-09-30T19:19:00.000+0000">2012-09-30 19:19</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/1934356948/hatena-hamazou-22/"><img src="http://ecx.images-amazon.com/images/I/41hTzxPy7kL._SL160_.jpg" alt="iOS SDK Development" title="iOS SDK Development" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/1934356948/hatena-hamazou-22/">iOS SDK Development</a></p>
+<ul>
+<li>作者: Chris Adamson,Bill Dudney</li>
+<li>出版社/メーカー: Pragmatic Bookshelf</li>
+<li>発売日: 2012/10/22</li>
+<li>メディア: ペーパーバック</li>
+<li>クリック: 3回</li>
+<li><a href="http://d.hatena.ne.jp/asin/1934356948">この商品を含むブログを見る</a></li>
+</ul>
+<p>iPhoneアプリの開発を担当しそうな気配を感じ取ったので、8月後半からぼちぼち読み始めていた。実際に10月から担当することが確定してからは2週間くらいちゃんと読み始めて、いまようやく6章／10章が終わったところ。もう10月になっちゃうので、いったんここまで読んだ感想をまとめておきます。</p>
+<h2>おおまかな内容（6章までだけど）</h2>
+<ul>
+<li>まずツイートアプリを作る。途中、iOS6から導入されたSocialフレームワークやAuto layoutの説明が入る。i18nについてもふれる。</li>
+<li>ツイートアプリを改修しながら、Obj-Cについて学ぶ。GCDも出てくる。本書はARCを使うためメモリ管理についてはそんなに詳しくなさげ。</li>
+<li>レシピアプリをStoryboardsなしで作る。Interface Builderの使い方を学ぶ。</li>
+<li>レシピアプリをStoryboardsを使って作りなおす。ナビゲーションも出てくる。</li>
+</ul>
+<p>※7章以降はiCloudとかアニメーションとかテストの話が出てくるらしい</p>
+<h2>iOS6, iPhone5に対応済み</h2>
+<p>本書を読んでる最中にiOS6、iPhone5がリリースされた。僕の場合は、AmazonではなくPragmatic Bookshelf（<a href="http://pragprog.com/book/adios/ios-sdk-development">ここ</a>）で買ったんだけど、iPhone5が発売されてからたった数日で本書のアップデートが行われた。6章までだけど、たしか以下のポイントについて変更されていたような気がする。</p>
+<ul>
+<li>サンプルコードをTwitterフレームワークからSocialフレームワークに書き換え</li>
+<li>Auto layoutに関する記述が数ページ追加</li>
+<li><code>@synthesize</code>を省略するようになった</li>
+<li><code>@1</code>や<code>@[]</code>や<code>@{}</code>といったリテラルを使うようになった</li>
+</ul>
+<p>iPhoneアプリの開発環境は目まぐるしく変化するから、自動アップデートがない紙の書籍はすぐに使えなくなってしまう。初心者であるほど、古い環境と新しい環境をアタマの中で置換しながら本を読んでいくのは難しい。なるべく電子書籍を買って、最新の情報にもとづいて勉強した方がいいと思う。</p>
+<h2>テンプレートに頼っていない</h2>
+<p>これがとてもいいと思った。初心者向けの参考書にありがちなXcodeのテンプレート頼りなサンプルコードは一切ない。すべてのプロジェクトはまず「Single View Application」で作成する。その後、Storyboardsを使ってナビゲーションを追加する（残念ながら今のところタブは出てきてない）。テンプレート頼りなサンプルコードを見て勉強したところで、いざ実践に入ったときにすぐに限界が来るのではないかと思った。Rails初心者がScaffoldから始めたせいで、脱Scaffoldが最初の関門になる感じに似ている。</p>
+<p>本書にしたがって実際にプロジェクトを進めていけば、View Controllerを追加し部品をその上に乗っけてSegueでつなげてナビゲーションにはめ込むような作業がおのずと身につく。とても実践的な知識が身についてよかった。</p>
+<h2>英文を読むだけの価値は十分にある</h2>
+<p>本書は英語で、しかも中身が詰まっていて、読み進めるのがしんどい。でも、この本には「最新」かつ「実践的」な情報が詰まっているので、本屋に並んでいるような初心者向けの本よりはるかに役に立った。英語というハードルを考えても、これは読む価値のある本だと思った。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

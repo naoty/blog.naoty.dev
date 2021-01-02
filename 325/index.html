@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSONをASCIIテーブルで表示する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="JSONをASCIIテーブルで表示する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/325/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">JSONをASCIIテーブルで表示する</h1>
+          <p class="metadata">
+            <time datetime="2018-03-05T17:34:00.000+0900">2018-03-05 17:34</time>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>もともとTSV形式の文字列をASCIIやMarkdown形式のテーブルに変換するコマンドだった<a href="https://github.com/naoty/table">naoty/table</a>を改善して、JSON形式の文字列を受け取れるようにした。</p>
+<p>例えば、以下のようなJSONファイルがあったとする。</p>
+<pre lang="json"><code>// pokemons.json
+[
+  {
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;bulbasaur&quot;
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;name&quot;: &quot;ivysaur&quot;
+  },
+  {
+    &quot;id&quot;: 3,
+    &quot;name&quot;: &quot;venusaur&quot;
+  }
+]
+</code></pre>
+<p>このとき、以下のようにパイプで<code>table</code>コマンドに渡すとASCII形式に変換できる。</p>
+<pre lang="shell"><code>$ cat pokemons.json | table -f json:ascii
++----+-----------+
+| id | name      |
++----+-----------+
+| 1  | bulbasaur |
+| 2  | ivysaur   |
+| 3  | venusaur  |
++----+-----------+
+</code></pre>
+<p><code>table</code>コマンドは出力フォーマットとしてMarkdown形式のテーブルも選べるので、以下のように出力できる。</p>
+<pre lang="shell"><code>$ cat pokemons.json | table -f json:markdown
+| id | name      |
+| -- | --------- |
+| 1  | bulbasaur |
+| 2  | ivysaur   |
+| 3  | venusaur  |
+</code></pre>
+<h1>モチベーション</h1>
+<p>最近、AWSの作業をすることが増えてAWS CLIから返ってくるJSONを扱うことが増えた。返ってきたJSONを<code>jq</code>コマンドで整形して表示するのだけど、件数が増えるとかなり見にくかった。そこで、このような機能を追加してASCIIテーブルとして見やすくしたかったので追加してみた。</p>
+<p>例えば、ECSのあるタスク定義に含まれるイメージを知りたいとき、こんな感じでやることになりそう。</p>
+<pre lang="shell"><code>$ aws ecs describe-task-definition --task-definition hello_world:8 | \
+  jq &quot;.taskDefinition.containerDefinitions | map({name: .name, image: .image})&quot; | \
+  table -f json:ascii
++-----------+-----------+
+| name      | image     |
++-----------+-----------+
+| wordpress | wordpress |
+| mysql     | mysql     |
++-----------+-----------+
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

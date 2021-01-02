@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railsに組み込むgemを作るためのTips</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Railsに組み込むgemを作るためのTips">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/170/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Railsに組み込むgemを作るためのTips</h1>
+          <p class="metadata">
+            <time datetime="2013-01-20T12:27:00.000+0000">2013-01-20 12:27</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/naoty/params_inquirer">params_inquirer</a>というgemを作りました。何ができるかと言うと、文で説明するのがなかなか難しいので、下のコードを見てください。</p>
+<pre><code># users_controller.rb
+
+def index
+  if params[:status].accepted? # params[:status] == 'accepted' と同じ
+    @users = User.accepted
+  elsif params[:status].rejected? # params[:status] == 'rejected' と同じ
+    @users = User.rejected
+  else
+    @users = User.all
+  end
+end
+</code></pre>
+<p>params_inquirerを使うと上の<code>accepted?</code>のようなメソッドが<code>params</code>に対して呼べるようになります。すでにrubygemsで公開してるので、ちょっと試してみたい場合は、irbで試してもらうこともできます。</p>
+<pre><code>$ gem install params_inquirer
+$ irb
+irb &gt; require 'params_inquirer'
+irb &gt; params = ParamsInquirer::Parameters.new({ name: 'naoty' })
+irb &gt; params[:name].naoty?
+ =&gt; true
+</code></pre>
+<p><code>params</code>の中身を文字列で比較するのがなんとなくダサいと感じていたので、作ってみました。あとは、Railsの中身について勉強してみたかったというのもあります。</p>
+<p>Railsに組み込みgemを作るにあたって知っておいた方がいいポイントについてまとめてみます。</p>
+<h2>Bundlerでgemのひな形を作る</h2>
+<p>gemを作るとき、まず最初にBundlerを使ってgemのひな形を作ります。</p>
+<pre><code>$ gem install bundler
+$ bundle gem params_inquirer
+</code></pre>
+<p>これでgemのひな形ができます。作ったgemをローカル環境にインストールしたりrubygems.orgにリリースするためのRaketaskもここに含まれるので、かなり便利です。</p>
+<p>Bundlerを使ったgemの開発については<a href="http://ja.asciicasts.com/episodes/245-new-gem-with-bundler">この記事</a>を参考にしました。</p>
+<h2>Railtie</h2>
+<p>Railtieは、Railsを起動するときにgemのコードを<code>ActionController::Base</code>に<code>include</code>させるために使いました。これによって、自分のgemをRailsアプリケーションに組み込むことができます。</p>
+<p>下のコードでは、Railsプロセスが起動するときに<code>initializer</code>ブロック内の処理が実行されて、自分で作った<code>ParamsInquirer::ActionController::Base</code>が<code>ActionController::Base</code>に<code>include</code>されるようになります。</p>
+<pre><code># lib/params_inquirer/railtie.rb
+
+require 'params_inquirer/action_controller/base'
+
+module ParamsInquier
+  class Railtie &lt; ::Rails::Railtie
+    initializer 'Initialize params_inquirer' do
+      ::ActionController::Base.send :include, ParamsInquirer::ActionController::Base
+    end
+  end
+end
+</code></pre>
+<p>ただ、このファイルがRails起動時に<code>require</code>されている必要があります。</p>
+<p>インストールされたgemを<code>require</code>するとき<code>lib/.rb</code>が<code>require</code>されます。このgemであれば<code>lib/params_inquirer.rb</code>です。なので、ここでrailtieを<code>require</code>しておく必要があります。</p>
+<pre><code># lib/params_inquirer.rb
+
+if defined?(Rails)
+  require 'lib/params_inquirer/railtie'
+else
+  require 'lib/params_inquirer/parameters'
+end
+</code></pre>
+<p><code>require 'params_inquirer'</code>が実行されるとこのファイルが実行されます。もしRailsアプリケーション内であればrailtieを<code>require</code>し、最初に見せたirbのような場合は必要なファイルだけ<code>require</code>するようにしています。</p>
+<p>以上のようすることで、Rails起動時にrailtieを<code>require</code>しrailtieから自分で作ったコードをRailsアプリケーション内に<code>include</code>させることができました。</p>
+<h2>ActiveSupport::Concern</h2>
+<p>ここからは実際に使ったというよりは、actionpackやactivesupportなどのgemを読んでいくときに必要になったtipsです。</p>
+<p><code>include</code>したモジュールを使ってクラスメソッドをmixinしたい場合、下のように<code>Module#.included</code>をオーバーライドしその中で内部モジュールを<code>extend</code>するテクニックが定石みたいです。</p>
+<pre><code>module M
+  def self.included(base)
+    # extendによってクラスメソッドとしてmixinされる
+    base.extend ClassMethods
+    scope :disabled, where(disabled: true)
+  end
+
+  # クラスメソッドを定義する内部モジュール
+  module ClassMethods
+    ...
+  end
+end
+</code></pre>
+<p>上のようなコードは<code>ActiveSupport::Concern</code>を使うと下のように書けます。</p>
+<pre><code>module M
+  extend ActiveSupport::Concern
+
+  included do
+    scope :disabled, where(disabled: true)
+  end
+
+  module ClassMethods
+    ...
+  end
+end
+</code></pre>
+<p>一見すると、<code>ClassMethods</code>モジュールが<code>extend</code>されていないように見えますが、内部的に<code>ClassMethods</code>という名前のモジュールが<code>extend</code>されます。「設定より規約」に従ってるんだと思います。</p>
+<p>これを知らないと、クラスメソッドが<code>extend</code>されていることに気づきにくいかもしれないです。また、<code>ActiveSupport::Concern</code>はいろんなところに頻出するので、知っておいた方がいいと思いました。</p>
+<h2>ActiveSupport::Autoload</h2>
+<p><code>ActiveSupport::Autoload#autoload</code>は<code>Module#autoload</code>の拡張で、<code>Module#autoload</code>は必要なファイルを必要なタイミングで<code>require</code>するメソッドです。</p>
+<pre><code>autoload(:Hoge, 'hoge') # 'hoge.rb'はこの時点ではrequireされていない
+p Hoge # ここで'hoge.rb'がrequireされる
+</code></pre>
+<p><code>ActiveSupport::Autoload#autoload</code>は、「<code>Hoge</code>はhoge.rbにあるはず」という「設定より規約」に従って、<code>Module#autoload</code>の第2引数を省略できるメソッドなので、上のコードは下のように書けます。</p>
+<pre><code>extend ActiveSupport::Autoload
+autoload :Hoge
+p Hoge # ここで'hoge.rb'がrequireされる
+</code></pre>
+<p>これもファイル名が省略されているということを知らないと、どのファイルを<code>require</code>しているか見えづらいと思います。</p>
+<h2>最後に</h2>
+<p>あまりまとまらなくてすごい量になってしまいました。簡単なgemを作るのに知っておくべきことがいろいろあって大変でした。間違っていることがあれば修正しますので、コメントいただけると助かります。また、params_inquirerもまだ未完成なので、pull requestも待ってます。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

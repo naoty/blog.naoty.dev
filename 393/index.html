@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作業ファイルという習慣</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="作業ファイルという習慣">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/393/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">作業ファイルという習慣</h1>
+          <p class="metadata">
+            <time datetime="2019-12-27T21:08:00.000+0000">2019-12-27 21:08</time>
+            <a href="/lifehack/">#lifehack</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>昔に書いた<a href="https://naoty.dev/posts/27.html">記事</a>で作業メモという習慣を続けている話をした。メモをとりながら開発するといろいろいいことがあったという話だった。そして、この習慣は今も続いている。</p>
+<p>TODO管理ツールと作業メモで二重に作業を管理していることに気づき、運用を見直すことにした。</p>
+<ul>
+<li>1つの作業につき、1つの作業ファイルを作るようにした。</li>
+<li>作業ファイルをベースとしたTODO管理ツールを開発することにした。</li>
+</ul>
+<h1>作業ファイル</h1>
+<p>タイトルと完了/未完了をfront matterで書くことを仕様とした。</p>
+<pre lang="markdown"><code>---
+title: ブログを書く
+done: false
+---
+
+# 2019-12-26
+* アウトラインを書く
+
+# 2019-12-27
+* 文章に組み立てる
+* スクショをとる
+</code></pre>
+<p>これまでは日報ファイルの中に各作業のメモを残していたけど、今後は逆に作業ファイルの中に日報を書くスタイルにした。この方が後で見返しやすかった。</p>
+<h1>新しいTODO管理ツール</h1>
+<p>作業ファイルを読み取って表示するTUIベースのツールを開発している。</p>
+<p><img src="task.gif" alt="task" /></p>
+<p>まだ機能は不足しているけど、ファイルの変更を自動的に反映する機能をがんばって作り込んだ結果、使えないこともないくらいのレベルにはなった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

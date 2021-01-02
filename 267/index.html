@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コマンドラインを拡張しやすくするヤツ書いた</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="コマンドラインを拡張しやすくするヤツ書いた">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/267/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">コマンドラインを拡張しやすくするヤツ書いた</h1>
+          <p class="metadata">
+            <time datetime="2015-07-14T10:15:00.000+0000">2015-07-14 10:15</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>gitなど既存のコマンドラインを拡張して新しいサブコマンドを追加する方法はいくつか考えられる。</p>
+<h1>git alias</h1>
+<p>gitの場合は<code>git alias</code>を使うことで簡単にサブコマンドを追加できる。gitのとき限定。</p>
+<h1>ラッパー</h1>
+<p><a href="https://github.com/github/hub">github/hub</a>のような既存のコマンドラインをラップしたスクリプトを書き、<code>alias hub=git</code>のように<code>alias</code>することで既存の機能を保ちつつ機能を追加できる。</p>
+<p>問題点としては、複数のラッパーによる拡張が難しくなる。例えば、ここで<code>bub</code>という<code>git</code>のラッパーを書いたとする。<code>git</code>に<code>hub</code>の機能と<code>bub</code>の機能を拡張したい。<code>hub</code>は入力されたサブコマンドが<code>hub</code>になければ<code>git</code>にフォワードしている。なので、<code>hub</code>と<code>bub</code>を同時に拡張するには<code>bub</code>を<code>hub</code>のラッパーとして実装することになってしまう。依存関係をハードコーディングすることになるため、まったくスケーラブルじゃない。</p>
+<h1>命名規則とext</h1>
+<p><code>command subcommand</code>と入力されたら<code>command-subcommand</code>を実行するように名前解決する仕組みがよさそうだと思う。例えば、<code>git pr</code>というコマンドはまず<code>git-pr</code>を探し、あれば実行し、なければ<code>git pr</code>を実行する（そしてエラーになる）。<code>gem uninstall all</code>というコマンドは<code>gem-uninstall-all</code>、<code>gem-uninstall all</code>、<code>gem uninstall all</code>の順に探索されて見つかり次第実行される。</p>
+<p>このような命名規則を基に名前解決するツールを書いた。</p>
+<p><a href="https://github.com/naoty/ext">naoty/ext</a></p>
+<pre><code>$ go get github.com/naoty/ext
+$ go get github.com/naoty/gem-uninstall-all
+$ alias gem=&quot;ext gem&quot;
+$ gem uninstall all # Run gem-uninstall-all
+</code></pre>
+<p>正直、いろんな問題がありえそうだが、昨日思いついたままに書いたものなので、まだ想定できてない。<code>gem-uninstall-rails</code>というコマンドがあったらrailsをアンインストールできないとかありそう。</p>
+<p>上の例で、<code>hub</code>と<code>bub</code>を同時に拡張したい場合に<code>ext</code>を使うと以下のようにできる。</p>
+<pre><code>$ go get github.com/naoty/hub-bub
+$ alias git=&quot;ext hub&quot;
+$ git bub # Run `hub-bub`
+</code></pre>
+<p>残念ながら、<code>hub</code>を使いたい場合はこうするしかないような気がする。</p>
+<hr />
+<h1>追記(2015-07-23)</h1>
+<p>gitには、<code>git subcommand</code>を<code>git-</code>として名前解決して実行する機能があったことをさっき知った。なので、gitに限って言えばextのようなツールは不要だと思う。</p>
+<pre><code>$ cd $HOME/bin
+$ vi git-hello
+#!/bin/sh
+
+echo &quot;Hello, world!&quot;
+$ chmod +x git-hello
+$ git hello
+Hello, world!
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

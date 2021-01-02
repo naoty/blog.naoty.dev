@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMLやCSSの変更を自動でブラウザに反映させる</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="HTMLやCSSの変更を自動でブラウザに反映させる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/117/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">HTMLやCSSの変更を自動でブラウザに反映させる</h1>
+          <p class="metadata">
+            <time datetime="2012-05-03T21:31:00.000+0000">2012-05-03 21:31</time>
+          </p>
+        </header>
+        <section class="body">
+          <h2>概要</h2>
+<ul>
+<li>LiveReloadをguardで起動する。</li>
+<li>すると、guardがHTMLやCSSの変更をキャッチしてLiveReloadでブラウザが自動でリロードされる。</li>
+<li><a href="http://youtu.be/EZ8vy_cNMVQ">これ</a>を見た方がはやい。</li>
+<li>サブディスプレイに複数のブラウザを立ちあげてLiveReloadをオンにして、ファイルの変更がいっぺんにそれらのブラウザに反映されるのが感動。鳥肌もの。</li>
+</ul>
+<h2>手順</h2>
+<ol>
+<li><code>guard-livereload</code>をbundleでいれる</li>
+<li><code>guard init livereload</code>で<code>Guardfile</code>を設定する。</li>
+<li><code>guard</code>でファイルの変更のウォッチをスタート。</li>
+<li>ブラウザのアドオンでLiveReloadをオンにする</li>
+</ol>
+<h2>Rails</h2>
+<pre lang="ruby:Gemfile"><code>group :development, :test do
+  gem 'rb-fsevent' if RUBY_PLATFORM =~ /darwin/i
+  gem 'guard-livereload'
+end
+</code></pre>
+<pre><code>$ bundle install
+$ guard init livereload
+$ guard
+</code></pre>
+<h2>アドオンたち</h2>
+<ul>
+<li>Firefox：<a href="https://addons.mozilla.org/ja/firefox/addon/livereload/">https://addons.mozilla.org/ja/firefox/addon/livereload/</a>、最新版（v12）ではうまく動かなかったので、これのためだけにv5までダウングレードしてる。</li>
+<li>Chrome：<a href="https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei">https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei</a></li>
+<li>Safariもあるらしい。</li>
+<li>IEにもほしいけど、どうなんだろう。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プラットフォーム依存のgemのせいでデプロイがこける件</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="プラットフォーム依存のgemのせいでデプロイがこける件">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/209/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">プラットフォーム依存のgemのせいでデプロイがこける件</h1>
+          <p class="metadata">
+            <time datetime="2014-02-05T19:13:00.000+0000">2014-02-05 19:13</time>
+          </p>
+        </header>
+        <section class="body">
+          <pre><code>You are trying to install in deployment mode after changing
+your Gemfile. Run `bundle install` elsewhere and add the
+updated Gemfile.lock to version control.
+
+You have deleted from the Gemfile:
+* growl
+</code></pre>
+<p>みたいなメッセージがでてきてデプロイ大失敗した。</p>
+<p>原因はGemfileに<code>RUBY_PLATFORM</code>を使ったことだった。</p>
+<pre lang="rb:Gemfile"><code>group :test do
+  gem &quot;growl&quot; if RUBY_PLATFORM =~ /darwin/
+end
+</code></pre>
+<p>上のメッセージはGemfileとGemfile.lockに不整合があるときに表示される。このようなGemfileの書き方だと、デプロイ先で実行したとき、<code>gem &quot;growl&quot;</code>が存在しないことになりGemfile.lockとの不整合が生まれると考えられる。</p>
+<p>そこで、Gemfileをこう書き替えた。</p>
+<pre lang="rb:Gemfile"><code>group :test do
+  gem &quot;growl&quot;, group: :darwin
+end
+</code></pre>
+<p>で、capistranoにこのグループをインストールしないように設定する。</p>
+<pre lang="rb:deploy.rb"><code># Ignore platform-specific gems
+set :bundle_without, %w(development test darwin).join(&quot; &quot;)
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

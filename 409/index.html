@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid.jsでデータフロー図を描く</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Mermaid.jsでデータフロー図を描く">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/409/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Mermaid.jsでデータフロー図を描く</h1>
+          <p class="metadata">
+            <time datetime="2020-03-15T11:22:00.000+0000">2020-03-15 11:22</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、仕事で大規模なデータ処理基盤にたずさわっている。自分の場合、複雑なものごとを理解するときにはまず全体像を理解するところからはじめている。データフロー図というものを描くと、データの流れを中心にデータ処理基盤を整理できて全体像の理解しやすくなった。</p>
+<p>また、仕事ではesaを使ってドキュメントを残すため、Mermaid.jsでデータフロー図を描いてわかりやすいドキュメントを残せた。</p>
+<h1>データフロー図</h1>
+<p>データフロー図は4つの要素から構成されている。</p>
+<ul>
+<li><strong>外部実体</strong>: システムの外部にあるデータの発生源や出力先</li>
+<li><strong>プロセス</strong>: データを入力し、データを出力する処理</li>
+<li><strong>データストア</strong>: データを永続的に保管する場所</li>
+<li><strong>データフロー</strong>: データの入力から出力への流れ</li>
+</ul>
+<h1>Mermaid.js流データフロー図</h1>
+<p>Mermaid.jsにはデータフロー図を描くための専用の記法があるわけじゃない。だけど、フローチャート図の記法を使ってうまく描けそうということがわかった。</p>
+<p>各要素を表す記法を下のように決める。</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>mermaid.js</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>外部実体</td>
+<td><code>external[External entity]</code></td>
+</tr>
+<tr>
+<td>プロセス</td>
+<td><code>process(Process)</code></td>
+</tr>
+<tr>
+<td>データストア</td>
+<td><code>datastore[(Datastore)]</code></td>
+</tr>
+<tr>
+<td>データフロー</td>
+<td><code>-- input --&gt;</code>, <code>-- output --&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>で、こんな感じで書く。</p>
+<pre><code>graph TD
+  external[External entity]
+  process(Process)
+  datastore[(Datastore)]
+
+  datastore -- input --&gt; process -- output --&gt; external
+</code></pre>
+<p>すると、こんな図が描ける。</p>
+<pre lang="mermaid"><code>graph TD
+  external[External entity]
+  process(Process)
+  datastore[(Datastore)]
+
+  datastore -- input --&gt; process -- output --&gt; external
+</code></pre>
+<h1>例</h1>
+<pre><code>graph TD
+  user[User]
+  api(API)
+  mysql[(MySQL)]
+  embulk(Embulk)
+  bigquery[(BigQuery)]
+  fluentd(Fluentd)
+  s3[(S3)]
+
+  user -- sign up --&gt; api -- profile --&gt; mysql -- profile --&gt; embulk -- profile --&gt; bigquery
+  api -- access log --&gt; fluentd -- access log --&gt; s3
+</code></pre>
+<pre lang="mermaid"><code>graph TD
+  user[User]
+  api(API)
+  mysql[(MySQL)]
+  embulk(Embulk)
+  bigquery[(BigQuery)]
+  fluentd(Fluentd)
+  s3[(S3)]
+
+  user -- sign up --&gt; api -- profile --&gt; mysql -- profile --&gt; embulk -- profile --&gt; bigquery
+  api -- access log --&gt; fluentd -- access log --&gt; s3
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

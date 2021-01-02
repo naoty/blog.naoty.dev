@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モデルの差分更新</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="モデルの差分更新">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/305/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">モデルの差分更新</h1>
+          <p class="metadata">
+            <time datetime="2017-12-01T21:40:00.000+0900">2017-12-01 21:40</time>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>アプリからデータのバックアップを受け取るときに、サーバー側で差分更新を行う必要がある。全部消去してから全部挿入するという実装も考えられるが、何かの実装ミスの際に全消去してしまうリスクがありそうなので避けたい。</p>
+<p>新しいデータと既存のデータを比較して、以下のような操作をする必要がある。</p>
+<ul>
+<li>新しいデータにも既存のデータにもあるデータを更新する。</li>
+<li>新しいデータにあるが、既存のデータにないデータを挿入する。</li>
+<li>新しいデータにないが、既存のデータにあるデータを削除する。</li>
+</ul>
+<p>これを実行するロジックをあらためて考えてみた。</p>
+<pre lang="ruby"><code>new_users = [{ id: 1, name: &quot;...&quot; }, { id: 2, name: &quot;...&quot; }]
+new_users_index = new_users.index_by { |new_user| new_user[:id] }
+
+User.all.in_batches do |users|
+  users.each do |user|
+    # インデックスから取得できたデータは取り除いていく
+    # 残ったデータはINSERT時に利用する
+    new_user = new_users_index.delete(user.id)
+
+    # 新しいデータに含まれているかチェック
+    if new_user.nil?
+      # 含まれていなければDELETE
+      user.destroy
+    else
+      # 含まれていればUPDATE
+      user.update_attributes(new_user)
+    end
+  end
+end
+
+# 残ったデータはすべてINSERTする
+new_users_index.values.each do |new_user|
+  User.create(new_user)
+end
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APNsの概要と関連ツール群</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="APNsの概要と関連ツール群">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/222/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">APNsの概要と関連ツール群</h1>
+          <p class="metadata">
+            <time datetime="2014-07-07T01:46:00.000+0000">2014-07-07 01:46</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Apple Push Notification Service（APNs）は、ソフトウェア開発者（プロバイダ）から受け取ったメッセージを安全な方法でデバイスにプッシュ通知するサービスである。</p>
+<h1>プッシュ通知までの流れ</h1>
+<ol>
+<li>プロバイダはデバイストークンとペイロードから成る通知メッセージを作る。</li>
+<li>プロバイダはその通知メッセージをAPNsに送信する。</li>
+<li>APNsは受け取った通知メッセージのデバイストークンから配信先のデバイスを特定し、通知メッセージを配信する。</li>
+</ol>
+<h1>接続を確立するまでの流れ</h1>
+<ol>
+<li>APNsとデバイス間で認証を行う（システムによって行われるため、開発者が実装する必要はない）。</li>
+<li>APNsとプロバイダ間で認証を行う。</li>
+<li>プロバイダがAPNsからサーバ証明書を取得し、検証する。</li>
+<li>プロバイダがプロバイダ証明書をAPNsに送信する。</li>
+<li>デバイストークンを生成しプロバイダと共有する。</li>
+<li>アプリケーションがリモート通知の登録を行う。</li>
+<li>システムがリモート通知の設定を行い、デバイストークンをアプリケーションデリゲートに渡す。</li>
+<li>アプリケーションがデバイストークンをプロバイダに送信する。</li>
+<li>プロバイダからの通信すべてにデバイストークンを添付させる。</li>
+</ol>
+<h1>APNs関連ツール群</h1>
+<p>AFNetworkingでおなじみのmatttさんが様々な関連ツールを開発している。それぞれのツールが上で説明した全体像の中でどのような位置づけなのか整理した。</p>
+<h2>houston</h2>
+<p><a href="https://github.com/nomad/houston">https://github.com/nomad/houston</a></p>
+<p>プロバイダからAPNsに向けて通知メッセージを送るためのクライアント。Ruby製。上記の通り、プロバイダがAPNsにメッセージを送るには、(1)APNsとの間で認証を行う、(2)配信先のデバイストークンを取得する必要がある。なので、houstonでもメッセージを送る際にAPNsのサーバー証明書と配信先のデバイストークンを設定する必要がある。</p>
+<h2>rack-push-notification</h2>
+<p><a href="https://github.com/mattt/rack-push-notification">https://github.com/mattt/rack-push-notification</a></p>
+<p>iOSアプリからデバイストークンを受け取りDBに保存するRackアプリケーション（Sinatraベース）。上述の通り、iOSアプリはAPNsからデバイストークンを取得したあと、プロバイダと共有する必要がある。rack-push-notificationはそのデバイストークンを受け取るためのAPIを用意する。</p>
+<h2>Orbiter</h2>
+<p><a href="https://github.com/mattt/Orbiter">https://github.com/mattt/Orbiter</a></p>
+<p>iOSアプリからデバイストークンを送信するためのクライアント。今までの2つのツールはプロバイダ側のツールだったが、OrbiterはiOSアプリ側のツールである。取得したデバイストークンをプロバイダに送信する処理を簡略化できるようだ。</p>
+<h2>まとめ</h2>
+<p>これらの関連ツールを使ったプッシュ通知のフローは以下のようになる。</p>
+<ol>
+<li>iOSアプリはリモート通知の登録を行い、APNsからデバイストークンを取得する。</li>
+<li>iOSアプリは <strong>Orbiter</strong> を使ってデバイストークンをプロバイダに送信する。</li>
+<li>プロバイダは <strong>rack-push-notification</strong> を使って用意したAPIからデバイストークンを受け取りDBに保存する。</li>
+<li>プロバイダは <strong>houston</strong> を使ってプッシュ通知をAPNsに送信する。</li>
+<li>APNsはプロバイダ証明書とデバイストークンからプッシュ通知を転送するデバイスを特定しプッシュ通知を送る。</li>
+</ol>
+<hr />
+<h1>参考</h1>
+<ul>
+<li><a href="https://developer.apple.com/jp/devcenter/ios/library/documentation/RemoteNotificationsPG.pdf">LocalおよびPush Notificationプログラミングガイド</a>(PDF)</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

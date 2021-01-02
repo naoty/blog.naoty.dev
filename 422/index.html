@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultをio::Resultに変換する</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Resultをio::Resultに変換する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/422/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Resultをio::Resultに変換する</h1>
+          <p class="metadata">
+            <time datetime="2020-06-29T22:13:00.000+0000">2020-06-29 22:13</time>
+            <a href="/rust/">#rust</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><code>Read</code>トレイトや<code>Write</code>トレイトを実装するには、<code>io::Result</code>を返す必要がある。これらの関数のなかで<code>std::result::Result</code>を扱うとき、これを<code>io::Result</code>に変換したい。</p>
+<pre lang="rust"><code>fn write(&amp;mut self, buf: &amp;[u8]) -&gt; io::Result {
+  let string = String::from_utf8(buf.to_vec());
+    .map_err(io::Error::from(io::ErrorKind::InvalidData))?;
+
+  // ...
+}
+</code></pre>
+<ul>
+<li><code>io::Result</code>にするために、<code>map_err</code>を使ってエラーの型を<code>io::Error</code>に変換する。</li>
+<li><code>io::Error</code>は<code>io::ErrorKind</code>から<code>from</code>関数で生成できる。</li>
+<li><code>io::ErrorKind</code>は<a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html">ドキュメント</a>にあるようにenumとして定義されている。このコードのような不正なデータを受け取った場合は<code>InvalidData</code>で表せそう。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

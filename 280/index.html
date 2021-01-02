@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>型消去を用いたSwiftによるリポジトリパターンの実装</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="型消去を用いたSwiftによるリポジトリパターンの実装">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/280/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">型消去を用いたSwiftによるリポジトリパターンの実装</h1>
+          <p class="metadata">
+            <time datetime="2016-03-11T16:00:00.000+0000">2016-03-11 16:00</time>
+          </p>
+        </header>
+        <section class="body">
+          <h1>リポジトリパターンとは</h1>
+<blockquote>
+<p>リポジトリはオブジェクトの参照を取得するのに必要なロジックをすべてカプセル化するためのパターンです。</p>
+<p><em>Domain Driven Design Quickly 日本語訳</em></p>
+</blockquote>
+<p>iOSアプリ開発の文脈では、オブジェクトをWeb APIから取得するのかRealmから取得するのかといった関心ごとがある。リポジトリを実装することで次のようなメリットがあると思う。</p>
+<ul>
+<li>どこからどのように取得するのかなどの関心ごとからドメインモデルを切り離せるため、ドメインモデルをクリアに保つことができる。（DDDの観点）</li>
+<li>テスト時にWeb APIやRealmにアクセスするリポジトリをメモリにアクセスするリポジトリに差し替えること（Dependency Injection）が可能になるため、テストデータを簡単に用意できたりテストのパフォーマンスを向上できるなど、テストしやすくなる。（テスタビリティの観点）</li>
+</ul>
+<h1>型消去とは</h1>
+<p>先日行われた<a href="http://www.tryswiftconf.com/">try! Swift</a>で紹介されたテクニックで、トークの内容については以下の書き起こし記事が詳しいと思う。</p>
+<p>型消去とは何か、端的に説明するのはかなり難しい。ただ、リポジトリパターンをSwiftで実装するにあたって非常に強力なテクニックであることが分かったので、型消去を用いない場合と用いた場合とを比べて型消去について説明してみたいと思う。</p>
+<h2>型消去を用いない場合</h2>
+<p>例のごとく<code>Pokemon</code>オブジェクトを取得するリポジトリを考える。<code>Pokemon</code>はWeb APIから取得するかもしれないし、Realmから取得するかもしれない。とりあえず以下のようなprotocolを定義して、<code>Pokemon</code>を取得するインターフェイスを用意する。</p>
+<pre><code>protocol PokemonRepository {
+    func find(ID: UInt) -&gt; Pokemon?
+    func findAll() -&gt; [Pokemon]
+}
+</code></pre>
+<p>そして、実際にRealmから<code>Pokemon</code>を取得するリポジトリはこのprotocolを実装して以下のように書けると思う。</p>
+<pre><code>struct RealmPokemonRepository: PokemonRepository {
+    func find(ID: UInt) -&gt; Pokemon? {
+        let realm = try! Realm()
+        return realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first
+    }
+
+    func findAll() -&gt; [Pokemon] {
+        let realm = try! Realm()
+        return realm.objects(Pokemon)
+    }
+}
+</code></pre>
+<p>同様にメモリ内の<code>[Pokemon]</code>から<code>Pokemon</code>を取得するリポジトリは以下のように書けると思う。</p>
+<pre><code>struct MemoryPokemonRepository: PokemonRepository {
+    let pokemons = [
+        Pokemon(ID: 1, name: &quot;フシギダネ&quot;),
+        Pokemon(ID: 2, name: &quot;フシギソウ&quot;),
+        Pokemon(ID: 3, name: &quot;フシギバナ&quot;)
+    ]
+
+    func find(ID: UInt) -&gt; Pokemon? {
+        return pokemons.filter { $0.ID == ID }.first
+    }
+
+    func findAll() -&gt; [Pokemon] {
+        return pokemons
+    }
+}
+</code></pre>
+<p>ViewController等でこのリポジトリを使う場合は以下のように書けると思う。</p>
+<pre><code>class PokedexViewController: UITableViewController {
+    var pokedex: [Pokemon] = []
+    lazy var repository: PokemonRepository = RealmPokemonRepository()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        pokedex = repository.findAll()
+    }
+}
+</code></pre>
+<p>テストを書く際は以下のようにリポジトリを差し替えることでRealmへのアクセスを回避できる。</p>
+<pre><code>class PokedexViewControllerTests: XCTestCase {
+    var viewController: PokedexViewController!
+
+    override func setUp() {
+        viewController = PokedexViewController()
+        viewController.repository = MemoryPokemonRepository()
+    }
+}
+</code></pre>
+<p>こうして<code>Pokemon</code>を取得するリポジトリを実装することで、どのようにオブジェクトを取得するのかという関心ごとをカプセル化し、テスタビリティのある設計が可能になった。しかし、この実装には大きな問題がある。</p>
+<p><strong>型消去を用いない実装の問題点は、ドメインモデルごとに似たようなprotocolを用意しなくてはならないことだ</strong> 。例えば、今度は<code>Human</code>を取得したいという場合に同様に<code>HumanRepository</code>を定義しなくてはならないし、その次に<code>Town</code>を取得したいという場合には<code>TownRepository</code>を定義しなくてはならない。これらのprotocolはほとんど中身が同じボイラープレートになってしまうだろう。</p>
+<p>それでは、より汎用的な<code>Repository</code>というprotocolを以下のように定義してみてはどうだろうかと考えてみる。</p>
+<pre><code>protocol Repository {
+    typealias Domain
+
+    func find(ID: UInt) -&gt; Domain?
+    func findAll() -&gt; [Domain]
+}
+</code></pre>
+<p>typealiasを使ってGenericsなprotocolを定義することでより汎用的になった。そして、これを実装するリポジトリは例えばこんな感じになる。</p>
+<pre><code>struct RealmPokemonRepository: Repository {
+    typealias Domain = Pokemon
+
+    func find(ID: UInt) -&gt; Pokemon? {
+        let realm = try! Realm()
+        return realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first
+    }
+
+    func findAll() -&gt; [Pokemon] {
+        let realm = try! Realm()
+        return realm.objects(Pokemon)
+    }
+}
+</code></pre>
+<p>しかし、これはすぐにうまくいかないことがわかる。</p>
+<pre><code>lazy var repository: Repository = RealmPokemonRepository
+</code></pre>
+<p>のようなコードはコンパイルエラーになってしまうのだ。<code>Repository</code>のようなtypealiasをもつprotocolはtypealiasに具体的な型をもっていないため抽象型と呼ばれ、そのまま変数の型として宣言することができない。</p>
+<p>このままおとなしくドメインモデルごとにボイラープレートのようなprotocolを書かなくてはいけないんだろうか（←try! Swift参加前の筆者）。</p>
+<h2>型消去を用いた場合</h2>
+<p>あらゆるリポジトリを汎用的に扱えるようにするため、以下のような<code>AnyRepository</code>を定義する。</p>
+<pre><code>struct AnyRepository: Repository {
+    typealias Domain = DomainType
+
+    private let _find: UInt -&gt; DomainType?
+    private let _findAll: () -&gt; [DomainType]
+
+    init(_ repository: T) {
+        _find = repository.find
+        _findAll = repository.findAll
+    }
+
+    func find(ID: UInt) -&gt; DomainType? {
+        return _find(ID)
+    }
+
+    func findAll() -&gt; [DomainType] {
+        return _findAll()
+    }
+}
+</code></pre>
+<p><code>AnyRepository</code>として使う場合は、<code>typealias Domain = Pokemon</code>となっている<code>Repository</code>を実装した型のみ<code>AnyRepository()</code>に渡すことができる。例えば、ViewControllerではこんな感じで使うことになる。</p>
+<pre><code>class PokedexViewController: UITableViewController {
+    var pokedex: [Pokemon] = []
+    lazy var repository: AnyRepository = AnyRepository(RealmPokemonRepository())
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        pokedex = repository.findAll()
+    }
+}
+</code></pre>
+<p>同様にテストではこんな感じになると思う。</p>
+<pre><code>class PokedexViewControllerTests: XCTestCase {
+    var viewController: PokedexViewController!
+
+    override func setUp() {
+        viewController = PokedexViewController()
+        viewController.repository = AnyRepository(MemoryPokemonRepository())
+    }
+}
+</code></pre>
+<p><code>AnyRepository</code>があることで、<code>PokemonRepository</code>や<code>HumanRepository</code>のようなドメインモデルごとのprotocolは不要になり、それぞれ<code>AnyRepository</code>、<code>AnyRepository</code>のような型を使うことで対処できる。これでボイラープレートのようなコードを書く必要はなくなった。</p>
+<p><strong>型消去とは、この例で言うと<code>PokemonRepository</code>型であった<code>repository</code>が<code>AnyRepository</code>という型にしてしまうことを指しているようだ</strong> 。型消去というのは、より柔軟な設計のための結果として考えることができそう。</p>
+<hr />
+<p>以降は型消去とは無関係だけど、リポジトリパターンを実装するにあたって必要となった技術要素を紹介していきたいと思う。</p>
+<h1>クエリのインターフェイス</h1>
+<p>上で紹介した<code>Repository</code>は意図的に不十分なインターフェイスだった。というのは、<code>findAll()</code>というメソッドはその名の通りすべてのオブジェクトを取得してしまうので、現実的には検索条件やソートなどのパラメータを指定できる必要があると思う。</p>
+<p>ここで指定される検索条件は内部的にGETリクエストのパラメータやRealmに渡される<code>NSPredicate</code>に変換されることになる。また、検索条件といっても単純に一致するためのものだけでなく、不一致や含んでいるかといった検索方法もある。Web APIに問い合わせるのかRealmに問い合わせるのかといったバックエンドに関わらず、これらを統一的に表すクエリの表現が必要となると思った。</p>
+<p>そこでAnyQueryという小さなライブラリを開発した。</p>
+<p><a href="https://github.com/naoty/AnyQuery">naoty/AnyQuery</a></p>
+<p>これを使って<code>Repository</code>はこんな感じに定義できる。</p>
+<pre><code>protocol Repository {
+    typealias Domain
+
+    func find(ID: UInt) -&gt; Domain?
+    func findAll(query query: AnyQuery?, sort: AnySort?) -&gt; [Domain]
+}
+
+extension Repository {
+    func findAll() -&gt; Domain? {
+        return findAll(query: nil, sort: nil)
+    }
+}
+</code></pre>
+<p><code>RealmPokemonRepository</code>で実際に使う場合はこんな感じになる。</p>
+<pre><code>struct RealmPokemonRepository: Repository {
+    typealias Domain = Pokemon
+
+    func find(ID: UInt) -&gt; Pokemon? {
+        let realm = try! Realm()
+        return realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first
+    }
+
+    func findAll(query query: AnyQuery?, sort: AnySort?) -&gt; [Pokemon] {
+        let realm = try! Realm()
+        var result realm.objects(Pokemon)
+
+        if let predicate = query?.predicate {
+            result = result.filter(predicate)
+        }
+
+        if let sortDescriptors = sort?.sortDescriptors {
+            for sortDescriptor in sortDescriptors {
+                guard let key = sortDescriptor.key else {
+                    continue
+                }
+                result = result.sorted(key, ascending: sortDescriptor.ascending)
+            }
+        }
+
+        return result
+    }
+}
+</code></pre>
+<p>そして、ViewControllerからはこんな感じでクエリを組み立てることができる。</p>
+<pre><code>class PokedexViewController: UITableViewController {
+    var pokedex: [Pokemon] = []
+    lazy var repository: PokemonRepository = RealmPokemonRepository()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let query = AnyQuery.In(key: &quot;ID&quot;, values: [1, 2, 3, 4, 5])
+        let sort = AnySort.Ascending(key: &quot;name&quot;)
+        pokedex = repository.findAll(query: query, sort: sort)
+    }
+}
+</code></pre>
+<p>詳細は<a href="https://github.com/naoty/AnyQuery/blob/master/README.md">README</a>に書いてあるが、例えば、こんな風に複雑な条件も表現できる。</p>
+<pre><code>let query = AnyQuery.Between(key: &quot;ID&quot;, lhs: 1, rhs: 100) &amp;&amp; AnyQuery.NotEqual(key: &quot;type&quot;, PokemonType.Fire.rawValue)
+let sort = AnySort.Descending(key: &quot;weight&quot;) &gt; AnySort.Descending(key: &quot;height&quot;)
+</code></pre>
+<h1>非同期処理の取り扱い</h1>
+<p>たいていの取得処理は非同期に行われるため、リポジトリのインターフェイスも非同期処理を前提にしなくてはならないと思う。しかし、取得完了時の処理をクロージャとして渡すインターフェイスはコールバック・ヘルにつながるため、Promiseライクなライブラリを使ってオブジェクトの代わりにPromiseオブジェクトを返すような形がいいと思った。</p>
+<p>例として<a href="https://github.com/ReactKit/SwiftTask">SwiftTask</a>を使って以下のように<code>Repository</code>を定義してみた。</p>
+<pre><code>protocol Repository {
+    typealias Domain
+    
+    func find(ID: UInt) -&gt; Task
+    func findAll(query query: AnyQuery?, sort: AnySort?) -&gt; Task
+}
+</code></pre>
+<p>そして、実装は以下のようになる。</p>
+<pre><code>class RealmPokemonRepository: Repository {
+    typealias Domain = Pokemon
+
+    func find(ID: UInt) -&gt; Task {
+        return Task { fulfill, reject in
+            let realm = try! Realm()
+            if let pokemon = realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first {
+                fulfill(pokemon.pokemon)
+            } else {
+                reject(RepositoryError.NotFound)
+            }
+        }
+    }
+
+    func findAll(query query: AnyQuery?, sort: AnySort?) -&gt; Task {
+        return Task { fulfill, reject in
+            let realm = try! Realm()
+            var result = realm.objects(RealmPokemon)
+            
+            if let predicate = query?.predicate {
+                result = result.filter(predicate)
+            }
+            
+            if let sortDescriptors = sort?.sortDescriptors {
+                for sortDescriptor in sortDescriptors {
+                    guard let key = sortDescriptor.key else {
+                        continue
+                    }
+                    result = result.sorted(key, ascending: sortDescriptor.ascending)
+                }
+            }
+            
+            if result.isEmpty {
+                reject(RepositoryError.NotFound)
+            } else {
+                let pokemons = result.map { $0.pokemon }
+                fulfill(pokemons)
+            }
+        }
+    }
+}
+</code></pre>
+<h1>最後に</h1>
+<p>Swiftでリポジトリパターンを実装するにあたってのポイントは3つあった。</p>
+<ul>
+<li>型消去によってリポジトリのための汎用的なインターフェイスを定義する。</li>
+<li><a href="https://github.com/naoty/AnyQuery">AnyQuery</a>を使ってクエリのインターフェイスを統一する。</li>
+<li>Promiseライクなライブラリを使って非同期処理も考慮したリポジトリを設計する。</li>
+</ul>
+<p>以上で説明したことはすべてこちらのサンプルプロジェクトで詳細を見ることができるので、参考にしてほしい。</p>
+<p><a href="https://github.com/naoty/Playground/tree/master/Repository">naoty/Playground</a></p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

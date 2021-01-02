@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セキュアなDockerfileを書く</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="セキュアなDockerfileを書く">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/390/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">セキュアなDockerfileを書く</h1>
+          <p class="metadata">
+            <time datetime="2019-12-07T18:30:00.000+0000">2019-12-07 18:30</time>
+            <a href="/docker/">#docker</a>
+            <a href="/security/">#security</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近コンテナのセキュリティへの意識が高まっているので、まずはセキュアなイメージのためのDockerfileを書く方法を調べる。</p>
+<h1>Before</h1>
+<p>Rails 6.0.1を動かすためのDockerfileを書いてみた。webpackerを動かすためにNode.jsやYarnも入れている。</p>
+<pre lang="dockerfile"><code>FROM node:12.13.1 AS node
+FROM ruby:2.6.5
+
+RUN apt-get update
+
+# node
+COPY --from=node /usr/local/bin/node /usr/local/bin/
+
+# yarn
+COPY --from=node /opt/yarn-v1.19.1 /opt/yarn-v1.19.1/
+RUN ln -s /opt/yarn-v1.19.1/bin/yarn /usr/local/bin/yarn &amp;&amp; \
+  ln -s /opt/yarn-v1.19.1/bin/yarnpkg /usr/local/bin/yarnpkg
+
+WORKDIR /hello-rails
+
+# npm packages
+COPY package.json yarn.lock /hello-rails/
+RUN yarn install
+
+# rubygems
+COPY Gemfile Gemfile.lock /hello-rails/
+RUN bundle install
+
+COPY . /hello-rails/
+
+ENTRYPOINT [&quot;bin/rails&quot;]
+CMD [&quot;s&quot;]
+</code></pre>
+<p><a href="https://github.com/aquasecurity/trivy">trivy</a>を使って脆弱性を調べてみると、思っていた以上に脆弱性が見つかった。</p>
+<pre><code>$ trivy naoty/rails
+naoty/rails:latest (debian 10.2)
+================================
+Total: 1399 (UNKNOWN: 16, LOW: 92, MEDIUM: 1137, HIGH: 143, CRITICAL: 11)
+</code></pre>
+<h1>ベースイメージを最小限にする</h1>
+<p>必要最小限のツールだけを含めて攻撃の対象になる脆弱性を減らしたい。そこで、alpineベースのベースイメージに変更する。</p>
+<pre lang="diff"><code>-FROM node:12.13.1 AS node
+-FROM ruby:2.6.5
++FROM node:12.13.1-alpine AS node
++FROM ruby:2.6.5-alpine
+
+-RUN apt-get update
++RUN apk update &amp;&amp; \
++  apk add --no-cache build-base sqlite-dev
+</code></pre>
+<p>trivyでもう一度脆弱性を調べてみると、脆弱性はほとんどなくなった。</p>
+<pre><code>$ trivy naoty/rails:alpine
+naoty/rails:alpine (alpine 3.10.3)
+==================================
+Total: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
+</code></pre>
+<h1>rootをなるべく使わない</h1>
+<p><code>root</code>ユーザーではなく最小限の権限しかもたないユーザーを使う。コンテナに侵入された場合の被害を最小限に抑えられる。</p>
+<pre lang="diff"><code> COPY . /hello-rails/
+
++RUN addgroup -S ruby &amp;&amp; \
++  adduser -S ruby ruby &amp;&amp; \
++  chown -R ruby:ruby /hello-rails
++USER ruby
+
+ ENTRYPOINT [&quot;bin/rails&quot;]
+ CMD [&quot;s&quot;]
+</code></pre>
+<ul>
+<li>Alpineでは<code>groupadd</code>, <code>useradd</code>ではなく<code>addgroup</code>, <code>adduser</code>を使う。</li>
+<li><code>-S</code>オプションを使ってシステムユーザーを作成する。システムユーザーはパスワードをもたずログインシェルもないので、より安全なユーザーとして使える。</li>
+<li>作成したユーザーを<code>USER</code>で指定してrailsを起動するようにしている。</li>
+</ul>
+<h1>参考</h1>
+<ul>
+<li><a href="https://snyk.io/blog/10-docker-image-security-best-practices/">https://snyk.io/blog/10-docker-image-security-best-practices/</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

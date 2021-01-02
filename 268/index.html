@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timepieceを0.4.0にアップデートした</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="Timepieceを0.4.0にアップデートした">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/268/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Timepieceを0.4.0にアップデートした</h1>
+          <p class="metadata">
+            <time datetime="2015-07-19T23:06:00.000+0000">2015-07-19 23:06</time>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/naoty/Timepiece">naoty/Timepiece</a></p>
+<p>Timepieceを<code>0.4.0</code>にアップデートした。ぶっちゃけブログの記事にするくらいならちゃんとCHANGELOGにしろという話なんだけど、技術的な詳細も少し話したいのでブログの記事にした。軽微なバグの修正と以下の2点が今回の変更点だ。</p>
+<h1>タイムゾーンのサポート</h1>
+<p>これがメインの変更になる。「サーバー側から受け取る時間のタイムゾーンとiOSアプリケーションのタイムゾーンが異なっており、それらを比較したい」みたいなissueをもらったので対応した。「こういう感じのインターフェイスはどう？」みたいなのを聞いてたら「Sweet!」だのと褒められたので、その気になって実装してしまった。けっこう大変だった。</p>
+<p>iOSでは、<code>NSDate</code>オブジェクトそのものにタイムゾーンは存在しない。システムで設定されるタイムゾーンを<code>NSCalendar</code>経由で取得することになる。</p>
+<pre><code>NSCalendar.currentCalendar().timeZone
+</code></pre>
+<p>なので、今回のようなケースだと、<code>NSDate</code>オブジェクトそれぞれにタイムゾーンが存在するように見せる必要がありそうだった。なお、オフセットを調整することも考えられるが、時間を足し引きしてしまった段階でそれは別の時間となってしまう。同じ時間で別のタイムゾーンを持つ<code>NSDate</code>オブジェクトが必要だった。実装方針としては、</p>
+<ul>
+<li>デフォルトでは<code>NSCalendar</code>経由でシステムのタイムゾーンを取得する</li>
+<li>タイムゾーンをセットする場合はそのタイムゾーンを持つ新しい<code>NSDate</code>を生成して返す（状態を更新しない）</li>
+</ul>
+<p>ということを念頭に置いた。</p>
+<p>ところで、Timepieceは<code>NSDate</code>を始めとするいくつかの既存のオブジェクトのextensionとして実装されている。extensionで<code>NSDate</code>オブジェクトに<code>timeZone</code>のようなプロパティを追加することは普通はできない。しかし、Objective-CのランタイムAPIを使って動的にプロパティを追加することで、これをなんとか実現させることができる。Swiftの場合でも、ランタイムAPIを使うことは可能だ。</p>
+<pre><code>import ObjectiveC
+
+public extension NSDate {
+    var timeZone {
+        return objc_getAssociatedObject(self, &amp;AssociatedKeys.TimeZone) as? NSTimeZone ?? calendar.timeZone
+    }
+
+    func change(#timeZone: NSTimeZone) -&gt; NSDate! {
+        // ...
+
+        objc_setAssociatedObject(newDate, &amp;AssociatedKeys.TimeZone, timeZone, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+
+        // ...
+    }
+}
+</code></pre>
+<p><code>objc_</code>から始まる関数がランタイムAPIだ。これらの関数によって動的にオブジェクトにプロパティを読み書きしている。<code>change(timeZone:)</code>で生成された<code>NSDate</code>オブジェクトのみ動的に追加されたプロパティを持つ。タイムゾーンが異なる<code>NSDate</code>同士の計算も問題なく行われている。これは上述の通りオフセットの調整による実装ではないためだと思う。</p>
+<h1>playgroundの追加</h1>
+<p>機能というわけじゃないけど、リポジトリにplaygroundを追加した。それに伴ってプロジェクトからワークスペースに変更した。実際にTimepieceを試してもらうには、サンプルのアプリケーションを作ってPodfileを書いて…みたいなことをする必要がありとても面倒だったので、Timepieceが使えるplaygroundを用意した。</p>
+<h1>Pull request大歓迎</h1>
+<p>タイムゾーン周りの実装は正直あんまり自信はないんだけど、テストはちゃんと通ってるしまぁいいかくらいの気持ちでリリースした。観点が漏れている可能性は大いにありうるので、ぜひPull requestしてもらいたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

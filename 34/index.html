@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロパティの参照順序について</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="プロパティの参照順序について">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/34/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">プロパティの参照順序について</h1>
+          <p class="metadata">
+            <time datetime="2011-02-13T22:12:00.000+0000">2011-02-13 22:12</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>　結論から言うと、プロパティは以下の順番で値を探しに行きます。</p>
+<ol>
+<li>ローカルプロパティ</li>
+<li>__proto__内のプロパティ（prototypeからセットされたプロパティ）</li>
+<li>__proto__.__proto__内のプロパティ</li>
+<li>__proto__.__proto__.__proto__・・・と続く</li>
+<li>undefined</li>
+</ol>
+<p>　以下の例で言うと、naotoknkオブジェクトのプロパティは以下の順番で値を探しに行きます。</p>
+<ol>
+<li>naotoknk（WorkerBee内で定義されたプロパティ）</li>
+<li>naotoknk.__proto__（WorkerBee.prototype内で定義されたプロパティ）</li>
+<li>naotoknk.__proto__.__proto__（Employee.prototype内で定義されたプロパティ）</li>
+<li>naotoknk.__proto__.__proto__.__proto__（Object.prototype内で定義されたプロパティ）</li>
+<li>undefined</li>
+</ol>
+<pre><code>function Employee() {
+    this.name = &quot;&quot;;
+    this.dept = &quot;general&quot;;
+}
+
+function WorkerBee() {
+    this.projects = [];
+}
+WorkerBee.prototype = new Employee; // 継承
+
+var naotoknk = new WorkerBee;
+</code></pre>
+<p>　この例では、WorkerBee.prototypeにEmployeeのインスタンスを定義しています。Employeeインスタンスにはnameプロパティとdeptプロパティが定義されているので、WorkerBee.prototype内にnameプロパティとdeptプロパティが定義されるのです（すなわち、継承）。<br />
+　このとき、naotoknk.nameを参照すると、naotoknk内にnameプロパティを探しに行きます。しかし、存在しないため、naotoknk.__proto__内に探しに行きます。ここには存在するため、&quot;&quot;（空文字列）を返します。</p>
+<pre><code>naotoknk.name == naotoknk. __proto__.name
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

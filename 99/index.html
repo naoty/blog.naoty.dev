@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>容赦無いCollection Insert</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="容赦無いCollection Insert">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/99/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">容赦無いCollection Insert</h1>
+          <p class="metadata">
+            <time datetime="2012-02-21T15:59:00.000+0000">2012-02-21 15:59</time>
+          </p>
+        </header>
+        <section class="body">
+          <p>Mongodbに大量のデータをぶち込もうとすると、「Exceded maximum insert size of 16,000,000 bytes」などとエラーを吐くので、入るまで半分にしてねじ込み続ける容赦無いスクリプトを書いた。</p>
+<pre lang="ruby"><code>def yousyanai_insert(data)
+  begin
+    NaotyModel.collection.insert(data)
+  rescue
+    data.each_slice(data.length / 2) {|half_data| yousyanai_insert(half_data) }
+  end
+end
+</code></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
