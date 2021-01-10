@@ -10,6 +10,30 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/434/</id>
+    <link href="https://blog.naoty.dev/434/"/>
+    <summary>&lt;p&gt;ブログのホスティングを &lt;a href=&quot;https://naoty.dev/posts/&quot;&gt;https://naoty.dev/posts/&lt;/a&gt; から &lt;a href=&quot;https://blog.naoty.dev&quot;&gt;https://blog.naoty.dev&lt;/a&gt; に移した。同時にこういったことも行った。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;はてなブログの記事とQiitaの記事を統合した。&lt;/li&gt;
+&lt;li&gt;ブログを生成する仕組みをフルスクラッチした。&lt;/li&gt;
+&lt;li&gt;ブログを生成するコードとブログのコンテンツを管理するリポジトリを分けた。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;記事の統合&lt;/h1&gt;
+&lt;p&gt;これまでインターネットで公開している記事ははてなブログ（はてなダイアリー）、Qiita、naoty.devの3つのサービスに分散していた。これらを統合してblog.naoty.devで公開するようにした。&lt;/p&gt;
+&lt;p&gt;理由は、自分が公開してきたテキストを手元で管理して、10年後、20年後も読めるようにしておきたかったからだ。プログラミングを始めた頃に書いたテキストが今も読めるという体験はとても尊いことなので、これを引き継いでいきたい。&lt;/p&gt;
+&lt;h1&gt;ブログを生成する仕組みのフルスクラッチ&lt;/h1&gt;
+&lt;p&gt;これまでgulp -&amp;gt; Gatsby.js -&amp;gt; Nuxt.js -&amp;gt; Gatsby.jsとブログを生成する仕組みを作り変えてきたけど、今回は既存のフレームワークを使わずにRubyでフルスクラッチした。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/naoty/blog&quot;&gt;https://github.com/naoty/blog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;理由は、既存のフレームワークを使ってブログを作ってから長い期間が経つとフレームワークの知識を忘れてしまいメンテナンスが難しくなることがしばしばあったからだ。&lt;/p&gt;
+&lt;p&gt;そこで、一番慣れているRubyを使って可読性が高いコードを書き、仕組みを忘れてしまってもコードを読めばメンテナンスができるようにした。&lt;/p&gt;
+&lt;h1&gt;別リポジトリでの管理&lt;/h1&gt;
+&lt;p&gt;上で書いた&lt;a href=&quot;https://github.com/naoty/blog&quot;&gt;naoty/blog&lt;/a&gt;とは別に&lt;a href=&quot;https://github.com/naoty/posts&quot;&gt;naoty/posts&lt;/a&gt;というリポジトリで記事コンテンツを管理するようにした。&lt;/p&gt;
+&lt;p&gt;理由は、ブログを生成するコードとブログのコンテンツそのものの寿命が異なるからだ。ブログを生成するコードは今回5回目のリニューアルとなり、（ないとは思うけど）また別の仕組みに一新されるかもしれない。&lt;/p&gt;</summary>
+    <title>blog.naoty.dev</title>
+    <updated>2021-01-10T19:56:00+00:00</updated>
+    <dc:date>2021-01-10T19:56:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/433/</id>
     <link href="https://blog.naoty.dev/433/"/>
     <summary>&lt;h1&gt;プライベート&lt;/h1&gt;

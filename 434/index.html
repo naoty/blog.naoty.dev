@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blog.naoty.dev</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="blog.naoty.dev">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/434/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">blog.naoty.dev</h1>
+          <p class="metadata">
+            <time datetime="2021-01-10T19:56:00.000+0000">2021-01-10 19:56</time>
+            <a href="/meta/">#meta</a>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ブログのホスティングを <a href="https://naoty.dev/posts/">https://naoty.dev/posts/</a> から <a href="https://blog.naoty.dev">https://blog.naoty.dev</a> に移した。同時にこういったことも行った。</p>
+<ul>
+<li>はてなブログの記事とQiitaの記事を統合した。</li>
+<li>ブログを生成する仕組みをフルスクラッチした。</li>
+<li>ブログを生成するコードとブログのコンテンツを管理するリポジトリを分けた。</li>
+</ul>
+<h1>記事の統合</h1>
+<p>これまでインターネットで公開している記事ははてなブログ（はてなダイアリー）、Qiita、naoty.devの3つのサービスに分散していた。これらを統合してblog.naoty.devで公開するようにした。</p>
+<p>理由は、自分が公開してきたテキストを手元で管理して、10年後、20年後も読めるようにしておきたかったからだ。プログラミングを始めた頃に書いたテキストが今も読めるという体験はとても尊いことなので、これを引き継いでいきたい。</p>
+<h1>ブログを生成する仕組みのフルスクラッチ</h1>
+<p>これまでgulp -&gt; Gatsby.js -&gt; Nuxt.js -&gt; Gatsby.jsとブログを生成する仕組みを作り変えてきたけど、今回は既存のフレームワークを使わずにRubyでフルスクラッチした。</p>
+<p><a href="https://github.com/naoty/blog">https://github.com/naoty/blog</a></p>
+<p>理由は、既存のフレームワークを使ってブログを作ってから長い期間が経つとフレームワークの知識を忘れてしまいメンテナンスが難しくなることがしばしばあったからだ。</p>
+<p>そこで、一番慣れているRubyを使って可読性が高いコードを書き、仕組みを忘れてしまってもコードを読めばメンテナンスができるようにした。</p>
+<h1>別リポジトリでの管理</h1>
+<p>上で書いた<a href="https://github.com/naoty/blog">naoty/blog</a>とは別に<a href="https://github.com/naoty/posts">naoty/posts</a>というリポジトリで記事コンテンツを管理するようにした。</p>
+<p>理由は、ブログを生成するコードとブログのコンテンツそのものの寿命が異なるからだ。ブログを生成するコードは今回5回目のリニューアルとなり、（ないとは思うけど）また別の仕組みに一新されるかもしれない。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
