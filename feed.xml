@@ -10,6 +10,83 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/435/</id>
+    <link href="https://blog.naoty.dev/435/"/>
+    <summary>&lt;h1&gt;課題&lt;/h1&gt;
+&lt;p&gt;関連先のテーブルのカラムを絞りつつ、N+1問題を回避するため&lt;code&gt;preload&lt;/code&gt;したい。&lt;/p&gt;
+&lt;h1&gt;解決&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;select&lt;/code&gt;で取得するカラムを絞るscopeを用意し、&lt;code&gt;has_many&lt;/code&gt;の第2引数で指定する。&lt;/p&gt;
+&lt;p&gt;例として下のようなテーブル定義とモデルがあるとする。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;books&lt;/code&gt;テーブルの&lt;code&gt;body&lt;/code&gt;カラムはTEXT型でサイズが大きくなりうるため、&lt;code&gt;body&lt;/code&gt;カラム以外をロードするための&lt;code&gt;metadata&lt;/code&gt;というscopeを定義し、関連元の&lt;code&gt;Author&lt;/code&gt;に&lt;code&gt;metadata&lt;/code&gt;を利用した&lt;code&gt;books_metadata&lt;/code&gt;という関連を定義しておく。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot;&gt;&lt;code&gt;ActiveRecord::Schema.define do
+  create_table :authors do |t|
+    t.string :name
+  end
+
+  create_table :books do |t|
+    t.string     :title
+    t.text       :body
+    t.references :author
+  end
+end
+
+class Author &amp;lt; ActiveRecord::Base
+  has_many :books
+  has_many :books_metadata, -&amp;gt; { metadata }, class_name: 'Book'
+end
+
+class Book &amp;lt; ActiveRecord::Base
+  belongs_to :author
+
+  scope :metadata, -&amp;gt; {
+    select(
+      :id,
+      :author_id,
+      :title,
+    )
+  }
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;データを作って&lt;code&gt;preload&lt;/code&gt;で実行されるSQLを比較すると、確かに&lt;code&gt;preload(:books_metadata)&lt;/code&gt;をした場合は&lt;code&gt;SELECT &amp;quot;books&amp;quot;.* FROM &amp;quot;books&amp;quot;&lt;/code&gt;としていないことがわかる。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot;&gt;&lt;code&gt;irb(main):001:0&amp;gt; author = Author.create(name: 'naoty')
+irb(main):002:0&amp;gt; author.books.create(title: 'dummy', body: 'dummy')
+irb(main):003:0&amp;gt; Author.preload(:books).first
+D, [2021-01-11T22:27:14.445409 #4400] DEBUG -- :   Author Load (0.2ms)  SELECT &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; ORDER BY &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; ASC LIMIT ?  [[&amp;quot;LIMIT&amp;quot;, 1]]
+D, [2021-01-11T22:27:14.446208 #4400] DEBUG -- :   Book Load (0.1ms)  SELECT &amp;quot;books&amp;quot;.* FROM &amp;quot;books&amp;quot; WHERE &amp;quot;books&amp;quot;.&amp;quot;author_id&amp;quot; = ?  [[&amp;quot;author_id&amp;quot;, 1]]
+irb(main):004:0&amp;gt; Author.preload(:books_metadata).first
+D, [2021-01-11T22:28:47.793620 #4400] DEBUG -- :   Author Load (0.2ms)  SELECT &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; ORDER BY &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; ASC LIMIT ?  [[&amp;quot;LIMIT&amp;quot;, 1]]
+D, [2021-01-11T22:28:47.794626 #4400] DEBUG -- :   Book Load (0.1ms)  SELECT &amp;quot;books&amp;quot;.&amp;quot;id&amp;quot;, &amp;quot;books&amp;quot;.&amp;quot;author_id&amp;quot;, &amp;quot;books&amp;quot;.&amp;quot;title&amp;quot; FROM &amp;quot;books&amp;quot; WHERE &amp;quot;books&amp;quot;.&amp;quot;author_id&amp;quot; = ?  [[&amp;quot;author_id&amp;quot;, 1]]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;だけど、&lt;code&gt;preload(:books_metadata)&lt;/code&gt;でロードした&lt;code&gt;Author&lt;/code&gt;に対して&lt;code&gt;#books&lt;/code&gt;を呼ぶと、&lt;code&gt;books&lt;/code&gt;テーブルへのSQLが実行されてしまう。なので、N+1クエリが発生することになる。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot;&gt;&lt;code&gt;irb(main):004:0&amp;gt; author = Author.preload(:books_metadata).first
+irb(main):005:0&amp;gt; author.books_metadata
+irb(main):006:0&amp;gt; author.books
+D, [2021-01-11T22:38:27.058462 #4400] DEBUG -- :   Book Load (0.3ms)  SELECT &amp;quot;books&amp;quot;.* FROM &amp;quot;books&amp;quot; WHERE &amp;quot;books&amp;quot;.&amp;quot;author_id&amp;quot; = ? /* loading for inspect */ LIMIT ?  [[&amp;quot;author_id&amp;quot;, 1], [&amp;quot;LIMIT&amp;quot;, 11]]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ある&lt;code&gt;Author&lt;/code&gt;インスタンスが&lt;code&gt;preload(:books)&lt;/code&gt;されていれば&lt;code&gt;#books&lt;/code&gt;を呼ぶことでN+1クエリを回避できるし、&lt;code&gt;preload(:books_metadata)&lt;/code&gt;されていれば&lt;code&gt;#books_metadata&lt;/code&gt;を呼ぶことでN+1クエリを回避できるということになる。&lt;/p&gt;
+&lt;p&gt;だけど、どちらで&lt;code&gt;preload&lt;/code&gt;されているか事前にわからない場合、どうすればいいのか。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ActiveRecord::Associations::CollectionProxy#loaded?&lt;/code&gt;を使うと、どちらで&lt;code&gt;preload&lt;/code&gt;されているか判別できる。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot;&gt;&lt;code&gt;irb(main):004:0&amp;gt; author = Author.preload(:books_metadata).first
+irb(main):005:0&amp;gt; author.association(:books).loaded?
+=&amp;gt; false
+irb(main):006:0&amp;gt; author.association(:books_metadata).loaded?
+=&amp;gt; true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;そこで、このようなラッパーを用意することで、どの関連が&lt;code&gt;preload&lt;/code&gt;されているか事前にわからない場合でも対処できるようになる。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot;&gt;&lt;code&gt;class Author
+  def books
+    return association(:books).reader if association(:books).loaded?
+    return books_metadata if association(:books_metadata).loaded?
+    association(:books).reader
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;従来の&lt;code&gt;books&lt;/code&gt;は&lt;code&gt;association(:books).reader&lt;/code&gt;と同じなので、無限ループを避けるためにこのような書き方をしている。&lt;/p&gt;</summary>
+    <title>カラムを絞ってpreloadする</title>
+    <updated>2021-01-11T22:10:00+00:00</updated>
+    <dc:date>2021-01-11T22:10:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/434/</id>
     <link href="https://blog.naoty.dev/434/"/>
     <summary>&lt;p&gt;ブログのホスティングを &lt;a href=&quot;https://naoty.dev/posts/&quot;&gt;https://naoty.dev/posts/&lt;/a&gt; から &lt;a href=&quot;https://blog.naoty.dev&quot;&gt;https://blog.naoty.dev&lt;/a&gt; に移した。同時にこういったことも行った。&lt;/p&gt;

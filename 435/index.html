@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カラムを絞ってpreloadする</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="カラムを絞ってpreloadする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/435/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">カラムを絞ってpreloadする</h1>
+          <p class="metadata">
+            <time datetime="2021-01-11T22:10:00.000+0000">2021-01-11 22:10</time>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>課題</h1>
+<p>関連先のテーブルのカラムを絞りつつ、N+1問題を回避するため<code>preload</code>したい。</p>
+<h1>解決</h1>
+<p><code>select</code>で取得するカラムを絞るscopeを用意し、<code>has_many</code>の第2引数で指定する。</p>
+<p>例として下のようなテーブル定義とモデルがあるとする。</p>
+<p><code>books</code>テーブルの<code>body</code>カラムはTEXT型でサイズが大きくなりうるため、<code>body</code>カラム以外をロードするための<code>metadata</code>というscopeを定義し、関連元の<code>Author</code>に<code>metadata</code>を利用した<code>books_metadata</code>という関連を定義しておく。</p>
+<pre lang="ruby"><code>ActiveRecord::Schema.define do
+  create_table :authors do |t|
+    t.string :name
+  end
+
+  create_table :books do |t|
+    t.string     :title
+    t.text       :body
+    t.references :author
+  end
+end
+
+class Author &lt; ActiveRecord::Base
+  has_many :books
+  has_many :books_metadata, -&gt; { metadata }, class_name: 'Book'
+end
+
+class Book &lt; ActiveRecord::Base
+  belongs_to :author
+
+  scope :metadata, -&gt; {
+    select(
+      :id,
+      :author_id,
+      :title,
+    )
+  }
+end
+</code></pre>
+<p>データを作って<code>preload</code>で実行されるSQLを比較すると、確かに<code>preload(:books_metadata)</code>をした場合は<code>SELECT &quot;books&quot;.* FROM &quot;books&quot;</code>としていないことがわかる。</p>
+<pre lang="ruby"><code>irb(main):001:0&gt; author = Author.create(name: 'naoty')
+irb(main):002:0&gt; author.books.create(title: 'dummy', body: 'dummy')
+irb(main):003:0&gt; Author.preload(:books).first
+D, [2021-01-11T22:27:14.445409 #4400] DEBUG -- :   Author Load (0.2ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; ORDER BY &quot;authors&quot;.&quot;id&quot; ASC LIMIT ?  [[&quot;LIMIT&quot;, 1]]
+D, [2021-01-11T22:27:14.446208 #4400] DEBUG -- :   Book Load (0.1ms)  SELECT &quot;books&quot;.* FROM &quot;books&quot; WHERE &quot;books&quot;.&quot;author_id&quot; = ?  [[&quot;author_id&quot;, 1]]
+irb(main):004:0&gt; Author.preload(:books_metadata).first
+D, [2021-01-11T22:28:47.793620 #4400] DEBUG -- :   Author Load (0.2ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; ORDER BY &quot;authors&quot;.&quot;id&quot; ASC LIMIT ?  [[&quot;LIMIT&quot;, 1]]
+D, [2021-01-11T22:28:47.794626 #4400] DEBUG -- :   Book Load (0.1ms)  SELECT &quot;books&quot;.&quot;id&quot;, &quot;books&quot;.&quot;author_id&quot;, &quot;books&quot;.&quot;title&quot; FROM &quot;books&quot; WHERE &quot;books&quot;.&quot;author_id&quot; = ?  [[&quot;author_id&quot;, 1]]
+</code></pre>
+<p>だけど、<code>preload(:books_metadata)</code>でロードした<code>Author</code>に対して<code>#books</code>を呼ぶと、<code>books</code>テーブルへのSQLが実行されてしまう。なので、N+1クエリが発生することになる。</p>
+<pre lang="ruby"><code>irb(main):004:0&gt; author = Author.preload(:books_metadata).first
+irb(main):005:0&gt; author.books_metadata
+irb(main):006:0&gt; author.books
+D, [2021-01-11T22:38:27.058462 #4400] DEBUG -- :   Book Load (0.3ms)  SELECT &quot;books&quot;.* FROM &quot;books&quot; WHERE &quot;books&quot;.&quot;author_id&quot; = ? /* loading for inspect */ LIMIT ?  [[&quot;author_id&quot;, 1], [&quot;LIMIT&quot;, 11]]
+</code></pre>
+<p>ある<code>Author</code>インスタンスが<code>preload(:books)</code>されていれば<code>#books</code>を呼ぶことでN+1クエリを回避できるし、<code>preload(:books_metadata)</code>されていれば<code>#books_metadata</code>を呼ぶことでN+1クエリを回避できるということになる。</p>
+<p>だけど、どちらで<code>preload</code>されているか事前にわからない場合、どうすればいいのか。</p>
+<p><code>ActiveRecord::Associations::CollectionProxy#loaded?</code>を使うと、どちらで<code>preload</code>されているか判別できる。</p>
+<pre lang="ruby"><code>irb(main):004:0&gt; author = Author.preload(:books_metadata).first
+irb(main):005:0&gt; author.association(:books).loaded?
+=&gt; false
+irb(main):006:0&gt; author.association(:books_metadata).loaded?
+=&gt; true
+</code></pre>
+<p>そこで、このようなラッパーを用意することで、どの関連が<code>preload</code>されているか事前にわからない場合でも対処できるようになる。</p>
+<pre lang="ruby"><code>class Author
+  def books
+    return association(:books).reader if association(:books).loaded?
+    return books_metadata if association(:books_metadata).loaded?
+    association(:books).reader
+  end
+end
+</code></pre>
+<p>従来の<code>books</code>は<code>association(:books).reader</code>と同じなので、無限ループを避けるためにこのような書き方をしている。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
