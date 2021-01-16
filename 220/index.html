@@ -40,14 +40,14 @@
     open $note_path
 }
 </code></pre>
-<p><code>note </code>でメモを書き始めることができる。</p>
+<p><code>note &lt;ファイル名&gt;</code>でメモを書き始めることができる。</p>
 <p>メモはすべてmarkdown形式で、エディタはvimを使うことにした。<a href="https://github.com/thinca/vim-template">vim-template</a>というプラグインを使うことで、notes/*.mdにマッチするファイルを以下のようなテンプレートで開くようにした。</p>
 <pre><code>---
 title: expand('%:t:r') %&gt;
 date: strftime('%Y-%m-%d') %&gt;
 ---
 </code></pre>
-<p><code>で囲われたコードはVim Scriptとして評価されて展開され、</code>の位置をカーソルの初期位置としてファイルが開く。このような設定はvim-templateのヘルプにあるのでそちらを参照してほしい。</p>
+<p><code>&lt;%=</code>と<code>%&gt;</code>で囲われたコードはVim Scriptとして評価されて展開され、<code>&lt;+CURSOR+&gt;</code>の位置をカーソルの初期位置としてファイルが開く。このような設定はvim-templateのヘルプにあるのでそちらを参照してほしい。</p>
 <h1>メモの検索</h1>
 <p>agとpecoを使う。agは高速なgrepということで、任意の文字列を含むファイルを検索する。</p>
 <pre><code>onote() {

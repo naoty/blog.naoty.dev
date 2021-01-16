@@ -35,8 +35,33 @@
   <span class="n">err</span>   <span class="kt">error</span>
 <span class="p">}</span>
 
-<span class="n">generate</span> <span class="o">:=</span> <span class="k">func</span><span class="p">()</span> 
+<span class="n">generate</span> <span class="o">:=</span> <span class="k">func</span><span class="p">()</span> <span class="o">&lt;-</span><span class="k">chan</span> <span class="n">result</span> <span class="p">{</span>
+  <span class="c">// 送受信可能なchannelを生成する</span>
+  <span class="n">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">result</span><span class="p">)</span>
+
+  <span class="c">// channelに結果を送信するgoroutineを実行する</span>
+  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c">// channelを確実に終了させる</span>
+    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+
+    <span class="n">err</span> <span class="o">:=</span> <span class="n">something</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+      <span class="n">ch</span> <span class="o">&lt;-</span> <span class="n">result</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">err</span><span class="o">:</span> <span class="n">err</span><span class="p">}</span>
+      <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">ch</span> <span class="o">&lt;-</span> <span class="n">result</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="m">1</span><span class="p">,</span> <span class="n">err</span><span class="o">:</span> <span class="no">nil</span><span class="p">}</span>
+  <span class="p">}()</span>
+
+  <span class="c">// 返り値の型が&lt;-chanなので受信専用のchannelとして返る</span>
+  <span class="k">return</span> <span class="n">ch</span>
+<span class="p">}</span>
 </pre>
+<ul>
+<li>関数の返り値が<code>&lt;-chan result</code>になっているため、この関数を呼び出す側はこのchannelから値を受信することしかできない。</li>
+<li>goroutine内で<code>defer</code>によって確実にchannelを終了させる。</li>
+<li>goroutineの結果を表す型を定義して<code>error</code>を含めた値をchannelに送ることで、呼び出す側でエラーハンドリングできるようにしている。</li>
+</ul>
         </section>
         <footer>
           <nav>

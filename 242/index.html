@@ -79,7 +79,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 </ol>
 <h2>継承よりカテゴリーによるコンポジション</h2>
 <p><code>MDCSwipeToChooseView</code>に機能を追加したい場合、サブクラスを定義する必要がある。しかし、この方法では別のライブラリが提供するViewのもつ機能を組み込むことができない。そこで、カテゴリーで<code>UIView</code>に機能を拡張することで、他のライブラリとも組み合わせることができる。</p>
-<p>カテゴリーによる拡張の欠点はインスタンス変数を追加することができないことだ。そのため、プロパティをカテゴリーによって拡張する場合は、``の<code>objc_setAssociatedObject()</code>を使ったトリッキーな実装が必要になる。</p>
+<p>カテゴリーによる拡張の欠点はインスタンス変数を追加することができないことだ。そのため、プロパティをカテゴリーによって拡張する場合は、<code>&lt;objc/runtime.h&gt;</code>の<code>objc_setAssociatedObject()</code>を使ったトリッキーな実装が必要になる。</p>
 <p>より簡単に実装するには、カスタマイズ用のパラメータを束ねる設定オブジェクトを使うのがよさそう。この設定オブジェクトのプロパティだけは上記のトリッキーな手法で拡張するしかないが、Viewをカスタマイズする変数はすべてのこの設定オブジェクトに隠ぺいする。このライブラリでの設定オブジェクトは<code>MDCSwipeOptions</code>と<code>MDCSwipeToChooseViewOptions</code>だった。</p>
 <h2>パラメータオブジェクト</h2>
 <p>デリゲートメソッドや<code>onPan</code>などのブロックのシグネチャがバージョンアップデートで変更されてしまうと互換性がなくなってしまう。そこで、複数の引数をまとめたパラメータオブジェクトというのを用意し、引数の変更をすべてパラメータオブジェクト内の変更で吸収することで、メソッドのシグネチャを変更せずに互換性を保つことができる。このライブラリでは<code>MDCPanState</code>がパラメータオブジェクトの役割を果たしている。</p>
@@ -394,7 +394,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 <p>次に、上記の閾値を超えてどちらかの方向が返ってきた場合に呼ばれる<code>-[UIView mdc_exitSuperviewFromTranslation:]</code>を見る。</p>
 <pre><code>- (void)mdc_exitSuperviewFromTranslation:(CGPoint)translation {
     MDCSwipeDirection direction = [self mdc_directionOfExceededThreshold];
-    id delegate = self.mdc_options.delegate;
+    id&lt;MDCSwipeToChooseDelegate&gt; delegate = self.mdc_options.delegate;
     if ([delegate respondsToSelector:@selector(view:shouldBeChosenWithDirection:)]) {
         BOOL should = [delegate view:self shouldBeChosenWithDirection:direction];
         if (!should) {
@@ -496,7 +496,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
                          self.transform = CGAffineTransformIdentity;
                          self.center = self.mdc_viewState.originalCenter;
                      } completion:^(BOOL finished) {
-                         id delegate = self.mdc_options.delegate;
+                         id&lt;MDCSwipeToChooseDelegate&gt; delegate = self.mdc_options.delegate;
                          if ([delegate respondsToSelector:@selector(viewDidCancelSwipe:)]) {
                              [delegate viewDidCancelSwipe:self];
                          }

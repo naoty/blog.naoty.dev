@@ -58,14 +58,14 @@ set textwidth=80
 set formatoptions+=m
 </code></pre>
 <h2>Todoリストを簡単に書く</h2>
-<p>上でふれたGithubが実装したTodoリスト記法<code>- []</code>, <code>- [x]</code>を簡単に入力するための設定も書いた。abbreviateを使うと略記を登録することができる。下の設定では<code>tl</code>と入力すると<code>- []</code>と自動的に変換される。さらに、Todoリストのある行の上で<code>を2回おすと（僕は</code>を``にしてる）、チェックをon/off切り替えられる。</p>
+<p>上でふれたGithubが実装したTodoリスト記法<code>- []</code>, <code>- [x]</code>を簡単に入力するための設定も書いた。abbreviateを使うと略記を登録することができる。下の設定では<code>tl&lt;space&gt;</code>と入力すると<code>- []</code>と自動的に変換される。さらに、Todoリストのある行の上で<code>&lt;Leader&gt;</code>を2回おすと（僕は<code>&lt;Leader&gt;</code>を<code>&lt;space&gt;</code>にしてる）、チェックをon/off切り替えられる。</p>
 <pre><code>" .vim/ftplugin/markdown.vim
 
 " todoリストを簡単に入力する
 abbreviate tl - []
 
 " todoリストのon/offを切り替える
-nnoremap   :call ToggleCheckbox()
+nnoremap &lt;buffer&gt; &lt;Leader&gt;&lt;Leader&gt; :call ToggleCheckbox()&lt;CR&gt;
 
 function! ToggleCheckbox()
   let l:line = getline('.')

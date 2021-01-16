@@ -29,20 +29,20 @@
         <section class="body">
           <p>　テーブル内のテキストを取得してグラフを描画する際に用いました。</p>
 <p>HTML</p>
-<pre><code>
-  
-    1月th&gt;10td&gt;3td&gt;
-    2月th&gt;5td&gt;1td&gt;
-    3月th&gt;20td&gt;4td&gt;
-    4月th&gt;30td&gt;6td&gt;
-    5月th&gt;10td&gt;2td&gt;
-    6月th&gt;25td&gt;4td&gt;
-    7月th&gt;25td&gt;5td&gt;
-    8月th&gt;40td&gt;9td&gt;
-    9月th&gt;35td&gt;7td&gt;
-    10月th&gt;20td&gt;5td&gt;
-    11月th&gt;10td&gt;2td&gt;
-    12月th&gt;5td&gt;1td&gt;
+<pre><code>&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;1月th&gt;&lt;td class='item'&gt;10td&gt;&lt;td class='user'&gt;3td&gt;
+    &lt;th&gt;2月th&gt;&lt;td class='item'&gt;5td&gt;&lt;td class='user'&gt;1td&gt;
+    &lt;th&gt;3月th&gt;&lt;td class='item'&gt;20td&gt;&lt;td class='user'&gt;4td&gt;
+    &lt;th&gt;4月th&gt;&lt;td class='item'&gt;30td&gt;&lt;td class='user'&gt;6td&gt;
+    &lt;th&gt;5月th&gt;&lt;td class='item'&gt;10td&gt;&lt;td class='user'&gt;2td&gt;
+    &lt;th&gt;6月th&gt;&lt;td class='item'&gt;25td&gt;&lt;td class='user'&gt;4td&gt;
+    &lt;th&gt;7月th&gt;&lt;td class='item'&gt;25td&gt;&lt;td class='user'&gt;5td&gt;
+    &lt;th&gt;8月th&gt;&lt;td class='item'&gt;40td&gt;&lt;td class='user'&gt;9td&gt;
+    &lt;th&gt;9月th&gt;&lt;td class='item'&gt;35td&gt;&lt;td class='user'&gt;7td&gt;
+    &lt;th&gt;10月th&gt;&lt;td class='item'&gt;20td&gt;&lt;td class='user'&gt;5td&gt;
+    &lt;th&gt;11月th&gt;&lt;td class='item'&gt;10td&gt;&lt;td class='user'&gt;2td&gt;
+    &lt;th&gt;12月th&gt;&lt;td class='item'&gt;5td&gt;&lt;td class='user'&gt;1td&gt;
   tr&gt;
 table&gt;
 </code></pre>
@@ -52,8 +52,13 @@ table&gt;
 
   jQuery.noConflict();
   jQuery(document).ready(function($){
-    for(var i=0; i
+    for(var i=0; i&lt;$('.item').length; i++){
+      item_count[i] = [i+1, $('.item:eq('+i+')').text()];
+      user_count[i] = [i+1, $('.user:eq('+i+')').text()];
+    }
+  });
 </code></pre>
+<p>　セレクタを利用してi回目のループでi番目の要素からテキストを取得します。item_countとuser_countはグラフを描画する際に用います。</p>
         </section>
         <footer>
           <nav>

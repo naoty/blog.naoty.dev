@@ -37,7 +37,7 @@
 <pre><code>var x: [CGFloat] = []
 var filteredX: [CGFloat] = []
 
-let xStream = Stream()
+let xStream = Stream&lt;CGFloat&gt;()
 </code></pre>
 <p>まず、生データと加工したデータをグラフに描画するための配列と生データを扱うストリームを用意する。加速度センサーから値を取得する度にこのストリームに値を出力していく。</p>
 <pre><code>override func viewDidLoad() {
@@ -63,7 +63,7 @@ private func accelerometerHandler(data: CMAccelerometerData!, error: NSError!) {
 
     xStream.subscribe { [unowned self] message in self.x.append(message) }
 
-    let filteredStream: Stream = xStream.scan(0) { previousMessage, message in
+    let filteredStream: Stream&lt;CGFloat&gt; = xStream.scan(0) { previousMessage, message in
         return previousMessage * 0.9 + message * 0.1
     }
 }
@@ -74,7 +74,7 @@ private func accelerometerHandler(data: CMAccelerometerData!, error: NSError!) {
 
     xStream.subscribe { [unowned self] message in self.x.append(message) }
 
-    let filteredStream: Stream = xStream.scan(0) { previousMessage, message in
+    let filteredStream: Stream&lt;CGFloat&gt; = xStream.scan(0) { previousMessage, message in
         return previousMessage * 0.9 + message * 0.1
     }.subscribe { [unowned self] message in
         self.filteredX.append(message)

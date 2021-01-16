@@ -51,9 +51,9 @@
 </pre>
 <ul>
 <li>
-<code>normalize(, )</code>という使い方をする。</li>
+<code>normalize(&lt;正規化したいデータ&gt;, &lt;スキーマ&gt;)</code>という使い方をする。</li>
 <li>
-<code>new schema.Entity()</code>でスキーマを初期化する。キーは正規化したデータのプロパティ名に使われる。</li>
+<code>new schema.Entity(&lt;キー&gt;)</code>でスキーマを初期化する。キーは正規化したデータのプロパティ名に使われる。</li>
 <li>正規化されたデータは<code>id</code>の値をキーとしたオブジェクトになっている。デフォルトでは<code>id</code>プロパティをキーに使うけど、<code>idAttribute</code>オプションで<code>id</code>以外のプロパティをキーに使うことができる。</li>
 </ul>
 <h1>配列</h1>

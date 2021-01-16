@@ -36,7 +36,7 @@
 * 生年月日: %{birthday}
 </code></pre>
 <p>標準入力でJSON文字列を渡すと、変数の中身をそれで展開するだけ。</p>
-<pre><code>$ echo '{"fullname": "Naoto Kaneko", "nickname": "naoty", "location": "Tokyo", "birthday": "1987/6/2"}' | qiita-build -t  -a  
+<pre><code>$ echo '{"fullname": "Naoto Kaneko", "nickname": "naoty", "location": "Tokyo", "birthday": "1987/6/2"}' | qiita-build -t &lt;TEAM&gt; -a &lt;ACCESS TOKEN&gt; &lt;TEMPLATE ID&gt;
 # 自己紹介
 * 氏名: Naoto Kaneko
 * ニックネーム: naoty

@@ -28,9 +28,9 @@
         </header>
         <section class="body">
           <p>APIから受け取ったデータを表示するカスタムディレクティブを作る場合、<code>$watch</code>でscopeのプロパティを監視し再描画を行うといった実装が必要になる。</p>
-<pre lang="html:index.html"><code>
-  
-
+<pre lang="html:index.html"><code>&lt;div ng-controller="MyController"&gt;
+  &lt;my-directive data="users"&gt;&lt;/my-directive&gt;
+&lt;/div&gt;
 </code></pre>
 <ul>
 <li>

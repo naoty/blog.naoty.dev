@@ -76,7 +76,7 @@ graph TD
   <span class="p">}</span>
 <span class="p">}</span>
 </pre>
-<p>あとは、remarkプラグインを書いて、<code>mermaid</code>がついたcode blockを``で囲うように変換するようにした。</p>
+<p>あとは、remarkプラグインを書いて、<code>mermaid</code>がついたcode blockを<code>&lt;div class="mermaid"&gt;&lt;/div&gt;</code>で囲うように変換するようにした。</p>
 <pre lang="js" class="highlight highlight-js"><span class="kd">const</span> <span class="nx">visit</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">unist-util-visit</span><span class="dl">"</span><span class="p">);</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">markdownAST</span> <span class="p">},</span> <span class="nx">pluginOptions</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -84,7 +84,7 @@ graph TD
     <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">lang</span> <span class="o">!==</span> <span class="dl">"</span><span class="s2">mermaid</span><span class="dl">"</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">html</span><span class="dl">"</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">`\n</span><span class="p">${</span><span class="nx">node</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="s2">\n`</span><span class="p">;</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">`&lt;div class="mermaid"&gt;\n</span><span class="p">${</span><span class="nx">node</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="s2">\n&lt;/div&gt;`</span><span class="p">;</span>
   <span class="p">});</span>
 
   <span class="k">return</span> <span class="nx">markdownAST</span><span class="p">;</span>

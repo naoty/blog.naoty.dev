@@ -40,8 +40,71 @@
   <span class="nx">memory</span>                   <span class="p">=</span> <span class="mi">512</span>
   <span class="nx">requires_compatibilities</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"FARGATE"</span><span class="p">]</span>
 
-  <span class="nx">container_definitions</span>  <span class="p">=</span> <span class="err">&lt;</span>
+  <span class="nx">container_definitions</span>  <span class="p">=</span> <span class="o">&lt;&lt;</span><span class="no">DOCUMENT</span><span class="sh">
+[
+  {
+    "name": "rails",
+    "image": "${aws_ecr_repository.rails.repository_url}:latest",
+    "command": ["exit", "1"],
+    "environment": [
+      { "name": "RAILS_ENV", "value": "production" }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${aws_cloudwatch_log_group.rails.name}",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "rake"
+      }
+    }
+  }
+]
+</span><span class="no">DOCUMENT
+</span><span class="p">}</span>
 </pre>
+<ul>
+<li>定期実行したいRakeタスクごとにECSタスク定義を作るのは非効率なので、Rakeタスク専用のタスク定義をつくる。</li>
+<li>後ほど、実行するコマンドをoverrideするため、タスク定義のコマンドでは<code>exit 1</code>を実行するようにしている。</li>
+</ul>
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">resource</span> <span class="s2">"aws_cloudwatch_event_rule"</span> <span class="s2">"push_notifications_schedule"</span> <span class="p">{</span>
+  <span class="nx">name</span>                <span class="p">=</span> <span class="s2">"push-schedule"</span>
+  <span class="nx">schedule_expression</span> <span class="p">=</span> <span class="s2">"cron(0 20 * * ? *)"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"aws_cloudwatch_event_target"</span> <span class="s2">"push_notifications"</span> <span class="p">{</span>
+  <span class="nx">rule</span>     <span class="p">=</span> <span class="nx">aws_cloudwatch_event_rule</span><span class="err">.</span><span class="nx">push_notifications_schedule</span><span class="err">.</span><span class="nx">name</span>
+  <span class="nx">arn</span>      <span class="p">=</span> <span class="nx">aws_ecs_cluster</span><span class="err">.</span><span class="nx">production</span><span class="err">.</span><span class="nx">arn</span>
+  <span class="nx">role_arn</span> <span class="p">=</span> <span class="nx">aws_iam_role</span><span class="err">.</span><span class="nx">ecs_events</span><span class="err">.</span><span class="nx">arn</span>
+
+  <span class="nx">ecs_target</span> <span class="p">{</span>
+    <span class="nx">launch_type</span>         <span class="p">=</span> <span class="s2">"FARGATE"</span>
+    <span class="nx">task_count</span>          <span class="p">=</span> <span class="mi">1</span>
+    <span class="nx">task_definition_arn</span> <span class="p">=</span> <span class="nx">aws_ecs_task_definition</span><span class="err">.</span><span class="nx">rake</span><span class="err">.</span><span class="nx">arn</span>
+
+    <span class="nx">network_configuration</span> <span class="p">{</span>
+      <span class="nx">subnets</span>         <span class="p">=</span> <span class="p">[</span><span class="nx">aws_subnet</span><span class="err">.</span><span class="nx">private_a</span><span class="err">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">aws_subnet</span><span class="err">.</span><span class="nx">private_c</span><span class="err">.</span><span class="nx">id</span><span class="p">]</span>
+      <span class="nx">security_groups</span> <span class="p">=</span> <span class="p">[</span><span class="nx">aws_security_group</span><span class="err">.</span><span class="nx">internal</span><span class="err">.</span><span class="nx">id</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">input</span> <span class="p">=</span> <span class="o">&lt;&lt;</span><span class="no">DOCUMENT</span><span class="sh">
+{
+  "containerOverrides": [
+    {
+      "name": "rails",
+      "command": ["bin/rails", "push_notifications"]
+    }
+  ]
+}
+</span><span class="no">DOCUMENT
+</span><span class="p">}</span>
+</pre>
+<ul>
+<li>
+<code>aws_cloudwatch_event_rule</code>はスケジュールごとに書き、そのスケジュールで実行するRakeタスクごとに<code>aws_cloudwatch_event_target</code>を書くことになる。なので、production環境とstaging環境で同じスケジュールを使う場合は、<code>aws_cloudwatch_event_rule</code>は共用することになる。</li>
+<li>
+<code>aws_cloudwatch_event_target</code>では、<code>ecs_target</code>でFargate上でECSタスクを実行するためのオプションを指定する必要がある。<code>input</code>でコンテナ定義のoverrideができるので、ここで<code>exit 1</code>としていた実行コマンドをoverrideしている。</li>
+</ul>
         </section>
         <footer>
           <nav>

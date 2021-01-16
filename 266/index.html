@@ -58,15 +58,15 @@
 <span class="n">generator1</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; nil</span>
 </pre>
 <h1>GeneratorOf</h1>
-<p>generatorを書くとき上のようにクラスを定義するのが面倒なら、<code>GeneratorOf</code>構造体が便利。以下のような感じで定義されている。</p>
-<pre lang="swift" class="highlight highlight-swift"><span class="kd">struct</span> <span class="kt">GeneratorOf</span><span class="p">:</span> <span class="kt">GeneratorType</span><span class="p">,</span> <span class="kt">SequenceType</span> <span class="p">{</span>
+<p>generatorを書くとき上のようにクラスを定義するのが面倒なら、<code>GeneratorOf&lt;T&gt;</code>構造体が便利。以下のような感じで定義されている。</p>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">struct</span> <span class="kt">GeneratorOf</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">GeneratorType</span><span class="p">,</span> <span class="kt">SequenceType</span> <span class="p">{</span>
 	<span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextElement</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?)</span>
 	
 	<span class="k">mutating</span> <span class="kd">func</span> <span class="nf">next</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span>
 <span class="p">}</span>
 </pre>
 <p><code>GeneratorOf</code>構造体は<code>GeneratorType</code>プロトコルに従っており、初期化時に渡されたクロージャを<code>next()</code>で実行するようになっている。なので、上のコードは以下のように書き直せる。</p>
-<pre lang="swift" class="highlight highlight-swift"><span class="kd">func</span> <span class="nf">lineGenerator</span><span class="p">(</span><span class="nv">#text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">GeneratorOf</span> <span class="p">{</span>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">func</span> <span class="nf">lineGenerator</span><span class="p">(</span><span class="nv">#text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">GeneratorOf</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">var</span> <span class="nv">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="nf">componentsSeparatedByString</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="kt">GeneratorOf</span> <span class="p">{</span> <span class="k">return</span> <span class="n">lines</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">?</span> <span class="nv">nil</span> <span class="p">:</span> <span class="n">lines</span><span class="o">.</span><span class="nf">removeAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">}</span>
 <span class="p">}</span>
@@ -106,12 +106,12 @@
 </pre>
 <h1>SequenceOf</h1>
 <p><code>GeneratorOf</code>と同様に<code>SequenceOf</code>も存在する。</p>
-<pre lang="swift" class="highlight highlight-swift"><span class="kd">struct</span> <span class="kt">SequenceOf</span><span class="p">:</span> <span class="kt">SequenceType</span> <span class="p">{</span>
-	<span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">makeUnderlyingGenerator</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">G</span><span class="p">)</span>
-	<span class="kd">func</span> <span class="nf">generate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">GeneratorOf</span>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">struct</span> <span class="kt">SequenceOf</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">SequenceType</span> <span class="p">{</span>
+	<span class="kd">init</span><span class="o">&lt;</span><span class="kt">G</span><span class="p">:</span> <span class="kt">GeneratorType</span> <span class="k">where</span> <span class="kt">T</span> <span class="o">==</span> <span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">makeUnderlyingGenerator</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">G</span><span class="p">)</span>
+	<span class="kd">func</span> <span class="nf">generate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">GeneratorOf</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span>
 <span class="p">}</span>
 </pre>
-<pre lang="swift" class="highlight highlight-swift"><span class="kd">func</span> <span class="nf">lineSequence</span><span class="p">(</span><span class="nv">#text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SequenceOf</span> <span class="p">{</span>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">func</span> <span class="nf">lineSequence</span><span class="p">(</span><span class="nv">#text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SequenceOf</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="p">{</span>
 	<span class="k">return</span> <span class="kt">SequenceOf</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">lineGenerator</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span> <span class="p">}</span>
 <span class="p">}</span>
 

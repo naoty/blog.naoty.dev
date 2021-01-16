@@ -79,7 +79,7 @@ bot: hubot -a irc -n DIO
 <ul>
 <li>Herokuによると<a href="#f2" title="https://devcenter.heroku.com/articles/nodejs-support">*2</a>、Heroku側で<code>bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin</code>にPATHを通してくれるので、Procfileでは<code>hubot</code>とすればいい。</li>
 <li>
-<code>-a  -n </code>をオプションにつける。</li>
+<code>-a &lt;Adapter名&gt; -n &lt;IRCのニックネーム&gt;</code>をオプションにつける。</li>
 </ul>
 <h2>Herokuにデプロイ</h2>
 <pre><code>$ git push heroku master

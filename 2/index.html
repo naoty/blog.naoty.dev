@@ -33,7 +33,7 @@
 <li>データの表示</li>
 <li>データの削除</li>
 </ul>
-<pre><code>
+<pre><code>&lt;body&gt;
 
 include_once("./ini.php");
 include_once("./sql_request.php");
@@ -53,12 +53,12 @@ sql_request($sql);
 
 ?&gt;
 
-
-氏名：
-
-メッセージ：
-
-
+&lt;form action="./MessageBoard.php" method="post"&gt;
+氏名：&lt;br&gt;
+&lt;input type="text" name="name" maxlength="255" /&gt;&lt;br&gt;
+メッセージ：&lt;br&gt;
+&lt;input type="text" name="msg" maxlength="255" width="400" /&gt;&lt;br&gt;
+&lt;input type="submit" value="post" /&gt;
 form&gt;
 
 //データの書き込み
@@ -78,7 +78,13 @@ if((int)($_POST["delete"])&gt;0){
 //データと削除ボタンの表示
 $arr = sql_request("SELECT * FROM mb ORDER BY actime DESC");
 if($arr !== false){
-	for($i=0;$i\n";
+	for($i=0;$i&lt;count($arr);$i++){
+		echo "\n";
+		echo "\n";
+		echo "".$arr[$i]["name"]."：\n";
+		echo "".$arr[$i]["msg"]." \n";
+		echo "".$arr[$i]["actime"]."\n";
+		echo "".$arr[$i]["id"]."' /&gt;\n";
 		echo "\n";
 		echo "\n";
 		echo "\n\n";

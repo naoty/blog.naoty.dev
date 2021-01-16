@@ -27,16 +27,16 @@
         </header>
         <section class="body">
           <p>Firefoxの右上の検索ボックスでQiita内の検索を行うためのプラグインを作ってみた。vimperatorであれば<code>qiita [keyword]</code>で検索できるようになった。</p>
-<pre lang="xml:qiita.xml"><code>
-
-    Qiita
-    Search by Qiita
-    utf-8
-    http://qiita.com/favicon.ico?v=3
-    
-        
-    
-
+<pre lang="xml:qiita.xml"><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/"&gt;
+    &lt;ShortName&gt;Qiita&lt;/ShortName&gt;
+    &lt;Description&gt;Search by Qiita&lt;/Description&gt;
+    &lt;InputEncoding&gt;utf-8&lt;/InputEncoding&gt;
+    &lt;Image width="16" height="16"&gt;http://qiita.com/favicon.ico?v=3&lt;/Image&gt;
+    &lt;Url type="text/html" method="GET" template="http://qiita.com/search"&gt;
+        &lt;Param name="q" value="{searchTerms}" /&gt;
+    &lt;/Url&gt;
+&lt;/SearchPlugin&gt;
 </code></pre>
 <ul>
 <li>macの場合は<code>~/Library/Application Support/Firefox/Profiles/xxxxxxxx.default/searchplugins/</code>以下に上のファイルを保存し、firefoxを再起動。（xxxxxxxxの部分はランダム）</li>
@@ -46,22 +46,27 @@
 <ul>
 <li>これは以下のような感じでできるらしい（未確認）。</li>
 </ul>
-<pre lang="html" class="highlight highlight-html">
+<pre lang="html" class="highlight highlight-html"><span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">"search"</span>
+    <span class="na">type=</span><span class="s">"application/opensearchdescription+xml"</span>
+    <span class="na">title=</span><span class="s">"Qiita検索プラグインを追加"</span>
+    <span class="na">href=</span><span class="s">"http://qiita.com/searchplugins/qiita.xml"</span> <span class="nt">/&gt;</span>
 </pre>
 <h3>追記（9/5）</h3>
 <ul>
 <li>githubのソースを確認したら上のような箇所があった。</li>
 </ul>
-<pre lang="html" class="highlight highlight-html">
+<pre lang="html" class="highlight highlight-html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"search"</span> <span class="na">type=</span><span class="s">"application/opensearchdescription+xml"</span> <span class="na">href=</span><span class="s">"/opensearch.xml"</span> <span class="na">title=</span><span class="s">"GitHub"</span> <span class="nt">/&gt;</span>
 </pre>
 <ul>
 <li>xmlも上で紹介した形式とほぼ同じだった。</li>
 </ul>
-<pre lang="xml:opensearch.xml"><code>
-  GitHub
-  Search GitHub
-  UTF-8
-  data:image/x-icon;base64,
+<pre lang="xml:opensearch.xml"><code>&lt;OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/"&gt;
+  &lt;ShortName&gt;GitHub&lt;/ShortName&gt;
+  &lt;Description&gt;Search GitHub&lt;/Description&gt;
+  &lt;InputEncoding&gt;UTF-8&lt;/InputEncoding&gt;
+  &lt;Image width="16" height="16"&gt;data:image/x-icon;base64,
   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
   bWFnZVJlYWR5ccllPAAAAVpJREFUeNqM0s0rRGEUx/F7x0RKxob4A6bZKBYWFkLZqIkkC7FUsrCw
   oCxsZcN/IFmIP4E9ZWnyurBR3krZeH8b1/dMv5vTpDue+szzzL33nJ5znieIoihIGCGmMIt0+ctS
@@ -69,12 +74,12 @@
   Fie2JnYx3sGYJcQ5jrU2PTjEDbpwpeeXWPZN3NOLnLb8hm1UoaBAG3P6btR26pt4rblDDarRs6KO
   Mh7fmr/idZxgAW3Y0H/r/IqCfYKU5o/yB1b7kY5tGp04Uwmh++5Vcx59PoGNWtV3pznQXK2SbLf7
   6s8kVv09yLpGRro0SwoawIgrt1fNzPtT2FVd/WjVCdiL9qQb5k8ho3Ia8eTKea50TeMd2LZOXQmf
-  mP9PrL/K3RjURTrAmk4lMcGPAAMAEvmJGW+ZZPAAAAAASUVORK5CYII=
-  
-    
-  
-  https://github.com/search
-
+  mP9PrL/K3RjURTrAmk4lMcGPAAMAEvmJGW+ZZPAAAAAASUVORK5CYII=&lt;/Image&gt;
+  &lt;Url type="text/html" method="get" template="https://github.com/search"&gt;
+    &lt;Param name="q" value="{searchTerms}"/&gt;
+  &lt;/Url&gt;
+  &lt;moz:SearchForm&gt;https://github.com/search&lt;/moz:SearchForm&gt;
+&lt;/OpenSearchDescription&gt;
 </code></pre>
 <hr>
 <h3>環境</h3>

@@ -28,7 +28,7 @@
           </p>
         </header>
         <section class="body">
-          <p>最近、react-railsを使ってRails上でReactコンポーネントを実装している。フォームを実装する際、Railsのフォームヘルパーは自動的にCSRFトークンを送るように``を生成してくれるが、Reactコンポーネントでフォームを実装する場合はそれを自分で実装する必要がある。</p>
+          <p>最近、react-railsを使ってRails上でReactコンポーネントを実装している。フォームを実装する際、Railsのフォームヘルパーは自動的にCSRFトークンを送るように<code>&lt;input&gt;</code>を生成してくれるが、Reactコンポーネントでフォームを実装する場合はそれを自分で実装する必要がある。</p>
 <p>react-railsであれば、Reactコンポーネントにpropsを簡単に渡せるため、props経由でCSRFトークンを渡すことで実装することができる。</p>
 <pre><code>// new.html.slim
 = react_component "SignUpForm",
@@ -37,9 +37,9 @@
 <pre lang="jsx" class="highlight highlight-jsx"><span class="c1">// SignUpForm.jsx</span>
 <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="p">(</span>
-    
-      
-    
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="p">=</span><span class="s">"post"</span> <span class="na">action</span><span class="p">=</span><span class="s">"/sign_up"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="p">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="p">=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">csrfParams</span><span class="si">}</span> <span class="na">value</span><span class="p">=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">csrfToken</span><span class="si">}</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
   <span class="p">);</span>
 <span class="p">}</span>
 </pre>

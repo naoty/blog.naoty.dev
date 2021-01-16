@@ -28,9 +28,9 @@
         </header>
         <section class="body">
           <p>　チェックボックスやラジオボタンで選択したものを画面遷移後もチェックしたままにしておきたい、ってことあるじゃないですか。けっこうそういうシーンは多いので、メモ。</p>
-<pre><code>
-    
-
+<pre><code>&lt;% @something_cool.each do |something| -%&gt;
+    &lt;%= radio_button_tag "cool", "#{something}", (something == params[:cool]) %&gt;&lt;%=h something %&gt;
+&lt;% end -%&gt;
 </code></pre>
 <ul>
 <li>radio_button_tag（check_box_tag）の第3引数はチェックを入れるかどうかをtrue/falseで表します</li>

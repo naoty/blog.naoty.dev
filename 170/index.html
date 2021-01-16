@@ -73,7 +73,7 @@ module ParamsInquier
 end
 </code></pre>
 <p>ただ、このファイルがRails起動時に<code>require</code>されている必要があります。</p>
-<p>インストールされたgemを<code>require</code>するとき<code>lib/.rb</code>が<code>require</code>されます。このgemであれば<code>lib/params_inquirer.rb</code>です。なので、ここでrailtieを<code>require</code>しておく必要があります。</p>
+<p>インストールされたgemを<code>require</code>するとき<code>lib/&lt;gem_name&gt;.rb</code>が<code>require</code>されます。このgemであれば<code>lib/params_inquirer.rb</code>です。なので、ここでrailtieを<code>require</code>しておく必要があります。</p>
 <pre><code># lib/params_inquirer.rb
 
 if defined?(Rails)

@@ -34,7 +34,7 @@
   <span class="c1">// 組み合わせの数だけループする</span>
   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">bit</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="n">bit</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// 組み合わせに含まれる要素</span>
-    <span class="n">vector</span> <span class="n">numbers</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="p">;</span>
 
     <span class="c1">// 全要素についてループする</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
@@ -61,7 +61,7 @@
 <pre lang="cpp" class="highlight highlight-cpp"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">bit</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="n">bit</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">}</span>
 </pre>
-<p>ある集合のすべての組み合わせは、各要素について含めるか含めないかの2択によって生まれるので、<code>2^</code>になる。<code>1 &lt;&lt; n</code>は<code>2^n</code>と同じなので、組み合わせの数だけループしていることになる。</p>
+<p>ある集合のすべての組み合わせは、各要素について含めるか含めないかの2択によって生まれるので、<code>2^&lt;要素数&gt;</code>になる。<code>1 &lt;&lt; n</code>は<code>2^n</code>と同じなので、組み合わせの数だけループしていることになる。</p>
 <h1>組み合わせの作り方</h1>
 <pre lang="cpp" class="highlight highlight-cpp"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">bit</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">))</span> <span class="p">{</span>

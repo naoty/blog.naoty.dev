@@ -41,7 +41,7 @@
 }.then { (placemark:CLPlacemark) in
     // ...
     return MKMapSnapshotter(options:opts).promise()
-}.then { (snapshot:MKMapSnapshot) -&gt; Promise in
+}.then { (snapshot:MKMapSnapshot) -&gt; Promise&lt;Int&gt; in
     // ...
     let av = UIAlertView()
     // ...
@@ -52,7 +52,7 @@
     return CLLocationManager.promise()
 }.catch { _ -&gt; CLLocation in
     return CLLocation(latitude: 41.89, longitude: -87.63)
-}.then { (ll:CLLocation) -&gt; Promise in
+}.then { (ll:CLLocation) -&gt; Promise&lt;NSDictionary&gt; in
     // ...
 }.then
 // ...
@@ -90,15 +90,15 @@
 </ul>
 <hr>
 <h1>NSURLConnection+Promise.swift</h1>
-<pre><code>public class func GET(url:String) -&gt; Promise {
+<pre><code>public class func GET(url:String) -&gt; Promise&lt;NSData&gt; {
     // ...
 }
 </code></pre>
 <ul>
-<li>いくつかの拡張を見てみるとすべて<code>Promise</code>を返すようになってる。</li>
+<li>いくつかの拡張を見てみるとすべて<code>Promise&lt;T&gt;</code>を返すようになってる。</li>
 <li>この返り値に対して<code>then</code>や<code>catch</code>を呼んでいるので、これらのメソッドは<code>Promise</code>クラスのメソッドだと考えられる。<code>Promise</code>クラスについてはあとで見ていく。</li>
 </ul>
-<pre><code>public class func GET(url:String) -&gt; Promise {
+<pre><code>public class func GET(url:String) -&gt; Promise&lt;UIImage&gt; {
     let rq = NSURLRequest(URL:NSURL(string:url))
     return promise(rq)
 }
@@ -108,7 +108,7 @@
 <li>
 <code>NSURLRequest</code>オブジェクトを作って<code>promise</code>メソッドというのに渡して呼んでいる。</li>
 </ul>
-<pre><code>public class func promise(rq:NSURLRequest) -&gt; Promise {
+<pre><code>public class func promise(rq:NSURLRequest) -&gt; Promise&lt;UIImage&gt; {
     return fetch(rq) { (fulfiller, rejecter, data) in
         // ...
     }
@@ -119,17 +119,17 @@
 <li>
 <code>fetch</code>メソッドはさらにクロージャを受け取っている。</li>
 </ul>
-<pre><code>func fetch(var request: NSURLRequest, body: ((T) -&gt; Void, (NSError) -&gt; Void, NSData) -&gt; Void) -&gt; Promise {
+<pre><code>func fetch&lt;T&gt;(var request: NSURLRequest, body: ((T) -&gt; Void, (NSError) -&gt; Void, NSData) -&gt; Void) -&gt; Promise&lt;T&gt; {
     // ...
 
-    return Promise { (fulfiller, rejunker) in
+    return Promise&lt;T&gt; { (fulfiller, rejunker) in
         // ...
     }
 }
 </code></pre>
 <ul>
 <li>
-<code>fetch</code>内では<code>Promise</code>を初期化して返している。初期化時にまたもクロージャを渡している。</li>
+<code>fetch</code>内では<code>Promise&lt;T&gt;</code>を初期化して返している。初期化時にまたもクロージャを渡している。</li>
 </ul>
 <pre><code>// Promise.swift
 
@@ -174,10 +174,10 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 <li>
 <code>recurse</code>メソッドは、すべての<code>handler</code>を実行したあと消去している。</li>
 </ul>
-<pre><code>func fetch(var request: NSURLRequest, body: ((T) -&gt; Void, (NSError) -&gt; Void, NSData) -&gt; Void) -&gt; Promise {
+<pre><code>func fetch&lt;T&gt;(var request: NSURLRequest, body: ((T) -&gt; Void, (NSError) -&gt; Void, NSData) -&gt; Void) -&gt; Promise&lt;T&gt; {
     // ...
 
-    return Promise { (fulfiller, rejunker) in
+    return Promise&lt;T&gt; { (fulfiller, rejunker) in
         NSURLConnection.sendAsynchronousRequest(request, queue:PMKOperationQueue) { (rsp, data, err) in
             // ...
 
@@ -192,21 +192,21 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 </code></pre>
 <ul>
 <li>
-<code>Promise</code>の初期化時に引数として渡されたクロージャが実行されるので、このときに非同期通信が実行されるようだ。</li>
-<li>非同期通信が成功した場合、<code>body(fulfiller, rejecter, data!)</code>が呼ばれる。この<code>body</code>というクロージャは<code>fetch</code>メソッドに渡されたもので、その中の<code>fulfiller</code>と<code>rejecter</code>の2つのクロージャは<code>Promise</code>の<code>init</code>内で定義されたメソッドである。</li>
+<code>Promise&lt;T&gt;</code>の初期化時に引数として渡されたクロージャが実行されるので、このときに非同期通信が実行されるようだ。</li>
+<li>非同期通信が成功した場合、<code>body(fulfiller, rejecter, data!)</code>が呼ばれる。この<code>body</code>というクロージャは<code>fetch</code>メソッドに渡されたもので、その中の<code>fulfiller</code>と<code>rejecter</code>の2つのクロージャは<code>Promise&lt;T&gt;</code>の<code>init</code>内で定義されたメソッドである。</li>
 </ul>
 <h1>Promise.swift</h1>
-<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+<pre><code>public func then&lt;U&gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise&lt;U&gt; {
 }
 </code></pre>
 <ul>
-<li>シグネチャーがジェネリクスまみれで複雑。<code>dispatch_queue_t</code>型と<code>(T) -&gt; U</code>型を引数にとり、<code>Promise</code>型を返すメソッドということになる。</li>
+<li>シグネチャーがジェネリクスまみれで複雑。<code>dispatch_queue_t</code>型と<code>(T) -&gt; U</code>型を引数にとり、<code>Promise&lt;U&gt;</code>型を返すメソッドということになる。</li>
 <li>
 <code>T</code>はPromiseクラスの型変数（←言い方合ってる？）であり、<code>NSURLConnection+Promise.swift</code>の例で言うと、この<code>T</code>には<code>NSData</code>や<code>NSString</code>が入ってくる。</li>
-<li>例えば<code>T</code>が<code>NSData</code>の場合、第2引数のbodyは「NSDataを引数にとって<code>U</code>を返すクロージャ」となる。この<code>U</code>が例えば<code>MKPlacemark</code>である場合、<code>then</code>は<code>Promise</code>を返すことになる。</li>
-<li>この返り値は<code>Promise</code>であるため再度<code>then</code>を呼び出すことができメソッドチェーンが成立している。</li>
+<li>例えば<code>T</code>が<code>NSData</code>の場合、第2引数のbodyは「NSDataを引数にとって<code>U</code>を返すクロージャ」となる。この<code>U</code>が例えば<code>MKPlacemark</code>である場合、<code>then</code>は<code>Promise&lt;MKPlacemark&gt;</code>を返すことになる。</li>
+<li>この返り値は<code>Promise&lt;T&gt;</code>であるため再度<code>then</code>を呼び出すことができメソッドチェーンが成立している。</li>
 </ul>
-<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+<pre><code>public func then&lt;U&gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise&lt;U&gt; {
     switch state {
     case .Rejected(let error):
         // ...
@@ -219,9 +219,9 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 </code></pre>
 <ul>
 <li>
-<code>state</code>は<code>Promise</code>クラスのプロパティで<code>State</code>型として定義されている。</li>
+<code>state</code>は<code>Promise&lt;T&gt;</code>クラスのプロパティで<code>State&lt;T&gt;</code>型として定義されている。</li>
 </ul>
-<pre><code>enum State {
+<pre><code>enum State&lt;T&gt; {
     case Pending
     case Fulfilled(@autoclosure () -&gt; T)
     case Rejected(NSError)
@@ -232,7 +232,7 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 <code>Fulfilled</code>は引数に<code>() -&gt; T</code>型のクロージャをとる。<code>@autoclosure</code>は指定された引数を暗黙的にクロージャとして扱えるようにする。これによって引数を<code>{ ... }</code>で囲う必要がなくなる。cf) <a href="https://developer.apple.com/swift/blog/?id=4">https://developer.apple.com/swift/blog/?id=4</a>
 </li>
 </ul>
-<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+<pre><code>public func then&lt;U&gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise&lt;U&gt; {
     switch state {
     case .Rejected(let error):
         // ...
@@ -248,11 +248,11 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 <code>state</code>はenum型であることが分かったので、<code>then</code>に戻る。</li>
 <li>このswitch文ではvalue bindingsを行っている。マッチしたcase文で宣言された変数に値が割り当てられる。例えば、.Fulfilledにマッチした場合、stateを初期化する際に.Fulfilledに渡されたクロージャが<code>value</code>という変数に割り当てられる。</li>
 </ul>
-<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+<pre><code>public func then&lt;U&gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise&lt;U&gt; {
     switch state {
     // ...
     case .Pending:
-        return Promise{ (fulfiller, rejecter) in
+        return Promise&lt;U&gt;{ (fulfiller, rejecter) in
             // ...
         }
     }
@@ -262,14 +262,14 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 <li>
 <code>status</code>は宣言時に初期値として<code>.Pending</code>を渡しているため、最初は<code>.Pending</code>のcase文を通ることになりそう。</li>
 <li>
-<code>status</code>が<code>.Pending</code>である場合、<code>Promise</code>を初期化して返している。</li>
+<code>status</code>が<code>.Pending</code>である場合、<code>Promise&lt;U&gt;</code>を初期化して返している。</li>
 <li>初期化の際、引数にクロージャを渡している。上述の通り、渡されたクロージャは初期化処理の最後に実行される。</li>
 </ul>
-<pre><code>public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise {
+<pre><code>public func then&lt;U&gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&gt; U) -&gt; Promise&lt;U&gt; {
     switch state {
     // ...
     case .Pending:
-        return Promise{ (fulfiller, rejecter) in
+        return Promise&lt;U&gt;{ (fulfiller, rejecter) in
             self.handlers.append{
                 switch self.state {
                 case .Fulfilled(let value):
@@ -286,7 +286,7 @@ public init(_ body:(fulfiller:(T) -&gt; Void, rejecter:(NSError) -&gt; Void) -&g
 </code></pre>
 <ul>
 <li>
-<code>Promise</code>の初期化の最後で<code>self.handlers</code>にクロージャが追加されている。上述の通り、<code>handlers</code>は<code>fulfiller</code>と<code>rejecter</code>内で呼ばれる<code>recurse</code>ですべて実行される。</li>
+<code>Promise&lt;U&gt;</code>の初期化の最後で<code>self.handlers</code>にクロージャが追加されている。上述の通り、<code>handlers</code>は<code>fulfiller</code>と<code>rejecter</code>内で呼ばれる<code>recurse</code>ですべて実行される。</li>
 <li>つまり、<code>then()</code>に渡されたクロージャは<code>handlers</code>に追加され、そのPromiseオブジェクトの非同期処理が完了したときに呼ばれることになる。</li>
 </ul>
         </section>

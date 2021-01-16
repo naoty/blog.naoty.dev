@@ -94,8 +94,26 @@ $ launchctl load -w ~/Library/LaunchAgents/org.apache.couchdb.plist
 ├── app.js
 ├── package.json
 ├── public
-│ ├── component.json // 
+│ ├── component.json // &lt;- ここに配置
+│ ├── components // &lt;- ここにインストールされる
+│   ├── images
+│   ├── javascripts
+│   └── stylesheets
+│   └── style.css
+├── routes
+│   └── index.js
+└── views
+    ├── layout.jade
+    └── index.jade
+$ cd public
+$ bower install
 </code></pre>
+<p><code>bower install</code>でインストールされるライブラリは同じディレクトリ内のcomponentsというディレクトリに入る。なので、public内にcomponent.jsonを配置して<code>bower install</code>すればよさげ。</p>
+<h3>node-dev</h3>
+<pre><code>$ npm install node-dev -g
+$ node-dev app.js
+</code></pre>
+<p><code>node app.js</code>で起動すると、ファイルを変更するたびに再起動する必要がありめんどくさい。node-devを使うとその必要がなくなるので、とても便利。インストール必須だと思う。</p>
         </section>
         <footer>
           <nav>

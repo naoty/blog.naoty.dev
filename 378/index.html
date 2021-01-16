@@ -98,9 +98,9 @@ mirb - Embeddable Interactive Ruby Shell
 <h1>Cからmrubyを実行する</h1>
 <pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>vi hello.c
 </pre>
-<pre lang="diff" class="highlight highlight-diff"><span class="gi">+#include 
-+#include 
-+#include 
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+#include &lt;mruby.h&gt;
++#include &lt;mruby/dump.h&gt;
++#include &lt;stdio.h&gt;
 +
 +int main() {
 +  mrb_state *mrb = mrb_open();
@@ -132,8 +132,8 @@ Hello, mruby!
 </ul>
 <hr>
 <h1>追記</h1>
-<p>Rubyは最新で問題ないです！問題があれば直すべきなので1.9はやめましょう… / 1件のコメント <a href="https://t.co/uu6C7Y3g0k">https://t.co/uu6C7Y3g0k</a> “mrubyの初手” (1 user) <a href="https://t.co/2bFP5uPQAu%E2%80%94">https://t.co/2bFP5uPQAu—</a> Uchio KONDO 🔫 (@udzura) August 7, 2019</p>
-<p>ドキュメント(docs/guides/compile.md) を「2.0 or later」にアップデートします— Yukihiro Matsumoto (@yukihiro_matz) August 7, 2019</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>とのことなので、ベースイメージを<code>ruby:2.6</code>にしてみたけど問題なく上記の手順ができた。</p>
         </section>
         <footer>

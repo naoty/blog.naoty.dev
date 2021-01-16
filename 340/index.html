@@ -32,21 +32,21 @@
 <p>以下のようなテンプレートを用意する。</p>
 <pre lang="html" class="highlight highlight-html">{{/* assets/views/layout.html */}}
 {{define "layout" -}}
-
-
-  
-    
-    Task
-  
-  
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"ja"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Task<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
     {{template "content" . -}}
-  
-
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
 {{end}}
 </pre>
 <pre lang="html" class="highlight highlight-html">{{/* assets/views/index.html */}}
 {{define "index" -}}
-Here is content!
+<span class="nt">&lt;p&gt;</span>Here is content!<span class="nt">&lt;/p&gt;</span>
 {{end}}
 </pre>
 <p>これらのテンプレートは以下のコマンドでバイナリに埋め込むことができる。</p>

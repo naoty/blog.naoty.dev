@@ -30,8 +30,8 @@
           <p>FRPの記事をいくつか見てあまり理解できなかったので、Swiftでストリームを扱うライブラリを書いてみた。結論から言うと、まだストリームについて深く理解できていない感じがするので「FRPとは何か」「ストリームとは何か」といった話はしない。そういう話は他のエントリーを読んでほしいと思う。</p>
 <p><a href="https://github.com/naoty/Stream">naoty/Stream · GitHub</a></p>
 <h1>demo</h1>
-<pre><code>let stream = Stream()
-let counterStream: Stream = stream.map({ message in
+<pre><code>let stream = Stream&lt;String&gt;()
+let counterStream: Stream&lt;Int&gt; = stream.map({ message in
     return countElements(message)
 }).scan(0, { previousMessage, message in
     return previousMessage + message

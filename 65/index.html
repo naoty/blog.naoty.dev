@@ -40,9 +40,9 @@ def tag_add_class_if(tag, conditions, cl, attributes = {}, &amp;block)
 end
 </code></pre>
 <pre><code># index.html.erb
- 'users'} do %&gt;
+&lt;%= tag_add_class_if :ul, (@user == current_user), 'current', {:class =&gt; 'users'} do %&gt;
   # ...
-
+&lt;% end -%&gt;
 #=&gt; ...
 </code></pre>
         </section>

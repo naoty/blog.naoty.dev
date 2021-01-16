@@ -31,10 +31,12 @@
 <p>シンプルなBGMアプリほしい</p>
 <p>— なおてぃーさん (@naoty_k) <a href="https://twitter.com/naoty_k/status/271989557321420800">11月 23, 2012</a></p>
 </blockquote>
+<!-- raw HTML omitted -->
 <blockquote>
 <p>好きな曲のyoutubeのリンクをHerokuとかにアップしておいて、iPadでそれらをリストを取得してエンドレスで聞けるようにしたい</p>
 <p>— なおてぃーさん (@naoty_k) <a href="https://twitter.com/naoty_k/status/271989962881265664">11月 23, 2012</a></p>
 </blockquote>
+<!-- raw HTML omitted -->
 <p>↑というのを思いつき、2日間でプロトタイプを作ってみた。</p>
 <p><img src="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg" alt="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg"></p>
 <p>ジョジョOPでテンション上げながら。</p>
@@ -48,7 +50,7 @@
 <h2>YouTube再生プレイヤー</h2>
 <p>YouTubeの再生プレイヤーは<code>UIWebView</code>にiframeを埋め込んで実装した。<code>MPMoviePlayerController</code>というのでもできそうな感じがするけど、時間かかりそうなので、とりあえず<code>UIWebView</code>を選択。</p>
 <p>iframeはYoutubeの動画の下のところから取ってこれるものを使う。↓こんなの。</p>
-<pre><code>
+<pre><code>&lt;iframe width="560" height="315" src="http://www.youtube.com/embed/UqFvrjhbO8c?rel=0" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
 </code></pre>
 <p>あとは、<code>UITableView</code>で選択した動画のIDを<code>UIWebView</code>に渡してリロードすることで、動画を切り替える。</p>
 <h2>サーバーとの通信</h2>

@@ -222,12 +222,12 @@
 &lt;p&gt;仕事で複雑なシステムを理解するためにデータフロー図を書くことが多い。esaでmermaid.jsの記法で書いている。例えばこんな感じ。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;graph TD
   e_user[&quot;User&quot;]
-  p_api_post_sign_up(&quot;API(POST /sign_up)&quot;)
-  d_mysql_users[(&quot;MySQL(users)&quot;)]
+  p_api_post_sign_up(&quot;API&amp;lt;br&amp;gt;(POST /sign_up)&quot;)
+  d_mysql_users[(&quot;MySQL&amp;lt;br&amp;gt;(users)&quot;)]
   p_fluentd(&quot;Fluentd&quot;)
-  d_s3_my-access-logs[(&quot;S3(my-access-logs)&quot;)]
+  d_s3_my-access-logs[(&quot;S3&amp;lt;br&amp;gt;(my-access-logs)&quot;)]
   p_embulk(&quot;Embulk&quot;)
-  d_bigquery_users[(&quot;BigQuery(users)&quot;)]
+  d_bigquery_users[(&quot;BigQuery&amp;lt;br&amp;gt;(users)&quot;)]
 
   e_user -- params --&amp;gt; p_api_post_sign_up
   p_api_post_sign_up -- user --&amp;gt; d_mysql_users
@@ -239,12 +239,12 @@
 &lt;p&gt;これはこうなる（このブログのレンダリングの実装の問題で潰れているけどしょうがない）。&lt;/p&gt;
 &lt;pre lang=&quot;mermaid&quot;&gt;&lt;code&gt;graph TD
   e_user[&quot;User&quot;]
-  p_api_post_sign_up(&quot;API(POST /sign_up)&quot;)
-  d_mysql_users[(&quot;MySQL(users)&quot;)]
+  p_api_post_sign_up(&quot;API&amp;lt;br&amp;gt;(POST /sign_up)&quot;)
+  d_mysql_users[(&quot;MySQL&amp;lt;br&amp;gt;(users)&quot;)]
   p_fluentd(&quot;Fluentd&quot;)
-  d_s3_my-access-logs[(&quot;S3(my-access-logs)&quot;)]
+  d_s3_my-access-logs[(&quot;S3&amp;lt;br&amp;gt;(my-access-logs)&quot;)]
   p_embulk(&quot;Embulk&quot;)
-  d_bigquery_users[(&quot;BigQuery(users)&quot;)]
+  d_bigquery_users[(&quot;BigQuery&amp;lt;br&amp;gt;(users)&quot;)]
 
   e_user -- params --&amp;gt; p_api_post_sign_up
   p_api_post_sign_up -- user --&amp;gt; d_mysql_users
@@ -277,7 +277,7 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Display&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyError&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Formatter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Formatter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;'_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
       &lt;span class=&quot;nn&quot;&gt;Self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InvalidFormat&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;write!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;invalid format&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -287,7 +287,7 @@
 &lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyError&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Box&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;MyError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InvalidFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dyn&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;MyError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InvalidFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
   &lt;span class=&quot;nd&quot;&gt;eprintln!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;error: {}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
@@ -301,7 +301,7 @@
 &lt;pre&gt;&lt;code&gt;error[E0277]: the trait bound `MyError: std::error::Error` is not satisfied
   --&amp;gt; src/main.rs:19:40
    |
-19 |     let error: Box = Box::new(MyError::InvalidFormat);
+19 |     let error: Box&amp;lt;dyn error::Error&amp;gt; = Box::new(MyError::InvalidFormat);
    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::error::Error` is not implemented for `MyError`
    |
    = note: required for the cast to the object type `dyn std::error::Error`
@@ -503,7 +503,7 @@ Metadata &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;all topics &lt;span cl
     <summary>&lt;p&gt;rustでCLIツールを作るときにフレームワークを調べるとclapしか出てこない。これがデファクトスタンダードなのだろうということで使ってみるが、微妙にカスタマイズしたかったのでメモ。&lt;/p&gt;
 &lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mycli&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;nf&quot;&gt;.version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;crate_version!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-    &lt;span class=&quot;nf&quot;&gt;.author&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Naoto Kaneko &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;.author&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Naoto Kaneko &amp;lt;naoty.k@gmail.com&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;nf&quot;&gt;.about&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DESCRIPTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;nf&quot;&gt;.template&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;USAGE_TEMPLATE&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.trim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
     &lt;span class=&quot;nf&quot;&gt;.version_short&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;v&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -567,7 +567,7 @@ Flags:
 &lt;span class=&quot;c&quot;&gt;// numbersは再利用可&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;ここからの話は&lt;code&gt;Vec&lt;/code&gt;型を想定する。moveを発生させたくない場合、&lt;code&gt;iter()&lt;/code&gt;や&lt;code&gt;iter_mut()&lt;/code&gt;を使う。&lt;/p&gt;
-&lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Iter&lt;/span&gt;
+&lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Iter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;&lt;code&gt;into_iter()&lt;/code&gt;とは違い、&lt;code&gt;&amp;amp;self&lt;/code&gt;を受けるのでmoveは発生しない。&lt;code&gt;Vec&lt;/code&gt;型の実装だと、&lt;code&gt;std::slice::Iter&lt;/code&gt;型を返す。なので、for式はこの&lt;code&gt;Iter&lt;/code&gt;型の&lt;code&gt;into_iter()&lt;/code&gt;を呼ぶことになるが、&lt;a href=&quot;https://doc.rust-lang.org/src/core/iter/traits/collect.rs.html#247-249&quot;&gt;実装&lt;/a&gt;を見ると&lt;code&gt;self&lt;/code&gt;を返しているだけ。&lt;code&gt;Iter&lt;/code&gt;型は&lt;code&gt;Iterator&lt;/code&gt;トレイトも実装しているということになる。&lt;/p&gt;
 &lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;vec!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
@@ -1353,21 +1353,21 @@ lib/pokemon.rb:1:0: MethodDefinitionMissing: &lt;span class=&quot;nv&quot;&gt;mo
 &lt;h1&gt;疑似分散モード&lt;/h1&gt;
 &lt;h2&gt;設定&lt;/h2&gt;
 &lt;p&gt;疑似分散モードに必要な設定を追加する。設定ファイルをコンテナからローカルにコピーして編集する。&lt;/p&gt;
-&lt;pre lang=&quot;xml&quot; class=&quot;highlight highlight-xml&quot;&gt;
-
-  
-    fs.defaultFS
-    hdfs://localhost:9000
-  
-
+&lt;pre lang=&quot;xml&quot; class=&quot;highlight highlight-xml&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- config/core-site.xml --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;fs.defaultFS&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;hdfs://localhost:9000&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
-&lt;pre lang=&quot;xml&quot; class=&quot;highlight highlight-xml&quot;&gt;
-
-  
-    dfs.replication
-    1
-  
-
+&lt;pre lang=&quot;xml&quot; class=&quot;highlight highlight-xml&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- config/hdfs-site.xml --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;dfs.replication&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; FROM openjdk:8
  RUN apt-get update \
@@ -1614,7 +1614,7 @@ graph TD
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
-&lt;p&gt;あとは、remarkプラグインを書いて、&lt;code&gt;mermaid&lt;/code&gt;がついたcode blockを``で囲うように変換するようにした。&lt;/p&gt;
+&lt;p&gt;あとは、remarkプラグインを書いて、&lt;code&gt;mermaid&lt;/code&gt;がついたcode blockを&lt;code&gt;&amp;lt;div class=&quot;mermaid&quot;&amp;gt;&amp;lt;/div&amp;gt;&lt;/code&gt;で囲うように変換するようにした。&lt;/p&gt;
 &lt;pre lang=&quot;js&quot; class=&quot;highlight highlight-js&quot;&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;visit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;unist-util-visit&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
 &lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;markdownAST&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pluginOptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -1622,7 +1622,7 @@ graph TD
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;lang&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;mermaid&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
     &lt;span class=&quot;nx&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;`\n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;\n`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;`&amp;lt;div class=&quot;mermaid&quot;&amp;gt;\n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;\n&amp;lt;/div&amp;gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 
   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;markdownAST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -2096,11 +2096,11 @@ Total: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
 &lt;pre&gt;&lt;code&gt;         public              private
  
      +-[public-1a]-+     +-[private-1a]-+
- 1a  |     NAT     |  |              |
+ 1a  |     NAT     | &amp;lt;-&amp;gt; |              |
      +-------------+     +--------------+
      
      +-[public-1c]-+     +-[private-1c]-+
- 1c  |     NAT     |  |              |
+ 1c  |     NAT     | &amp;lt;-&amp;gt; |              |
      +-------------+     +--------------+
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Terraform&lt;/h1&gt;
@@ -2555,8 +2555,33 @@ $ node dist/bundle.js
   &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;   &lt;span class=&quot;kt&quot;&gt;error&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; 
-&lt;/pre&gt;</summary>
+&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;// 送受信可能なchannelを生成する&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;c&quot;&gt;// channelに結果を送信するgoroutineを実行する&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// channelを確実に終了させる&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;defer&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;something&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}()&lt;/span&gt;
+
+  &lt;span class=&quot;c&quot;&gt;// 返り値の型が&amp;lt;-chanなので受信専用のchannelとして返る&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;関数の返り値が&lt;code&gt;&amp;lt;-chan result&lt;/code&gt;になっているため、この関数を呼び出す側はこのchannelから値を受信することしかできない。&lt;/li&gt;
+&lt;li&gt;goroutine内で&lt;code&gt;defer&lt;/code&gt;によって確実にchannelを終了させる。&lt;/li&gt;
+&lt;li&gt;goroutineの結果を表す型を定義して&lt;code&gt;error&lt;/code&gt;を含めた値をchannelに送ることで、呼び出す側でエラーハンドリングできるようにしている。&lt;/li&gt;
+&lt;/ul&gt;</summary>
     <title>goroutineの実行パターン</title>
     <updated>2019-09-01T18:43:00+09:00</updated>
     <dc:date>2019-09-01T18:43:00+09:00</dc:date>
@@ -2653,9 +2678,9 @@ mirb - Embeddable Interactive Ruby Shell
 &lt;h1&gt;Cからmrubyを実行する&lt;/h1&gt;
 &lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vi hello.c
 &lt;/pre&gt;
-&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+#include 
-+#include 
-+#include 
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+#include &amp;lt;mruby.h&amp;gt;
++#include &amp;lt;mruby/dump.h&amp;gt;
++#include &amp;lt;stdio.h&amp;gt;
 +
 +int main() {
 +  mrb_state *mrb = mrb_open();
@@ -2687,8 +2712,8 @@ Hello, mruby!
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h1&gt;追記&lt;/h1&gt;
-&lt;p&gt;Rubyは最新で問題ないです！問題があれば直すべきなので1.9はやめましょう… / 1件のコメント &lt;a href=&quot;https://t.co/uu6C7Y3g0k&quot;&gt;https://t.co/uu6C7Y3g0k&lt;/a&gt; “mrubyの初手” (1 user) &lt;a href=&quot;https://t.co/2bFP5uPQAu%E2%80%94&quot;&gt;https://t.co/2bFP5uPQAu—&lt;/a&gt; Uchio KONDO 🔫 (@udzura) August 7, 2019&lt;/p&gt;
-&lt;p&gt;ドキュメント(docs/guides/compile.md) を「2.0 or later」にアップデートします— Yukihiro Matsumoto (@yukihiro_matz) August 7, 2019&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;とのことなので、ベースイメージを&lt;code&gt;ruby:2.6&lt;/code&gt;にしてみたけど問題なく上記の手順ができた。&lt;/p&gt;</summary>
     <title>mrubyの初手</title>
     <updated>2019-08-07T12:06:00+09:00</updated>
@@ -2707,7 +2732,7 @@ Hello, mruby!
 &lt;li&gt;ヘッダーファイル。ソースコードで実装されている関数や構造体の宣言が書いてある。&lt;/li&gt;
 &lt;li&gt;宣言をソースコードと分けることで、ソースコード内で関数や構造体を実装する順番を気にしなくてよくなる。&lt;/li&gt;
 &lt;li&gt;
-&lt;code&gt;#include &lt;/code&gt;や&lt;code&gt;#include &quot;myheader.h&quot;&lt;/code&gt;でヘッダーファイル内の宣言をソースコードに展開する。前者は&lt;code&gt;/usr/include&lt;/code&gt;や&lt;code&gt;/usr/local/include&lt;/code&gt;以下にあるヘッダーファイルを検索し、後者はソースコードからの相対パスで検索する。&lt;/li&gt;
+&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/code&gt;や&lt;code&gt;#include &quot;myheader.h&quot;&lt;/code&gt;でヘッダーファイル内の宣言をソースコードに展開する。前者は&lt;code&gt;/usr/include&lt;/code&gt;や&lt;code&gt;/usr/local/include&lt;/code&gt;以下にあるヘッダーファイルを検索し、後者はソースコードからの相対パスで検索する。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;&lt;code&gt;*.o&lt;/code&gt;&lt;/h1&gt;
 &lt;ul&gt;
@@ -2791,8 +2816,71 @@ baz2.c -&amp;gt; baz2.o -+
   &lt;span class=&quot;nx&quot;&gt;memory&lt;/span&gt;                   &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;512&lt;/span&gt;
   &lt;span class=&quot;nx&quot;&gt;requires_compatibilities&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;FARGATE&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 
-  &lt;span class=&quot;nx&quot;&gt;container_definitions&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;
-&lt;/pre&gt;</summary>
+  &lt;span class=&quot;nx&quot;&gt;container_definitions&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DOCUMENT&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt;
+[
+  {
+    &quot;name&quot;: &quot;rails&quot;,
+    &quot;image&quot;: &quot;${aws_ecr_repository.rails.repository_url}:latest&quot;,
+    &quot;command&quot;: [&quot;exit&quot;, &quot;1&quot;],
+    &quot;environment&quot;: [
+      { &quot;name&quot;: &quot;RAILS_ENV&quot;, &quot;value&quot;: &quot;production&quot; }
+    ],
+    &quot;logConfiguration&quot;: {
+      &quot;logDriver&quot;: &quot;awslogs&quot;,
+      &quot;options&quot;: {
+        &quot;awslogs-group&quot;: &quot;${aws_cloudwatch_log_group.rails.name}&quot;,
+        &quot;awslogs-region&quot;: &quot;ap-northeast-1&quot;,
+        &quot;awslogs-stream-prefix&quot;: &quot;rake&quot;
+      }
+    }
+  }
+]
+&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DOCUMENT
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;定期実行したいRakeタスクごとにECSタスク定義を作るのは非効率なので、Rakeタスク専用のタスク定義をつくる。&lt;/li&gt;
+&lt;li&gt;後ほど、実行するコマンドをoverrideするため、タスク定義のコマンドでは&lt;code&gt;exit 1&lt;/code&gt;を実行するようにしている。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre lang=&quot;hcl&quot; class=&quot;highlight highlight-hcl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;resource&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;aws_cloudwatch_event_rule&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;push_notifications_schedule&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;                &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;push-schedule&quot;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;schedule_expression&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;cron(0 20 * * ? *)&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;resource&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;aws_cloudwatch_event_target&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;push_notifications&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;rule&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;aws_cloudwatch_event_rule&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push_notifications_schedule&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;arn&lt;/span&gt;      &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;aws_ecs_cluster&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;production&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arn&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;role_arn&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;aws_iam_role&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ecs_events&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arn&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;ecs_target&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;launch_type&lt;/span&gt;         &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;FARGATE&quot;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;task_count&lt;/span&gt;          &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;task_definition_arn&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;aws_ecs_task_definition&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;rake&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arn&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;network_configuration&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;subnets&lt;/span&gt;         &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;aws_subnet&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;private_a&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;aws_subnet&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;private_c&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;security_groups&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;aws_security_group&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;internal&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DOCUMENT&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt;
+{
+  &quot;containerOverrides&quot;: [
+    {
+      &quot;name&quot;: &quot;rails&quot;,
+      &quot;command&quot;: [&quot;bin/rails&quot;, &quot;push_notifications&quot;]
+    }
+  ]
+}
+&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DOCUMENT
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;aws_cloudwatch_event_rule&lt;/code&gt;はスケジュールごとに書き、そのスケジュールで実行するRakeタスクごとに&lt;code&gt;aws_cloudwatch_event_target&lt;/code&gt;を書くことになる。なので、production環境とstaging環境で同じスケジュールを使う場合は、&lt;code&gt;aws_cloudwatch_event_rule&lt;/code&gt;は共用することになる。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;aws_cloudwatch_event_target&lt;/code&gt;では、&lt;code&gt;ecs_target&lt;/code&gt;でFargate上でECSタスクを実行するためのオプションを指定する必要がある。&lt;code&gt;input&lt;/code&gt;でコンテナ定義のoverrideができるので、ここで&lt;code&gt;exit 1&lt;/code&gt;としていた実行コマンドをoverrideしている。&lt;/li&gt;
+&lt;/ul&gt;</summary>
     <title>ECSタスクでRakeタスクを定期実行する</title>
     <updated>2019-07-04T23:27:00+09:00</updated>
     <dc:date>2019-07-04T23:27:00+09:00</dc:date>
@@ -2881,7 +2969,7 @@ baz2.c -&amp;gt; baz2.o -+
   &lt;span class=&quot;c1&quot;&gt;// 組み合わせの数だけループする&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;// 組み合わせに含まれる要素&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
     &lt;span class=&quot;c1&quot;&gt;// 全要素についてループする&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -2908,7 +2996,7 @@ baz2.c -&amp;gt; baz2.o -+
 &lt;pre lang=&quot;cpp&quot; class=&quot;highlight highlight-cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
-&lt;p&gt;ある集合のすべての組み合わせは、各要素について含めるか含めないかの2択によって生まれるので、&lt;code&gt;2^&lt;/code&gt;になる。&lt;code&gt;1 &amp;lt;&amp;lt; n&lt;/code&gt;は&lt;code&gt;2^n&lt;/code&gt;と同じなので、組み合わせの数だけループしていることになる。&lt;/p&gt;
+&lt;p&gt;ある集合のすべての組み合わせは、各要素について含めるか含めないかの2択によって生まれるので、&lt;code&gt;2^&amp;lt;要素数&amp;gt;&lt;/code&gt;になる。&lt;code&gt;1 &amp;lt;&amp;lt; n&lt;/code&gt;は&lt;code&gt;2^n&lt;/code&gt;と同じなので、組み合わせの数だけループしていることになる。&lt;/p&gt;
 &lt;h1&gt;組み合わせの作り方&lt;/h1&gt;
 &lt;pre lang=&quot;cpp&quot; class=&quot;highlight highlight-cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -3193,9 +3281,9 @@ secure-file-priv = &quot;&quot;
 &lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;code&gt;normalize(, )&lt;/code&gt;という使い方をする。&lt;/li&gt;
+&lt;code&gt;normalize(&amp;lt;正規化したいデータ&amp;gt;, &amp;lt;スキーマ&amp;gt;)&lt;/code&gt;という使い方をする。&lt;/li&gt;
 &lt;li&gt;
-&lt;code&gt;new schema.Entity()&lt;/code&gt;でスキーマを初期化する。キーは正規化したデータのプロパティ名に使われる。&lt;/li&gt;
+&lt;code&gt;new schema.Entity(&amp;lt;キー&amp;gt;)&lt;/code&gt;でスキーマを初期化する。キーは正規化したデータのプロパティ名に使われる。&lt;/li&gt;
 &lt;li&gt;正規化されたデータは&lt;code&gt;id&lt;/code&gt;の値をキーとしたオブジェクトになっている。デフォルトでは&lt;code&gt;id&lt;/code&gt;プロパティをキーに使うけど、&lt;code&gt;idAttribute&lt;/code&gt;オプションで&lt;code&gt;id&lt;/code&gt;以外のプロパティをキーに使うことができる。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;配列&lt;/h1&gt;
@@ -3526,7 +3614,7 @@ Default Collection
     &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CharacterController&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;controller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Start&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;controller&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;GetComponent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;controller&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GetComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharacterController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Update&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -3668,7 +3756,7 @@ Default Collection
 &lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;nn&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ls&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;failed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;あるいは、&lt;code&gt;?&lt;/code&gt;オペレータを使ってエラーをそのまま呼び出し元に転送することもできる。&lt;/p&gt;
-&lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;execute_ls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;execute_ls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nn&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ls&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;nf&quot;&gt;Ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(())&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -3727,8 +3815,8 @@ Default Collection
 &lt;h1&gt;作った理由&lt;/h1&gt;
 &lt;p&gt;CIからの通知をSlackに送るようにしていると、CIからの通知でchannelが埋まってしまうようなことがよくあると思う。しかも、複雑な処理をCI上で行うと、細かく分解されたジョブから大量の通知が来るようになる。そこで、こういった簡単なプロキシを作って同じworkflowの通知をスレッドにまとめようと考えた。&lt;/p&gt;
 &lt;h1&gt;これは何か&lt;/h1&gt;
-&lt;p&gt;slack-thread-webhookは&lt;code&gt;POST /hooks/&lt;/code&gt;というエンドポイントを持っており、Slackのincoming webhookと同じリクエストボディを受け付ける。このエンドポイントにリクエストを送ると、初回はメッセージとしてSlackに転送し、同じ``に二回以上送ると初回に送られたメッセージのスレッドに転送する。&lt;/p&gt;
-&lt;p&gt;内部的には、Slackにスレッドとしてメッセージを送るために必要な親メッセージのtimestampを``とともにRedisに保持するようにしている。&lt;/p&gt;
+&lt;p&gt;slack-thread-webhookは&lt;code&gt;POST /hooks/&amp;lt;id&amp;gt;&lt;/code&gt;というエンドポイントを持っており、Slackのincoming webhookと同じリクエストボディを受け付ける。このエンドポイントにリクエストを送ると、初回はメッセージとしてSlackに転送し、同じ&lt;code&gt;&amp;lt;id&amp;gt;&lt;/code&gt;に二回以上送ると初回に送られたメッセージのスレッドに転送する。&lt;/p&gt;
+&lt;p&gt;内部的には、Slackにスレッドとしてメッセージを送るために必要な親メッセージのtimestampを&lt;code&gt;&amp;lt;id&amp;gt;&lt;/code&gt;とともにRedisに保持するようにしている。&lt;/p&gt;
 &lt;h1&gt;どう使うのか&lt;/h1&gt;
 &lt;p&gt;上のスクショのようなCIの通知では、例えばCircle CIの&lt;code&gt;CIRCLE_WORKFLOW_ID&lt;/code&gt;のような一連のジョブで共通するIDを使って、以下のようにリクエストを送ることでスレッドに通知をまとめることができる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;cat &amp;lt;&amp;lt; EOS | curl -X POST -H &quot;Content-Type: application/json&quot; -d @- https://slack-thread-webhook.herokuapp.com/hooks/${CIRCLE_WORKFLOW_ID}
@@ -3748,7 +3836,7 @@ EOS
   &quot;attachments&quot;: [
     {
       &quot;color&quot;: &quot;good&quot;,
-      &quot;title&quot;: &quot;Finish &quot;
+      &quot;title&quot;: &quot;Finish &amp;lt;${CIRCLE_BUILD_URL}|${CIRCLE_JOB}&amp;gt;&quot;
     }
   ]
 }
@@ -4029,7 +4117,7 @@ EOS
 &lt;h1&gt;略称&lt;/h1&gt;
 &lt;p&gt;EC2のような公式の略称は使ってもいいけど、基本的には略称は避けるべきだと思う。上述の&lt;code&gt;prod&lt;/code&gt;も&lt;code&gt;production&lt;/code&gt;とした方がいいと思う。&lt;/p&gt;
 &lt;h1&gt;まとめ&lt;/h1&gt;
-&lt;p&gt;これまでの話をまとめると、たいていのケースでは&lt;code&gt;-&lt;/code&gt;というネーミングにするのがよさそう。例えば&lt;/p&gt;
+&lt;p&gt;これまでの話をまとめると、たいていのケースでは&lt;code&gt;&amp;lt;リソースの種類&amp;gt;-&amp;lt;環境&amp;gt;&lt;/code&gt;というネーミングにするのがよさそう。例えば&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;EC2インスタンス：&lt;code&gt;production&lt;/code&gt;
 &lt;/li&gt;
@@ -4131,7 +4219,7 @@ EOS
   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
       &lt;span class=&quot;c1&quot;&gt;// 自身に渡されたpropsとstateをラップしたComponentに渡す&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;;&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -4206,21 +4294,21 @@ EOS
 &lt;p&gt;以下のようなテンプレートを用意する。&lt;/p&gt;
 &lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;{{/* assets/views/layout.html */}}
 {{define &quot;layout&quot; -}}
-
-
-  
-    
-    Task
-  
-  
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ja&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Task&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
     {{template &quot;content&quot; . -}}
-  
-
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
 {{end}}
 &lt;/pre&gt;
 &lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;{{/* assets/views/index.html */}}
 {{define &quot;index&quot; -}}
-Here is content!
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Here is content!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
 {{end}}
 &lt;/pre&gt;
 &lt;p&gt;これらのテンプレートは以下のコマンドでバイナリに埋め込むことができる。&lt;/p&gt;
@@ -4370,7 +4458,7 @@ Here is content!
 &lt;p&gt;パラメータストアとは、AWSが提供する階層型ストレージのことで、設定のような軽いデータを安全に管理できる。KMSによる暗号化も可能なので機密情報を含む環境変数の管理に向いていそうだと判断した。&lt;/p&gt;
 &lt;h2&gt;環境変数をパラメータストアに移す&lt;/h2&gt;
 &lt;p&gt;バラバラに管理されていた環境変数をパラメータストアに移した。パラメータストアは階層構造になっており、ある階層下にある値をまとめて取得することができる。&lt;/p&gt;
-&lt;p&gt;今回は&lt;code&gt;///&lt;/code&gt;という階層で環境変数を管理することにした。例えば、&lt;code&gt;/myapp/production/PASSWORD&lt;/code&gt;のような感じだ。&lt;/p&gt;
+&lt;p&gt;今回は&lt;code&gt;/&amp;lt;アプリケーション名&amp;gt;/&amp;lt;実行環境&amp;gt;/&amp;lt;環境変数名&amp;gt;&lt;/code&gt;という階層で環境変数を管理することにした。例えば、&lt;code&gt;/myapp/production/PASSWORD&lt;/code&gt;のような感じだ。&lt;/p&gt;
 &lt;h2&gt;コンテナからパラメータストアにアクセスする&lt;/h2&gt;
 &lt;p&gt;ECSコンテナからパラメータストアにアクセスするには権限が必要になる。パラメータストアへの移行と同時並行でECSコンテナでIAMロールを使うように修正していたので、このIAMロールにパラメータストアにアクセスするためのポリシーを付与した。&lt;/p&gt;
 &lt;h2&gt;Rails起動時に環境変数をセットする&lt;/h2&gt;
@@ -4548,8 +4636,8 @@ aws ecs &lt;span class=&quot;nb&quot;&gt;wait &lt;/span&gt;tasks-stopped &lt;spa
 &lt;/pre&gt;
 &lt;p&gt;これでモデルから必要な属性だけをcamelCaseのJSON文字列に変換できるようになった。&lt;/p&gt;
 &lt;p&gt;次にRailsのviewでdata属性に上のpropsを渡す。あとでここからJSでデータを引っ張ってくる計画だ。&lt;/p&gt;
-&lt;pre lang=&quot;erb&quot; class=&quot;highlight highlight-erb&quot;&gt;
-
+&lt;pre lang=&quot;erb&quot; class=&quot;highlight highlight-erb&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;js-redux-root&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-react-props=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_react_props&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;あとは、Reduxのstoreを作成するときに上のpropsを設定する。&lt;/p&gt;
 &lt;pre lang=&quot;javascript&quot; class=&quot;highlight highlight-javascript&quot;&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addEventListener&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;DOMContentLoaded&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -4558,10 +4646,10 @@ aws ecs &lt;span class=&quot;nb&quot;&gt;wait &lt;/span&gt;tasks-stopped &lt;spa
   &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;store&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;createStore&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;rootReducer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;initialState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
   &lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    
-      
-    
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Provider&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;SignUpForm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/Provider&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;これでRailsで作ったデータをReduxのinitial stateに設定できた。フォームの初期値を埋めておきたいときなど、コントローラーからReactコンポーネントにデータを渡せるとラクなので、こういう実装が必要になると思う。&lt;/p&gt;
@@ -4574,7 +4662,7 @@ aws ecs &lt;span class=&quot;nb&quot;&gt;wait &lt;/span&gt;tasks-stopped &lt;spa
     <id>https://blog.naoty.dev/328/</id>
     <link href="https://blog.naoty.dev/328/"/>
     <summary>&lt;p&gt;webpackerを使ったRailsプロジェクトにjestを導入してみた。jestをインストールしてテストを実行してみると、以下のようなエラーがおきた。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;({&quot;Object.&quot;:function(module,exports,require,__dirname,__filename,global,jest){import xxx from './xxx';
+&lt;pre&gt;&lt;code&gt;({&quot;Object.&amp;lt;anonymous&amp;gt;&quot;:function(module,exports,require,__dirname,__filename,global,jest){import xxx from './xxx';
                                                                                          ^^^^^^
 
 SyntaxError: Unexpected token import
@@ -4755,7 +4843,7 @@ SyntaxError: Unexpected token import
   <entry>
     <id>https://blog.naoty.dev/323/</id>
     <link href="https://blog.naoty.dev/323/"/>
-    <summary>&lt;p&gt;最近、react-railsを使ってRails上でReactコンポーネントを実装している。フォームを実装する際、Railsのフォームヘルパーは自動的にCSRFトークンを送るように``を生成してくれるが、Reactコンポーネントでフォームを実装する場合はそれを自分で実装する必要がある。&lt;/p&gt;
+    <summary>&lt;p&gt;最近、react-railsを使ってRails上でReactコンポーネントを実装している。フォームを実装する際、Railsのフォームヘルパーは自動的にCSRFトークンを送るように&lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt;を生成してくれるが、Reactコンポーネントでフォームを実装する場合はそれを自分で実装する必要がある。&lt;/p&gt;
 &lt;p&gt;react-railsであれば、Reactコンポーネントにpropsを簡単に渡せるため、props経由でCSRFトークンを渡すことで実装することができる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// new.html.slim
 = react_component &quot;SignUpForm&quot;,
@@ -4764,9 +4852,9 @@ SyntaxError: Unexpected token import
 &lt;pre lang=&quot;jsx&quot; class=&quot;highlight highlight-jsx&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// SignUpForm.jsx&lt;/span&gt;
 &lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    
-      
-    
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/sign_up&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hidden&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;csrfParams&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;csrfToken&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;form&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;</summary>
@@ -4876,7 +4964,7 @@ SyntaxError: Unexpected token import
 &lt;li&gt;
 &lt;code&gt;margin-top&lt;/code&gt;を使わない。一貫して&lt;code&gt;margin-bottom&lt;/code&gt;を使うことで、シンプルにレイアウトを組むことができる。&lt;/li&gt;
 &lt;li&gt;
-&lt;code&gt;margin-bottom&lt;/code&gt;の値は&lt;code&gt;~&lt;/code&gt;と``を&lt;code&gt;1&lt;/code&gt;とすると、その他のブロック要素を`2`にする。例えば、このブログでは以下のような感じにしている。&lt;/li&gt;
+&lt;code&gt;margin-bottom&lt;/code&gt;の値は&lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;~&lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt;と&lt;code&gt;&amp;lt;li&amp;gt;&lt;/code&gt;を&lt;code&gt;1&lt;/code&gt;とすると、その他のブロック要素を&lt;code&gt;2&lt;/code&gt;にする。例えば、このブログでは以下のような感じにしている。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre lang=&quot;css&quot; class=&quot;highlight highlight-css&quot;&gt;&lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
@@ -4969,79 +5057,7 @@ SyntaxError: Unexpected token import
     <link href="https://blog.naoty.dev/315/"/>
     <summary>&lt;p&gt;最近、Jupyter Notebookを使って機械学習を学び始めた。数式が頻繁に出てくるため、LaTeXを初めて使うようになった。&lt;/p&gt;
 &lt;p&gt;自分のためのメモとして、よく使う数式とその記法をまとめた。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;  記法
-  数式
-
-
-
-
-  `$x^{-2}$`
-  $x^{-2}$
-
-
-  `$x_{12}$`
-  $x\_{12}$
-
-
-  `$\frac{1}{2}$`
-  $\frac{1}{2}$
-
-
-  `$y = 2x + 1 \tag{1}$`
-  $y = 2x + 1 \tag{1}$
-
-
-  `$\frac{\partial L}{\partial W}$`
-  $\frac{\partial L}{\partial W}$
-
-
-  $$
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;\begin{align}&lt;br&gt;
-x + y = 3 \tag{1} \&lt;br&gt;
-2x - y = 0 \tag{2}&lt;br&gt;
-\end{align}&lt;br&gt;
-$$&lt;br&gt;
-$$&lt;br&gt;
-\begin{align}&lt;br&gt;
-x + y = 3 \tag{1} \&lt;br&gt;
-2x - y = 0 \tag{2}&lt;br&gt;
-\end{align}&lt;br&gt;
-$$&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;  $$
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;y = \begin{cases}&lt;br&gt;
-x &amp;amp; (x &amp;gt; 0) \&lt;br&gt;
-0 &amp;amp; (x \leqq 0)&lt;br&gt;
-\end{cases}&lt;br&gt;
-$$&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;  $$
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;y = \begin{cases}&lt;br&gt;
-x &amp;amp; (x &amp;gt; 0) \&lt;br&gt;
-0 &amp;amp; (x \leqq 0)&lt;br&gt;
-\end{cases}&lt;br&gt;
-$$&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;  $$
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;\sum_{i=0}^{k} x_{k}&lt;br&gt;
-$$&lt;br&gt;
-$$&lt;br&gt;
-\sum_{i=0}^{k} x_k&lt;br&gt;
-$$&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;  $$
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;\begin{pmatrix}&lt;br&gt;
-1 &amp;amp; 2 \&lt;br&gt;
-3 &amp;amp; 4&lt;br&gt;
-\end{pmatrix}&lt;br&gt;
-$$&lt;br&gt;
-$$&lt;br&gt;
-\begin{pmatrix}&lt;br&gt;
-1 &amp;amp; 2 \&lt;br&gt;
-3 &amp;amp; 4&lt;br&gt;
-\end{pmatrix}&lt;br&gt;
-$$&lt;/p&gt;</summary>
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>よく使うLaTeXコマンド</title>
     <updated>2018-01-08T08:57:00+09:00</updated>
     <dc:date>2018-01-08T08:57:00+09:00</dc:date>
@@ -5295,57 +5311,66 @@ if-shell 'which todo' 'set-option -g status-right &quot;next: #(todo next)&quot;
     <link href="https://blog.naoty.dev/307/"/>
     <summary>&lt;p&gt;ブログを作るにあたって適切なセマンティックを使おうと思い、HTML5のタグを調べた。&lt;/p&gt;
 &lt;h1&gt;レイアウト&lt;/h1&gt;
-&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;
-  
-    ブログタイトル
-    公開：2017-12-01 12:00:00
-  
-  
-    見出し1
-    本文
-  
-  
-    トップ
-  
-
+&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;article&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;header&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;ブログタイトル&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;公開：&lt;span class=&quot;nt&quot;&gt;&amp;lt;time&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;datetime=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2017-12-01T12:00:00.000+0900&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;2017-12-01 12:00:00&lt;span class=&quot;nt&quot;&gt;&amp;lt;/time&amp;gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/header&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;section&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;見出し1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;本文&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;footer&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;トップ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/footer&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/article&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;``：ブログのエントリーを表すために使う。&lt;/li&gt;
 &lt;li&gt;
-&lt;code&gt;, &lt;/code&gt;：ブログのヘッダーおよびフッターを表すために使う。このブログでは、ブログタイトルやメタデータをヘッダーに表示して、ナビゲーションのリンクをフッターに表示している。&lt;/li&gt;
-&lt;li&gt;``：ブログ本文をヘッダーやフッターと区別して表すために使う。&lt;/li&gt;
-&lt;li&gt;``：ブログのエントリーの公開日時を表すために使う。&lt;code&gt;datetime&lt;/code&gt;属性によって公開日時を指定できる。&lt;/li&gt;
+&lt;code&gt;&amp;lt;article&amp;gt;&lt;/code&gt;：ブログのエントリーを表すために使う。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;header&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;footer&amp;gt;&lt;/code&gt;：ブログのヘッダーおよびフッターを表すために使う。このブログでは、ブログタイトルやメタデータをヘッダーに表示して、ナビゲーションのリンクをフッターに表示している。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;section&amp;gt;&lt;/code&gt;：ブログ本文をヘッダーやフッターと区別して表すために使う。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;time&amp;gt;&lt;/code&gt;：ブログのエントリーの公開日時を表すために使う。&lt;code&gt;datetime&lt;/code&gt;属性によって公開日時を指定できる。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;コード&lt;/h1&gt;
-&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;
-  app/models/pokemon.rb
-  
-    
-    
-  
-
+&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;figure&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;figcaption&amp;gt;&lt;/span&gt;app/models/pokemon.rb&lt;span class=&quot;nt&quot;&gt;&amp;lt;/figcaption&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;pre&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;code&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ruby&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/code&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/pre&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/figure&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;``：文書とは別に参考資料として付け加えたコンテンツを表すために使う。画像やコードに対して使えるようだ。&lt;/li&gt;
-&lt;li&gt;``：参考資料のキャプションを表すために使う。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;figure&amp;gt;&lt;/code&gt;：文書とは別に参考資料として付け加えたコンテンツを表すために使う。画像やコードに対して使えるようだ。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;figcaption&amp;gt;&lt;/code&gt;：参考資料のキャプションを表すために使う。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;画像&lt;/h1&gt;
-&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;
-  図1
-  
-    
-    
-  
-
+&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;figure&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;figcaption&amp;gt;&lt;/span&gt;図1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/figcaption&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;picture&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;source&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;srcset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/figure1-large.png, /figure1-large@2x.png 2x&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;media=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;(min-width: 600px)&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/figure1.png&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;srcset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/figure1.png, /figure1@2x.png 2x&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;alt=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;図1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/picture&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/figure&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;``：条件に合わせて表示する画像を切り替えることができる。レスポンシブデザインをサポートしたり、画像の最適化のために使う。&lt;/li&gt;
-&lt;li&gt;``：複数のリソースを指定するために使う。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;picture&amp;gt;&lt;/code&gt;：条件に合わせて表示する画像を切り替えることができる。レスポンシブデザインをサポートしたり、画像の最適化のために使う。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;source&amp;gt;&lt;/code&gt;：複数のリソースを指定するために使う。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;その他&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;``：追記されたテキストを表すために使う。&lt;code&gt;datetime&lt;/code&gt;属性に追記日時を指定できる。&lt;/li&gt;
-&lt;li&gt;``：削除されたテキストを表すために使う。&lt;code&gt;datetime&lt;/code&gt;属性に削除日時を指定できる。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;ins&amp;gt;&lt;/code&gt;：追記されたテキストを表すために使う。&lt;code&gt;datetime&lt;/code&gt;属性に追記日時を指定できる。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;del&amp;gt;&lt;/code&gt;：削除されたテキストを表すために使う。&lt;code&gt;datetime&lt;/code&gt;属性に削除日時を指定できる。&lt;/li&gt;
 &lt;/ul&gt;</summary>
     <title>ブログで使うHTML5</title>
     <updated>2017-12-03T20:03:00+09:00</updated>
@@ -5454,7 +5479,7 @@ if-shell 'which todo' 'set-option -g status-right &quot;next: #(todo next)&quot;
 &lt;ul&gt;
 &lt;li&gt;ページの各コンテンツをmarkdownで書くようにして、ejsで書いたレイアウトに展開するようにした。これは既存のgulpプラグインではできなかったため、独自にgulpプラグインを書いた。&lt;/li&gt;
 &lt;li&gt;各投稿からindexページを生成するようにした。ejsで書いたレイアウトに展開するようになっている。また、同時にファイルのmtimeを見てソートするようにしている。これも独自のgulpプラグインを書いて実現した。&lt;/li&gt;
-&lt;li&gt;CSSはSASSで書いてCSSに変換して圧縮している。CSSはすべてHTMLの``タグ内につっこんでいる。こうすることで、CSSのレンダリングブロックを回避できるため、初回のレンダリングが少し速くなる。&lt;/li&gt;
+&lt;li&gt;CSSはSASSで書いてCSSに変換して圧縮している。CSSはすべてHTMLの&lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt;タグ内につっこんでいる。こうすることで、CSSのレンダリングブロックを回避できるため、初回のレンダリングが少し速くなる。&lt;/li&gt;
 &lt;li&gt;CSSを書く際に、モバイルファーストを念頭にまずスマホ表示を前提に書き始めた。そして、画面を広げながら、余白が気になる部分でメディアクエリを使って広い画面向けのスタイルを追加している。&lt;/li&gt;
 &lt;li&gt;最終的なHTMLは圧縮している。ここらへん、できる限りファイルサイズを抑えてパフォーマンスを最適化しようとしている。結果的に、PageSpeed Insightsでほぼ100点をとれるようになった。&lt;/li&gt;
 &lt;/ul&gt;
@@ -5584,7 +5609,7 @@ http.ListenAndServe(&quot;:8080&quot;, routesHandler)
 &lt;p&gt;&lt;code&gt;library/golang&lt;/code&gt;で公式イメージが用意されている。ユースケースに合わせていくつかの種類が用意されている。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;code&gt;golang:&lt;/code&gt;: 何が必要なのか分かっていない場合はこれを使った方がよさそう。&lt;/li&gt;
+&lt;code&gt;golang:&amp;lt;version&amp;gt;&lt;/code&gt;: 何が必要なのか分かっていない場合はこれを使った方がよさそう。&lt;/li&gt;
 &lt;li&gt;
 &lt;code&gt;golang:alpine&lt;/code&gt;: Alpine Linuxをベースとしているため非常に軽い。イメージサイズを小さくしたい場合に推奨されている。&lt;/li&gt;
 &lt;li&gt;
@@ -5627,7 +5652,7 @@ ENTRYPOINT [&quot;golang-sample&quot;]
 &lt;p&gt;MITライセンスファイル（&lt;code&gt;LICENSE&lt;/code&gt;）を作成するとき、いつも&lt;a href=&quot;https://choosealicense.com/licenses/mit/&quot;&gt;MIT License | Choose a License&lt;/a&gt;からコピペしていた。さすがに毎回同じことをするのは面倒になってきたのでテンプレートからテキストを生成するだけのコマンドラインツールを書いた。&lt;code&gt;text/template&lt;/code&gt;を使ったことがなかったのでちょうどいい練習になった。&lt;/p&gt;
 &lt;h2&gt;brewery&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/brewery&quot;&gt;naoty/brewery&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Goで書いたコマンドラインツールは&lt;a href=&quot;https://github.com/naoty/homebrew-misc&quot;&gt;naoty/homebrew-misc&lt;/a&gt;からHomebrewでインストールできるようにしている。その準備をするためにformulaを作るとき、&lt;code&gt;brew create  --tap naoty/misc&lt;/code&gt;を実行していた。しかし、この方法だと&lt;code&gt;/usr/local/Homebrew/Library/Taps/naoty/homebrew-misc/&lt;/code&gt;以下にformulaが作成されてしまい、その後ワークスペースにコピペする作業が発生していた。&lt;/p&gt;
+&lt;p&gt;Goで書いたコマンドラインツールは&lt;a href=&quot;https://github.com/naoty/homebrew-misc&quot;&gt;naoty/homebrew-misc&lt;/a&gt;からHomebrewでインストールできるようにしている。その準備をするためにformulaを作るとき、&lt;code&gt;brew create &amp;lt;url&amp;gt; --tap naoty/misc&lt;/code&gt;を実行していた。しかし、この方法だと&lt;code&gt;/usr/local/Homebrew/Library/Taps/naoty/homebrew-misc/&lt;/code&gt;以下にformulaが作成されてしまい、その後ワークスペースにコピペする作業が発生していた。&lt;/p&gt;
 &lt;p&gt;そこで、formulaをテンプレートから生成して標準出力に出力するだけのコマンドラインツールを作った。SHA256もちゃんと計算してくれるので便利。今後はformulaを書く作業が捗りそう。&lt;/p&gt;
 &lt;h2&gt;学び&lt;/h2&gt;
 &lt;ul&gt;
@@ -6037,7 +6062,7 @@ Only &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;rails-sample/vendor: assets
 &amp;gt; # gem 'rack-cors'
 &amp;gt;
 44,45d33
-&amp;lt;   # Access an IRB console on exception pages or by using  anywhere in the code.
+&amp;lt;   # Access an IRB console on exception pages or by using &amp;lt;%= console %&amp;gt; anywhere in the code.
 &amp;lt;   gem 'web-console', '&amp;gt;= 3.3.0'
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
@@ -6263,7 +6288,7 @@ Only &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;rails-sample/vendor: assets
 $ brew install flock
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;flock は指定したディレクトリ（何も指定しなければカレントディレクトリ）以下の Swift のソースコードを解析して dot 形式のソースコードを出力する。これを Graphviz 等を用いて画像に出力して使う。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ flock 
+&lt;pre&gt;&lt;code&gt;$ flock &amp;lt;directory&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;試しに &lt;a href=&quot;https://github.com/Alamofire/Alamofire&quot;&gt;Alamofire&lt;/a&gt; で flock を試してみた。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313230437.png&quot; alt=&quot;f:id:naoty_k:20170313230437p:plain&quot; title=&quot;f:id:naoty_k:20170313230437p:plain&quot;&gt;&lt;/p&gt;
@@ -6275,7 +6300,7 @@ $ brew install flock
 &lt;p&gt;幸いにも、 Apple は SourceKit という IDE のためのフレームワークを OSS として公開している。これを使うことで、正規表現によるパースなしに Swift のソースコードの AST を抽出することができる。 SourceKit を使った有名なツールに &lt;a href=&quot;https://github.com/realm/SwiftLint&quot;&gt;realm/SwiftLint&lt;/a&gt; がある。&lt;/p&gt;
 &lt;p&gt;flock では、間接的に SourceKit を使っている。間接的に、というのは SourceKit を Swift から扱いやすくする &lt;a href=&quot;https://github.com/jpsim/SourceKitten&quot;&gt;jpsim/SourceKitten&lt;/a&gt; を使っているからだ。 flock は SourceKitten が提供する情報をもとに dot ファイルのソースコードを生成している。&lt;/p&gt;
 &lt;h1&gt;課題&lt;/h1&gt;
-&lt;p&gt;現状では、 &lt;code&gt;[String]&lt;/code&gt;, &lt;code&gt;String?&lt;/code&gt;, &lt;code&gt;Set&lt;/code&gt; といった Compound Type を扱えていないため、依存関係の一部分しかグラフにできていない。 SourceKitten がこうした型を扱えていないため、 SourceKit を直接扱うか、こちら側でなんとかパースするかすることになりそう。&lt;/p&gt;</summary>
+&lt;p&gt;現状では、 &lt;code&gt;[String]&lt;/code&gt;, &lt;code&gt;String?&lt;/code&gt;, &lt;code&gt;Set&amp;lt;String&amp;gt;&lt;/code&gt; といった Compound Type を扱えていないため、依存関係の一部分しかグラフにできていない。 SourceKitten がこうした型を扱えていないため、 SourceKit を直接扱うか、こちら側でなんとかパースするかすることになりそう。&lt;/p&gt;</summary>
     <title>Swiftのオブジェクトグラフを生成する flock を作った</title>
     <updated>2017-03-13T23:17:00+00:00</updated>
     <dc:date>2017-03-13T23:17:00+00:00</dc:date>
@@ -6284,6 +6309,7 @@ $ brew install flock
     <id>https://blog.naoty.dev/292/</id>
     <link href="https://blog.naoty.dev/292/"/>
     <summary>&lt;h1&gt;あらすじ&lt;/h1&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;前回、 &lt;a href=&quot;https://github.com/naoty&quot;&gt;naoty/todo&lt;/a&gt; というツールを Homebrew で配布しようとしたときにとある問題にハマった。 &lt;code&gt;todo&lt;/code&gt; という名前を持つファイルが &lt;code&gt;README.md&lt;/code&gt; や &lt;code&gt;LICENSE&lt;/code&gt; のようなメタファイルとして判断されエラーが起きてしまうという問題だった。&lt;/p&gt;
 &lt;h1&gt;Homebrew に Pull request を送った&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/Homebrew/brew/pull/2106&quot;&gt;Exclude executables from metafiles by naoty · Pull Request #2106 · Homebrew/brew · GitHub&lt;/a&gt;&lt;/p&gt;
@@ -6645,6 +6671,7 @@ Date() + (3.hours - 30.minutes)
 &lt;/ul&gt;
 &lt;h1&gt;型消去とは&lt;/h1&gt;
 &lt;p&gt;先日行われた&lt;a href=&quot;http://www.tryswiftconf.com/&quot;&gt;try! Swift&lt;/a&gt;で紹介されたテクニックで、トークの内容については以下の書き起こし記事が詳しいと思う。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;型消去とは何か、端的に説明するのはかなり難しい。ただ、リポジトリパターンをSwiftで実装するにあたって非常に強力なテクニックであることが分かったので、型消去を用いない場合と用いた場合とを比べて型消去について説明してみたいと思う。&lt;/p&gt;
 &lt;h2&gt;型消去を用いない場合&lt;/h2&gt;
 &lt;p&gt;例のごとく&lt;code&gt;Pokemon&lt;/code&gt;オブジェクトを取得するリポジトリを考える。&lt;code&gt;Pokemon&lt;/code&gt;はWeb APIから取得するかもしれないし、Realmから取得するかもしれない。とりあえず以下のようなprotocolを定義して、&lt;code&gt;Pokemon&lt;/code&gt;を取得するインターフェイスを用意する。&lt;/p&gt;
@@ -6757,7 +6784,7 @@ Date() + (3.hours - 30.minutes)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;AnyRepository&lt;/code&gt;として使う場合は、&lt;code&gt;typealias Domain = Pokemon&lt;/code&gt;となっている&lt;code&gt;Repository&lt;/code&gt;を実装した型のみ&lt;code&gt;AnyRepository()&lt;/code&gt;に渡すことができる。例えば、ViewControllerではこんな感じで使うことになる。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;AnyRepository&amp;lt;Pokemon&amp;gt;&lt;/code&gt;として使う場合は、&lt;code&gt;typealias Domain = Pokemon&lt;/code&gt;となっている&lt;code&gt;Repository&lt;/code&gt;を実装した型のみ&lt;code&gt;AnyRepository()&lt;/code&gt;に渡すことができる。例えば、ViewControllerではこんな感じで使うことになる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;class PokedexViewController: UITableViewController {
     var pokedex: [Pokemon] = []
     lazy var repository: AnyRepository = AnyRepository(RealmPokemonRepository())
@@ -6779,8 +6806,8 @@ Date() + (3.hours - 30.minutes)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;AnyRepository&lt;/code&gt;があることで、&lt;code&gt;PokemonRepository&lt;/code&gt;や&lt;code&gt;HumanRepository&lt;/code&gt;のようなドメインモデルごとのprotocolは不要になり、それぞれ&lt;code&gt;AnyRepository&lt;/code&gt;、&lt;code&gt;AnyRepository&lt;/code&gt;のような型を使うことで対処できる。これでボイラープレートのようなコードを書く必要はなくなった。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;型消去とは、この例で言うと&lt;code&gt;PokemonRepository&lt;/code&gt;型であった&lt;code&gt;repository&lt;/code&gt;が&lt;code&gt;AnyRepository&lt;/code&gt;という型にしてしまうことを指しているようだ&lt;/strong&gt; 。型消去というのは、より柔軟な設計のための結果として考えることができそう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;AnyRepository&lt;/code&gt;があることで、&lt;code&gt;PokemonRepository&lt;/code&gt;や&lt;code&gt;HumanRepository&lt;/code&gt;のようなドメインモデルごとのprotocolは不要になり、それぞれ&lt;code&gt;AnyRepository&amp;lt;Pokemon&amp;gt;&lt;/code&gt;、&lt;code&gt;AnyRepository&amp;lt;Human&amp;gt;&lt;/code&gt;のような型を使うことで対処できる。これでボイラープレートのようなコードを書く必要はなくなった。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;型消去とは、この例で言うと&lt;code&gt;PokemonRepository&lt;/code&gt;型であった&lt;code&gt;repository&lt;/code&gt;が&lt;code&gt;AnyRepository&amp;lt;Pokemon&amp;gt;&lt;/code&gt;という型にしてしまうことを指しているようだ&lt;/strong&gt; 。型消去というのは、より柔軟な設計のための結果として考えることができそう。&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;以降は型消去とは無関係だけど、リポジトリパターンを実装するにあたって必要となった技術要素を紹介していきたいと思う。&lt;/p&gt;
 &lt;h1&gt;クエリのインターフェイス&lt;/h1&gt;
@@ -6865,7 +6892,7 @@ let sort = AnySort.Descending(key: &quot;weight&quot;) &amp;gt; AnySort.Descendi
     typealias Domain = Pokemon
 
     func find(ID: UInt) -&amp;gt; Task {
-        return Task { fulfill, reject in
+        return Task&amp;lt;Float, Pokemon, ErrorType&amp;gt; { fulfill, reject in
             let realm = try! Realm()
             if let pokemon = realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first {
                 fulfill(pokemon.pokemon)
@@ -6876,7 +6903,7 @@ let sort = AnySort.Descending(key: &quot;weight&quot;) &amp;gt; AnySort.Descendi
     }
 
     func findAll(query query: AnyQuery?, sort: AnySort?) -&amp;gt; Task {
-        return Task { fulfill, reject in
+        return Task&amp;lt;Float, [Pokemon], ErrorType&amp;gt; { fulfill, reject in
             let realm = try! Realm()
             var result = realm.objects(RealmPokemon)
             
@@ -7103,7 +7130,8 @@ presentViewController(alert.viewController, animated: true, completion: nil)
 &lt;li&gt;HIGに沿って実装するのは、HIGの理解と注意深い実装が必要になる。&lt;/li&gt;
 &lt;li&gt;上記のようなSwiftの表現力を駆使した設計によって、効率的にHIGに沿ったユーザーフレンドリーな実装を可能にできる。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;関連記事&lt;/h1&gt;</summary>
+&lt;h1&gt;関連記事&lt;/h1&gt;
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>HIGで推奨されているアラートをSwiftで効率的に組み立てる</title>
     <updated>2016-02-17T10:00:00+00:00</updated>
     <dc:date>2016-02-17T10:00:00+00:00</dc:date>
@@ -7202,7 +7230,7 @@ print(error.summary) //=&amp;gt; &quot;Something wrong\n&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;エラーの利用例&lt;/h1&gt;
 &lt;p&gt;&lt;code&gt;FriendlyErrorType&lt;/code&gt;を実装したエラー型を実際に利用してみる。Alamofire、SwiftTask、Himotokiを使ってQiita APIを呼び出している。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;return Task { progress, fulfill, reject, configure in
+&lt;pre&gt;&lt;code&gt;return Task&amp;lt;Void, [Item], FriendlyErrorType&amp;gt; { progress, fulfill, reject, configure in
     Alamofire.request(.GET, &quot;https://qiita.com/api/v2/items&quot;).responseJSON { response in
         switch response.status {
         case .Success(let value):
@@ -7246,7 +7274,8 @@ presentViewController(alertController, animated: true, completion: nil)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;以上のような方針に基づいたサンプルアプリケーションを用意した。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/MyQiita&quot;&gt;naoty/MyQiita&lt;/a&gt;&lt;/p&gt;
-&lt;h1&gt;関連記事&lt;/h1&gt;</summary>
+&lt;h1&gt;関連記事&lt;/h1&gt;
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>FriendlyErrorType</title>
     <updated>2016-02-10T13:25:00+00:00</updated>
     <dc:date>2016-02-10T13:25:00+00:00</dc:date>
@@ -7472,12 +7501,67 @@ end
     <link href="https://blog.naoty.dev/269/"/>
     <summary>&lt;pre lang=&quot;zsh&quot; class=&quot;highlight highlight-zsh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew uninstall go
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bash &amp;lt; 
-
-FOUNDATION_EXPORT NSString&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; GoHelloWorld&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#endif&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bash &amp;lt; &amp;lt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-L&lt;/span&gt; https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vi .zprofile.local
 &lt;/pre&gt;
+&lt;pre lang=&quot;zsh:.zprofile.local&quot;&gt;&lt;code&gt;# gvm
+[[ -s &quot;$HOME/.gvm/scripts/gvm&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.gvm/scripts/gvm&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;まず、gomobileはGo 1.5以降が必要なので、HomebrewをやめてgvmでGoのバージョン管理をする。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre lang=&quot;zsh&quot; class=&quot;highlight highlight-zsh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; .zprofile
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gvm &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;go1.4.2
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gvm use go1.4.2 &lt;span class=&quot;nt&quot;&gt;--default&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ GOROOT_BOOTSTRAP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$GOROOT&lt;/span&gt; gvm &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;go1.5beta2
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gvm use go1.5beta2 &lt;span class=&quot;nt&quot;&gt;--default&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;go get golang.org/x/mobile/cmd/gomobile
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gomobile init &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Go 1.5のインストールにはGo 1.4以降が必要なので先に1.4.2をインストールする。&lt;/li&gt;
+&lt;li&gt;その後&lt;code&gt;GOROOT_BOOTSTRAP&lt;/code&gt;で1.4.2の&lt;code&gt;GOROOT&lt;/code&gt;を指定して1.5beta2をインストールする。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;gomobile init&lt;/code&gt;でiOSやAndroid向けにツールチェーンをインストールしたり標準ライブラリをビルドしたりしているようだ。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre lang=&quot;zsh&quot; class=&quot;highlight highlight-zsh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$GOROOT&lt;/span&gt;/src
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;gomobile_playground &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$_&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;hello
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vi hello/hello.go
+&lt;/pre&gt;
+&lt;pre lang=&quot;go:gomobile_playground/hello/hello.go&quot;&gt;&lt;code&gt;package hello
+
+func World() string {
+    return &quot;Hello, world!&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;hello&lt;/code&gt;というパッケージをとりあえず書いてみる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre lang=&quot;zsh&quot; class=&quot;highlight highlight-zsh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;hello
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gomobile &lt;span class=&quot;nb&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-target&lt;/span&gt; ios
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls
+&lt;/span&gt;hello.framework hello.go
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;gomobile bind -target ios&lt;/code&gt;でパッケージをiOS用のフレームワークにビルドする。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre lang=&quot;cpp:hello.framework/Versions/Current/Headers/Hello.h&quot;&gt;&lt;code&gt;// Objective-C API for talking to github.com/naoty/gomobile_playground/hello Go package.
+//   gobind -lang=objc github.com/naoty/gomobile_playground/hello
+//
+// File is generated by gobind. Do not edit.
+
+#ifndef __GoHello_H__
+#define __GoHello_H__
+
+#include &amp;lt;Foundation/Foundation.h&amp;gt;
+
+FOUNDATION_EXPORT NSString* GoHelloWorld();
+
+#endif
+&lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;ヘッダーファイルを見てみると、確かに文字列を返す関数が定義されているようだ。&lt;/li&gt;
 &lt;/ul&gt;</summary>
@@ -7554,7 +7638,7 @@ $ git bub # Run `hub-bub`
 &lt;p&gt;残念ながら、&lt;code&gt;hub&lt;/code&gt;を使いたい場合はこうするしかないような気がする。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h1&gt;追記(2015-07-23)&lt;/h1&gt;
-&lt;p&gt;gitには、&lt;code&gt;git subcommand&lt;/code&gt;を&lt;code&gt;git-&lt;/code&gt;として名前解決して実行する機能があったことをさっき知った。なので、gitに限って言えばextのようなツールは不要だと思う。&lt;/p&gt;
+&lt;p&gt;gitには、&lt;code&gt;git subcommand&lt;/code&gt;を&lt;code&gt;git-&amp;lt;subcommand&amp;gt;&lt;/code&gt;として名前解決して実行する機能があったことをさっき知った。なので、gitに限って言えばextのようなツールは不要だと思う。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ cd $HOME/bin
 $ vi git-hello
 #!/bin/sh
@@ -7602,15 +7686,15 @@ Hello, world!
 &lt;span class=&quot;n&quot;&gt;generator1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//=&amp;gt; nil&lt;/span&gt;
 &lt;/pre&gt;
 &lt;h1&gt;GeneratorOf&lt;/h1&gt;
-&lt;p&gt;generatorを書くとき上のようにクラスを定義するのが面倒なら、&lt;code&gt;GeneratorOf&lt;/code&gt;構造体が便利。以下のような感じで定義されている。&lt;/p&gt;
-&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;p&gt;generatorを書くとき上のようにクラスを定義するのが面倒なら、&lt;code&gt;GeneratorOf&amp;lt;T&amp;gt;&lt;/code&gt;構造体が便利。以下のような感じで定義されている。&lt;/p&gt;
+&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 	&lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;nextElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt;
 	
 	&lt;span class=&quot;k&quot;&gt;mutating&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;&lt;code&gt;GeneratorOf&lt;/code&gt;構造体は&lt;code&gt;GeneratorType&lt;/code&gt;プロトコルに従っており、初期化時に渡されたクロージャを&lt;code&gt;next()&lt;/code&gt;で実行するようになっている。なので、上のコードは以下のように書き直せる。&lt;/p&gt;
-&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lineGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;#text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lineGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;#text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;lines&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;componentsSeparatedByString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isEmpty&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;removeAtIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -7650,12 +7734,12 @@ Hello, world!
 &lt;/pre&gt;
 &lt;h1&gt;SequenceOf&lt;/h1&gt;
 &lt;p&gt;&lt;code&gt;GeneratorOf&lt;/code&gt;と同様に&lt;code&gt;SequenceOf&lt;/code&gt;も存在する。&lt;/p&gt;
-&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;makeUnderlyingGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt;
+&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorType&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;makeUnderlyingGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;GeneratorOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
-&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lineSequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;#text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceOf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;pre lang=&quot;swift&quot; class=&quot;highlight highlight-swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lineSequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;#text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SequenceOf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lineGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
@@ -7733,7 +7817,7 @@ $ hot
 1: Timepiece.xcodeproj/TimepieceTests-Info.plist
 1: Timepiece.xcodeproj/project.xcworkspace/contents.xcworkspacedata
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;表示件数を&lt;code&gt;-n &lt;/code&gt;で指定したり、パターンを指定してマッチしたファイルだけ表示することができる。&lt;/p&gt;
+&lt;p&gt;表示件数を&lt;code&gt;-n &amp;lt;表示したい件数&amp;gt;&lt;/code&gt;で指定したり、パターンを指定してマッチしたファイルだけ表示することができる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ hot -n 5 &quot;**/*.swift&quot;
 17: Sources/NSDate+Timepiece.swift
 15: Tests/NSDate+TimepieceTests.swift
@@ -7767,7 +7851,7 @@ $ hot
 &lt;p&gt;Swiftでは、Haskellにおける型コンストラクタにあたる概念がない。Genericsを使うことで&lt;code&gt;Maybe&lt;/code&gt;のような型を表現することはできるが、ある型が型引数をとるのかとらないのか、とるとしたらいくつとるのかを知る術はない（はず）。Haskellではそれらは種類という概念で説明されている。&lt;code&gt;Maybe&lt;/code&gt;の種類は&lt;code&gt;Maybe :: * -&amp;gt; *&lt;/code&gt;だし、&lt;code&gt;Either&lt;/code&gt;の種類は&lt;code&gt;Either: * -&amp;gt; * -&amp;gt; *&lt;/code&gt;となっているので、それぞれ型引数を1つと2つとることがわかる。Haskellの&lt;code&gt;Functor&lt;/code&gt;は種類が&lt;code&gt;* -&amp;gt; *&lt;/code&gt;の型コンストラクタしかインスタンスにできないのだけど、こういう概念をSwiftで表現できない。&lt;/p&gt;
 &lt;p&gt;というわけで、Swiftで関数型プログラミングをするにはHaskellほどうまくはできないことがなんとなくわかった。Genericsなどで擬似的に表現するしかない。&lt;code&gt;Functor&lt;/code&gt;の&lt;code&gt;fmap&lt;/code&gt;を以下のように実装してみた。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;extension Optional {
-    func fmap(f: T -&amp;gt; U) -&amp;gt; U? {
+    func fmap&amp;lt;U&amp;gt;(f: T -&amp;gt; U) -&amp;gt; U? {
         switch self {
         case .Some(let value):
             return f(value)
@@ -7780,7 +7864,7 @@ $ hot
 let maybeOne: Int? = 1
 let maybeTen = maybeOne.fmap({ x in x * 10 })
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Swiftの&lt;code&gt;Optional&lt;/code&gt;型はつまり&lt;code&gt;T?&lt;/code&gt;型のことなのだけど、&lt;code&gt;Optional&lt;/code&gt;型を拡張して&lt;code&gt;fmap&lt;/code&gt;を追加している。&lt;code&gt;return f(value)&lt;/code&gt;のところは暗黙的に&lt;code&gt;U?&lt;/code&gt;型にラップしている。このように実装することで、&lt;code&gt;Optional&lt;/code&gt;型のもつ「あるかもしれないし、ないかもしれない」という文脈を保ちつつ、中身の&lt;code&gt;1&lt;/code&gt;という&lt;code&gt;Int&lt;/code&gt;を計算している。&lt;/p&gt;
+&lt;p&gt;Swiftの&lt;code&gt;Optional&amp;lt;T&amp;gt;&lt;/code&gt;型はつまり&lt;code&gt;T?&lt;/code&gt;型のことなのだけど、&lt;code&gt;Optional&lt;/code&gt;型を拡張して&lt;code&gt;fmap&lt;/code&gt;を追加している。&lt;code&gt;return f(value)&lt;/code&gt;のところは暗黙的に&lt;code&gt;U?&lt;/code&gt;型にラップしている。このように実装することで、&lt;code&gt;Optional&lt;/code&gt;型のもつ「あるかもしれないし、ないかもしれない」という文脈を保ちつつ、中身の&lt;code&gt;1&lt;/code&gt;という&lt;code&gt;Int&lt;/code&gt;を計算している。&lt;/p&gt;
 &lt;p&gt;ここでは&lt;code&gt;Functor&lt;/code&gt;だけを簡単に実装してみたが、これに加えて&lt;code&gt;Applicative&lt;/code&gt;と&lt;code&gt;Monad&lt;/code&gt;を実装するとより抽象的な計算が可能になってくる。JSONのパースなどを実装する際には&lt;code&gt;Applicative&lt;/code&gt;の操作が必要になってきそうな感じがする。自分はまだ関数型プログラミングの実装を実際にしたわけではないので、理解したとは到底いえない。パーサーの実装をしてみたり、上で紹介したライブラリのコードを読んでみることで関数型プログラミングを実践的に理解していきたい。&lt;/p&gt;</summary>
     <title>「すごいHaskell たのしく学ぼう！」を読んだ</title>
     <updated>2015-06-14T18:40:00+00:00</updated>
@@ -7868,6 +7952,7 @@ $ todo list
     <summary>&lt;h1&gt;potatotips&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&quot;http://connpass.com/event/14143/&quot;&gt;【第17回】potatotips(iOS/Android開発Tips共有会) (2015/05/13 19:00〜)&lt;/a&gt;&lt;/p&gt;
 &lt;h1&gt;資料&lt;/h1&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;h1&gt;最近のTimepiece&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;GW前あたりから急激にバズってきた。一時GitHubのトレンドで1位になった。それまでは☆70くらいだったけど、もうそろそろ☆500になりそうな勢いだ。&lt;/li&gt;
@@ -8335,7 +8420,7 @@ disable_dependency_loading
     <link href="https://blog.naoty.dev/254/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;https://github.com/naoty/Timepiece&quot;&gt;naoty/Timepiece&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Swiftの日付操作ライブラリであるTimepieceに機能を追加し0.2.0にアップデートした。また、1ヶ月くらい前からしれっとCocoaPods（現在はまだrc版）をサポートしたのでCocoaPodsからインストールできるようになってる。&lt;/p&gt;
-&lt;h1&gt;NSDate \ Stringの変換&lt;/h1&gt;
+&lt;h1&gt;NSDate &amp;lt;-&amp;gt; Stringの変換&lt;/h1&gt;
 &lt;pre&gt;&lt;code&gt;let timestamp = 3.years.ago.stringFromFormat(&quot;yyyy-MM-dd&quot;)
 XCTAssertEqual(timestamp, &quot;2012-03-01&quot;, &quot;&quot;)
 
@@ -9302,7 +9387,7 @@ run Rails.application
 * 生年月日: %{birthday}
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;標準入力でJSON文字列を渡すと、変数の中身をそれで展開するだけ。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ echo '{&quot;fullname&quot;: &quot;Naoto Kaneko&quot;, &quot;nickname&quot;: &quot;naoty&quot;, &quot;location&quot;: &quot;Tokyo&quot;, &quot;birthday&quot;: &quot;1987/6/2&quot;}' | qiita-build -t  -a  
+&lt;pre&gt;&lt;code&gt;$ echo '{&quot;fullname&quot;: &quot;Naoto Kaneko&quot;, &quot;nickname&quot;: &quot;naoty&quot;, &quot;location&quot;: &quot;Tokyo&quot;, &quot;birthday&quot;: &quot;1987/6/2&quot;}' | qiita-build -t &amp;lt;TEAM&amp;gt; -a &amp;lt;ACCESS TOKEN&amp;gt; &amp;lt;TEMPLATE ID&amp;gt;
 # 自己紹介
 * 氏名: Naoto Kaneko
 * ニックネーム: naoty
@@ -9869,7 +9954,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;/ol&gt;
 &lt;h2&gt;継承よりカテゴリーによるコンポジション&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;MDCSwipeToChooseView&lt;/code&gt;に機能を追加したい場合、サブクラスを定義する必要がある。しかし、この方法では別のライブラリが提供するViewのもつ機能を組み込むことができない。そこで、カテゴリーで&lt;code&gt;UIView&lt;/code&gt;に機能を拡張することで、他のライブラリとも組み合わせることができる。&lt;/p&gt;
-&lt;p&gt;カテゴリーによる拡張の欠点はインスタンス変数を追加することができないことだ。そのため、プロパティをカテゴリーによって拡張する場合は、``の&lt;code&gt;objc_setAssociatedObject()&lt;/code&gt;を使ったトリッキーな実装が必要になる。&lt;/p&gt;
+&lt;p&gt;カテゴリーによる拡張の欠点はインスタンス変数を追加することができないことだ。そのため、プロパティをカテゴリーによって拡張する場合は、&lt;code&gt;&amp;lt;objc/runtime.h&amp;gt;&lt;/code&gt;の&lt;code&gt;objc_setAssociatedObject()&lt;/code&gt;を使ったトリッキーな実装が必要になる。&lt;/p&gt;
 &lt;p&gt;より簡単に実装するには、カスタマイズ用のパラメータを束ねる設定オブジェクトを使うのがよさそう。この設定オブジェクトのプロパティだけは上記のトリッキーな手法で拡張するしかないが、Viewをカスタマイズする変数はすべてのこの設定オブジェクトに隠ぺいする。このライブラリでの設定オブジェクトは&lt;code&gt;MDCSwipeOptions&lt;/code&gt;と&lt;code&gt;MDCSwipeToChooseViewOptions&lt;/code&gt;だった。&lt;/p&gt;
 &lt;h2&gt;パラメータオブジェクト&lt;/h2&gt;
 &lt;p&gt;デリゲートメソッドや&lt;code&gt;onPan&lt;/code&gt;などのブロックのシグネチャがバージョンアップデートで変更されてしまうと互換性がなくなってしまう。そこで、複数の引数をまとめたパラメータオブジェクトというのを用意し、引数の変更をすべてパラメータオブジェクト内の変更で吸収することで、メソッドのシグネチャを変更せずに互換性を保つことができる。このライブラリでは&lt;code&gt;MDCPanState&lt;/code&gt;がパラメータオブジェクトの役割を果たしている。&lt;/p&gt;
@@ -10184,7 +10269,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;p&gt;次に、上記の閾値を超えてどちらかの方向が返ってきた場合に呼ばれる&lt;code&gt;-[UIView mdc_exitSuperviewFromTranslation:]&lt;/code&gt;を見る。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;- (void)mdc_exitSuperviewFromTranslation:(CGPoint)translation {
     MDCSwipeDirection direction = [self mdc_directionOfExceededThreshold];
-    id delegate = self.mdc_options.delegate;
+    id&amp;lt;MDCSwipeToChooseDelegate&amp;gt; delegate = self.mdc_options.delegate;
     if ([delegate respondsToSelector:@selector(view:shouldBeChosenWithDirection:)]) {
         BOOL should = [delegate view:self shouldBeChosenWithDirection:direction];
         if (!should) {
@@ -10286,7 +10371,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
                          self.transform = CGAffineTransformIdentity;
                          self.center = self.mdc_viewState.originalCenter;
                      } completion:^(BOOL finished) {
-                         id delegate = self.mdc_options.delegate;
+                         id&amp;lt;MDCSwipeToChooseDelegate&amp;gt; delegate = self.mdc_options.delegate;
                          if ([delegate respondsToSelector:@selector(viewDidCancelSwipe:)]) {
                              [delegate viewDidCancelSwipe:self];
                          }
@@ -10857,11 +10942,12 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
     <id>https://blog.naoty.dev/240/</id>
     <link href="https://blog.naoty.dev/240/"/>
     <summary>&lt;p&gt;自分のTwitterアカウントをコピーするbotを簡単に作れるmirror botというものを作りました。&lt;a href=&quot;https://twitter.com/naoty_bot&quot;&gt;@naoty_bot&lt;/a&gt;はこれを使って作りました。&lt;/p&gt;
-&lt;p&gt;naoty/mirror_bot&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&quot;https://twitter.com/naoty_k&quot;&gt;@naoty_k&lt;/a&gt; なんでわざわざ大金払って太ろうとしてるの？バカなの？&lt;/p&gt;
 &lt;p&gt;— なおてぃー（bot） (@naoty_bot) &lt;a href=&quot;https://twitter.com/naoty_bot/status/531779458177323009&quot;&gt;2014, 11月 10&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;h1&gt;コピーbotを作る手順&lt;/h1&gt;
 &lt;p&gt;１. bot用のアカウントを作ります。&lt;/p&gt;
 &lt;p&gt;２. 人間とbotそれぞれのアカウントでTwitterアプリケーションを作ります。&lt;a href=&quot;https://apps.twitter.com/app/new&quot;&gt;ここ&lt;/a&gt;から作れます。そして、人間とbotの両方のアカウント用の「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を取得します（下のスクショのモザイクかかってるところです）。&lt;/p&gt;
@@ -11058,7 +11144,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;pre&gt;&lt;code&gt;var x: [CGFloat] = []
 var filteredX: [CGFloat] = []
 
-let xStream = Stream()
+let xStream = Stream&amp;lt;CGFloat&amp;gt;()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;まず、生データと加工したデータをグラフに描画するための配列と生データを扱うストリームを用意する。加速度センサーから値を取得する度にこのストリームに値を出力していく。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
@@ -11084,7 +11170,7 @@ private func accelerometerHandler(data: CMAccelerometerData!, error: NSError!) {
 
     xStream.subscribe { [unowned self] message in self.x.append(message) }
 
-    let filteredStream: Stream = xStream.scan(0) { previousMessage, message in
+    let filteredStream: Stream&amp;lt;CGFloat&amp;gt; = xStream.scan(0) { previousMessage, message in
         return previousMessage * 0.9 + message * 0.1
     }
 }
@@ -11095,7 +11181,7 @@ private func accelerometerHandler(data: CMAccelerometerData!, error: NSError!) {
 
     xStream.subscribe { [unowned self] message in self.x.append(message) }
 
-    let filteredStream: Stream = xStream.scan(0) { previousMessage, message in
+    let filteredStream: Stream&amp;lt;CGFloat&amp;gt; = xStream.scan(0) { previousMessage, message in
         return previousMessage * 0.9 + message * 0.1
     }.subscribe { [unowned self] message in
         self.filteredX.append(message)
@@ -11328,8 +11414,8 @@ class TextFieldContainer: UIView {
     <summary>&lt;p&gt;FRPの記事をいくつか見てあまり理解できなかったので、Swiftでストリームを扱うライブラリを書いてみた。結論から言うと、まだストリームについて深く理解できていない感じがするので「FRPとは何か」「ストリームとは何か」といった話はしない。そういう話は他のエントリーを読んでほしいと思う。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/Stream&quot;&gt;naoty/Stream · GitHub&lt;/a&gt;&lt;/p&gt;
 &lt;h1&gt;demo&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;let stream = Stream()
-let counterStream: Stream = stream.map({ message in
+&lt;pre&gt;&lt;code&gt;let stream = Stream&amp;lt;String&amp;gt;()
+let counterStream: Stream&amp;lt;Int&amp;gt; = stream.map({ message in
     return countElements(message)
 }).scan(0, { previousMessage, message in
     return previousMessage + message
@@ -11865,7 +11951,7 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 }.then { (placemark:CLPlacemark) in
     // ...
     return MKMapSnapshotter(options:opts).promise()
-}.then { (snapshot:MKMapSnapshot) -&amp;gt; Promise in
+}.then { (snapshot:MKMapSnapshot) -&amp;gt; Promise&amp;lt;Int&amp;gt; in
     // ...
     let av = UIAlertView()
     // ...
@@ -11876,7 +11962,7 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
     return CLLocationManager.promise()
 }.catch { _ -&amp;gt; CLLocation in
     return CLLocation(latitude: 41.89, longitude: -87.63)
-}.then { (ll:CLLocation) -&amp;gt; Promise in
+}.then { (ll:CLLocation) -&amp;gt; Promise&amp;lt;NSDictionary&amp;gt; in
     // ...
 }.then
 // ...
@@ -11914,15 +12000,15 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h1&gt;NSURLConnection+Promise.swift&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;public class func GET(url:String) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public class func GET(url:String) -&amp;gt; Promise&amp;lt;NSData&amp;gt; {
     // ...
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;いくつかの拡張を見てみるとすべて&lt;code&gt;Promise&lt;/code&gt;を返すようになってる。&lt;/li&gt;
+&lt;li&gt;いくつかの拡張を見てみるとすべて&lt;code&gt;Promise&amp;lt;T&amp;gt;&lt;/code&gt;を返すようになってる。&lt;/li&gt;
 &lt;li&gt;この返り値に対して&lt;code&gt;then&lt;/code&gt;や&lt;code&gt;catch&lt;/code&gt;を呼んでいるので、これらのメソッドは&lt;code&gt;Promise&lt;/code&gt;クラスのメソッドだと考えられる。&lt;code&gt;Promise&lt;/code&gt;クラスについてはあとで見ていく。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;public class func GET(url:String) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public class func GET(url:String) -&amp;gt; Promise&amp;lt;UIImage&amp;gt; {
     let rq = NSURLRequest(URL:NSURL(string:url))
     return promise(rq)
 }
@@ -11932,7 +12018,7 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 &lt;li&gt;
 &lt;code&gt;NSURLRequest&lt;/code&gt;オブジェクトを作って&lt;code&gt;promise&lt;/code&gt;メソッドというのに渡して呼んでいる。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;public class func promise(rq:NSURLRequest) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public class func promise(rq:NSURLRequest) -&amp;gt; Promise&amp;lt;UIImage&amp;gt; {
     return fetch(rq) { (fulfiller, rejecter, data) in
         // ...
     }
@@ -11943,17 +12029,17 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 &lt;li&gt;
 &lt;code&gt;fetch&lt;/code&gt;メソッドはさらにクロージャを受け取っている。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;func fetch(var request: NSURLRequest, body: ((T) -&amp;gt; Void, (NSError) -&amp;gt; Void, NSData) -&amp;gt; Void) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;func fetch&amp;lt;T&amp;gt;(var request: NSURLRequest, body: ((T) -&amp;gt; Void, (NSError) -&amp;gt; Void, NSData) -&amp;gt; Void) -&amp;gt; Promise&amp;lt;T&amp;gt; {
     // ...
 
-    return Promise { (fulfiller, rejunker) in
+    return Promise&amp;lt;T&amp;gt; { (fulfiller, rejunker) in
         // ...
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;code&gt;fetch&lt;/code&gt;内では&lt;code&gt;Promise&lt;/code&gt;を初期化して返している。初期化時にまたもクロージャを渡している。&lt;/li&gt;
+&lt;code&gt;fetch&lt;/code&gt;内では&lt;code&gt;Promise&amp;lt;T&amp;gt;&lt;/code&gt;を初期化して返している。初期化時にまたもクロージャを渡している。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;// Promise.swift
 
@@ -11998,10 +12084,10 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;li&gt;
 &lt;code&gt;recurse&lt;/code&gt;メソッドは、すべての&lt;code&gt;handler&lt;/code&gt;を実行したあと消去している。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;func fetch(var request: NSURLRequest, body: ((T) -&amp;gt; Void, (NSError) -&amp;gt; Void, NSData) -&amp;gt; Void) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;func fetch&amp;lt;T&amp;gt;(var request: NSURLRequest, body: ((T) -&amp;gt; Void, (NSError) -&amp;gt; Void, NSData) -&amp;gt; Void) -&amp;gt; Promise&amp;lt;T&amp;gt; {
     // ...
 
-    return Promise { (fulfiller, rejunker) in
+    return Promise&amp;lt;T&amp;gt; { (fulfiller, rejunker) in
         NSURLConnection.sendAsynchronousRequest(request, queue:PMKOperationQueue) { (rsp, data, err) in
             // ...
 
@@ -12016,21 +12102,21 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;code&gt;Promise&lt;/code&gt;の初期化時に引数として渡されたクロージャが実行されるので、このときに非同期通信が実行されるようだ。&lt;/li&gt;
-&lt;li&gt;非同期通信が成功した場合、&lt;code&gt;body(fulfiller, rejecter, data!)&lt;/code&gt;が呼ばれる。この&lt;code&gt;body&lt;/code&gt;というクロージャは&lt;code&gt;fetch&lt;/code&gt;メソッドに渡されたもので、その中の&lt;code&gt;fulfiller&lt;/code&gt;と&lt;code&gt;rejecter&lt;/code&gt;の2つのクロージャは&lt;code&gt;Promise&lt;/code&gt;の&lt;code&gt;init&lt;/code&gt;内で定義されたメソッドである。&lt;/li&gt;
+&lt;code&gt;Promise&amp;lt;T&amp;gt;&lt;/code&gt;の初期化時に引数として渡されたクロージャが実行されるので、このときに非同期通信が実行されるようだ。&lt;/li&gt;
+&lt;li&gt;非同期通信が成功した場合、&lt;code&gt;body(fulfiller, rejecter, data!)&lt;/code&gt;が呼ばれる。この&lt;code&gt;body&lt;/code&gt;というクロージャは&lt;code&gt;fetch&lt;/code&gt;メソッドに渡されたもので、その中の&lt;code&gt;fulfiller&lt;/code&gt;と&lt;code&gt;rejecter&lt;/code&gt;の2つのクロージャは&lt;code&gt;Promise&amp;lt;T&amp;gt;&lt;/code&gt;の&lt;code&gt;init&lt;/code&gt;内で定義されたメソッドである。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;Promise.swift&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public func then&amp;lt;U&amp;gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise&amp;lt;U&amp;gt; {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;シグネチャーがジェネリクスまみれで複雑。&lt;code&gt;dispatch_queue_t&lt;/code&gt;型と&lt;code&gt;(T) -&amp;gt; U&lt;/code&gt;型を引数にとり、&lt;code&gt;Promise&lt;/code&gt;型を返すメソッドということになる。&lt;/li&gt;
+&lt;li&gt;シグネチャーがジェネリクスまみれで複雑。&lt;code&gt;dispatch_queue_t&lt;/code&gt;型と&lt;code&gt;(T) -&amp;gt; U&lt;/code&gt;型を引数にとり、&lt;code&gt;Promise&amp;lt;U&amp;gt;&lt;/code&gt;型を返すメソッドということになる。&lt;/li&gt;
 &lt;li&gt;
 &lt;code&gt;T&lt;/code&gt;はPromiseクラスの型変数（←言い方合ってる？）であり、&lt;code&gt;NSURLConnection+Promise.swift&lt;/code&gt;の例で言うと、この&lt;code&gt;T&lt;/code&gt;には&lt;code&gt;NSData&lt;/code&gt;や&lt;code&gt;NSString&lt;/code&gt;が入ってくる。&lt;/li&gt;
-&lt;li&gt;例えば&lt;code&gt;T&lt;/code&gt;が&lt;code&gt;NSData&lt;/code&gt;の場合、第2引数のbodyは「NSDataを引数にとって&lt;code&gt;U&lt;/code&gt;を返すクロージャ」となる。この&lt;code&gt;U&lt;/code&gt;が例えば&lt;code&gt;MKPlacemark&lt;/code&gt;である場合、&lt;code&gt;then&lt;/code&gt;は&lt;code&gt;Promise&lt;/code&gt;を返すことになる。&lt;/li&gt;
-&lt;li&gt;この返り値は&lt;code&gt;Promise&lt;/code&gt;であるため再度&lt;code&gt;then&lt;/code&gt;を呼び出すことができメソッドチェーンが成立している。&lt;/li&gt;
+&lt;li&gt;例えば&lt;code&gt;T&lt;/code&gt;が&lt;code&gt;NSData&lt;/code&gt;の場合、第2引数のbodyは「NSDataを引数にとって&lt;code&gt;U&lt;/code&gt;を返すクロージャ」となる。この&lt;code&gt;U&lt;/code&gt;が例えば&lt;code&gt;MKPlacemark&lt;/code&gt;である場合、&lt;code&gt;then&lt;/code&gt;は&lt;code&gt;Promise&amp;lt;MKPlacemark&amp;gt;&lt;/code&gt;を返すことになる。&lt;/li&gt;
+&lt;li&gt;この返り値は&lt;code&gt;Promise&amp;lt;T&amp;gt;&lt;/code&gt;であるため再度&lt;code&gt;then&lt;/code&gt;を呼び出すことができメソッドチェーンが成立している。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public func then&amp;lt;U&amp;gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise&amp;lt;U&amp;gt; {
     switch state {
     case .Rejected(let error):
         // ...
@@ -12043,9 +12129,9 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;code&gt;state&lt;/code&gt;は&lt;code&gt;Promise&lt;/code&gt;クラスのプロパティで&lt;code&gt;State&lt;/code&gt;型として定義されている。&lt;/li&gt;
+&lt;code&gt;state&lt;/code&gt;は&lt;code&gt;Promise&amp;lt;T&amp;gt;&lt;/code&gt;クラスのプロパティで&lt;code&gt;State&amp;lt;T&amp;gt;&lt;/code&gt;型として定義されている。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;enum State {
+&lt;pre&gt;&lt;code&gt;enum State&amp;lt;T&amp;gt; {
     case Pending
     case Fulfilled(@autoclosure () -&amp;gt; T)
     case Rejected(NSError)
@@ -12056,7 +12142,7 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;code&gt;Fulfilled&lt;/code&gt;は引数に&lt;code&gt;() -&amp;gt; T&lt;/code&gt;型のクロージャをとる。&lt;code&gt;@autoclosure&lt;/code&gt;は指定された引数を暗黙的にクロージャとして扱えるようにする。これによって引数を&lt;code&gt;{ ... }&lt;/code&gt;で囲う必要がなくなる。cf) &lt;a href=&quot;https://developer.apple.com/swift/blog/?id=4&quot;&gt;https://developer.apple.com/swift/blog/?id=4&lt;/a&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public func then&amp;lt;U&amp;gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise&amp;lt;U&amp;gt; {
     switch state {
     case .Rejected(let error):
         // ...
@@ -12072,11 +12158,11 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;code&gt;state&lt;/code&gt;はenum型であることが分かったので、&lt;code&gt;then&lt;/code&gt;に戻る。&lt;/li&gt;
 &lt;li&gt;このswitch文ではvalue bindingsを行っている。マッチしたcase文で宣言された変数に値が割り当てられる。例えば、.Fulfilledにマッチした場合、stateを初期化する際に.Fulfilledに渡されたクロージャが&lt;code&gt;value&lt;/code&gt;という変数に割り当てられる。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public func then&amp;lt;U&amp;gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise&amp;lt;U&amp;gt; {
     switch state {
     // ...
     case .Pending:
-        return Promise{ (fulfiller, rejecter) in
+        return Promise&amp;lt;U&amp;gt;{ (fulfiller, rejecter) in
             // ...
         }
     }
@@ -12086,14 +12172,14 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;li&gt;
 &lt;code&gt;status&lt;/code&gt;は宣言時に初期値として&lt;code&gt;.Pending&lt;/code&gt;を渡しているため、最初は&lt;code&gt;.Pending&lt;/code&gt;のcase文を通ることになりそう。&lt;/li&gt;
 &lt;li&gt;
-&lt;code&gt;status&lt;/code&gt;が&lt;code&gt;.Pending&lt;/code&gt;である場合、&lt;code&gt;Promise&lt;/code&gt;を初期化して返している。&lt;/li&gt;
+&lt;code&gt;status&lt;/code&gt;が&lt;code&gt;.Pending&lt;/code&gt;である場合、&lt;code&gt;Promise&amp;lt;U&amp;gt;&lt;/code&gt;を初期化して返している。&lt;/li&gt;
 &lt;li&gt;初期化の際、引数にクロージャを渡している。上述の通り、渡されたクロージャは初期化処理の最後に実行される。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;public func then(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise {
+&lt;pre&gt;&lt;code&gt;public func then&amp;lt;U&amp;gt;(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -&amp;gt; U) -&amp;gt; Promise&amp;lt;U&amp;gt; {
     switch state {
     // ...
     case .Pending:
-        return Promise{ (fulfiller, rejecter) in
+        return Promise&amp;lt;U&amp;gt;{ (fulfiller, rejecter) in
             self.handlers.append{
                 switch self.state {
                 case .Fulfilled(let value):
@@ -12110,7 +12196,7 @@ public init(_ body:(fulfiller:(T) -&amp;gt; Void, rejecter:(NSError) -&amp;gt; V
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;code&gt;Promise&lt;/code&gt;の初期化の最後で&lt;code&gt;self.handlers&lt;/code&gt;にクロージャが追加されている。上述の通り、&lt;code&gt;handlers&lt;/code&gt;は&lt;code&gt;fulfiller&lt;/code&gt;と&lt;code&gt;rejecter&lt;/code&gt;内で呼ばれる&lt;code&gt;recurse&lt;/code&gt;ですべて実行される。&lt;/li&gt;
+&lt;code&gt;Promise&amp;lt;U&amp;gt;&lt;/code&gt;の初期化の最後で&lt;code&gt;self.handlers&lt;/code&gt;にクロージャが追加されている。上述の通り、&lt;code&gt;handlers&lt;/code&gt;は&lt;code&gt;fulfiller&lt;/code&gt;と&lt;code&gt;rejecter&lt;/code&gt;内で呼ばれる&lt;code&gt;recurse&lt;/code&gt;ですべて実行される。&lt;/li&gt;
 &lt;li&gt;つまり、&lt;code&gt;then()&lt;/code&gt;に渡されたクロージャは&lt;code&gt;handlers&lt;/code&gt;に追加され、そのPromiseオブジェクトの非同期処理が完了したときに呼ばれることになる。&lt;/li&gt;
 &lt;/ul&gt;</summary>
     <title>PromiseKit/swiftを読んだ</title>
@@ -12334,14 +12420,14 @@ run YourApplication
     open $note_path
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;note &lt;/code&gt;でメモを書き始めることができる。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;note &amp;lt;ファイル名&amp;gt;&lt;/code&gt;でメモを書き始めることができる。&lt;/p&gt;
 &lt;p&gt;メモはすべてmarkdown形式で、エディタはvimを使うことにした。&lt;a href=&quot;https://github.com/thinca/vim-template&quot;&gt;vim-template&lt;/a&gt;というプラグインを使うことで、notes/*.mdにマッチするファイルを以下のようなテンプレートで開くようにした。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;---
 title: expand('%:t:r') %&amp;gt;
 date: strftime('%Y-%m-%d') %&amp;gt;
 ---
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;で囲われたコードはVim Scriptとして評価されて展開され、&lt;/code&gt;の位置をカーソルの初期位置としてファイルが開く。このような設定はvim-templateのヘルプにあるのでそちらを参照してほしい。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;%=&lt;/code&gt;と&lt;code&gt;%&amp;gt;&lt;/code&gt;で囲われたコードはVim Scriptとして評価されて展開され、&lt;code&gt;&amp;lt;+CURSOR+&amp;gt;&lt;/code&gt;の位置をカーソルの初期位置としてファイルが開く。このような設定はvim-templateのヘルプにあるのでそちらを参照してほしい。&lt;/p&gt;
 &lt;h1&gt;メモの検索&lt;/h1&gt;
 &lt;p&gt;agとpecoを使う。agは高速なgrepということで、任意の文字列を含むファイルを検索する。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;onote() {
@@ -12414,9 +12500,9 @@ date: strftime('%Y-%m-%d') %&amp;gt;
     <id>https://blog.naoty.dev/217/</id>
     <link href="https://blog.naoty.dev/217/"/>
     <summary>&lt;p&gt;APIから受け取ったデータを表示するカスタムディレクティブを作る場合、&lt;code&gt;$watch&lt;/code&gt;でscopeのプロパティを監視し再描画を行うといった実装が必要になる。&lt;/p&gt;
-&lt;pre lang=&quot;html:index.html&quot;&gt;&lt;code&gt;
-  
-
+&lt;pre lang=&quot;html:index.html&quot;&gt;&lt;code&gt;&amp;lt;div ng-controller=&quot;MyController&quot;&amp;gt;
+  &amp;lt;my-directive data=&quot;users&quot;&amp;gt;&amp;lt;/my-directive&amp;gt;
+&amp;lt;/div&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -12531,12 +12617,12 @@ NSArray *ages = table.columns[@&quot;age&quot;];   //=&amp;gt; @[@18, @19, @20]
   <entry>
     <id>https://blog.naoty.dev/214/</id>
     <link href="https://blog.naoty.dev/214/"/>
-    <summary>&lt;p&gt;XcodeでCommand Line Toolを作るときビルドした実行ファイルは、デフォルトでは&lt;code&gt;$HOME/Library/Developer/Xcode/DerivedData//Build/Products//&lt;/code&gt;以下に保存されます。実行ファイルをGitで管理したい場合など何らかの理由でプロジェクト内に置きたいとき、Build Phasesに設定を追加することで実行ファイルをプロジェクトにコピーする作業を自動化できます。&lt;/p&gt;
+    <summary>&lt;p&gt;XcodeでCommand Line Toolを作るときビルドした実行ファイルは、デフォルトでは&lt;code&gt;$HOME/Library/Developer/Xcode/DerivedData/&amp;lt;アプリケーション固有ID&amp;gt;/Build/Products/&amp;lt;Build Configuration&amp;gt;/&lt;/code&gt;以下に保存されます。実行ファイルをGitで管理したい場合など何らかの理由でプロジェクト内に置きたいとき、Build Phasesに設定を追加することで実行ファイルをプロジェクトにコピーする作業を自動化できます。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f6e02520-a8b0-295a-bc78-07666f6d79a0.png&quot; alt=&quot;スクリーンショット 2014-04-14 0.59.33.png&quot;&gt;&lt;/p&gt;
 &lt;p&gt;プロジェクトの設定画面からスクリーンショットのようにBuild PhasesにRun Scriptを追加して以下のようなシェルスクリプトを入力します。&lt;/p&gt;
 &lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$BUILT_PRODUCTS_DIR&lt;/span&gt;/your_executable &lt;span class=&quot;nv&quot;&gt;$SRCROOT&lt;/span&gt;/bin/your_executable
 &lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;$BUILT_PRODUCTS_DIR&lt;/code&gt;という環境変数は上の&lt;code&gt;$HOME/Library/Developer/Xcode/DerivedData//Build/Products//&lt;/code&gt;を指し、&lt;code&gt;$SRCROOT&lt;/code&gt;はプロジェクトルートを指します。これでビルドする毎にプロジェクト内に実行ファイルがコピーされます。&lt;/p&gt;</summary>
+&lt;p&gt;&lt;code&gt;$BUILT_PRODUCTS_DIR&lt;/code&gt;という環境変数は上の&lt;code&gt;$HOME/Library/Developer/Xcode/DerivedData/&amp;lt;アプリケーション固有ID&amp;gt;/Build/Products/&amp;lt;Build Configuration&amp;gt;/&lt;/code&gt;を指し、&lt;code&gt;$SRCROOT&lt;/code&gt;はプロジェクトルートを指します。これでビルドする毎にプロジェクト内に実行ファイルがコピーされます。&lt;/p&gt;</summary>
     <title>Xcodeでビルドした実行ファイルを自動的にプロジェクトにコピーする</title>
     <updated>2014-04-14T01:07:00+00:00</updated>
     <dc:date>2014-04-14T01:07:00+00:00</dc:date>
@@ -12560,11 +12646,11 @@ bind-key    C-s   split-window -v -c &quot;#{pane_current_path}&quot;
     <id>https://blog.naoty.dev/212/</id>
     <link href="https://blog.naoty.dev/212/"/>
     <summary>&lt;pre lang=&quot;yaml:locales/ja.yml&quot;&gt;&lt;code&gt;ja:
-  footer: &quot;© naoty All Rights Reserved.&quot;
+  footer: &quot;&amp;amp;copy; naoty All Rights Reserved.&quot;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;などと&lt;code&gt;©&lt;/code&gt;のような特殊文字をロケールファイルで指定するとうまく表示されない。&lt;/p&gt;
+&lt;p&gt;などと&lt;code&gt;&amp;amp;copy;&lt;/code&gt;のような特殊文字をロケールファイルで指定するとうまく表示されない。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;gt; I18n.t(&quot;footer&quot;)
-=&amp;gt; &quot;© naoty All Rights Reserved.&quot;
+=&amp;gt; &quot;&amp;amp;copy; naoty All Rights Reserved.&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;こういうときは特殊文字の16進数表記を使うとうまく表示される。&lt;/p&gt;
 &lt;pre lang=&quot;yaml:locales/ja.yml&quot;&gt;&lt;code&gt;ja:
@@ -13094,8 +13180,8 @@ abbreviate tl - [ ]
 setlocal foldmethod=indent
 
 &quot; todoリストのon/offを切り替える
-nnoremap   :call ToggleCheckbox()
-vnoremap   :call ToggleCheckbox()
+nnoremap &amp;lt;buffer&amp;gt; &amp;lt;Leader&amp;gt;&amp;lt;Leader&amp;gt; :call ToggleCheckbox()&amp;lt;CR&amp;gt;
+vnoremap &amp;lt;buffer&amp;gt; &amp;lt;Leader&amp;gt;&amp;lt;Leader&amp;gt; :call ToggleCheckbox()&amp;lt;CR&amp;gt;
 
 &quot; 選択行のチェックボックスを切り替える
 function! ToggleCheckbox()
@@ -13358,11 +13444,11 @@ end
   <entry>
     <id>https://blog.naoty.dev/193/</id>
     <link href="https://blog.naoty.dev/193/"/>
-    <summary>&lt;pre lang=&quot;vim:.vim/after/ftplugin/php.vim&quot;&gt;&lt;code&gt;nmap  :execute 'Ref phpmanual ' . expand('') 
+    <summary>&lt;pre lang=&quot;vim:.vim/after/ftplugin/php.vim&quot;&gt;&lt;code&gt;nmap &amp;lt;F4&amp;gt; :execute 'Ref phpmanual ' . expand('&amp;lt;cword&amp;gt;') &amp;lt;CR&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre lang=&quot;vim:.vim/ftplugin/ruby.vim&quot;&gt;&lt;code&gt;nnoremap  :execute 'Ref refe ' . expand('') 
+&lt;pre lang=&quot;vim:.vim/ftplugin/ruby.vim&quot;&gt;&lt;code&gt;nnoremap &amp;lt;F4&amp;gt; :execute 'Ref refe ' . expand('&amp;lt;cword&amp;gt;') &amp;lt;CR&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;expand('')&lt;/code&gt;でカーソル上の単語が取れる。この関数をマッピングで使ううまいやり方わからなかったけど、これでとりあえずいけた。&lt;/p&gt;</summary>
+&lt;p&gt;&lt;code&gt;expand('&amp;lt;cword&amp;gt;')&lt;/code&gt;でカーソル上の単語が取れる。この関数をマッピングで使ううまいやり方わからなかったけど、これでとりあえずいけた。&lt;/p&gt;</summary>
     <title>カーソル上の単語でvim-refを検索する</title>
     <updated>2013-06-26T00:42:00+00:00</updated>
     <dc:date>2013-06-26T00:42:00+00:00</dc:date>
@@ -13669,9 +13755,9 @@ person.mrb person.rb
 &lt;p&gt;CからRubyで定義した&lt;code&gt;Person&lt;/code&gt;インスタンスを生成して&lt;code&gt;greeting&lt;/code&gt;メソッドの結果を標準出力に表示してみる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// greeting.c
 
-#include 
-#include 
-#include 
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;mruby.h&amp;gt;
+#include &amp;lt;mruby/string.h&amp;gt;
 
 int main()
 {
@@ -13749,7 +13835,8 @@ $ ./greeting
 &lt;blockquote&gt;
 &lt;p&gt;@&lt;a href=&quot;https://twitter.com/naoty_k&quot;&gt;naoty_k&lt;/a&gt; クラスの取り出しはmrb_class_obj_get()、メソッドの呼び出しはmrb_funcall()を使ってください。funcallには派生形あり。&lt;/p&gt;
 &lt;p&gt;— Yukihiro Matsumotoさん (@yukihiro_matz) &lt;a href=&quot;https://twitter.com/yukihiro_matz/status/329229906561077248&quot;&gt;2013年4月30日&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
+&lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>mrubyで定義したクラスとメソッドをCから呼び出す</title>
     <updated>2013-05-03T23:13:00+00:00</updated>
     <dc:date>2013-05-03T23:13:00+00:00</dc:date>
@@ -13807,14 +13894,14 @@ set textwidth=80
 set formatoptions+=m
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Todoリストを簡単に書く&lt;/h2&gt;
-&lt;p&gt;上でふれたGithubが実装したTodoリスト記法&lt;code&gt;- []&lt;/code&gt;, &lt;code&gt;- [x]&lt;/code&gt;を簡単に入力するための設定も書いた。abbreviateを使うと略記を登録することができる。下の設定では&lt;code&gt;tl&lt;/code&gt;と入力すると&lt;code&gt;- []&lt;/code&gt;と自動的に変換される。さらに、Todoリストのある行の上で&lt;code&gt;を2回おすと（僕は&lt;/code&gt;を``にしてる）、チェックをon/off切り替えられる。&lt;/p&gt;
+&lt;p&gt;上でふれたGithubが実装したTodoリスト記法&lt;code&gt;- []&lt;/code&gt;, &lt;code&gt;- [x]&lt;/code&gt;を簡単に入力するための設定も書いた。abbreviateを使うと略記を登録することができる。下の設定では&lt;code&gt;tl&amp;lt;space&amp;gt;&lt;/code&gt;と入力すると&lt;code&gt;- []&lt;/code&gt;と自動的に変換される。さらに、Todoリストのある行の上で&lt;code&gt;&amp;lt;Leader&amp;gt;&lt;/code&gt;を2回おすと（僕は&lt;code&gt;&amp;lt;Leader&amp;gt;&lt;/code&gt;を&lt;code&gt;&amp;lt;space&amp;gt;&lt;/code&gt;にしてる）、チェックをon/off切り替えられる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&quot; .vim/ftplugin/markdown.vim
 
 &quot; todoリストを簡単に入力する
 abbreviate tl - []
 
 &quot; todoリストのon/offを切り替える
-nnoremap   :call ToggleCheckbox()
+nnoremap &amp;lt;buffer&amp;gt; &amp;lt;Leader&amp;gt;&amp;lt;Leader&amp;gt; :call ToggleCheckbox()&amp;lt;CR&amp;gt;
 
 function! ToggleCheckbox()
   let l:line = getline('.')
@@ -13895,7 +13982,7 @@ RGB getBlue() {
   return color;
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre lang=&quot;c:types.h&quot;&gt;&lt;code&gt;#include 
+&lt;pre lang=&quot;c:types.h&quot;&gt;&lt;code&gt;#include &amp;lt;Arduino.h&amp;gt;
 
 struct RGB {
   byte r;
@@ -13922,7 +14009,7 @@ RGB getBlue();
     <link href="https://blog.naoty.dev/178/"/>
     <summary>&lt;h2&gt;入力補完&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;インサートモードで&lt;code&gt;または&lt;/code&gt;と打つと、補完候補が出てきます。&lt;/li&gt;
+&lt;li&gt;インサートモードで&lt;code&gt;&amp;lt;C-n&amp;gt;&lt;/code&gt;または&lt;code&gt;&amp;lt;C-p&amp;gt;&lt;/code&gt;と打つと、補完候補が出てきます。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;バッファ&lt;/h2&gt;
 &lt;ul&gt;
@@ -13930,9 +14017,9 @@ RGB getBlue();
 &lt;li&gt;直前に開いたファイルに戻りたい場合によく使います。&lt;/li&gt;
 &lt;li&gt;個人的には、前後のバッファに移動したりバッファから履歴を削除するために以下のようなマッピングを設定しています。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;nnoremap  :bnext
-nnoremap  :bprevious
-nnoremap d :bdelete
+&lt;pre&gt;&lt;code&gt;nnoremap &amp;lt;Tab&amp;gt; :bnext&amp;lt;CR&amp;gt;
+nnoremap &amp;lt;S-Tab&amp;gt; :bprevious&amp;lt;CR&amp;gt;
+nnoremap &amp;lt;Leader&amp;gt;d :bdelete&amp;lt;CR&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;これでTabやShift+Tabで前後のバッファに移動できます。&lt;/li&gt;
@@ -13943,9 +14030,9 @@ nnoremap d :bdelete
 &lt;li&gt;デスクトップPCであまり画面が大きくない場合、分割して複数のファイルを開くよりタブの方が出番が多いような気がします。&lt;/li&gt;
 &lt;li&gt;個人的には、前後のタブに移動したり新しいタブを開くために以下のようなマッピングを設定しています。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;nnoremap t :tabnew
-nnoremap n :tabnext
-nnoremap p :tabprev
+&lt;pre&gt;&lt;code&gt;nnoremap &amp;lt;Leader&amp;gt;t :tabnew&amp;lt;CR&amp;gt;
+nnoremap &amp;lt;Leader&amp;gt;n :tabnext&amp;lt;CR&amp;gt;
+nnoremap &amp;lt;Leader&amp;gt;p :tabprev&amp;lt;CR&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;コマンド定義&lt;/h2&gt;
 &lt;ul&gt;
@@ -13953,11 +14040,11 @@ nnoremap p :tabprev
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;command! Indent2 :setlocal tabstop=2 shiftwidth=2
 command! Indent4 :setlocal tabstop=4 shiftwidth=4
-command! ToSjis :e ++enc=sjis
+command! ToSjis :e ++enc=sjis&amp;lt;CR&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;これで普通に&lt;code&gt;:Intent2&lt;/code&gt;と打てばインデント量が2になります。&lt;/li&gt;
-&lt;li&gt;基本は&lt;code&gt;command!  &lt;/code&gt;です。コマンド名は大文字から始めなくちゃいけないようです。あとはいろいろオプションがあるので、詳しくは&lt;code&gt;:help command-nargs&lt;/code&gt;を見てください。&lt;/li&gt;
+&lt;li&gt;基本は&lt;code&gt;command! &amp;lt;Command name&amp;gt; &amp;lt;command&amp;gt;&lt;/code&gt;です。コマンド名は大文字から始めなくちゃいけないようです。あとはいろいろオプションがあるので、詳しくは&lt;code&gt;:help command-nargs&lt;/code&gt;を見てください。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;abbreviate&lt;/h2&gt;
 &lt;ul&gt;
@@ -13973,7 +14060,7 @@ command! ToSjis :e ++enc=sjis
 &lt;ul&gt;
 &lt;li&gt;abbreviateは応用としてtypoを修正するのにも便利です。&quot;abbreviate&quot;っていう単語がもうtypoしそうですね。あと、個人的に&quot;receive&quot;を&quot;recieve&quot;と書いてしまうことが多いので以下のように設定します。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;&quot; abbreviate  
+&lt;pre&gt;&lt;code&gt;&quot; abbreviate &amp;lt;誤&amp;gt; &amp;lt;正&amp;gt;
 abbreviate abbriviate abbreviate
 abbreviate recieve receive
 &lt;/code&gt;&lt;/pre&gt;
@@ -14099,6 +14186,7 @@ autocmd BufRead,BufNewFile *.ru setfiletype ruby
     <id>https://blog.naoty.dev/174/</id>
     <link href="https://blog.naoty.dev/174/"/>
     <summary>&lt;p&gt;秋葉原の秋月電子に行って、慣れない雰囲気の中、なんとか&lt;a href=&quot;http://akizukidenshi.com/catalog/g/gP-04002/&quot;&gt;この感圧センサー&lt;/a&gt;をゲットしました。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;オライリーの&lt;a href=&quot;http://www.oreilly.co.jp/books/9784873114538/&quot;&gt;Prototyping Lab&lt;/a&gt;という本を見ながら回路を接続して、上のようなプログラムを実行するとこんな感じになりました。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130123/20130123235951.gif&quot; alt=&quot;f:id:naoty_k:20130123235951g:plain&quot; title=&quot;f:id:naoty_k:20130123235951g:plain&quot;&gt;&lt;/p&gt;
 &lt;p&gt;センサーに加わった圧力を0番のアナログピンから受け取り、シリアル通信でそのままモニタに出力しています。&lt;/p&gt;
@@ -14136,12 +14224,15 @@ autocmd BufRead,BufNewFile *.ru setfiletype ruby
 &lt;p&gt;arduinoからリクエストを受けてwebsocketでグラフを更新 &lt;a href=&quot;http://t.co/cXHadMjR&quot; title=&quot;http://vine.co/v/bJ0j6W3gvz1&quot;&gt;vine.co/v/bJ0j6W3gvz1&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;— なおてぃー (@naoty_k) &lt;a href=&quot;https://twitter.com/naoty_k/status/296625898378125312&quot;&gt;January 30, 2013&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;コードはこんなかんじ。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;上2つのコードを組み合わせると、圧力をPOSTでサーバーに送信できます。で、node.jsで書いたサーバーに送ると以下のような感じになりました。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Demo &lt;a href=&quot;http://t.co/l0bNyY8a&quot; title=&quot;http://vine.co/v/bnn5muaq7T5&quot;&gt;vine.co/v/bnn5muaq7T5&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;— なおてぃーさん (@naoty_k) &lt;a href=&quot;https://twitter.com/naoty_k/status/299175115747381248&quot;&gt;2013年2月6日&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;arduinoのコードとサーバーのコードはともにgithubで公開しています。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/makura-arduino&quot;&gt;https://github.com/naoty/makura-arduino&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/makura-web&quot;&gt;https://github.com/naoty/makura-web&lt;/a&gt;&lt;/p&gt;</summary>
@@ -14366,7 +14457,7 @@ module ParamsInquier
 end
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;ただ、このファイルがRails起動時に&lt;code&gt;require&lt;/code&gt;されている必要があります。&lt;/p&gt;
-&lt;p&gt;インストールされたgemを&lt;code&gt;require&lt;/code&gt;するとき&lt;code&gt;lib/.rb&lt;/code&gt;が&lt;code&gt;require&lt;/code&gt;されます。このgemであれば&lt;code&gt;lib/params_inquirer.rb&lt;/code&gt;です。なので、ここでrailtieを&lt;code&gt;require&lt;/code&gt;しておく必要があります。&lt;/p&gt;
+&lt;p&gt;インストールされたgemを&lt;code&gt;require&lt;/code&gt;するとき&lt;code&gt;lib/&amp;lt;gem_name&amp;gt;.rb&lt;/code&gt;が&lt;code&gt;require&lt;/code&gt;されます。このgemであれば&lt;code&gt;lib/params_inquirer.rb&lt;/code&gt;です。なので、ここでrailtieを&lt;code&gt;require&lt;/code&gt;しておく必要があります。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;# lib/params_inquirer.rb
 
 if defined?(Rails)
@@ -14515,7 +14606,7 @@ end
 &lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;DAYS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'日'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'月'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'火'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'水'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'木'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'金'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'土'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;freeze&lt;/span&gt;
 &lt;span class=&quot;no&quot;&gt;DAYS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'日'&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DAYS&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; /Users/naoty/workspace/misc/freeze_sample.rb:3:in `': can't modify frozen Array (RuntimeError)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; /Users/naoty/workspace/misc/freeze_sample.rb:3:in `&amp;lt;main&amp;gt;': can't modify frozen Array (RuntimeError)&lt;/span&gt;
 &lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -14690,7 +14781,7 @@ bot: hubot -a irc -n DIO
 &lt;ul&gt;
 &lt;li&gt;Herokuによると&lt;a href=&quot;#f2&quot; title=&quot;https://devcenter.heroku.com/articles/nodejs-support&quot;&gt;*2&lt;/a&gt;、Heroku側で&lt;code&gt;bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin&lt;/code&gt;にPATHを通してくれるので、Procfileでは&lt;code&gt;hubot&lt;/code&gt;とすればいい。&lt;/li&gt;
 &lt;li&gt;
-&lt;code&gt;-a  -n &lt;/code&gt;をオプションにつける。&lt;/li&gt;
+&lt;code&gt;-a &amp;lt;Adapter名&amp;gt; -n &amp;lt;IRCのニックネーム&amp;gt;&lt;/code&gt;をオプションにつける。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Herokuにデプロイ&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;$ git push heroku master
@@ -14805,8 +14896,26 @@ $ launchctl load -w ~/Library/LaunchAgents/org.apache.couchdb.plist
 ├── app.js
 ├── package.json
 ├── public
-│ ├── component.json // 
-&lt;/code&gt;&lt;/pre&gt;</summary>
+│ ├── component.json // &amp;lt;- ここに配置
+│ ├── components // &amp;lt;- ここにインストールされる
+│   ├── images
+│   ├── javascripts
+│   └── stylesheets
+│   └── style.css
+├── routes
+│   └── index.js
+└── views
+    ├── layout.jade
+    └── index.jade
+$ cd public
+$ bower install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;bower install&lt;/code&gt;でインストールされるライブラリは同じディレクトリ内のcomponentsというディレクトリに入る。なので、public内にcomponent.jsonを配置して&lt;code&gt;bower install&lt;/code&gt;すればよさげ。&lt;/p&gt;
+&lt;h3&gt;node-dev&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install node-dev -g
+$ node-dev app.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;node app.js&lt;/code&gt;で起動すると、ファイルを変更するたびに再起動する必要がありめんどくさい。node-devを使うとその必要がなくなるので、とても便利。インストール必須だと思う。&lt;/p&gt;</summary>
     <title>node.js環境構築</title>
     <updated>2012-12-16T23:33:00+00:00</updated>
     <dc:date>2012-12-16T23:33:00+00:00</dc:date>
@@ -14900,10 +15009,12 @@ $ launchctl load -w ~/Library/LaunchAgents/org.apache.couchdb.plist
 &lt;p&gt;シンプルなBGMアプリほしい&lt;/p&gt;
 &lt;p&gt;— なおてぃーさん (@naoty_k) &lt;a href=&quot;https://twitter.com/naoty_k/status/271989557321420800&quot;&gt;11月 23, 2012&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;blockquote&gt;
 &lt;p&gt;好きな曲のyoutubeのリンクをHerokuとかにアップしておいて、iPadでそれらをリストを取得してエンドレスで聞けるようにしたい&lt;/p&gt;
 &lt;p&gt;— なおてぃーさん (@naoty_k) &lt;a href=&quot;https://twitter.com/naoty_k/status/271989962881265664&quot;&gt;11月 23, 2012&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;↑というのを思いつき、2日間でプロトタイプを作ってみた。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot; alt=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot;&gt;&lt;/p&gt;
 &lt;p&gt;ジョジョOPでテンション上げながら。&lt;/p&gt;
@@ -14917,7 +15028,7 @@ $ launchctl load -w ~/Library/LaunchAgents/org.apache.couchdb.plist
 &lt;h2&gt;YouTube再生プレイヤー&lt;/h2&gt;
 &lt;p&gt;YouTubeの再生プレイヤーは&lt;code&gt;UIWebView&lt;/code&gt;にiframeを埋め込んで実装した。&lt;code&gt;MPMoviePlayerController&lt;/code&gt;というのでもできそうな感じがするけど、時間かかりそうなので、とりあえず&lt;code&gt;UIWebView&lt;/code&gt;を選択。&lt;/p&gt;
 &lt;p&gt;iframeはYoutubeの動画の下のところから取ってこれるものを使う。↓こんなの。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;http://www.youtube.com/embed/UqFvrjhbO8c?rel=0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;あとは、&lt;code&gt;UITableView&lt;/code&gt;で選択した動画のIDを&lt;code&gt;UIWebView&lt;/code&gt;に渡してリロードすることで、動画を切り替える。&lt;/p&gt;
 &lt;h2&gt;サーバーとの通信&lt;/h2&gt;
@@ -15337,8 +15448,8 @@ end
 &lt;li&gt;なので、Sinatraのテンプレートを使ってみる。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre lang=&quot;ruby:views/layout.erb&quot;&gt;&lt;code&gt;{
-  &quot;status&quot;: ,
-  &quot;result&quot;: 
+  &quot;status&quot;: &amp;lt;%= response.status %&amp;gt;,
+  &quot;result&quot;: &amp;lt;%= yield %&amp;gt;
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre lang=&quot;ruby:my_app.rb&quot;&gt;&lt;code&gt;get '/' do
@@ -15895,16 +16006,16 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
     <id>https://blog.naoty.dev/142/</id>
     <link href="https://blog.naoty.dev/142/"/>
     <summary>&lt;p&gt;Firefoxの右上の検索ボックスでQiita内の検索を行うためのプラグインを作ってみた。vimperatorであれば&lt;code&gt;qiita [keyword]&lt;/code&gt;で検索できるようになった。&lt;/p&gt;
-&lt;pre lang=&quot;xml:qiita.xml&quot;&gt;&lt;code&gt;
-
-    Qiita
-    Search by Qiita
-    utf-8
-    http://qiita.com/favicon.ico?v=3
-    
-        
-    
-
+&lt;pre lang=&quot;xml:qiita.xml&quot;&gt;&lt;code&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;
+&amp;lt;SearchPlugin xmlns=&quot;http://www.mozilla.org/2006/browser/search/&quot;&amp;gt;
+    &amp;lt;ShortName&amp;gt;Qiita&amp;lt;/ShortName&amp;gt;
+    &amp;lt;Description&amp;gt;Search by Qiita&amp;lt;/Description&amp;gt;
+    &amp;lt;InputEncoding&amp;gt;utf-8&amp;lt;/InputEncoding&amp;gt;
+    &amp;lt;Image width=&quot;16&quot; height=&quot;16&quot;&amp;gt;http://qiita.com/favicon.ico?v=3&amp;lt;/Image&amp;gt;
+    &amp;lt;Url type=&quot;text/html&quot; method=&quot;GET&quot; template=&quot;http://qiita.com/search&quot;&amp;gt;
+        &amp;lt;Param name=&quot;q&quot; value=&quot;{searchTerms}&quot; /&amp;gt;
+    &amp;lt;/Url&amp;gt;
+&amp;lt;/SearchPlugin&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;macの場合は&lt;code&gt;~/Library/Application Support/Firefox/Profiles/xxxxxxxx.default/searchplugins/&lt;/code&gt;以下に上のファイルを保存し、firefoxを再起動。（xxxxxxxxの部分はランダム）&lt;/li&gt;
@@ -15914,22 +16025,27 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
 &lt;ul&gt;
 &lt;li&gt;これは以下のような感じでできるらしい（未確認）。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;
+&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;search&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/opensearchdescription+xml&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;title=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Qiita検索プラグインを追加&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://qiita.com/searchplugins/qiita.xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;h3&gt;追記（9/5）&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;githubのソースを確認したら上のような箇所があった。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;
+&lt;pre lang=&quot;html&quot; class=&quot;highlight highlight-html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;search&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/opensearchdescription+xml&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/opensearch.xml&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;title=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;GitHub&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;xmlも上で紹介した形式とほぼ同じだった。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre lang=&quot;xml:opensearch.xml&quot;&gt;&lt;code&gt;
-  GitHub
-  Search GitHub
-  UTF-8
-  data:image/x-icon;base64,
+&lt;pre lang=&quot;xml:opensearch.xml&quot;&gt;&lt;code&gt;&amp;lt;OpenSearchDescription xmlns=&quot;http://a9.com/-/spec/opensearch/1.1/&quot;
+                       xmlns:moz=&quot;http://www.mozilla.org/2006/browser/search/&quot;&amp;gt;
+  &amp;lt;ShortName&amp;gt;GitHub&amp;lt;/ShortName&amp;gt;
+  &amp;lt;Description&amp;gt;Search GitHub&amp;lt;/Description&amp;gt;
+  &amp;lt;InputEncoding&amp;gt;UTF-8&amp;lt;/InputEncoding&amp;gt;
+  &amp;lt;Image width=&quot;16&quot; height=&quot;16&quot;&amp;gt;data:image/x-icon;base64,
   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
   bWFnZVJlYWR5ccllPAAAAVpJREFUeNqM0s0rRGEUx/F7x0RKxob4A6bZKBYWFkLZqIkkC7FUsrCw
   oCxsZcN/IFmIP4E9ZWnyurBR3krZeH8b1/dMv5vTpDue+szzzL33nJ5znieIoihIGCGmMIt0+ctS
@@ -15937,12 +16053,12 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
   Fie2JnYx3sGYJcQ5jrU2PTjEDbpwpeeXWPZN3NOLnLb8hm1UoaBAG3P6btR26pt4rblDDarRs6KO
   Mh7fmr/idZxgAW3Y0H/r/IqCfYKU5o/yB1b7kY5tGp04Uwmh++5Vcx59PoGNWtV3pznQXK2SbLf7
   6s8kVv09yLpGRro0SwoawIgrt1fNzPtT2FVd/WjVCdiL9qQb5k8ho3Ia8eTKea50TeMd2LZOXQmf
-  mP9PrL/K3RjURTrAmk4lMcGPAAMAEvmJGW+ZZPAAAAAASUVORK5CYII=
-  
-    
-  
-  https://github.com/search
-
+  mP9PrL/K3RjURTrAmk4lMcGPAAMAEvmJGW+ZZPAAAAAASUVORK5CYII=&amp;lt;/Image&amp;gt;
+  &amp;lt;Url type=&quot;text/html&quot; method=&quot;get&quot; template=&quot;https://github.com/search&quot;&amp;gt;
+    &amp;lt;Param name=&quot;q&quot; value=&quot;{searchTerms}&quot;/&amp;gt;
+  &amp;lt;/Url&amp;gt;
+  &amp;lt;moz:SearchForm&amp;gt;https://github.com/search&amp;lt;/moz:SearchForm&amp;gt;
+&amp;lt;/OpenSearchDescription&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;hr&gt;
 &lt;h3&gt;環境&lt;/h3&gt;
@@ -16002,7 +16118,7 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
     <link href="https://blog.naoty.dev/140/"/>
     <summary>&lt;p&gt;便利な設定があるわけじゃなさそうなので、こんなコマンドを自分で定義してみた。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://gyazo.com/d96e474ae19d51408d908c7ddc569171.png?1344926946&quot; alt=&quot;command&quot;&gt;&lt;/p&gt;
-&lt;pre lang=&quot;vim:.vimrc&quot;&gt;&lt;code&gt;commands! -nargs=1 -complete=help Vh :vertical belowright help 
+&lt;pre lang=&quot;vim:.vimrc&quot;&gt;&lt;code&gt;commands! -nargs=1 -complete=help Vh :vertical belowright help &amp;lt;args&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -16013,7 +16129,8 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
 &lt;code&gt;-complete=&lt;/code&gt;で補完のタイプを指定。他にもファイルとかディレクトリとかあるらしい。&lt;/li&gt;
 &lt;li&gt;
 &lt;code&gt;vertical belowright [cmd]&lt;/code&gt;で縦分割して右ウィンドウにコマンドの結果を表示する。&lt;/li&gt;
-&lt;li&gt;``は引数&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;&amp;lt;args&amp;gt;&lt;/code&gt;は引数&lt;/li&gt;
 &lt;/ul&gt;</summary>
     <title>vimで右にhelpを表示する</title>
     <updated>2012-08-14T15:58:00+00:00</updated>
@@ -16615,7 +16732,7 @@ end
     <id>https://blog.naoty.dev/129/</id>
     <link href="https://blog.naoty.dev/129/"/>
     <summary>&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#&amp;lt;User id: 1, name: &quot;naoty&quot;, ...&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;name&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;naoty&quot;&lt;/span&gt;
 &lt;/pre&gt;
@@ -16907,6 +17024,7 @@ S3_SECRET_ACCESS_KEY=xxx
 &lt;/ul&gt;
 &lt;h3&gt;ブラウザのリロードの自動化&lt;/h3&gt;
 &lt;p&gt;viewやscssを編集してデザインを細かく調整する際、なんどもブラウザをリロードするのが煩わしかったのですが、最近便利なツールを見つけました。LiveReloadというツールです。chrome, firefox, safariなど各種ブラウザの拡張機能でLiveReloadをインストールし、guard-livereloadというgemを使うことで、viewやscssの変更が保存されると自動的にブラウザをリロードしてくれます。言葉で説明するより、以下の動画を見た方がわかりやすいです。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;感動的ですね！さっそく使いましょう。まずGemfileに追記します。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;group :development do
   gem 'guard-livereload'
@@ -17442,12 +17560,12 @@ end
 &lt;h2&gt;設定&lt;/h2&gt;
 &lt;p&gt;以下のテキストをホームディレクトリに&lt;code&gt;.vimperatorrc&lt;/code&gt;として保存。&lt;br&gt;
 Firefoxを再起動。&lt;/p&gt;
-&lt;pre lang=&quot;vim:.vimperatorrc&quot;&gt;&lt;code&gt;map j 5
-map k 5
-map h 
-map l 
-map H 
-map L 
+&lt;pre lang=&quot;vim:.vimperatorrc&quot;&gt;&lt;code&gt;map j 5&amp;lt;C-e&amp;gt;
+map k 5&amp;lt;C-y&amp;gt;
+map h &amp;lt;C-p&amp;gt;
+map l &amp;lt;C-n&amp;gt;
+map H &amp;lt;A-Left&amp;gt;
+map L &amp;lt;A-Right&amp;gt;
 
 set hintchars=asdfjkl
 &lt;/code&gt;&lt;/pre&gt;
@@ -17606,7 +17724,7 @@ set incsearch
 
 nnoremap n nzz 
 nnoremap N Nzz 
-nnoremap  :nohlsearch
+nnoremap &amp;lt;Esc&amp;gt;&amp;lt;Esc&amp;gt; :nohlsearch&amp;lt;CR&amp;gt;
 
 &quot; ----------------------------------------
 &quot; Vundle
@@ -17660,7 +17778,7 @@ filetype plugin indent on
 let g:unite_enable_start_insert = 1
 
 &quot; open unite buffer
-nnoremap  :Unite buffer file_rec
+nnoremap &amp;lt;space&amp;gt;&amp;lt;space&amp;gt; :Unite buffer file_rec&amp;lt;CR&amp;gt;
 
 &quot; ----------------------------------------
 &quot; neocomplcache.vim
@@ -17671,12 +17789,12 @@ highlight Pmenu     ctermbg=8
 highlight PmenuSel  ctermbg=1
 highlight PmenuSbar ctermbg=0
 
-imap  neocomplcache#sources#snippets_complete#expandable() ? &quot;\(neocomplcache_snippets_expand)&quot; : pumvisible() ? &quot;\&quot; : &quot;\&quot;
-smap  neocomplcache#sources#snippets_complete#expandable() ? &quot;\(neocomplcache_snippets_expand)&quot; : pumvisible() ? &quot;\&quot; : &quot;\&quot;
+imap &amp;lt;expr&amp;gt;&amp;lt;Tab&amp;gt; neocomplcache#sources#snippets_complete#expandable() ? &quot;\&amp;lt;Plug&amp;gt;(neocomplcache_snippets_expand)&quot; : pumvisible() ? &quot;\&amp;lt;C-n&amp;gt;&quot; : &quot;\&amp;lt;Tab&amp;gt;&quot;
+smap &amp;lt;expr&amp;gt;&amp;lt;Tab&amp;gt; neocomplcache#sources#snippets_complete#expandable() ? &quot;\&amp;lt;Plug&amp;gt;(neocomplcache_snippets_expand)&quot; : pumvisible() ? &quot;\&amp;lt;C-n&amp;gt;&quot; : &quot;\&amp;lt;Tab&amp;gt;&quot;
 
-inoremap   neocomplcache#smart_close_popup().&quot;\&quot;
-inoremap  neocomplcache#close_popup()
-inoremap  neocomplcache#cancel_popup()
+inoremap &amp;lt;expr&amp;gt;&amp;lt;CR&amp;gt;  neocomplcache#smart_close_popup().&quot;\&amp;lt;CR&amp;gt;&quot;
+inoremap &amp;lt;expr&amp;gt;&amp;lt;C-y&amp;gt; neocomplcache#close_popup()
+inoremap &amp;lt;expr&amp;gt;&amp;lt;C-e&amp;gt; neocomplcache#cancel_popup()
 
 &quot; ----------------------------------------
 &quot; Align.vim
@@ -17689,57 +17807,57 @@ let g:Align_xstrlen = 3
 let g:NERDSpaceDelims = 1
 let g:NERDShutup = 1
 
-map x NERDCommenterToggle
+map &amp;lt;Leader&amp;gt;x &amp;lt;Plug&amp;gt;NERDCommenterToggle
 
 &quot; ----------------------------------------
 &quot; Other Key Mappings
 &quot; ----------------------------------------
 
 &quot; reload .vimrc
-nnoremap r :source ~/.vimrc
+nnoremap &amp;lt;space&amp;gt;r :source ~/.vimrc&amp;lt;CR&amp;gt;
 
 &quot; move by one display line
 nnoremap j gj
 nnoremap k gk
 
 &quot; move to line head/end like mac
-nnoremap  0
-nnoremap  $
+nnoremap &amp;lt;C-a&amp;gt; 0
+nnoremap &amp;lt;C-e&amp;gt; $
 
 &quot; go to another window
-nnoremap h h
-nnoremap j j
-nnoremap k k
-nnoremap l l
+nnoremap &amp;lt;space&amp;gt;h &amp;lt;C-w&amp;gt;h
+nnoremap &amp;lt;space&amp;gt;j &amp;lt;C-w&amp;gt;j
+nnoremap &amp;lt;space&amp;gt;k &amp;lt;C-w&amp;gt;k
+nnoremap &amp;lt;space&amp;gt;l &amp;lt;C-w&amp;gt;l
 
 &quot; move the window to another position
-nnoremap H H
-nnoremap J J
-nnoremap K K
-nnoremap L L
+nnoremap &amp;lt;space&amp;gt;H &amp;lt;C-w&amp;gt;H
+nnoremap &amp;lt;space&amp;gt;J &amp;lt;C-w&amp;gt;J
+nnoremap &amp;lt;space&amp;gt;K &amp;lt;C-w&amp;gt;K
+nnoremap &amp;lt;space&amp;gt;L &amp;lt;C-w&amp;gt;L
 
 &quot; adjust the window height/width
-nnoremap + 5+
-nnoremap - 5-
-nnoremap &amp;gt; 10&amp;gt;
-nnoremap &amp;lt; 10&amp;lt;
+nnoremap &amp;lt;space&amp;gt;+ &amp;lt;C-w&amp;gt;5+
+nnoremap &amp;lt;space&amp;gt;- &amp;lt;C-w&amp;gt;5-
+nnoremap &amp;lt;space&amp;gt;&amp;gt; &amp;lt;C-w&amp;gt;10&amp;gt;
+nnoremap &amp;lt;space&amp;gt;&amp;lt; &amp;lt;C-w&amp;gt;10&amp;lt;
 
 &quot; complete surroundings
-inoremap ' ''
-inoremap &quot; &quot;&quot;
-inoremap ( ()
-inoremap { {}
-inoremap [ []
-inoremap \| \|\|
+inoremap ' ''&amp;lt;Left&amp;gt;
+inoremap &quot; &quot;&quot;&amp;lt;Left&amp;gt;
+inoremap ( ()&amp;lt;Left&amp;gt;
+inoremap { {}&amp;lt;Left&amp;gt;
+inoremap [ []&amp;lt;Left&amp;gt;
+inoremap \| \|\|&amp;lt;Left&amp;gt;
 
 &quot; hjkl move in insert mode
-inoremap  
-inoremap  
-inoremap  
-inoremap  
+inoremap &amp;lt;C-h&amp;gt; &amp;lt;Left&amp;gt;
+inoremap &amp;lt;C-j&amp;gt; &amp;lt;Down&amp;gt;
+inoremap &amp;lt;C-k&amp;gt; &amp;lt;Up&amp;gt;
+inoremap &amp;lt;C-l&amp;gt; &amp;lt;Right&amp;gt;
 
 &quot; ctags
-nnoremap  :pop
+nnoremap &amp;lt;C-[&amp;gt; :pop&amp;lt;CR&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;</summary>
     <title>vimrc晒し</title>
     <updated>2012-03-27T14:47:00+00:00</updated>
@@ -19850,7 +19968,7 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;クラス定義内のselfはクラスそのものを指すので、上記のように書き換えられる。&lt;/li&gt;
-&lt;li&gt;「class \&lt;/li&gt;
+&lt;li&gt;「class &amp;lt;&amp;lt; self; end;」内で定義されたメソッドは、クラスメソッドとなる。&lt;/li&gt;
 &lt;/ul&gt;</summary>
     <title>特異クラスと特異メソッド</title>
     <updated>2011-07-20T23:16:00+00:00</updated>
@@ -19910,11 +20028,11 @@ gem 'factory_girl_rails'
 Mon Jul 18 22:43:46 [initandlisten] connection accepted from 127.0.0.1:51455 #17
 Mon Jul 18 22:43:46 [conn17] end connection 127.0.0.1:51455
 Mon Jul 18 22:43:46 [initandlisten] connection accepted from 127.0.0.1:51456 #18
-/spec/spec_helper.rb:26:in `block in ': undefined method `use_transactional_fixtures=' for # (NoMethodError)
+/spec/spec_helper.rb:26:in `block in &amp;lt;top (required)&amp;gt;': undefined method `use_transactional_fixtures=' for #&amp;lt;RSpec::Core::Configuration:0x0000010087a298&amp;gt; (NoMethodError)
 	from /vendor/bundle/ruby/1.9.1/gems/rspec-core-2.6.4/lib/rspec/core.rb:79:in `configure'
-	from /spec/spec_helper.rb:10:in `'
+	from /spec/spec_helper.rb:10:in `&amp;lt;top (required)&amp;gt;'
 	from /spec/models/user_spec.rb:1:in `require'
-	from /spec/models/user_spec.rb:1:in `'
+	from /spec/models/user_spec.rb:1:in `&amp;lt;top (required)&amp;gt;'
 	from /vendor/bundle/ruby/1.9.1/gems/rspec-core-2.6.4/lib/rspec/core/configuration.rb:419:in `load'
 	from /vendor/bundle/ruby/1.9.1/gems/rspec-core-2.6.4/lib/rspec/core/configuration.rb:419:in `block in load_spec_files'
 	from /vendor/bundle/ruby/1.9.1/gems/rspec-core-2.6.4/lib/rspec/core/configuration.rb:419:in `map'
@@ -19985,7 +20103,7 @@ Mon Jul 18 21:55:14 [conn4] end connection 127.0.0.1:50867
 &lt;pre&gt;&lt;code&gt;$ touch spec/factories.rb
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;テスト実行&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ rake spec 
+&lt;pre&gt;&lt;code&gt;$ rake spec &amp;lt;file&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;</summary>
     <title>Rails3にrspecとfactory girlをインストールしたときのメモ</title>
     <updated>2011-07-18T22:07:00+00:00</updated>
@@ -20053,9 +20171,9 @@ def tag_add_class_if(tag, conditions, cl, attributes = {}, &amp;amp;block)
 end
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;# index.html.erb
- 'users'} do %&amp;gt;
+&amp;lt;%= tag_add_class_if :ul, (@user == current_user), 'current', {:class =&amp;gt; 'users'} do %&amp;gt;
   # ...
-
+&amp;lt;% end -%&amp;gt;
 #=&amp;gt; ...
 &lt;/code&gt;&lt;/pre&gt;</summary>
     <title>ある条件であるクラスを追加するヘルパーメソッドつくりました</title>
@@ -20072,11 +20190,11 @@ def tag_hidden_if(tag, conditions, attributes = {}, &amp;amp;block)
 end
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;# index.html.erb
-
-   'naotyhoge'} do %&amp;gt;
+&amp;lt;% @articles.each_with_index do |article, i| -%&amp;gt;
+  &amp;lt;%= tag_hidden_if :li, (i % 2 == 0), {:class =&amp;gt; 'naotyhoge'} do %&amp;gt;
     # ...
-  
-
+  &amp;lt;% end -%&amp;gt;
+&amp;lt;% end -%&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;この例だと、偶数の列は非表示になるはずです。&lt;/li&gt;
@@ -20373,7 +20491,7 @@ SomethingCool.all.each {|sc| sc.update_attributes({:cool_user_count =&amp;gt; 0}
     <id>https://blog.naoty.dev/57/</id>
     <link href="https://blog.naoty.dev/57/"/>
     <summary>&lt;p&gt;railsで動的なページにTweetボタンを埋め込みたいので、公式ドキュメント&lt;a href=&quot;#f1&quot; title=&quot;http://dev.twitter.com/pages/tweet_button&quot;&gt;*1&lt;/a&gt;を見ながら、カスタマイズしてみました。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;script&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&quot;http://platform.twitter.com/widgets.js&quot; type=&quot;text/javascript&quot;&amp;gt;script&amp;gt;
 &amp;lt;div&amp;gt;
   &amp;lt;a href=&quot;http://twitter.com/share&quot; class=&quot;twitter-share-button&quot;
        data-count=&quot;horizontal&quot;
@@ -20706,10 +20824,10 @@ Screen version 4.01.00devel (GNU8cf5efc) 2-May-06
     <link href="https://blog.naoty.dev/48/"/>
     <summary>&lt;p&gt;submit_tagの場合&lt;br&gt;
 view&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-   &quot;search&quot;) %&amp;gt;
-   &quot;delete&quot;) %&amp;gt;
-
+&lt;pre&gt;&lt;code&gt;&amp;lt;% form_tag -%&amp;gt;
+  &amp;lt;%= submit_tag(&quot;Search&quot;, :name =&amp;gt; &quot;search&quot;) %&amp;gt;
+  &amp;lt;%= submit_tag(&quot;Delete&quot;, :name =&amp;gt; &quot;delete&quot;) %&amp;gt;
+&amp;lt;% end -%&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;controller&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;if params[:search]
@@ -20720,10 +20838,10 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;image_submit_tagの場合&lt;br&gt;
 view&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-   &quot;search&quot;) %&amp;gt;
-   &quot;delete&quot;) %&amp;gt;
-
+&lt;pre&gt;&lt;code&gt;&amp;lt;% form_tag -%&amp;gt;
+  &amp;lt;%= image_submit_tag(&quot;search.png&quot;, :name =&amp;gt; &quot;search&quot;) %&amp;gt;
+  &amp;lt;%= image_submit_tag(&quot;delete.png&quot;, :name =&amp;gt; &quot;delete&quot;) %&amp;gt;
+&amp;lt;% end -%&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;controller&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;if params['search.x']
@@ -20740,27 +20858,27 @@ end
     <id>https://blog.naoty.dev/47/</id>
     <link href="https://blog.naoty.dev/47/"/>
     <summary>&lt;p&gt;HTML&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-    
-        
-            
-            
-            
-            
+&lt;pre&gt;&lt;code&gt;&amp;lt;table&amp;gt;
+    &amp;lt;tr&amp;gt;
+        &amp;lt;td&amp;gt;
+            &amp;lt;input type=&quot;radio&quot; name=&quot;A&quot; value=&quot;0&quot; /&amp;gt;
+            &amp;lt;input type=&quot;radio&quot; name=&quot;B&quot; value=&quot;1&quot; /&amp;gt;
+            &amp;lt;input type=&quot;radio&quot; name=&quot;C&quot; value=&quot;2&quot; /&amp;gt;
+            &amp;lt;input type=&quot;radio&quot; name=&quot;D&quot; value=&quot;3&quot; /&amp;gt;
         td&amp;gt;
     tr&amp;gt;
-    
-        
-            
-                AAAoption&amp;gt;
-                BBBoption&amp;gt;
-                CCCoption&amp;gt;
+    &amp;lt;tr&amp;gt;
+        &amp;lt;td&amp;gt;
+            &amp;lt;select&amp;gt;
+                &amp;lt;option selected=&quot;selected&quot; value=&quot;AAA&quot;&amp;gt;AAAoption&amp;gt;
+                &amp;lt;option value=&quot;BBB&quot;&amp;gt;BBBoption&amp;gt;
+                &amp;lt;option value=&quot;CCC&quot;&amp;gt;CCCoption&amp;gt;
             select&amp;gt;
         td&amp;gt;
     tr&amp;gt;
-    
-        
-            
+    &amp;lt;tr&amp;gt;
+        &amp;lt;td&amp;gt;
+            &amp;lt;input id=&quot;reset&quot; type=&quot;submit&quot; value=&quot;reset&quot; /&amp;gt;
         td&amp;gt;
     tr&amp;gt;
 table&amp;gt;
@@ -20780,6 +20898,7 @@ table&amp;gt;
     <id>https://blog.naoty.dev/46/</id>
     <link href="https://blog.naoty.dev/46/"/>
     <summary>&lt;p&gt;　どうやらjsdo.itからそのままはてなダイアリーに埋め込みができるようになったみたいですね。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;&lt;a href=&quot;http://jsdo.it/naoty/zV9A&quot; title=&quot;お絵かき&quot;&gt;お絵かき - jsdo.it - share JavaScript, HTML5 and CSS&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;　これを作るにあたってのポイントは2つでした。第一に、ドラッグの実装。第二に、マウスの動きに合わせて線を引くこと。&lt;/p&gt;
 &lt;p&gt;1.　ドラッグの実装&lt;/p&gt;
@@ -20833,6 +20952,7 @@ function draw(event) {
     <id>https://blog.naoty.dev/45/</id>
     <link href="https://blog.naoty.dev/45/"/>
     <summary>&lt;p&gt;　Google Maps API v3で入力した場所名あるいは住所から緯度経度を取得し、Twitter APIでその緯度経度を使ってタイムラインを検索するアプリを作ったので、その記録。実物はここで見れる。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;&lt;a href=&quot;http://jsdo.it/naoty/rK4I&quot; title=&quot;タイムライン場所検索&quot;&gt;タイムライン場所検索 - jsdo.it - share JavaScript, HTML5 and CSS&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;JavaScript&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// Google Maps API V3
@@ -20931,17 +21051,17 @@ $('#search').click(function (e) {
   <entry>
     <id>https://blog.naoty.dev/44/</id>
     <link href="https://blog.naoty.dev/44/"/>
-    <summary>&lt;pre&gt;&lt;code&gt;
-    miyagia&amp;gt;li&amp;gt;
-    sendaia&amp;gt;li&amp;gt;
-    kesennumaa&amp;gt;li&amp;gt;
-    ishinomakia&amp;gt;li&amp;gt;
-    onagawaa&amp;gt;li&amp;gt;
-    iwatea&amp;gt;li&amp;gt;
-    miyakoa&amp;gt;li&amp;gt;
-    rikuzentakadaa&amp;gt;li&amp;gt;
-    fukushimaa&amp;gt;li&amp;gt;
-    soumaa&amp;gt;li&amp;gt;
+    <summary>&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+    &amp;lt;li class=&quot;pref&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;miyagia&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;sendaia&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;kesennumaa&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;ishinomakia&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;onagawaa&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;pref&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;iwatea&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;miyakoa&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;rikuzentakadaa&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;pref&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;fukushimaa&amp;gt;li&amp;gt;
+    &amp;lt;li class=&quot;city&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;soumaa&amp;gt;li&amp;gt;
 ul&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;$(&quot;li.pref&quot;).click(accordion); // (1)
@@ -21043,8 +21163,8 @@ do {
 &lt;li&gt;@fromと@toという変数を使ってパラメータを保持しておくことで、入力した日付を引き続き表示させます。select_datetimeの第1引数で表示する日付を設定できます。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;View&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; &quot;from&quot;}) %&amp;gt; 〜 
- &quot;to&quot;}) %&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%= select_datetime(@from || Time.now, {:prefix =&amp;gt; &quot;from&quot;}) %&amp;gt; 〜 
+&amp;lt;%= select_datetime(@to || Time.now, {:prefix =&amp;gt; &quot;to&quot;}) %&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Controller&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;def index
@@ -21091,20 +21211,20 @@ end
     <link href="https://blog.naoty.dev/41/"/>
     <summary>&lt;p&gt;　select1の値が変更されると、select2の値がselect1と同じ値に変更される。セレクトボックスがたくさんあって入力が煩わしいインターフェイスを改善するときに、考えました。HTMLSelectElementのselectedIndexプロパティには選択されたoption要素の番号が入っているので、それを他方のselect要素に代入することで、セレクトボックスの値を変更することができます。&lt;/p&gt;
 &lt;p&gt;HTML&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-    1option&amp;gt;
-    2option&amp;gt;
-    3option&amp;gt;
-    4option&amp;gt;
-    5option&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;select id=&quot;select1&quot;&amp;gt;
+    &amp;lt;option value=&quot;1&quot;&amp;gt;1option&amp;gt;
+    &amp;lt;option value=&quot;2&quot;&amp;gt;2option&amp;gt;
+    &amp;lt;option value=&quot;3&quot;&amp;gt;3option&amp;gt;
+    &amp;lt;option value=&quot;4&quot;&amp;gt;4option&amp;gt;
+    &amp;lt;option value=&quot;5&quot;&amp;gt;5option&amp;gt;
 select&amp;gt;
 
-
-    1option&amp;gt;
-    2option&amp;gt;
-    3option&amp;gt;
-    4option&amp;gt;
-    5option&amp;gt;
+&amp;lt;select id=&quot;select2&quot;&amp;gt;
+    &amp;lt;option value=&quot;1&quot;&amp;gt;1option&amp;gt;
+    &amp;lt;option value=&quot;2&quot;&amp;gt;2option&amp;gt;
+    &amp;lt;option value=&quot;3&quot;&amp;gt;3option&amp;gt;
+    &amp;lt;option value=&quot;4&quot;&amp;gt;4option&amp;gt;
+    &amp;lt;option value=&quot;5&quot;&amp;gt;5option&amp;gt;
 select&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;JavaScript&lt;/p&gt;
@@ -21122,9 +21242,9 @@ select1.change = function () {
     <id>https://blog.naoty.dev/40/</id>
     <link href="https://blog.naoty.dev/40/"/>
     <summary>&lt;p&gt;　チェックボックスやラジオボタンで選択したものを画面遷移後もチェックしたままにしておきたい、ってことあるじゃないですか。けっこうそういうシーンは多いので、メモ。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-    
-
+&lt;pre&gt;&lt;code&gt;&amp;lt;% @something_cool.each do |something| -%&amp;gt;
+    &amp;lt;%= radio_button_tag &quot;cool&quot;, &quot;#{something}&quot;, (something == params[:cool]) %&amp;gt;&amp;lt;%=h something %&amp;gt;
+&amp;lt;% end -%&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;radio_button_tag（check_box_tag）の第3引数はチェックを入れるかどうかをtrue/falseで表します&lt;/li&gt;
@@ -21529,7 +21649,8 @@ end
   <entry>
     <id>https://blog.naoty.dev/32/</id>
     <link href="https://blog.naoty.dev/32/"/>
-    <summary>&lt;p&gt;　canvasはHTML5で新しく追加されるHTML要素で、canvas内にJavaScriptを使って図形を描画できる。Flashを使わないで済む。簡単な図形を描いてみた。&lt;/p&gt;</summary>
+    <summary>&lt;p&gt;　canvasはHTML5で新しく追加されるHTML要素で、canvas内にJavaScriptを使って図形を描画できる。Flashを使わないで済む。簡単な図形を描いてみた。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>Canvasで図形を描画する</title>
     <updated>2011-02-02T15:55:00+00:00</updated>
     <dc:date>2011-02-02T15:55:00+00:00</dc:date>
@@ -21573,7 +21694,8 @@ $(this).find(&quot;tr&quot;).first().remove();
   <entry>
     <id>https://blog.naoty.dev/29/</id>
     <link href="https://blog.naoty.dev/29/"/>
-    <summary>&lt;p&gt;　垂直方向も作ってみました。こちらの方が難しかった。jsdo.itでの更新がブログパーツの方にも反映されるようです。便利すぎ。&lt;/p&gt;</summary>
+    <summary>&lt;p&gt;　垂直方向も作ってみました。こちらの方が難しかった。jsdo.itでの更新がブログパーツの方にも反映されるようです。便利すぎ。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>jQueryでテーブルを垂直方向に分割する</title>
     <updated>2011-01-20T17:04:00+00:00</updated>
     <dc:date>2011-01-20T17:04:00+00:00</dc:date>
@@ -21581,7 +21703,8 @@ $(this).find(&quot;tr&quot;).first().remove();
   <entry>
     <id>https://blog.naoty.dev/28/</id>
     <link href="https://blog.naoty.dev/28/"/>
-    <summary>&lt;p&gt;　使い道はなさそうですが、いい練習になりました。これは、jsdo.itのブログパーツを少しいじって、はてなダイアリーに貼りつけられるようにしたものです。サイズは「465 * 555」がちょうどよさそうです。&lt;/p&gt;</summary>
+    <summary>&lt;p&gt;　使い道はなさそうですが、いい練習になりました。これは、jsdo.itのブログパーツを少しいじって、はてなダイアリーに貼りつけられるようにしたものです。サイズは「465 * 555」がちょうどよさそうです。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;</summary>
     <title>jQueryでテーブルを水平方向に分割する</title>
     <updated>2011-01-20T14:43:00+00:00</updated>
     <dc:date>2011-01-20T14:43:00+00:00</dc:date>
@@ -21618,14 +21741,14 @@ $(this).find(&quot;tr&quot;).first().remove();
     <id>https://blog.naoty.dev/26/</id>
     <link href="https://blog.naoty.dev/26/"/>
     <summary>&lt;p&gt;HTML（セレクトボックス）&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-  2005option&amp;gt;
-  2006option&amp;gt;
-  2007option&amp;gt;
-  2008option&amp;gt;
-  2009option&amp;gt;
-  2010option&amp;gt;
-  2011option&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;select id='date_year' name='year'&amp;gt;
+  &amp;lt;option value='2005'&amp;gt;2005option&amp;gt;
+  &amp;lt;option value='2006'&amp;gt;2006option&amp;gt;
+  &amp;lt;option value='2007'&amp;gt;2007option&amp;gt;
+  &amp;lt;option value='2008'&amp;gt;2008option&amp;gt;
+  &amp;lt;option value='2009'&amp;gt;2009option&amp;gt;
+  &amp;lt;option value='2010'&amp;gt;2010option&amp;gt;
+  &amp;lt;option value='2011' selected='selected'&amp;gt;2011option&amp;gt;
 select&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;jQuery&lt;/p&gt;
@@ -21664,20 +21787,20 @@ $(location).attr('href', 'http://www.google.co.jp'); // googleに移動
     <link href="https://blog.naoty.dev/23/"/>
     <summary>&lt;p&gt;　テーブル内のテキストを取得してグラフを描画する際に用いました。&lt;/p&gt;
 &lt;p&gt;HTML&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-  
-    1月th&amp;gt;10td&amp;gt;3td&amp;gt;
-    2月th&amp;gt;5td&amp;gt;1td&amp;gt;
-    3月th&amp;gt;20td&amp;gt;4td&amp;gt;
-    4月th&amp;gt;30td&amp;gt;6td&amp;gt;
-    5月th&amp;gt;10td&amp;gt;2td&amp;gt;
-    6月th&amp;gt;25td&amp;gt;4td&amp;gt;
-    7月th&amp;gt;25td&amp;gt;5td&amp;gt;
-    8月th&amp;gt;40td&amp;gt;9td&amp;gt;
-    9月th&amp;gt;35td&amp;gt;7td&amp;gt;
-    10月th&amp;gt;20td&amp;gt;5td&amp;gt;
-    11月th&amp;gt;10td&amp;gt;2td&amp;gt;
-    12月th&amp;gt;5td&amp;gt;1td&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;th&amp;gt;1月th&amp;gt;&amp;lt;td class='item'&amp;gt;10td&amp;gt;&amp;lt;td class='user'&amp;gt;3td&amp;gt;
+    &amp;lt;th&amp;gt;2月th&amp;gt;&amp;lt;td class='item'&amp;gt;5td&amp;gt;&amp;lt;td class='user'&amp;gt;1td&amp;gt;
+    &amp;lt;th&amp;gt;3月th&amp;gt;&amp;lt;td class='item'&amp;gt;20td&amp;gt;&amp;lt;td class='user'&amp;gt;4td&amp;gt;
+    &amp;lt;th&amp;gt;4月th&amp;gt;&amp;lt;td class='item'&amp;gt;30td&amp;gt;&amp;lt;td class='user'&amp;gt;6td&amp;gt;
+    &amp;lt;th&amp;gt;5月th&amp;gt;&amp;lt;td class='item'&amp;gt;10td&amp;gt;&amp;lt;td class='user'&amp;gt;2td&amp;gt;
+    &amp;lt;th&amp;gt;6月th&amp;gt;&amp;lt;td class='item'&amp;gt;25td&amp;gt;&amp;lt;td class='user'&amp;gt;4td&amp;gt;
+    &amp;lt;th&amp;gt;7月th&amp;gt;&amp;lt;td class='item'&amp;gt;25td&amp;gt;&amp;lt;td class='user'&amp;gt;5td&amp;gt;
+    &amp;lt;th&amp;gt;8月th&amp;gt;&amp;lt;td class='item'&amp;gt;40td&amp;gt;&amp;lt;td class='user'&amp;gt;9td&amp;gt;
+    &amp;lt;th&amp;gt;9月th&amp;gt;&amp;lt;td class='item'&amp;gt;35td&amp;gt;&amp;lt;td class='user'&amp;gt;7td&amp;gt;
+    &amp;lt;th&amp;gt;10月th&amp;gt;&amp;lt;td class='item'&amp;gt;20td&amp;gt;&amp;lt;td class='user'&amp;gt;5td&amp;gt;
+    &amp;lt;th&amp;gt;11月th&amp;gt;&amp;lt;td class='item'&amp;gt;10td&amp;gt;&amp;lt;td class='user'&amp;gt;2td&amp;gt;
+    &amp;lt;th&amp;gt;12月th&amp;gt;&amp;lt;td class='item'&amp;gt;5td&amp;gt;&amp;lt;td class='user'&amp;gt;1td&amp;gt;
   tr&amp;gt;
 table&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -21687,8 +21810,13 @@ table&amp;gt;
 
   jQuery.noConflict();
   jQuery(document).ready(function($){
-    for(var i=0; i
-&lt;/code&gt;&lt;/pre&gt;</summary>
+    for(var i=0; i&amp;lt;$('.item').length; i++){
+      item_count[i] = [i+1, $('.item:eq('+i+')').text()];
+      user_count[i] = [i+1, $('.user:eq('+i+')').text()];
+    }
+  });
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;　セレクタを利用してi回目のループでi番目の要素からテキストを取得します。item_countとuser_countはグラフを描画する際に用います。&lt;/p&gt;</summary>
     <title>jQueryで複数のテキストを取得する方法</title>
     <updated>2010-12-28T16:50:00+00:00</updated>
     <dc:date>2010-12-28T16:50:00+00:00</dc:date>
@@ -22290,7 +22418,7 @@ function sql_request($sql){
 	border-collapse: collapse;
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;body&amp;gt;
 
 / *****DB情報の読み込み***** /
 include_once(&quot;ini.php&quot;);
@@ -22375,7 +22503,7 @@ body&amp;gt;
 &lt;li&gt;htmlspecialcharsしてからDB書き込みは文字化けの原因なので、表示前に移動&lt;/li&gt;
 &lt;li&gt;SQLインジェクション対策でmysql_escape_stringを追加&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;body&amp;gt;
 
 / *****DB情報の読み込み***** /
 include_once(&quot;ini.php&quot;);
@@ -22433,7 +22561,7 @@ body&amp;gt;
   <entry>
     <id>https://blog.naoty.dev/4/</id>
     <link href="https://blog.naoty.dev/4/"/>
-    <summary>&lt;pre&gt;&lt;code&gt;
+    <summary>&lt;pre&gt;&lt;code&gt;&amp;lt;body&amp;gt;
 
 / *****DB情報の読み込み***** /
 include_once(&quot;ini.php&quot;);
@@ -22467,7 +22595,14 @@ if($name_d&amp;lt;&amp;gt;&quot;&quot;){
 / *****twi_tbの全データ表示***** /
 $re = mysql_query(&quot;SELECT * FROM twi_tb&quot;);
 $arr = mysql_fetch_array($re);
-for($i=0;$i
+for($i=0;$i&amp;lt;count($arr);$i++){
+	echo $arr[$i][0].$arr[$i][1].$arr[$i][2].$arr[$i][3];
+}
+
+/ *****DB切断***** /
+mysql_close($con);
+
+?&amp;gt;
 
 body&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;</summary>
@@ -22483,7 +22618,7 @@ body&amp;gt;
 &lt;li&gt;データの送信&lt;/li&gt;
 &lt;li&gt;データの表示&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;body&amp;gt;
 
 include_once(&quot;./ini.php&quot;);
 include_once(&quot;./sql_request.php&quot;);
@@ -22504,12 +22639,12 @@ sql_request($sql);
 
 ?&amp;gt;
 
-
-氏名：
-
-メッセージ：
-
-
+&amp;lt;form action=&quot;./MessageBoard.php&quot; method=&quot;post&quot;&amp;gt;
+氏名：&amp;lt;br&amp;gt;
+&amp;lt;input type=&quot;text&quot; name=&quot;name&quot; maxlength=&quot;255&quot; /&amp;gt;&amp;lt;br&amp;gt;
+メッセージ：&amp;lt;br&amp;gt;
+&amp;lt;input type=&quot;text&quot; name=&quot;msg&quot; maxlength=&quot;255&quot; width=&quot;400&quot; /&amp;gt;&amp;lt;br&amp;gt;
+&amp;lt;input type=&quot;submit&quot; value=&quot;post&quot; /&amp;gt;
 form&amp;gt;
 
 //フォームから送信された情報をテーブルに挿入
@@ -22523,7 +22658,14 @@ if(($_POST[&quot;name&quot;] != &quot;&quot;) &amp;amp;&amp;amp; ($_POST[&quot;m
 //テーブルの情報を時間順に並び替えて表示
 $arr = sql_request(&quot;SELECT * FROM mb ORDER BY actime DESC&quot;);
 if($arr !== false){
-	for($i=0;$i
+	for($i=0;$i&amp;lt;count($arr);$i++){
+		echo &quot;&quot;.$arr[$i][&quot;name&quot;].&quot;：
+			&quot;.$arr[$i][&quot;msg&quot;].&quot; 
+			&quot;.$arr[$i][&quot;actime&quot;].&quot;\n&quot;;
+	}
+}
+
+?&amp;gt;
 
 body&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;</summary>
@@ -22540,7 +22682,7 @@ body&amp;gt;
 &lt;li&gt;データの表示&lt;/li&gt;
 &lt;li&gt;データの削除&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;body&amp;gt;
 
 include_once(&quot;./ini.php&quot;);
 include_once(&quot;./sql_request.php&quot;);
@@ -22560,12 +22702,12 @@ sql_request($sql);
 
 ?&amp;gt;
 
-
-氏名：
-
-メッセージ：
-
-
+&amp;lt;form action=&quot;./MessageBoard.php&quot; method=&quot;post&quot;&amp;gt;
+氏名：&amp;lt;br&amp;gt;
+&amp;lt;input type=&quot;text&quot; name=&quot;name&quot; maxlength=&quot;255&quot; /&amp;gt;&amp;lt;br&amp;gt;
+メッセージ：&amp;lt;br&amp;gt;
+&amp;lt;input type=&quot;text&quot; name=&quot;msg&quot; maxlength=&quot;255&quot; width=&quot;400&quot; /&amp;gt;&amp;lt;br&amp;gt;
+&amp;lt;input type=&quot;submit&quot; value=&quot;post&quot; /&amp;gt;
 form&amp;gt;
 
 //データの書き込み
@@ -22585,7 +22727,13 @@ if((int)($_POST[&quot;delete&quot;])&amp;gt;0){
 //データと削除ボタンの表示
 $arr = sql_request(&quot;SELECT * FROM mb ORDER BY actime DESC&quot;);
 if($arr !== false){
-	for($i=0;$i\n&quot;;
+	for($i=0;$i&amp;lt;count($arr);$i++){
+		echo &quot;\n&quot;;
+		echo &quot;\n&quot;;
+		echo &quot;&quot;.$arr[$i][&quot;name&quot;].&quot;：\n&quot;;
+		echo &quot;&quot;.$arr[$i][&quot;msg&quot;].&quot; \n&quot;;
+		echo &quot;&quot;.$arr[$i][&quot;actime&quot;].&quot;\n&quot;;
+		echo &quot;&quot;.$arr[$i][&quot;id&quot;].&quot;' /&amp;gt;\n&quot;;
 		echo &quot;\n&quot;;
 		echo &quot;\n&quot;;
 		echo &quot;\n\n&quot;;

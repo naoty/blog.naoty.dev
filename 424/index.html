@@ -30,7 +30,7 @@
           <p>rustでCLIツールを作るときにフレームワークを調べるとclapしか出てこない。これがデファクトスタンダードなのだろうということで使ってみるが、微妙にカスタマイズしたかったのでメモ。</p>
 <pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">matches</span> <span class="o">=</span> <span class="nn">App</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"mycli"</span><span class="p">)</span>
     <span class="nf">.version</span><span class="p">(</span><span class="nd">crate_version!</span><span class="p">())</span>
-    <span class="nf">.author</span><span class="p">(</span><span class="s">"Naoto Kaneko "</span><span class="p">)</span>
+    <span class="nf">.author</span><span class="p">(</span><span class="s">"Naoto Kaneko &lt;naoty.k@gmail.com&gt;"</span><span class="p">)</span>
     <span class="nf">.about</span><span class="p">(</span><span class="n">DESCRIPTION</span><span class="p">)</span>
     <span class="nf">.template</span><span class="p">(</span><span class="n">USAGE_TEMPLATE</span><span class="nf">.trim</span><span class="p">())</span>
     <span class="nf">.version_short</span><span class="p">(</span><span class="s">"v"</span><span class="p">)</span>

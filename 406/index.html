@@ -82,21 +82,21 @@
 <h1>疑似分散モード</h1>
 <h2>設定</h2>
 <p>疑似分散モードに必要な設定を追加する。設定ファイルをコンテナからローカルにコピーして編集する。</p>
-<pre lang="xml" class="highlight highlight-xml">
-
-  
-    fs.defaultFS
-    hdfs://localhost:9000
-  
-
+<pre lang="xml" class="highlight highlight-xml"><span class="c">&lt;!-- config/core-site.xml --&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>fs.defaultFS<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>hdfs://localhost:9000<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
 </pre>
-<pre lang="xml" class="highlight highlight-xml">
-
-  
-    dfs.replication
-    1
-  
-
+<pre lang="xml" class="highlight highlight-xml"><span class="c">&lt;!-- config/hdfs-site.xml --&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>dfs.replication<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
 </pre>
 <pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
  RUN apt-get update \

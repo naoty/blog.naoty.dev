@@ -118,7 +118,7 @@ print(error.summary) //=&gt; "Something wrong\n"
 </code></pre>
 <h1>エラーの利用例</h1>
 <p><code>FriendlyErrorType</code>を実装したエラー型を実際に利用してみる。Alamofire、SwiftTask、Himotokiを使ってQiita APIを呼び出している。</p>
-<pre><code>return Task { progress, fulfill, reject, configure in
+<pre><code>return Task&lt;Void, [Item], FriendlyErrorType&gt; { progress, fulfill, reject, configure in
     Alamofire.request(.GET, "https://qiita.com/api/v2/items").responseJSON { response in
         switch response.status {
         case .Success(let value):
@@ -163,6 +163,7 @@ presentViewController(alertController, animated: true, completion: nil)
 <p>以上のような方針に基づいたサンプルアプリケーションを用意した。</p>
 <p><a href="https://github.com/naoty/MyQiita">naoty/MyQiita</a></p>
 <h1>関連記事</h1>
+<!-- raw HTML omitted -->
         </section>
         <footer>
           <nav>

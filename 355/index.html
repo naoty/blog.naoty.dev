@@ -32,8 +32,8 @@
 <h1>作った理由</h1>
 <p>CIからの通知をSlackに送るようにしていると、CIからの通知でchannelが埋まってしまうようなことがよくあると思う。しかも、複雑な処理をCI上で行うと、細かく分解されたジョブから大量の通知が来るようになる。そこで、こういった簡単なプロキシを作って同じworkflowの通知をスレッドにまとめようと考えた。</p>
 <h1>これは何か</h1>
-<p>slack-thread-webhookは<code>POST /hooks/</code>というエンドポイントを持っており、Slackのincoming webhookと同じリクエストボディを受け付ける。このエンドポイントにリクエストを送ると、初回はメッセージとしてSlackに転送し、同じ``に二回以上送ると初回に送られたメッセージのスレッドに転送する。</p>
-<p>内部的には、Slackにスレッドとしてメッセージを送るために必要な親メッセージのtimestampを``とともにRedisに保持するようにしている。</p>
+<p>slack-thread-webhookは<code>POST /hooks/&lt;id&gt;</code>というエンドポイントを持っており、Slackのincoming webhookと同じリクエストボディを受け付ける。このエンドポイントにリクエストを送ると、初回はメッセージとしてSlackに転送し、同じ<code>&lt;id&gt;</code>に二回以上送ると初回に送られたメッセージのスレッドに転送する。</p>
+<p>内部的には、Slackにスレッドとしてメッセージを送るために必要な親メッセージのtimestampを<code>&lt;id&gt;</code>とともにRedisに保持するようにしている。</p>
 <h1>どう使うのか</h1>
 <p>上のスクショのようなCIの通知では、例えばCircle CIの<code>CIRCLE_WORKFLOW_ID</code>のような一連のジョブで共通するIDを使って、以下のようにリクエストを送ることでスレッドに通知をまとめることができる。</p>
 <pre><code>cat &lt;&lt; EOS | curl -X POST -H "Content-Type: application/json" -d @- https://slack-thread-webhook.herokuapp.com/hooks/${CIRCLE_WORKFLOW_ID}
@@ -53,7 +53,7 @@ EOS
   "attachments": [
     {
       "color": "good",
-      "title": "Finish "
+      "title": "Finish &lt;${CIRCLE_BUILD_URL}|${CIRCLE_JOB}&gt;"
     }
   ]
 }

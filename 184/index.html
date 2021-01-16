@@ -59,9 +59,9 @@ person.mrb person.rb
 <p>CからRubyで定義した<code>Person</code>インスタンスを生成して<code>greeting</code>メソッドの結果を標準出力に表示してみる。</p>
 <pre><code>// greeting.c
 
-#include 
-#include 
-#include 
+#include &lt;stdio.h&gt;
+#include &lt;mruby.h&gt;
+#include &lt;mruby/string.h&gt;
 
 int main()
 {
@@ -140,6 +140,7 @@ $ ./greeting
 <p>@<a href="https://twitter.com/naoty_k">naoty_k</a> クラスの取り出しはmrb_class_obj_get()、メソッドの呼び出しはmrb_funcall()を使ってください。funcallには派生形あり。</p>
 <p>— Yukihiro Matsumotoさん (@yukihiro_matz) <a href="https://twitter.com/yukihiro_matz/status/329229906561077248">2013年4月30日</a></p>
 </blockquote>
+<!-- raw HTML omitted -->
         </section>
         <footer>
           <nav>

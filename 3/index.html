@@ -32,7 +32,7 @@
 <li>データの送信</li>
 <li>データの表示</li>
 </ul>
-<pre><code>
+<pre><code>&lt;body&gt;
 
 include_once("./ini.php");
 include_once("./sql_request.php");
@@ -53,12 +53,12 @@ sql_request($sql);
 
 ?&gt;
 
-
-氏名：
-
-メッセージ：
-
-
+&lt;form action="./MessageBoard.php" method="post"&gt;
+氏名：&lt;br&gt;
+&lt;input type="text" name="name" maxlength="255" /&gt;&lt;br&gt;
+メッセージ：&lt;br&gt;
+&lt;input type="text" name="msg" maxlength="255" width="400" /&gt;&lt;br&gt;
+&lt;input type="submit" value="post" /&gt;
 form&gt;
 
 //フォームから送信された情報をテーブルに挿入
@@ -72,7 +72,14 @@ if(($_POST["name"] != "") &amp;&amp; ($_POST["msg"] != "")){
 //テーブルの情報を時間順に並び替えて表示
 $arr = sql_request("SELECT * FROM mb ORDER BY actime DESC");
 if($arr !== false){
-	for($i=0;$i
+	for($i=0;$i&lt;count($arr);$i++){
+		echo "".$arr[$i]["name"]."：
+			".$arr[$i]["msg"]." 
+			".$arr[$i]["actime"]."\n";
+	}
+}
+
+?&gt;
 
 body&gt;
 </code></pre>

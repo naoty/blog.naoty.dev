@@ -29,7 +29,7 @@
         <section class="body">
           <h2>入力補完</h2>
 <ul>
-<li>インサートモードで<code>または</code>と打つと、補完候補が出てきます。</li>
+<li>インサートモードで<code>&lt;C-n&gt;</code>または<code>&lt;C-p&gt;</code>と打つと、補完候補が出てきます。</li>
 </ul>
 <h2>バッファ</h2>
 <ul>
@@ -37,9 +37,9 @@
 <li>直前に開いたファイルに戻りたい場合によく使います。</li>
 <li>個人的には、前後のバッファに移動したりバッファから履歴を削除するために以下のようなマッピングを設定しています。</li>
 </ul>
-<pre><code>nnoremap  :bnext
-nnoremap  :bprevious
-nnoremap d :bdelete
+<pre><code>nnoremap &lt;Tab&gt; :bnext&lt;CR&gt;
+nnoremap &lt;S-Tab&gt; :bprevious&lt;CR&gt;
+nnoremap &lt;Leader&gt;d :bdelete&lt;CR&gt;
 </code></pre>
 <ul>
 <li>これでTabやShift+Tabで前後のバッファに移動できます。</li>
@@ -50,9 +50,9 @@ nnoremap d :bdelete
 <li>デスクトップPCであまり画面が大きくない場合、分割して複数のファイルを開くよりタブの方が出番が多いような気がします。</li>
 <li>個人的には、前後のタブに移動したり新しいタブを開くために以下のようなマッピングを設定しています。</li>
 </ul>
-<pre><code>nnoremap t :tabnew
-nnoremap n :tabnext
-nnoremap p :tabprev
+<pre><code>nnoremap &lt;Leader&gt;t :tabnew&lt;CR&gt;
+nnoremap &lt;Leader&gt;n :tabnext&lt;CR&gt;
+nnoremap &lt;Leader&gt;p :tabprev&lt;CR&gt;
 </code></pre>
 <h2>コマンド定義</h2>
 <ul>
@@ -60,11 +60,11 @@ nnoremap p :tabprev
 </ul>
 <pre><code>command! Indent2 :setlocal tabstop=2 shiftwidth=2
 command! Indent4 :setlocal tabstop=4 shiftwidth=4
-command! ToSjis :e ++enc=sjis
+command! ToSjis :e ++enc=sjis&lt;CR&gt;
 </code></pre>
 <ul>
 <li>これで普通に<code>:Intent2</code>と打てばインデント量が2になります。</li>
-<li>基本は<code>command!  </code>です。コマンド名は大文字から始めなくちゃいけないようです。あとはいろいろオプションがあるので、詳しくは<code>:help command-nargs</code>を見てください。</li>
+<li>基本は<code>command! &lt;Command name&gt; &lt;command&gt;</code>です。コマンド名は大文字から始めなくちゃいけないようです。あとはいろいろオプションがあるので、詳しくは<code>:help command-nargs</code>を見てください。</li>
 </ul>
 <h2>abbreviate</h2>
 <ul>
@@ -80,7 +80,7 @@ command! ToSjis :e ++enc=sjis
 <ul>
 <li>abbreviateは応用としてtypoを修正するのにも便利です。"abbreviate"っていう単語がもうtypoしそうですね。あと、個人的に"receive"を"recieve"と書いてしまうことが多いので以下のように設定します。</li>
 </ul>
-<pre><code>" abbreviate  
+<pre><code>" abbreviate &lt;誤&gt; &lt;正&gt;
 abbreviate abbriviate abbreviate
 abbreviate recieve receive
 </code></pre>

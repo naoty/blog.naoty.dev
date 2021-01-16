@@ -72,7 +72,7 @@ set incsearch
 
 nnoremap n nzz 
 nnoremap N Nzz 
-nnoremap  :nohlsearch
+nnoremap &lt;Esc&gt;&lt;Esc&gt; :nohlsearch&lt;CR&gt;
 
 " ----------------------------------------
 " Vundle
@@ -126,7 +126,7 @@ filetype plugin indent on
 let g:unite_enable_start_insert = 1
 
 " open unite buffer
-nnoremap  :Unite buffer file_rec
+nnoremap &lt;space&gt;&lt;space&gt; :Unite buffer file_rec&lt;CR&gt;
 
 " ----------------------------------------
 " neocomplcache.vim
@@ -137,12 +137,12 @@ highlight Pmenu     ctermbg=8
 highlight PmenuSel  ctermbg=1
 highlight PmenuSbar ctermbg=0
 
-imap  neocomplcache#sources#snippets_complete#expandable() ? "\(neocomplcache_snippets_expand)" : pumvisible() ? "\" : "\"
-smap  neocomplcache#sources#snippets_complete#expandable() ? "\(neocomplcache_snippets_expand)" : pumvisible() ? "\" : "\"
+imap &lt;expr&gt;&lt;Tab&gt; neocomplcache#sources#snippets_complete#expandable() ? "\&lt;Plug&gt;(neocomplcache_snippets_expand)" : pumvisible() ? "\&lt;C-n&gt;" : "\&lt;Tab&gt;"
+smap &lt;expr&gt;&lt;Tab&gt; neocomplcache#sources#snippets_complete#expandable() ? "\&lt;Plug&gt;(neocomplcache_snippets_expand)" : pumvisible() ? "\&lt;C-n&gt;" : "\&lt;Tab&gt;"
 
-inoremap   neocomplcache#smart_close_popup()."\"
-inoremap  neocomplcache#close_popup()
-inoremap  neocomplcache#cancel_popup()
+inoremap &lt;expr&gt;&lt;CR&gt;  neocomplcache#smart_close_popup()."\&lt;CR&gt;"
+inoremap &lt;expr&gt;&lt;C-y&gt; neocomplcache#close_popup()
+inoremap &lt;expr&gt;&lt;C-e&gt; neocomplcache#cancel_popup()
 
 " ----------------------------------------
 " Align.vim
@@ -155,57 +155,57 @@ let g:Align_xstrlen = 3
 let g:NERDSpaceDelims = 1
 let g:NERDShutup = 1
 
-map x NERDCommenterToggle
+map &lt;Leader&gt;x &lt;Plug&gt;NERDCommenterToggle
 
 " ----------------------------------------
 " Other Key Mappings
 " ----------------------------------------
 
 " reload .vimrc
-nnoremap r :source ~/.vimrc
+nnoremap &lt;space&gt;r :source ~/.vimrc&lt;CR&gt;
 
 " move by one display line
 nnoremap j gj
 nnoremap k gk
 
 " move to line head/end like mac
-nnoremap  0
-nnoremap  $
+nnoremap &lt;C-a&gt; 0
+nnoremap &lt;C-e&gt; $
 
 " go to another window
-nnoremap h h
-nnoremap j j
-nnoremap k k
-nnoremap l l
+nnoremap &lt;space&gt;h &lt;C-w&gt;h
+nnoremap &lt;space&gt;j &lt;C-w&gt;j
+nnoremap &lt;space&gt;k &lt;C-w&gt;k
+nnoremap &lt;space&gt;l &lt;C-w&gt;l
 
 " move the window to another position
-nnoremap H H
-nnoremap J J
-nnoremap K K
-nnoremap L L
+nnoremap &lt;space&gt;H &lt;C-w&gt;H
+nnoremap &lt;space&gt;J &lt;C-w&gt;J
+nnoremap &lt;space&gt;K &lt;C-w&gt;K
+nnoremap &lt;space&gt;L &lt;C-w&gt;L
 
 " adjust the window height/width
-nnoremap + 5+
-nnoremap - 5-
-nnoremap &gt; 10&gt;
-nnoremap &lt; 10&lt;
+nnoremap &lt;space&gt;+ &lt;C-w&gt;5+
+nnoremap &lt;space&gt;- &lt;C-w&gt;5-
+nnoremap &lt;space&gt;&gt; &lt;C-w&gt;10&gt;
+nnoremap &lt;space&gt;&lt; &lt;C-w&gt;10&lt;
 
 " complete surroundings
-inoremap ' ''
-inoremap " ""
-inoremap ( ()
-inoremap { {}
-inoremap [ []
-inoremap \| \|\|
+inoremap ' ''&lt;Left&gt;
+inoremap " ""&lt;Left&gt;
+inoremap ( ()&lt;Left&gt;
+inoremap { {}&lt;Left&gt;
+inoremap [ []&lt;Left&gt;
+inoremap \| \|\|&lt;Left&gt;
 
 " hjkl move in insert mode
-inoremap  
-inoremap  
-inoremap  
-inoremap  
+inoremap &lt;C-h&gt; &lt;Left&gt;
+inoremap &lt;C-j&gt; &lt;Down&gt;
+inoremap &lt;C-k&gt; &lt;Up&gt;
+inoremap &lt;C-l&gt; &lt;Right&gt;
 
 " ctags
-nnoremap  :pop
+nnoremap &lt;C-[&gt; :pop&lt;CR&gt;
 </code></pre>
         </section>
         <footer>

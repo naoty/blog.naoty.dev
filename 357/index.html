@@ -35,7 +35,7 @@
 <pre lang="rust" class="highlight highlight-rust"><span class="nn">process</span><span class="p">::</span><span class="nn">Command</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"ls"</span><span class="p">)</span><span class="nf">.output</span><span class="p">()</span><span class="nf">.expect</span><span class="p">(</span><span class="s">"failed"</span><span class="p">);</span>
 </pre>
 <p>あるいは、<code>?</code>オペレータを使ってエラーをそのまま呼び出し元に転送することもできる。</p>
-<pre lang="rust" class="highlight highlight-rust"><span class="k">fn</span> <span class="nf">execute_ls</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nn">io</span><span class="p">::</span><span class="n">Result</span> <span class="p">{</span>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">fn</span> <span class="nf">execute_ls</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nn">io</span><span class="p">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="nn">process</span><span class="p">::</span><span class="nn">Command</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"ls"</span><span class="p">)</span><span class="nf">.output</span><span class="p">()</span><span class="o">?</span><span class="p">;</span>
     <span class="nf">Ok</span><span class="p">(())</span>
 <span class="p">}</span>

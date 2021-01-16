@@ -47,7 +47,7 @@
 <span class="c">// numbersは再利用可</span>
 </pre>
 <p>ここからの話は<code>Vec</code>型を想定する。moveを発生させたくない場合、<code>iter()</code>や<code>iter_mut()</code>を使う。</p>
-<pre lang="rust" class="highlight highlight-rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">iter</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Iter</span>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">iter</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Iter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 </pre>
 <p><code>into_iter()</code>とは違い、<code>&amp;self</code>を受けるのでmoveは発生しない。<code>Vec</code>型の実装だと、<code>std::slice::Iter</code>型を返す。なので、for式はこの<code>Iter</code>型の<code>into_iter()</code>を呼ぶことになるが、<a href="https://doc.rust-lang.org/src/core/iter/traits/collect.rs.html#247-249">実装</a>を見ると<code>self</code>を返しているだけ。<code>Iter</code>型は<code>Iterator</code>トレイトも実装しているということになる。</p>
 <pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">numbers</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>

@@ -39,6 +39,7 @@
 </ul>
 <h1>型消去とは</h1>
 <p>先日行われた<a href="http://www.tryswiftconf.com/">try! Swift</a>で紹介されたテクニックで、トークの内容については以下の書き起こし記事が詳しいと思う。</p>
+<!-- raw HTML omitted -->
 <p>型消去とは何か、端的に説明するのはかなり難しい。ただ、リポジトリパターンをSwiftで実装するにあたって非常に強力なテクニックであることが分かったので、型消去を用いない場合と用いた場合とを比べて型消去について説明してみたいと思う。</p>
 <h2>型消去を用いない場合</h2>
 <p>例のごとく<code>Pokemon</code>オブジェクトを取得するリポジトリを考える。<code>Pokemon</code>はWeb APIから取得するかもしれないし、Realmから取得するかもしれない。とりあえず以下のようなprotocolを定義して、<code>Pokemon</code>を取得するインターフェイスを用意する。</p>
@@ -151,7 +152,7 @@
     }
 }
 </code></pre>
-<p><code>AnyRepository</code>として使う場合は、<code>typealias Domain = Pokemon</code>となっている<code>Repository</code>を実装した型のみ<code>AnyRepository()</code>に渡すことができる。例えば、ViewControllerではこんな感じで使うことになる。</p>
+<p><code>AnyRepository&lt;Pokemon&gt;</code>として使う場合は、<code>typealias Domain = Pokemon</code>となっている<code>Repository</code>を実装した型のみ<code>AnyRepository()</code>に渡すことができる。例えば、ViewControllerではこんな感じで使うことになる。</p>
 <pre><code>class PokedexViewController: UITableViewController {
     var pokedex: [Pokemon] = []
     lazy var repository: AnyRepository = AnyRepository(RealmPokemonRepository())
@@ -173,8 +174,8 @@
     }
 }
 </code></pre>
-<p><code>AnyRepository</code>があることで、<code>PokemonRepository</code>や<code>HumanRepository</code>のようなドメインモデルごとのprotocolは不要になり、それぞれ<code>AnyRepository</code>、<code>AnyRepository</code>のような型を使うことで対処できる。これでボイラープレートのようなコードを書く必要はなくなった。</p>
-<p><strong>型消去とは、この例で言うと<code>PokemonRepository</code>型であった<code>repository</code>が<code>AnyRepository</code>という型にしてしまうことを指しているようだ</strong> 。型消去というのは、より柔軟な設計のための結果として考えることができそう。</p>
+<p><code>AnyRepository</code>があることで、<code>PokemonRepository</code>や<code>HumanRepository</code>のようなドメインモデルごとのprotocolは不要になり、それぞれ<code>AnyRepository&lt;Pokemon&gt;</code>、<code>AnyRepository&lt;Human&gt;</code>のような型を使うことで対処できる。これでボイラープレートのようなコードを書く必要はなくなった。</p>
+<p><strong>型消去とは、この例で言うと<code>PokemonRepository</code>型であった<code>repository</code>が<code>AnyRepository&lt;Pokemon&gt;</code>という型にしてしまうことを指しているようだ</strong> 。型消去というのは、より柔軟な設計のための結果として考えることができそう。</p>
 <hr>
 <p>以降は型消去とは無関係だけど、リポジトリパターンを実装するにあたって必要となった技術要素を紹介していきたいと思う。</p>
 <h1>クエリのインターフェイス</h1>
@@ -259,7 +260,7 @@ let sort = AnySort.Descending(key: "weight") &gt; AnySort.Descending(key: "heigh
     typealias Domain = Pokemon
 
     func find(ID: UInt) -&gt; Task {
-        return Task { fulfill, reject in
+        return Task&lt;Float, Pokemon, ErrorType&gt; { fulfill, reject in
             let realm = try! Realm()
             if let pokemon = realm.objects(Pokemon).filter("ID == %d", ID).first {
                 fulfill(pokemon.pokemon)
@@ -270,7 +271,7 @@ let sort = AnySort.Descending(key: "weight") &gt; AnySort.Descending(key: "heigh
     }
 
     func findAll(query query: AnyQuery?, sort: AnySort?) -&gt; Task {
-        return Task { fulfill, reject in
+        return Task&lt;Float, [Pokemon], ErrorType&gt; { fulfill, reject in
             let realm = try! Realm()
             var result = realm.objects(RealmPokemon)
             

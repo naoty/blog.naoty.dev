@@ -27,11 +27,11 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="vim:.vim/after/ftplugin/php.vim"><code>nmap  :execute 'Ref phpmanual ' . expand('') 
+          <pre lang="vim:.vim/after/ftplugin/php.vim"><code>nmap &lt;F4&gt; :execute 'Ref phpmanual ' . expand('&lt;cword&gt;') &lt;CR&gt;
 </code></pre>
-<pre lang="vim:.vim/ftplugin/ruby.vim"><code>nnoremap  :execute 'Ref refe ' . expand('') 
+<pre lang="vim:.vim/ftplugin/ruby.vim"><code>nnoremap &lt;F4&gt; :execute 'Ref refe ' . expand('&lt;cword&gt;') &lt;CR&gt;
 </code></pre>
-<p><code>expand('')</code>でカーソル上の単語が取れる。この関数をマッピングで使ううまいやり方わからなかったけど、これでとりあえずいけた。</p>
+<p><code>expand('&lt;cword&gt;')</code>でカーソル上の単語が取れる。この関数をマッピングで使ううまいやり方わからなかったけど、これでとりあえずいけた。</p>
         </section>
         <footer>
           <nav>

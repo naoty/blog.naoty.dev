@@ -45,8 +45,8 @@
 </pre>
 <p>これでモデルから必要な属性だけをcamelCaseのJSON文字列に変換できるようになった。</p>
 <p>次にRailsのviewでdata属性に上のpropsを渡す。あとでここからJSでデータを引っ張ってくる計画だ。</p>
-<pre lang="erb" class="highlight highlight-erb">
-
+<pre lang="erb" class="highlight highlight-erb"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"js-redux-root"</span> <span class="na">data-react-props=</span><span class="s">"</span><span class="cp">&lt;%=</span> <span class="vi">@user</span><span class="p">.</span><span class="nf">to_react_props</span> <span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
 </pre>
 <p>あとは、Reduxのstoreを作成するときに上のpropsを設定する。</p>
 <pre lang="javascript" class="highlight highlight-javascript"><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">DOMContentLoaded</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -55,10 +55,10 @@
   <span class="kd">const</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">createStore</span><span class="p">(</span><span class="nx">rootReducer</span><span class="p">,</span> <span class="nx">initialState</span><span class="p">);</span>
 
   <span class="nx">render</span><span class="p">(</span>
-    
-      
-    
-  <span class="p">);</span>
+    <span class="o">&lt;</span><span class="nx">Provider</span> <span class="nx">store</span><span class="o">=</span><span class="p">{</span><span class="nx">store</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">SignUpForm</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="sr">/Provider</span><span class="err">&gt;
+</span>  <span class="p">);</span>
 <span class="p">});</span>
 </pre>
 <p>これでRailsで作ったデータをReduxのinitial stateに設定できた。フォームの初期値を埋めておきたいときなど、コントローラーからReactコンポーネントにデータを渡せるとラクなので、こういう実装が必要になると思う。</p>

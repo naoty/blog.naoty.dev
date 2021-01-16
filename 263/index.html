@@ -44,7 +44,7 @@
 <p>Swiftでは、Haskellにおける型コンストラクタにあたる概念がない。Genericsを使うことで<code>Maybe</code>のような型を表現することはできるが、ある型が型引数をとるのかとらないのか、とるとしたらいくつとるのかを知る術はない（はず）。Haskellではそれらは種類という概念で説明されている。<code>Maybe</code>の種類は<code>Maybe :: * -&gt; *</code>だし、<code>Either</code>の種類は<code>Either: * -&gt; * -&gt; *</code>となっているので、それぞれ型引数を1つと2つとることがわかる。Haskellの<code>Functor</code>は種類が<code>* -&gt; *</code>の型コンストラクタしかインスタンスにできないのだけど、こういう概念をSwiftで表現できない。</p>
 <p>というわけで、Swiftで関数型プログラミングをするにはHaskellほどうまくはできないことがなんとなくわかった。Genericsなどで擬似的に表現するしかない。<code>Functor</code>の<code>fmap</code>を以下のように実装してみた。</p>
 <pre><code>extension Optional {
-    func fmap(f: T -&gt; U) -&gt; U? {
+    func fmap&lt;U&gt;(f: T -&gt; U) -&gt; U? {
         switch self {
         case .Some(let value):
             return f(value)
@@ -57,7 +57,7 @@
 let maybeOne: Int? = 1
 let maybeTen = maybeOne.fmap({ x in x * 10 })
 </code></pre>
-<p>Swiftの<code>Optional</code>型はつまり<code>T?</code>型のことなのだけど、<code>Optional</code>型を拡張して<code>fmap</code>を追加している。<code>return f(value)</code>のところは暗黙的に<code>U?</code>型にラップしている。このように実装することで、<code>Optional</code>型のもつ「あるかもしれないし、ないかもしれない」という文脈を保ちつつ、中身の<code>1</code>という<code>Int</code>を計算している。</p>
+<p>Swiftの<code>Optional&lt;T&gt;</code>型はつまり<code>T?</code>型のことなのだけど、<code>Optional</code>型を拡張して<code>fmap</code>を追加している。<code>return f(value)</code>のところは暗黙的に<code>U?</code>型にラップしている。このように実装することで、<code>Optional</code>型のもつ「あるかもしれないし、ないかもしれない」という文脈を保ちつつ、中身の<code>1</code>という<code>Int</code>を計算している。</p>
 <p>ここでは<code>Functor</code>だけを簡単に実装してみたが、これに加えて<code>Applicative</code>と<code>Monad</code>を実装するとより抽象的な計算が可能になってくる。JSONのパースなどを実装する際には<code>Applicative</code>の操作が必要になってきそうな感じがする。自分はまだ関数型プログラミングの実装を実際にしたわけではないので、理解したとは到底いえない。パーサーの実装をしてみたり、上で紹介したライブラリのコードを読んでみることで関数型プログラミングを実践的に理解していきたい。</p>
         </section>
         <footer>

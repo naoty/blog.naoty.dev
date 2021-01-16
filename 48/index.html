@@ -29,10 +29,10 @@
         <section class="body">
           <p>submit_tagの場合<br>
 view</p>
-<pre><code>
-   "search") %&gt;
-   "delete") %&gt;
-
+<pre><code>&lt;% form_tag -%&gt;
+  &lt;%= submit_tag("Search", :name =&gt; "search") %&gt;
+  &lt;%= submit_tag("Delete", :name =&gt; "delete") %&gt;
+&lt;% end -%&gt;
 </code></pre>
 <p>controller</p>
 <pre><code>if params[:search]
@@ -43,10 +43,10 @@ end
 </code></pre>
 <p>image_submit_tagの場合<br>
 view</p>
-<pre><code>
-   "search") %&gt;
-   "delete") %&gt;
-
+<pre><code>&lt;% form_tag -%&gt;
+  &lt;%= image_submit_tag("search.png", :name =&gt; "search") %&gt;
+  &lt;%= image_submit_tag("delete.png", :name =&gt; "delete") %&gt;
+&lt;% end -%&gt;
 </code></pre>
 <p>controller</p>
 <pre><code>if params['search.x']

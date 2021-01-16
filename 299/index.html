@@ -33,7 +33,7 @@
 <p>MITライセンスファイル（<code>LICENSE</code>）を作成するとき、いつも<a href="https://choosealicense.com/licenses/mit/">MIT License | Choose a License</a>からコピペしていた。さすがに毎回同じことをするのは面倒になってきたのでテンプレートからテキストを生成するだけのコマンドラインツールを書いた。<code>text/template</code>を使ったことがなかったのでちょうどいい練習になった。</p>
 <h2>brewery</h2>
 <p><a href="https://github.com/naoty/brewery">naoty/brewery</a></p>
-<p>Goで書いたコマンドラインツールは<a href="https://github.com/naoty/homebrew-misc">naoty/homebrew-misc</a>からHomebrewでインストールできるようにしている。その準備をするためにformulaを作るとき、<code>brew create  --tap naoty/misc</code>を実行していた。しかし、この方法だと<code>/usr/local/Homebrew/Library/Taps/naoty/homebrew-misc/</code>以下にformulaが作成されてしまい、その後ワークスペースにコピペする作業が発生していた。</p>
+<p>Goで書いたコマンドラインツールは<a href="https://github.com/naoty/homebrew-misc">naoty/homebrew-misc</a>からHomebrewでインストールできるようにしている。その準備をするためにformulaを作るとき、<code>brew create &lt;url&gt; --tap naoty/misc</code>を実行していた。しかし、この方法だと<code>/usr/local/Homebrew/Library/Taps/naoty/homebrew-misc/</code>以下にformulaが作成されてしまい、その後ワークスペースにコピペする作業が発生していた。</p>
 <p>そこで、formulaをテンプレートから生成して標準出力に出力するだけのコマンドラインツールを作った。SHA256もちゃんと計算してくれるので便利。今後はformulaを書く作業が捗りそう。</p>
 <h2>学び</h2>
 <ul>

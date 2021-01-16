@@ -65,8 +65,8 @@ end
 <li>なので、Sinatraのテンプレートを使ってみる。</li>
 </ul>
 <pre lang="ruby:views/layout.erb"><code>{
-  "status": ,
-  "result": 
+  "status": &lt;%= response.status %&gt;,
+  "result": &lt;%= yield %&gt;
 }
 </code></pre>
 <pre lang="ruby:my_app.rb"><code>get '/' do

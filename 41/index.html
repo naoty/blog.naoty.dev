@@ -29,20 +29,20 @@
         <section class="body">
           <p>　select1の値が変更されると、select2の値がselect1と同じ値に変更される。セレクトボックスがたくさんあって入力が煩わしいインターフェイスを改善するときに、考えました。HTMLSelectElementのselectedIndexプロパティには選択されたoption要素の番号が入っているので、それを他方のselect要素に代入することで、セレクトボックスの値を変更することができます。</p>
 <p>HTML</p>
-<pre><code>
-    1option&gt;
-    2option&gt;
-    3option&gt;
-    4option&gt;
-    5option&gt;
+<pre><code>&lt;select id="select1"&gt;
+    &lt;option value="1"&gt;1option&gt;
+    &lt;option value="2"&gt;2option&gt;
+    &lt;option value="3"&gt;3option&gt;
+    &lt;option value="4"&gt;4option&gt;
+    &lt;option value="5"&gt;5option&gt;
 select&gt;
 
-
-    1option&gt;
-    2option&gt;
-    3option&gt;
-    4option&gt;
-    5option&gt;
+&lt;select id="select2"&gt;
+    &lt;option value="1"&gt;1option&gt;
+    &lt;option value="2"&gt;2option&gt;
+    &lt;option value="3"&gt;3option&gt;
+    &lt;option value="4"&gt;4option&gt;
+    &lt;option value="5"&gt;5option&gt;
 select&gt;
 </code></pre>
 <p>JavaScript</p>

@@ -34,8 +34,8 @@
 <li>@fromと@toという変数を使ってパラメータを保持しておくことで、入力した日付を引き続き表示させます。select_datetimeの第1引数で表示する日付を設定できます。</li>
 </ul>
 <p>View</p>
-<pre><code> "from"}) %&gt; 〜 
- "to"}) %&gt;
+<pre><code>&lt;%= select_datetime(@from || Time.now, {:prefix =&gt; "from"}) %&gt; 〜 
+&lt;%= select_datetime(@to || Time.now, {:prefix =&gt; "to"}) %&gt;
 </code></pre>
 <p>Controller</p>
 <pre><code>def index

@@ -34,11 +34,11 @@ def tag_hidden_if(tag, conditions, attributes = {}, &amp;block)
 end
 </code></pre>
 <pre><code># index.html.erb
-
-   'naotyhoge'} do %&gt;
+&lt;% @articles.each_with_index do |article, i| -%&gt;
+  &lt;%= tag_hidden_if :li, (i % 2 == 0), {:class =&gt; 'naotyhoge'} do %&gt;
     # ...
-  
-
+  &lt;% end -%&gt;
+&lt;% end -%&gt;
 </code></pre>
 <ul>
 <li>この例だと、偶数の列は非表示になるはずです。</li>

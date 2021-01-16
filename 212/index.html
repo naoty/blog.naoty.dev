@@ -28,11 +28,11 @@
         </header>
         <section class="body">
           <pre lang="yaml:locales/ja.yml"><code>ja:
-  footer: "© naoty All Rights Reserved."
+  footer: "&amp;copy; naoty All Rights Reserved."
 </code></pre>
-<p>などと<code>©</code>のような特殊文字をロケールファイルで指定するとうまく表示されない。</p>
+<p>などと<code>&amp;copy;</code>のような特殊文字をロケールファイルで指定するとうまく表示されない。</p>
 <pre><code>&gt; I18n.t("footer")
-=&gt; "© naoty All Rights Reserved."
+=&gt; "&amp;copy; naoty All Rights Reserved."
 </code></pre>
 <p>こういうときは特殊文字の16進数表記を使うとうまく表示される。</p>
 <pre lang="yaml:locales/ja.yml"><code>ja:

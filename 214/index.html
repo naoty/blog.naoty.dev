@@ -27,12 +27,12 @@
           </p>
         </header>
         <section class="body">
-          <p>XcodeでCommand Line Toolを作るときビルドした実行ファイルは、デフォルトでは<code>$HOME/Library/Developer/Xcode/DerivedData//Build/Products//</code>以下に保存されます。実行ファイルをGitで管理したい場合など何らかの理由でプロジェクト内に置きたいとき、Build Phasesに設定を追加することで実行ファイルをプロジェクトにコピーする作業を自動化できます。</p>
+          <p>XcodeでCommand Line Toolを作るときビルドした実行ファイルは、デフォルトでは<code>$HOME/Library/Developer/Xcode/DerivedData/&lt;アプリケーション固有ID&gt;/Build/Products/&lt;Build Configuration&gt;/</code>以下に保存されます。実行ファイルをGitで管理したい場合など何らかの理由でプロジェクト内に置きたいとき、Build Phasesに設定を追加することで実行ファイルをプロジェクトにコピーする作業を自動化できます。</p>
 <p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/f6e02520-a8b0-295a-bc78-07666f6d79a0.png" alt="スクリーンショット 2014-04-14 0.59.33.png"></p>
 <p>プロジェクトの設定画面からスクリーンショットのようにBuild PhasesにRun Scriptを追加して以下のようなシェルスクリプトを入力します。</p>
 <pre lang="bash" class="highlight highlight-bash"><span class="nb">cp</span> <span class="nv">$BUILT_PRODUCTS_DIR</span>/your_executable <span class="nv">$SRCROOT</span>/bin/your_executable
 </pre>
-<p><code>$BUILT_PRODUCTS_DIR</code>という環境変数は上の<code>$HOME/Library/Developer/Xcode/DerivedData//Build/Products//</code>を指し、<code>$SRCROOT</code>はプロジェクトルートを指します。これでビルドする毎にプロジェクト内に実行ファイルがコピーされます。</p>
+<p><code>$BUILT_PRODUCTS_DIR</code>という環境変数は上の<code>$HOME/Library/Developer/Xcode/DerivedData/&lt;アプリケーション固有ID&gt;/Build/Products/&lt;Build Configuration&gt;/</code>を指し、<code>$SRCROOT</code>はプロジェクトルートを指します。これでビルドする毎にプロジェクト内に実行ファイルがコピーされます。</p>
         </section>
         <footer>
           <nav>
