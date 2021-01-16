@@ -6,6 +6,7 @@
     <title>掲示板 ver.1.2</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="掲示板 ver.1.2">
     <meta property="og:type" content="website">
@@ -34,7 +35,7 @@
 <pre><code>
 
 / *****DB情報の読み込み***** /
-include_once(&quot;ini.php&quot;);
+include_once("ini.php");
 
 / *****DBへ接続、DBの選択***** /
 $con = mysql_connect(DB_HOST,DB_USER,DB_PASS);
@@ -50,29 +51,29 @@ echo '';
 echo '';
 
 / *****エスケープ***** /
-$name_d = mysql_escape_string($_POST[&quot;name&quot;]);
-$msg_d = mysql_escape_string($_POST[&quot;msg&quot;]);
+$name_d = mysql_escape_string($_POST["name"]);
+$msg_d = mysql_escape_string($_POST["msg"]);
 
 / *****utf-8にエンコーディング***** /
-$name_d = mb_convert_encoding($name_d,&quot;utf-8&quot;,&quot;utf-8,euc-jp,sjis&quot;);
-$msg_d = mb_convert_encoding($msg_d,&quot;utf-8&quot;,&quot;utf-8,euc-jp,sjis&quot;);
+$name_d = mb_convert_encoding($name_d,"utf-8","utf-8,euc-jp,sjis");
+$msg_d = mb_convert_encoding($msg_d,"utf-8","utf-8,euc-jp,sjis");
 
 / *****「name」にデータがあるときデータをDBに挿入***** /
-if($name_d !== &quot;&quot;){
-	mysql_query(&quot;INSERT INTO twi_tb (name,msg) VALUES ('$name_d','$msg_d')&quot;);
+if($name_d !== ""){
+	mysql_query("INSERT INTO twi_tb (name,msg) VALUES ('$name_d','$msg_d')");
 }
 
 / *****タグ削除、twi_tbの全データ表示***** /
-$re = mysql_query(&quot;SELECT * FROM twi_tb&quot;);
+$re = mysql_query("SELECT * FROM twi_tb");
 while($arr = mysql_fetch_array($re)){
 	echo htmlspecialchars($arr[0]);
-	echo &quot;：&quot;;
+	echo "：";
 	echo htmlspecialchars($arr[1]);
-	echo &quot;：&quot;;
+	echo "：";
 	echo htmlspecialchars($arr[2]);
-	echo &quot;：&quot;;
+	echo "：";
 	echo htmlspecialchars($arr[3]);
-	echo &quot;&quot;;
+	echo "";
 }
 
 / *****DB切断***** /

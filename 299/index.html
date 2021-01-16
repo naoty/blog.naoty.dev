@@ -6,6 +6,7 @@
     <title>Goでちょっとしたツールを作った</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Goでちょっとしたツールを作った">
     <meta property="og:type" content="website">
@@ -36,8 +37,10 @@
 <p>そこで、formulaをテンプレートから生成して標準出力に出力するだけのコマンドラインツールを作った。SHA256もちゃんと計算してくれるので便利。今後はformulaを書く作業が捗りそう。</p>
 <h2>学び</h2>
 <ul>
-<li><code>text/template</code>の使い方。Webアプリケーションを開発するのであれば、同じようなパッケージである<code>html/template</code>が確実に必要になるので、覚えておきたかった。</li>
-<li><a href="https://github.com/jteeuwen/go-bindata">https://github.com/jteeuwen/go-bindata</a>によってテンプレートをバイナリに含めること。これもテンプレートを使う以上シングルバイナリにして配布を簡単にするために必要になるだろう。</li>
+<li>
+<code>text/template</code>の使い方。Webアプリケーションを開発するのであれば、同じようなパッケージである<code>html/template</code>が確実に必要になるので、覚えておきたかった。</li>
+<li>
+<a href="https://github.com/jteeuwen/go-bindata">https://github.com/jteeuwen/go-bindata</a>によってテンプレートをバイナリに含めること。これもテンプレートを使う以上シングルバイナリにして配布を簡単にするために必要になるだろう。</li>
 <li>golang/depの使い方。おおかたの仕様についてはstableになったとのことなので、今から使い方に慣れておきたい。<code>dep ensure</code>のバリエーションと<code>Gopkg.toml</code>の書き方をもう少し把握したい。</li>
 </ul>
         </section>

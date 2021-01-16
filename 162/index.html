@@ -6,6 +6,7 @@
     <title>AndroidでUserAgentを指定する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="AndroidでUserAgentを指定する">
     <meta property="og:type" content="website">
@@ -27,10 +28,10 @@
         </header>
         <section class="body">
           <p><code>DefaultHttpClient</code>を使うとUserAgentが<code>Apache-HttpClient/...</code>みたいな感じになる。サーバー側でUserAgentを使って制限したりする場合には、以下のようにすれば自由にUserAgentを指定できる。</p>
-<pre lang="java"><code>DefaultHttpClient client = new DefaultHttpClient();
-HttpParams params = client.getParams();
-params.setParameter(CoreProtocolPNames.USER_AGENT, &quot;ユーザーエージェント&quot;);
-</code></pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">DefaultHttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultHttpClient</span><span class="o">();</span>
+<span class="nc">HttpParams</span> <span class="n">params</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">getParams</span><span class="o">();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="nc">CoreProtocolPNames</span><span class="o">.</span><span class="na">USER_AGENT</span><span class="o">,</span> <span class="s">"ユーザーエージェント"</span><span class="o">);</span>
+</pre>
         </section>
         <footer>
           <nav>

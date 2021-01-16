@@ -6,6 +6,7 @@
     <title>エラーの判別</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="エラーの判別">
     <meta property="og:type" content="website">
@@ -28,72 +29,72 @@
         <section class="body">
           <h1>ダメなケース</h1>
 <p>同じメッセージを持つ、別々のエラーは等しくない。</p>
-<pre lang="go"><code>err1 := errors.New(&quot;user not found&quot;)
-err2 := errors.New(&quot;user not found&quot;)
-fmt.Println(err1 == err2) //=&gt; false
-</code></pre>
+<pre lang="go" class="highlight highlight-go"><span class="n">err1</span> <span class="o">:=</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"user not found"</span><span class="p">)</span>
+<span class="n">err2</span> <span class="o">:=</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"user not found"</span><span class="p">)</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err1</span> <span class="o">==</span> <span class="n">err2</span><span class="p">)</span> <span class="c">//=&gt; false</span>
+</pre>
 <p>なので、こういったコードはうまくいかない。</p>
-<pre lang="go"><code>package user
+<pre lang="go" class="highlight highlight-go"><span class="k">package</span> <span class="n">user</span>
 
-func Lookup() (*User, error) {
-  return nil, errors.New(&quot;user not found&quot;)
-}
-</code></pre>
-<pre lang="go"><code>package main
+<span class="k">func</span> <span class="n">Lookup</span><span class="p">()</span> <span class="p">(</span><span class="o">*</span><span class="n">User</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="no">nil</span><span class="p">,</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"user not found"</span><span class="p">)</span>
+<span class="p">}</span>
+</pre>
+<pre lang="go" class="highlight highlight-go"><span class="k">package</span> <span class="n">main</span>
 
-func main() {
-  user, err := user.Lookup()
-  if err == errors.New(&quot;user not found&quot;) {
-    fmt.Fprintln(os.Stderr, &quot;failed to lookup user&quot;)
-  }
-}
-</code></pre>
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">user</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">user</span><span class="o">.</span><span class="n">Lookup</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"user not found"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintln</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stderr</span><span class="p">,</span> <span class="s">"failed to lookup user"</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <h1>シンプルなエラーの判別</h1>
 <p>エラーを比較するには、エラーを生成するコードとエラーを判別するコードの間でエラーを共有する。</p>
-<pre lang="go"><code>package user
+<pre lang="go" class="highlight highlight-go"><span class="k">package</span> <span class="n">user</span>
 
-var ErrNotFound = errors.New(&quot;user not found&quot;)
+<span class="k">var</span> <span class="n">ErrNotFound</span> <span class="o">=</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"user not found"</span><span class="p">)</span>
 
-func Lookup() (*User, error) {
-  return nil, ErrNotFound
-}
-</code></pre>
-<pre lang="go"><code>package main
+<span class="k">func</span> <span class="n">Lookup</span><span class="p">()</span> <span class="p">(</span><span class="o">*</span><span class="n">User</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="no">nil</span><span class="p">,</span> <span class="n">ErrNotFound</span>
+<span class="p">}</span>
+</pre>
+<pre lang="go" class="highlight highlight-go"><span class="k">package</span> <span class="n">main</span>
 
-func main() {
-  user, err := user.Lookup()
-  if err == user.ErrNotFound {
-    fmt.Fprintln(os.Stderr, &quot;failed to lookup user&quot;)
-  }
-}
-</code></pre>
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">user</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">user</span><span class="o">.</span><span class="n">Lookup</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">ErrNotFound</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintln</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stderr</span><span class="p">,</span> <span class="s">"failed to lookup user"</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <h1>データをもつエラーの判別</h1>
 <p>データをもつエラーを表現するには、<code>Error()</code>を実装する型を定義する。<code>errors.As()</code>を使うと、エラーの判別をしつつ型アサーションにより内部のデータにアクセスできる。</p>
-<pre lang="go"><code>package user
+<pre lang="go" class="highlight highlight-go"><span class="k">package</span> <span class="n">user</span>
 
-type ErrNotFound struct {
-  ID int
-}
+<span class="k">type</span> <span class="n">ErrNotFound</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">ID</span> <span class="kt">int</span>
+<span class="p">}</span>
 
-func (err ErrNotFound) Error() string {
-  return fmt.Sprintf(&quot;user not found: %d&quot;, err.ID)
-}
+<span class="k">func</span> <span class="p">(</span><span class="n">err</span> <span class="n">ErrNotFound</span><span class="p">)</span> <span class="n">Error</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"user not found: %d"</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
+<span class="p">}</span>
 
-func Lookup(id int) (*User, error) {
-  return nil, ErrorNotFound{ID: id}
-}
-</code></pre>
-<pre lang="go"><code>package main
+<span class="k">func</span> <span class="n">Lookup</span><span class="p">(</span><span class="n">id</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">User</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="no">nil</span><span class="p">,</span> <span class="n">ErrorNotFound</span><span class="p">{</span><span class="n">ID</span><span class="o">:</span> <span class="n">id</span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<pre lang="go" class="highlight highlight-go"><span class="k">package</span> <span class="n">main</span>
 
-func main() {
-  user, err := user.Lookup(1)
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">user</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">user</span><span class="o">.</span><span class="n">Lookup</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
 
-  var notFoundErr user.ErrNotFound
-  if errors.As(err, &amp;notFoundErr) {
-    fmt.Fprintf(os.Stderr, &quot;failed to lookup user ID:%d\n&quot;, notFoundErr.ID)
-  }
-}
-</code></pre>
+  <span class="k">var</span> <span class="n">notFoundErr</span> <span class="n">user</span><span class="o">.</span><span class="n">ErrNotFound</span>
+  <span class="k">if</span> <span class="n">errors</span><span class="o">.</span><span class="n">As</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">notFoundErr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stderr</span><span class="p">,</span> <span class="s">"failed to lookup user ID:%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">notFoundErr</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
         </section>
         <footer>
           <nav>

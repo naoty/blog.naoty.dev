@@ -6,6 +6,7 @@
     <title>Rails APIモードのdiff</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Rails APIモードのdiff">
     <meta property="og:type" content="website">
@@ -32,40 +33,41 @@
 <li>アセットパイプライン関連の設定やディレクトリがなくなった。</li>
 <li>Cookie 等 Web ブラウザでしか使われない設定やミドルウェアがなくなった。</li>
 </ul>
-<hr />
-<pre lang="sh"><code>$ rails new rails-sample
-$ rails new rails-api-sample --api
-</code></pre>
+<hr>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>rails new rails-sample
+<span class="nv">$ </span>rails new rails-api-sample <span class="nt">--api</span>
+</pre>
 <ul>
-<li><code>--api</code> をつけると API モードで rails アプリケーションを作成する。</li>
+<li>
+<code>--api</code> をつけると API モードで rails アプリケーションを作成する。</li>
 </ul>
-<pre lang="sh"><code>$ diff -qr rails-sample rails-api-sample
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>diff <span class="nt">-qr</span> rails-sample rails-api-sample
 Files rails-sample/Gemfile and rails-api-sample/Gemfile differ
 Files rails-sample/Gemfile.lock and rails-api-sample/Gemfile.lock differ
-Only in rails-sample/app: assets
+Only <span class="k">in </span>rails-sample/app: assets
 Files rails-sample/app/controllers/application_controller.rb and rails-api-sample/app/controllers/application_controller.rb differ
-Only in rails-sample/app: helpers
-Only in rails-sample/app/views/layouts: application.html.erb
+Only <span class="k">in </span>rails-sample/app: helpers
+Only <span class="k">in </span>rails-sample/app/views/layouts: application.html.erb
 Files rails-sample/config/application.rb and rails-api-sample/config/application.rb differ
 Files rails-sample/config/environments/development.rb and rails-api-sample/config/environments/development.rb differ
 Files rails-sample/config/environments/production.rb and rails-api-sample/config/environments/production.rb differ
-Only in rails-sample/config/initializers: assets.rb
-Only in rails-sample/config/initializers: cookies_serializer.rb
-Only in rails-api-sample/config/initializers: cors.rb
+Only <span class="k">in </span>rails-sample/config/initializers: assets.rb
+Only <span class="k">in </span>rails-sample/config/initializers: cookies_serializer.rb
+Only <span class="k">in </span>rails-api-sample/config/initializers: cors.rb
 Files rails-sample/config/initializers/new_framework_defaults.rb and rails-api-sample/config/initializers/new_framework_defaults.rb differ
-Only in rails-sample/config/initializers: session_store.rb
+Only <span class="k">in </span>rails-sample/config/initializers: session_store.rb
 Files rails-sample/config/secrets.yml and rails-api-sample/config/secrets.yml differ
-Only in rails-sample/lib: assets
-Only in rails-sample/public: 404.html
-Only in rails-sample/public: 422.html
-Only in rails-sample/public: 500.html
-Only in rails-sample/public: apple-touch-icon-precomposed.png
-Only in rails-sample/public: apple-touch-icon.png
-Only in rails-sample/public: favicon.ico
-Only in rails-sample/test: helpers
-Only in rails-sample/tmp/cache: assets
-Only in rails-sample/vendor: assets
-</code></pre>
+Only <span class="k">in </span>rails-sample/lib: assets
+Only <span class="k">in </span>rails-sample/public: 404.html
+Only <span class="k">in </span>rails-sample/public: 422.html
+Only <span class="k">in </span>rails-sample/public: 500.html
+Only <span class="k">in </span>rails-sample/public: apple-touch-icon-precomposed.png
+Only <span class="k">in </span>rails-sample/public: apple-touch-icon.png
+Only <span class="k">in </span>rails-sample/public: favicon.ico
+Only <span class="k">in </span>rails-sample/test: helpers
+Only <span class="k">in </span>rails-sample/tmp/cache: assets
+Only <span class="k">in </span>rails-sample/vendor: assets
+</pre>
 <ul>
 <li>API モードの Rails アプリケーションには、アセット関連のファイルやディレクトリ、ヘルパー、レイアウトファイル、そして cookie 等の Web ブラウザに関連する設定ファイルがない。</li>
 <li>逆に API モードには CORS に関する initializer が存在する。</li>
@@ -102,93 +104,95 @@ Only in rails-sample/vendor: assets
 <li>逆に、API モードでは不要なアセットパイプラインに関わる rubygems は含まれない。</li>
 <li>API モードでは、jbuilder がコメントアウトされているのが興味深い。JSON 以外のフォーマットが採用される可能性を見越しているのかな。</li>
 </ul>
-<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/app/controllers/application_controller.rb
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/app/controllers/application_controller.rb
 1,2c1
 &lt; class ApplicationController &lt; ActionController::Base
 &lt;   protect_from_forgery with: :exception
----
-&gt; class ApplicationController &lt; ActionController::API
-</code></pre>
+<span class="nt">---</span>
+<span class="o">&gt;</span> class ApplicationController &lt; ActionController::API
+</pre>
 <ul>
 <li>API モードでは CSRF 対策は不要なので削除されている。</li>
-<li><code>ActionController::Base</code> ではなく <code>ActionController::API</code> を継承するようになっている。</li>
+<li>
+<code>ActionController::Base</code> ではなく <code>ActionController::API</code> を継承するようになっている。</li>
 </ul>
-<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/config/application.rb
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/config/application.rb
 3c3,13
-&lt; require 'rails/all'
----
-&gt; require &quot;rails&quot;
-&gt; # Pick the frameworks you want:
-&gt; require &quot;active_model/railtie&quot;
-&gt; require &quot;active_job/railtie&quot;
-&gt; require &quot;active_record/railtie&quot;
-&gt; require &quot;action_controller/railtie&quot;
-&gt; require &quot;action_mailer/railtie&quot;
-&gt; require &quot;action_view/railtie&quot;
-&gt; require &quot;action_cable/engine&quot;
-&gt; # require &quot;sprockets/railtie&quot;
-&gt; require &quot;rails/test_unit/railtie&quot;
+&lt; require <span class="s1">'rails/all'</span>
+<span class="nt">---</span>
+<span class="o">&gt;</span> require <span class="s2">"rails"</span>
+<span class="o">&gt;</span> <span class="c"># Pick the frameworks you want:</span>
+<span class="o">&gt;</span> require <span class="s2">"active_model/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"active_job/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"active_record/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"action_controller/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"action_mailer/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"action_view/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"action_cable/engine"</span>
+<span class="o">&gt;</span> <span class="c"># require "sprockets/railtie"</span>
+<span class="o">&gt;</span> require <span class="s2">"rails/test_unit/railtie"</span>
 9c19
 &lt; module RailsSample
----
-&gt; module RailsApiSample
+<span class="nt">---</span>
+<span class="o">&gt;</span> module RailsApiSample
 13a24,28
-&gt;
-&gt;     # Only loads a smaller set of middleware suitable for API only apps.
-&gt;     # Middleware like session, flash, cookies can be added back manually.
-&gt;     # Skip views, helpers and assets when generating a new resource.
-&gt;     config.api_only = true
-</code></pre>
+<span class="o">&gt;</span>
+<span class="o">&gt;</span>     <span class="c"># Only loads a smaller set of middleware suitable for API only apps.</span>
+<span class="o">&gt;</span>     <span class="c"># Middleware like session, flash, cookies can be added back manually.</span>
+<span class="o">&gt;</span>     <span class="c"># Skip views, helpers and assets when generating a new resource.</span>
+<span class="o">&gt;</span>     config.api_only <span class="o">=</span> <span class="nb">true</span>
+</pre>
 <ul>
 <li>API モードでは <code>require</code> する rubygems をひとつひとつ書いている。sprockets は API モードでは不要なのでコメントアウトされている。</li>
-<li><code>require rails/all</code> の内容と大差はなさそうだが、不要なものをコメントアウトできるようにしてある。</li>
+<li>
+<code>require rails/all</code> の内容と大差はなさそうだが、不要なものをコメントアウトできるようにしてある。</li>
 <li>API モードでは、generate 時にアセットやヘルパーの generate をスキップするオプションが設定されている。</li>
 </ul>
-<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/config/environments/development.rb
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/config/environments/development.rb
 40,46d39
-&lt;   # Debug mode disables concatenation and preprocessing of assets.
-&lt;   # This option may cause significant delays in view rendering with a large
-&lt;   # number of complex assets.
-&lt;   config.assets.debug = true
+&lt;   <span class="c"># Debug mode disables concatenation and preprocessing of assets.</span>
+&lt;   <span class="c"># This option may cause significant delays in view rendering with a large</span>
+&lt;   <span class="c"># number of complex assets.</span>
+&lt;   config.assets.debug <span class="o">=</span> <span class="nb">true</span>
 &lt;
-&lt;   # Suppress logger output for asset requests.
-&lt;   config.assets.quiet = true
-$ diff {rails-sample,rails-api-sample}/config/environments/production.rb
+&lt;   <span class="c"># Suppress logger output for asset requests.</span>
+&lt;   config.assets.quiet <span class="o">=</span> <span class="nb">true</span>
+<span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/config/environments/production.rb
 21,28d20
-&lt;   # Compress JavaScripts and CSS.
-&lt;   config.assets.js_compressor = :uglifier
-&lt;   # config.assets.css_compressor = :sass
+&lt;   <span class="c"># Compress JavaScripts and CSS.</span>
+&lt;   config.assets.js_compressor <span class="o">=</span> :uglifier
+&lt;   <span class="c"># config.assets.css_compressor = :sass</span>
 &lt;
-&lt;   # Do not fallback to assets pipeline if a precompiled asset is missed.
-&lt;   config.assets.compile = false
+&lt;   <span class="c"># Do not fallback to assets pipeline if a precompiled asset is missed.</span>
+&lt;   config.assets.compile <span class="o">=</span> <span class="nb">false</span>
 &lt;
-&lt;   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
+&lt;   <span class="c"># `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb</span>
 57c49
-&lt;   # config.active_job.queue_name_prefix = &quot;rails-sample_#{Rails.env}&quot;
----
-&gt;   # config.active_job.queue_name_prefix = &quot;rails-api-sample_#{Rails.env}&quot;
-</code></pre>
+&lt;   <span class="c"># config.active_job.queue_name_prefix = "rails-sample_#{Rails.env}"</span>
+<span class="nt">---</span>
+<span class="o">&gt;</span>   <span class="c"># config.active_job.queue_name_prefix = "rails-api-sample_#{Rails.env}"</span>
+</pre>
 <ul>
 <li>環境設定ファイルはアセットパイプラインの設定の有無が異なっているだけだった。</li>
 </ul>
-<pre lang="sh"><code>$ diff {rails-sample,rails-api-sample}/config/initializers/new_framework_defaults.rb
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/config/initializers/new_framework_defaults.rb
 7,12d6
-&lt; # Enable per-form CSRF tokens. Previous versions had false.
-&lt; Rails.application.config.action_controller.per_form_csrf_tokens = true
+&lt; <span class="c"># Enable per-form CSRF tokens. Previous versions had false.</span>
+&lt; Rails.application.config.action_controller.per_form_csrf_tokens <span class="o">=</span> <span class="nb">true</span>
 &lt;
-&lt; # Enable origin-checking CSRF mitigation. Previous versions had false.
-&lt; Rails.application.config.action_controller.forgery_protection_origin_check = true
+&lt; <span class="c"># Enable origin-checking CSRF mitigation. Previous versions had false.</span>
+&lt; Rails.application.config.action_controller.forgery_protection_origin_check <span class="o">=</span> <span class="nb">true</span>
 &lt;
-</code></pre>
+</pre>
 <ul>
 <li>API モードには CSRF 対策は不要ということで、設定が省かれている。</li>
 </ul>
-<pre lang="sh"><code>$ cd rails-sample
-$ bin/rails initializers &gt; initializers.txt
-$ cd ../rails-api-sample
-$ bin/rails initializers &gt; initializers.txt
-$ cd ..
-$ diff {rails-sample,rails-api-sample}/initializers.txt
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd </span>rails-sample
+<span class="nv">$ </span>bin/rails initializers <span class="o">&gt;</span> initializers.txt
+<span class="nv">$ </span><span class="nb">cd</span> ../rails-api-sample
+<span class="nv">$ </span>bin/rails initializers <span class="o">&gt;</span> initializers.txt
+<span class="nv">$ </span><span class="nb">cd</span> ..
+<span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/initializers.txt
 3,5d2
 &lt; set_load_path
 &lt; set_load_path
@@ -212,10 +216,10 @@ $ diff {rails-sample,rails-api-sample}/initializers.txt
 &lt; load_environment_config
 &lt; load_environment_config
 43a26,29
-&gt; global_id
-&gt; active_job.logger
-&gt; active_job.set_configs
-&gt; active_job.set_reloader_hook
+<span class="o">&gt;</span> global_id
+<span class="o">&gt;</span> active_job.logger
+<span class="o">&gt;</span> active_job.set_configs
+<span class="o">&gt;</span> active_job.set_reloader_hook
 67,70d52
 &lt; global_id
 &lt; active_job.logger
@@ -255,19 +259,19 @@ $ diff {rails-sample,rails-api-sample}/initializers.txt
 &lt; append_assets_path
 &lt; turbolinks
 &lt; append_assets_path
----
-&gt; engines_blank_point
-</code></pre>
+<span class="nt">---</span>
+<span class="o">&gt;</span> engines_blank_point
+</pre>
 <ul>
 <li>API モードだと余計な initializers の読み込みが少なくなっているようだ。</li>
 <li>なお、このコマンドは筆者によって追加されている。</li>
 </ul>
-<pre lang="sh"><code>$ cd rails-sample
-$ bin/rails middleware &gt; middleware.txt
-$ cd ../rails-api-sample
-$ bin/rails middleware &gt; middleware.txt
-$ cd ..
-$ diff {rails-sample,rails-api-sample}/middleware.txt
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd </span>rails-sample
+<span class="nv">$ </span>bin/rails middleware <span class="o">&gt;</span> middleware.txt
+<span class="nv">$ </span><span class="nb">cd</span> ../rails-api-sample
+<span class="nv">$ </span>bin/rails middleware <span class="o">&gt;</span> middleware.txt
+<span class="nv">$ </span><span class="nb">cd</span> ..
+<span class="nv">$ </span>diff <span class="o">{</span>rails-sample,rails-api-sample<span class="o">}</span>/middleware.txt
 6d5
 &lt; use Rack::MethodOverride
 8d6
@@ -280,11 +284,12 @@ $ diff {rails-sample,rails-api-sample}/middleware.txt
 &lt; use ActionDispatch::Flash
 23c17
 &lt; run RailsSample::Application.routes
----
-&gt; run RailsApiSample::Application.routes
-</code></pre>
+<span class="nt">---</span>
+<span class="o">&gt;</span> run RailsApiSample::Application.routes
+</pre>
 <ul>
-<li><code>Rack::MethodOverride</code> とは <code>params[:_method]</code> によって HTTP メソッドを上書きするためのミドルウェアで、PUT や DELETE リクエストはこれによって実現している。しかし、これらは フォーム等の HTML が存在しない API モードでは不要なので削除してあると思われる。</li>
+<li>
+<code>Rack::MethodOverride</code> とは <code>params[:_method]</code> によって HTTP メソッドを上書きするためのミドルウェアで、PUT や DELETE リクエストはこれによって実現している。しかし、これらは フォーム等の HTML が存在しない API モードでは不要なので削除してあると思われる。</li>
 <li>cookie 等の Web ブラウザに関連するミドルウェアが API モードには含まれない。</li>
 </ul>
         </section>

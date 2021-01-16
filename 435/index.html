@@ -6,6 +6,7 @@
     <title>カラムを絞ってpreloadする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="カラムを絞ってpreloadする">
     <meta property="og:type" content="website">
@@ -32,69 +33,69 @@
 <p><code>select</code>で取得するカラムを絞るscopeを用意し、<code>has_many</code>の第2引数で指定する。</p>
 <p>例として下のようなテーブル定義とモデルがあるとする。</p>
 <p><code>books</code>テーブルの<code>body</code>カラムはTEXT型でサイズが大きくなりうるため、<code>body</code>カラム以外をロードするための<code>metadata</code>というscopeを定義し、関連元の<code>Author</code>に<code>metadata</code>を利用した<code>books_metadata</code>という関連を定義しておく。</p>
-<pre lang="ruby"><code>ActiveRecord::Schema.define do
-  create_table :authors do |t|
-    t.string :name
-  end
+<pre lang="ruby" class="highlight highlight-ruby"><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Schema</span><span class="p">.</span><span class="nf">define</span> <span class="k">do</span>
+  <span class="n">create_table</span> <span class="ss">:authors</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="ss">:name</span>
+  <span class="k">end</span>
 
-  create_table :books do |t|
-    t.string     :title
-    t.text       :body
-    t.references :author
-  end
-end
+  <span class="n">create_table</span> <span class="ss">:books</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">string</span>     <span class="ss">:title</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">text</span>       <span class="ss">:body</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">references</span> <span class="ss">:author</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-class Author &lt; ActiveRecord::Base
-  has_many :books
-  has_many :books_metadata, -&gt; { metadata }, class_name: 'Book'
-end
+<span class="k">class</span> <span class="nc">Author</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:books</span>
+  <span class="n">has_many</span> <span class="ss">:books_metadata</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">metadata</span> <span class="p">},</span> <span class="ss">class_name: </span><span class="s1">'Book'</span>
+<span class="k">end</span>
 
-class Book &lt; ActiveRecord::Base
-  belongs_to :author
+<span class="k">class</span> <span class="nc">Book</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:author</span>
 
-  scope :metadata, -&gt; {
-    select(
-      :id,
-      :author_id,
-      :title,
-    )
-  }
-end
-</code></pre>
-<p>データを作って<code>preload</code>で実行されるSQLを比較すると、確かに<code>preload(:books_metadata)</code>をした場合は<code>SELECT &quot;books&quot;.* FROM &quot;books&quot;</code>としていないことがわかる。</p>
-<pre lang="ruby"><code>irb(main):001:0&gt; author = Author.create(name: 'naoty')
-irb(main):002:0&gt; author.books.create(title: 'dummy', body: 'dummy')
-irb(main):003:0&gt; Author.preload(:books).first
-D, [2021-01-11T22:27:14.445409 #4400] DEBUG -- :   Author Load (0.2ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; ORDER BY &quot;authors&quot;.&quot;id&quot; ASC LIMIT ?  [[&quot;LIMIT&quot;, 1]]
-D, [2021-01-11T22:27:14.446208 #4400] DEBUG -- :   Book Load (0.1ms)  SELECT &quot;books&quot;.* FROM &quot;books&quot; WHERE &quot;books&quot;.&quot;author_id&quot; = ?  [[&quot;author_id&quot;, 1]]
-irb(main):004:0&gt; Author.preload(:books_metadata).first
-D, [2021-01-11T22:28:47.793620 #4400] DEBUG -- :   Author Load (0.2ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; ORDER BY &quot;authors&quot;.&quot;id&quot; ASC LIMIT ?  [[&quot;LIMIT&quot;, 1]]
-D, [2021-01-11T22:28:47.794626 #4400] DEBUG -- :   Book Load (0.1ms)  SELECT &quot;books&quot;.&quot;id&quot;, &quot;books&quot;.&quot;author_id&quot;, &quot;books&quot;.&quot;title&quot; FROM &quot;books&quot; WHERE &quot;books&quot;.&quot;author_id&quot; = ?  [[&quot;author_id&quot;, 1]]
-</code></pre>
+  <span class="n">scope</span> <span class="ss">:metadata</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span>
+    <span class="nb">select</span><span class="p">(</span>
+      <span class="ss">:id</span><span class="p">,</span>
+      <span class="ss">:author_id</span><span class="p">,</span>
+      <span class="ss">:title</span><span class="p">,</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="k">end</span>
+</pre>
+<p>データを作って<code>preload</code>で実行されるSQLを比較すると、確かに<code>preload(:books_metadata)</code>をした場合は<code>SELECT "books".* FROM "books"</code>としていないことがわかる。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span> <span class="o">=</span> <span class="no">Author</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">name: </span><span class="s1">'naoty'</span><span class="p">)</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span><span class="p">.</span><span class="nf">books</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">title: </span><span class="s1">'dummy'</span><span class="p">,</span> <span class="ss">body: </span><span class="s1">'dummy'</span><span class="p">)</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="no">Author</span><span class="p">.</span><span class="nf">preload</span><span class="p">(</span><span class="ss">:books</span><span class="p">).</span><span class="nf">first</span>
+<span class="no">D</span><span class="p">,</span> <span class="p">[</span><span class="mi">2021</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">11</span><span class="no">T22</span><span class="p">:</span><span class="mi">27</span><span class="p">:</span><span class="mf">14.445409</span> <span class="c1">#4400] DEBUG -- :   Author Load (0.2ms)  SELECT "authors".* FROM "authors" ORDER BY "authors"."id" ASC LIMIT ?  [["LIMIT", 1]]</span>
+<span class="no">D</span><span class="p">,</span> <span class="p">[</span><span class="mi">2021</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">11</span><span class="no">T22</span><span class="p">:</span><span class="mi">27</span><span class="p">:</span><span class="mf">14.446208</span> <span class="c1">#4400] DEBUG -- :   Book Load (0.1ms)  SELECT "books".* FROM "books" WHERE "books"."author_id" = ?  [["author_id", 1]]</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="no">Author</span><span class="p">.</span><span class="nf">preload</span><span class="p">(</span><span class="ss">:books_metadata</span><span class="p">).</span><span class="nf">first</span>
+<span class="no">D</span><span class="p">,</span> <span class="p">[</span><span class="mi">2021</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">11</span><span class="no">T22</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mf">47.793620</span> <span class="c1">#4400] DEBUG -- :   Author Load (0.2ms)  SELECT "authors".* FROM "authors" ORDER BY "authors"."id" ASC LIMIT ?  [["LIMIT", 1]]</span>
+<span class="no">D</span><span class="p">,</span> <span class="p">[</span><span class="mi">2021</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">11</span><span class="no">T22</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mf">47.794626</span> <span class="c1">#4400] DEBUG -- :   Book Load (0.1ms)  SELECT "books"."id", "books"."author_id", "books"."title" FROM "books" WHERE "books"."author_id" = ?  [["author_id", 1]]</span>
+</pre>
 <p>だけど、<code>preload(:books_metadata)</code>でロードした<code>Author</code>に対して<code>#books</code>を呼ぶと、<code>books</code>テーブルへのSQLが実行されてしまう。なので、N+1クエリが発生することになる。</p>
-<pre lang="ruby"><code>irb(main):004:0&gt; author = Author.preload(:books_metadata).first
-irb(main):005:0&gt; author.books_metadata
-irb(main):006:0&gt; author.books
-D, [2021-01-11T22:38:27.058462 #4400] DEBUG -- :   Book Load (0.3ms)  SELECT &quot;books&quot;.* FROM &quot;books&quot; WHERE &quot;books&quot;.&quot;author_id&quot; = ? /* loading for inspect */ LIMIT ?  [[&quot;author_id&quot;, 1], [&quot;LIMIT&quot;, 11]]
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span> <span class="o">=</span> <span class="no">Author</span><span class="p">.</span><span class="nf">preload</span><span class="p">(</span><span class="ss">:books_metadata</span><span class="p">).</span><span class="nf">first</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span><span class="p">.</span><span class="nf">books_metadata</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span><span class="p">.</span><span class="nf">books</span>
+<span class="no">D</span><span class="p">,</span> <span class="p">[</span><span class="mi">2021</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">11</span><span class="no">T22</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mf">27.058462</span> <span class="c1">#4400] DEBUG -- :   Book Load (0.3ms)  SELECT "books".* FROM "books" WHERE "books"."author_id" = ? /* loading for inspect */ LIMIT ?  [["author_id", 1], ["LIMIT", 11]]</span>
+</pre>
 <p>ある<code>Author</code>インスタンスが<code>preload(:books)</code>されていれば<code>#books</code>を呼ぶことでN+1クエリを回避できるし、<code>preload(:books_metadata)</code>されていれば<code>#books_metadata</code>を呼ぶことでN+1クエリを回避できるということになる。</p>
 <p>だけど、どちらで<code>preload</code>されているか事前にわからない場合、どうすればいいのか。</p>
 <p><code>ActiveRecord::Associations::CollectionProxy#loaded?</code>を使うと、どちらで<code>preload</code>されているか判別できる。</p>
-<pre lang="ruby"><code>irb(main):004:0&gt; author = Author.preload(:books_metadata).first
-irb(main):005:0&gt; author.association(:books).loaded?
-=&gt; false
-irb(main):006:0&gt; author.association(:books_metadata).loaded?
-=&gt; true
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span> <span class="o">=</span> <span class="no">Author</span><span class="p">.</span><span class="nf">preload</span><span class="p">(</span><span class="ss">:books_metadata</span><span class="p">).</span><span class="nf">first</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span><span class="p">.</span><span class="nf">association</span><span class="p">(</span><span class="ss">:books</span><span class="p">).</span><span class="nf">loaded?</span>
+<span class="o">=&gt;</span> <span class="kp">false</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">author</span><span class="p">.</span><span class="nf">association</span><span class="p">(</span><span class="ss">:books_metadata</span><span class="p">).</span><span class="nf">loaded?</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+</pre>
 <p>そこで、このようなラッパーを用意することで、どの関連が<code>preload</code>されているか事前にわからない場合でも対処できるようになる。</p>
-<pre lang="ruby"><code>class Author
-  def books
-    return association(:books).reader if association(:books).loaded?
-    return books_metadata if association(:books_metadata).loaded?
-    association(:books).reader
-  end
-end
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">Author</span>
+  <span class="k">def</span> <span class="nf">books</span>
+    <span class="k">return</span> <span class="n">association</span><span class="p">(</span><span class="ss">:books</span><span class="p">).</span><span class="nf">reader</span> <span class="k">if</span> <span class="n">association</span><span class="p">(</span><span class="ss">:books</span><span class="p">).</span><span class="nf">loaded?</span>
+    <span class="k">return</span> <span class="n">books_metadata</span> <span class="k">if</span> <span class="n">association</span><span class="p">(</span><span class="ss">:books_metadata</span><span class="p">).</span><span class="nf">loaded?</span>
+    <span class="n">association</span><span class="p">(</span><span class="ss">:books</span><span class="p">).</span><span class="nf">reader</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <p>従来の<code>books</code>は<code>association(:books).reader</code>と同じなので、無限ループを避けるためにこのような書き方をしている。</p>
         </section>
         <footer>

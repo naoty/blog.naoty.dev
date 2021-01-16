@@ -6,6 +6,7 @@
     <title>Railsでオートリンクを有効にしつつサニタイズ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Railsでオートリンクを有効にしつつサニタイズ">
     <meta property="og:type" content="website">
@@ -29,11 +30,11 @@
           <p>本文をサニタイズしつつ、オートリンクを有効化したいので以下のように設定した。オートリンクは<code>rails_autolink</code>というgemが必要。</p>
 <pre lang="rb:application.rb"><code>config.after_initialize do
   ActionView::Base.sanitized_allowed_tags.clear
-  ActionView::Base.sanitized_allowed_tags = [&quot;a&quot;]
-  ActionView::Base.sanitized_allowed_attributes = [&quot;rel&quot;, &quot;target&quot;]
+  ActionView::Base.sanitized_allowed_tags = ["a"]
+  ActionView::Base.sanitized_allowed_attributes = ["rel", "target"]
 end
 </code></pre>
-<p>許可するtagをクリアしたあとにホワイトリスト方式で許可するタグを指定した。あと、デフォルトでは<code>rel=&quot;nofollow&quot;</code>とか<code>target=&quot;_blank&quot;</code>がサニタイズされてしまうので、許可したい属性を追加した。</p>
+<p>許可するtagをクリアしたあとにホワイトリスト方式で許可するタグを指定した。あと、デフォルトでは<code>rel="nofollow"</code>とか<code>target="_blank"</code>がサニタイズされてしまうので、許可したい属性を追加した。</p>
         </section>
         <footer>
           <nav>

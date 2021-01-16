@@ -6,6 +6,7 @@
     <title>GoのためのDockerfile</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="GoのためのDockerfile">
     <meta property="og:type" content="website">
@@ -30,9 +31,12 @@
           <h2>base image</h2>
 <p><code>library/golang</code>で公式イメージが用意されている。ユースケースに合わせていくつかの種類が用意されている。</p>
 <ul>
-<li><code>golang:</code>: 何が必要なのか分かっていない場合はこれを使った方がよさそう。</li>
-<li><code>golang:alpine</code>: Alpine Linuxをベースとしているため非常に軽い。イメージサイズを小さくしたい場合に推奨されている。</li>
-<li><code>golang:onbuild</code>: ネット上ではよく紹介されているが、公式では非推奨とされている。</li>
+<li>
+<code>golang:</code>: 何が必要なのか分かっていない場合はこれを使った方がよさそう。</li>
+<li>
+<code>golang:alpine</code>: Alpine Linuxをベースとしているため非常に軽い。イメージサイズを小さくしたい場合に推奨されている。</li>
+<li>
+<code>golang:onbuild</code>: ネット上ではよく紹介されているが、公式では非推奨とされている。</li>
 </ul>
 <h2>ディレクトリレイアウト</h2>
 <pre><code>$ docker run -i -t --rm golang:1.9 /bin/bash
@@ -50,7 +54,7 @@ GOPATH=/go
 WORKDIR /go/src/github.com/naoty/golang-sample
 COPY . .
 RUN go install github.com/naoty/golang-sample
-ENTRYPOINT [&quot;golang-sample&quot;]
+ENTRYPOINT ["golang-sample"]
 </code></pre>
 <p><code>go install ...</code>で<code>/go/bin/</code>以下にバイナリがビルドされる。<code>PATH</code>は<code>/go/bin</code>も含まれているため、そのままビルドされたバイナリを指定するだけでOK。</p>
 <h2>参考</h2>

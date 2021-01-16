@@ -6,6 +6,7 @@
     <title>vimの便利機能</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="vimの便利機能">
     <meta property="og:type" content="website">
@@ -72,25 +73,25 @@ command! ToSjis :e ++enc=sjis
 <pre><code>abbreviate #i #include
 </code></pre>
 <ul>
-<li>例えば上のように設定すると、&quot;#i[space]&quot;と入力すると勝手に&quot;#import[space]&quot;と変換してくれます。あとはコメントブロックを入力するのによく使われるみたいです。</li>
+<li>例えば上のように設定すると、"#i[space]"と入力すると勝手に"#import[space]"と変換してくれます。あとはコメントブロックを入力するのによく使われるみたいです。</li>
 </ul>
 <pre><code>abbreviate #b / ****************************
 </code></pre>
 <ul>
-<li>abbreviateは応用としてtypoを修正するのにも便利です。&quot;abbreviate&quot;っていう単語がもうtypoしそうですね。あと、個人的に&quot;receive&quot;を&quot;recieve&quot;と書いてしまうことが多いので以下のように設定します。</li>
+<li>abbreviateは応用としてtypoを修正するのにも便利です。"abbreviate"っていう単語がもうtypoしそうですね。あと、個人的に"receive"を"recieve"と書いてしまうことが多いので以下のように設定します。</li>
 </ul>
-<pre><code>&quot; abbreviate  
+<pre><code>" abbreviate  
 abbreviate abbriviate abbreviate
 abbreviate recieve receive
 </code></pre>
 <ul>
 <li>abbreviateの設定をそのまま.vimrcに書くと、ハードコーディング感があって個人的に気持ち悪いので、.vim/abbreviate.vimという別ファイルに分けて書いてます。</li>
 </ul>
-<pre><code>&quot; .vim/abbreviate.vim
+<pre><code>" .vim/abbreviate.vim
 abbreviate abbriviate abbreviate
 abbreviate recieve receive
 
-&quot; .vimrc
+" .vimrc
 source ~/.vim/abbreviate.vim
 </code></pre>
 <h2>filetype毎の設定ファイル</h2>
@@ -111,7 +112,7 @@ source ~/.vim/abbreviate.vim
 <li>上のようなディレクトリ構造にしておくと、各filetypeごとに設定ファイルが読み込まれるようになります。詳しくは<code>:help filetype-plugin</code>らへんを見てください。</li>
 <li>例えばMakefileを書く場合、インデントはspaceではなくtabしか使えないので、expandtabを無効にしたいところです。そこで、以下のようなファイルを用意します。</li>
 </ul>
-<pre><code>&quot; .vim/ftplugin/make.vim
+<pre><code>" .vim/ftplugin/make.vim
 setlocal noexpandtab
 setlocal tabstop=8
 setlocal shiftwidth=8
@@ -125,7 +126,7 @@ setlocal shiftwidth=8
     |- filetype.vim
 .vimrc
 </code></pre>
-<pre><code>&quot; .vim/ftdetect/filetype.vim
+<pre><code>" .vim/ftdetect/filetype.vim
 
 autocmd BufRead,BufNewFile Gemfile setfiletype ruby
 autocmd BufRead,BufNewFile Guardfile setfiletype ruby
@@ -136,7 +137,7 @@ autocmd BufRead,BufNewFile *.ru setfiletype ruby
 <ul>
 <li>上のように設定ファイルを用意すると、指定したファイルを自動的にrubyをfiletypeとして開いてくれます。</li>
 </ul>
-<hr />
+<hr>
 <p>以上の設定はすべて僕の<a href="https://github.com/naoty/dotfiles">dotfiles</a>に書いてあるので参考にしてみてください。</p>
 <p>読み返してみると、その筋の方に怒られそうな気がしてきた…(´･ω･`)</p>
         </section>

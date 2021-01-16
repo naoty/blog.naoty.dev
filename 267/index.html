@@ -6,6 +6,7 @@
     <title>コマンドラインを拡張しやすくするヤツ書いた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="コマンドラインを拡張しやすくするヤツ書いた">
     <meta property="og:type" content="website">
@@ -38,24 +39,24 @@
 <p><a href="https://github.com/naoty/ext">naoty/ext</a></p>
 <pre><code>$ go get github.com/naoty/ext
 $ go get github.com/naoty/gem-uninstall-all
-$ alias gem=&quot;ext gem&quot;
+$ alias gem="ext gem"
 $ gem uninstall all # Run gem-uninstall-all
 </code></pre>
 <p>正直、いろんな問題がありえそうだが、昨日思いついたままに書いたものなので、まだ想定できてない。<code>gem-uninstall-rails</code>というコマンドがあったらrailsをアンインストールできないとかありそう。</p>
 <p>上の例で、<code>hub</code>と<code>bub</code>を同時に拡張したい場合に<code>ext</code>を使うと以下のようにできる。</p>
 <pre><code>$ go get github.com/naoty/hub-bub
-$ alias git=&quot;ext hub&quot;
+$ alias git="ext hub"
 $ git bub # Run `hub-bub`
 </code></pre>
 <p>残念ながら、<code>hub</code>を使いたい場合はこうするしかないような気がする。</p>
-<hr />
+<hr>
 <h1>追記(2015-07-23)</h1>
 <p>gitには、<code>git subcommand</code>を<code>git-</code>として名前解決して実行する機能があったことをさっき知った。なので、gitに限って言えばextのようなツールは不要だと思う。</p>
 <pre><code>$ cd $HOME/bin
 $ vi git-hello
 #!/bin/sh
 
-echo &quot;Hello, world!&quot;
+echo "Hello, world!"
 $ chmod +x git-hello
 $ git hello
 Hello, world!

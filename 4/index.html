@@ -6,6 +6,7 @@
     <title>掲示板 ver.1.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="掲示板 ver.1.1">
     <meta property="og:type" content="website">
@@ -29,7 +30,7 @@
           <pre><code>
 
 / *****DB情報の読み込み***** /
-include_once(&quot;ini.php&quot;);
+include_once("ini.php");
 
 / *****DBへ接続、DBの選択***** /
 $con = mysql_connect(DB_HOST,DB_USER,DB_PASS);
@@ -45,20 +46,20 @@ echo '';
 echo '';
 
 / *****タグ削除***** /
-$name_d = htmlspecialchars($_POST[&quot;name&quot;]);
-$msg_d = htmlspecialchars($_POST[&quot;msg&quot;]);
+$name_d = htmlspecialchars($_POST["name"]);
+$msg_d = htmlspecialchars($_POST["msg"]);
 
 / *****utf-8にエンコーディング***** /
-$name_d = mb_convert_encoding($name_d,&quot;utf-8&quot;);
-$msg_d = mb_convert_encoding($msg_d,&quot;utf-8&quot;);
+$name_d = mb_convert_encoding($name_d,"utf-8");
+$msg_d = mb_convert_encoding($msg_d,"utf-8");
 
 / *****「name」にデータがあるときデータをDBに挿入***** /
-if($name_d&lt;&gt;&quot;&quot;){
-	mysql_query(&quot;INSERT INTO twi_tb (name,msg) VALUES ('$name_d','$msg_d')&quot;);
+if($name_d&lt;&gt;""){
+	mysql_query("INSERT INTO twi_tb (name,msg) VALUES ('$name_d','$msg_d')");
 }
 
 / *****twi_tbの全データ表示***** /
-$re = mysql_query(&quot;SELECT * FROM twi_tb&quot;);
+$re = mysql_query("SELECT * FROM twi_tb");
 $arr = mysql_fetch_array($re);
 for($i=0;$i
 

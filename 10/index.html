@@ -6,6 +6,7 @@
     <title>count_letters ver.2</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="count_letters ver.2">
     <meta property="og:type" content="website">
@@ -32,13 +33,13 @@
 	ary.uniq!
 	ary.each do |letter|
 		result = str.scan(/(#{letter})/)
-		print &quot;'&quot;, letter, &quot;': &quot;
-		result.count.times{print &quot;*&quot;}
-		print &quot;\n&quot;
+		print "'", letter, "': "
+		result.count.times{print "*"}
+		print "\n"
 	end
 end
 
-p count_letters(&quot;Ruby is an object oriented programming language&quot;)
+p count_letters("Ruby is an object oriented programming language")
 </code></pre>
         </section>
         <footer>

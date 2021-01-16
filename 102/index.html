@@ -6,6 +6,7 @@
     <title>Railsで時間を「◯分前」「◯時間前」にフォーマットする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Railsで時間を「◯分前」「◯時間前」にフォーマットする">
     <meta property="og:type" content="website">
@@ -29,19 +30,19 @@
           <pre lang="ruby:config/initializers/time_formats.rb"><code># coding: UTF-8
 Time::DATE_FORMATS[:human] = lambda {|date|
   seconds = (Time.now - date).round;
-  days    = seconds / (60 * 60 * 24); return &quot;#{date.month}月#{date.day}日&quot; if days &gt; 0;
-  hours   = seconds / (60 * 60);      return &quot;#{hours}時間前&quot; if hours &gt; 0;
-  minutes = seconds / 60;             return &quot;#{minutes}分前&quot; if minutes &gt; 0;
-  return &quot;#{seconds}秒前&quot;
+  days    = seconds / (60 * 60 * 24); return "#{date.month}月#{date.day}日" if days &gt; 0;
+  hours   = seconds / (60 * 60);      return "#{hours}時間前" if hours &gt; 0;
+  minutes = seconds / 60;             return "#{minutes}分前" if minutes &gt; 0;
+  return "#{seconds}秒前"
 }
 </code></pre>
-<pre lang="ruby"><code>naotyA = User.create(:created_at =&gt; Time.now - 5.minutes)
-naotyB = User.create(:created_at =&gt; Time.now - 5.hours)
-naotyC = User.create(:created_at =&gt; Time.now - 5.days)
-naotyA.created_at.to_s(:human) #=&gt; &quot;5分前&quot;
-naotyB.created_at.to_s(:human) #=&gt; &quot;5時間前&quot;
-naotyC.created_at.to_s(:human) #=&gt; &quot;2月25日&quot;
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">naotyA</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">:created_at</span> <span class="o">=&gt;</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">5</span><span class="p">.</span><span class="nf">minutes</span><span class="p">)</span>
+<span class="n">naotyB</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">:created_at</span> <span class="o">=&gt;</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">5</span><span class="p">.</span><span class="nf">hours</span><span class="p">)</span>
+<span class="n">naotyC</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">:created_at</span> <span class="o">=&gt;</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">5</span><span class="p">.</span><span class="nf">days</span><span class="p">)</span>
+<span class="n">naotyA</span><span class="p">.</span><span class="nf">created_at</span><span class="p">.</span><span class="nf">to_s</span><span class="p">(</span><span class="ss">:human</span><span class="p">)</span> <span class="c1">#=&gt; "5分前"</span>
+<span class="n">naotyB</span><span class="p">.</span><span class="nf">created_at</span><span class="p">.</span><span class="nf">to_s</span><span class="p">(</span><span class="ss">:human</span><span class="p">)</span> <span class="c1">#=&gt; "5時間前"</span>
+<span class="n">naotyC</span><span class="p">.</span><span class="nf">created_at</span><span class="p">.</span><span class="nf">to_s</span><span class="p">(</span><span class="ss">:human</span><span class="p">)</span> <span class="c1">#=&gt; "2月25日"</span>
+</pre>
         </section>
         <footer>
           <nav>

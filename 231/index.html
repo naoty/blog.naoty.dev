@@ -6,6 +6,7 @@
     <title>SwiftでNSDateを簡単に扱うライブラリを書いた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="SwiftでNSDateを簡単に扱うライブラリを書いた">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
           </p>
         </header>
         <section class="body">
-          <p>Swiftの実験的なプロジェクトとしてActiveSupportの拡張っぽく直感的に時間を扱うライブラリ&quot;Timepiece&quot;というものを書いた。</p>
+          <p>Swiftの実験的なプロジェクトとしてActiveSupportの拡張っぽく直感的に時間を扱うライブラリ"Timepiece"というものを書いた。</p>
 <p><a href="https://github.com/naoty/Timepiece">naoty/Timepiece · GitHub</a></p>
 <h1>demo</h1>
 <pre><code>let today = NSDate.today()
@@ -37,13 +38,16 @@ let birthday = NSDate.date(year: 1987, month: 6, day: 2)
 </code></pre>
 <h1>機能</h1>
 <ul>
-<li><code>1.day.ago</code>（1日前）、<code>4.years.later</code>（4年後）というように<code>Int</code>型を拡張し、<code>数.単位.前/後</code>という書き方で<code>NSDate</code>オブジェクトを初期化できる。単位は単数形、複数形どちらも使える。</li>
-<li><code>NSDate() + 1.minute</code>（1分後）、<code>NSDate() - 3.hours</code>（3時間前）というように、<code>NSDate</code>オブジェクトから<code>数.単位</code>を加算・減算できる。</li>
-<li><code>NSDate.date(year:month:day:hour:minute:second)</code>, <code>NSDate.today()</code>, <code>NSDate.yesterday()</code>, <code>NSDate.tomorrow()</code>というように、<code>NSDate</code>オブジェクトをより直感的に初期化できる。</li>
+<li>
+<code>1.day.ago</code>（1日前）、<code>4.years.later</code>（4年後）というように<code>Int</code>型を拡張し、<code>数.単位.前/後</code>という書き方で<code>NSDate</code>オブジェクトを初期化できる。単位は単数形、複数形どちらも使える。</li>
+<li>
+<code>NSDate() + 1.minute</code>（1分後）、<code>NSDate() - 3.hours</code>（3時間前）というように、<code>NSDate</code>オブジェクトから<code>数.単位</code>を加算・減算できる。</li>
+<li>
+<code>NSDate.date(year:month:day:hour:minute:second)</code>, <code>NSDate.today()</code>, <code>NSDate.yesterday()</code>, <code>NSDate.tomorrow()</code>というように、<code>NSDate</code>オブジェクトをより直感的に初期化できる。</li>
 </ul>
 <h1>今後</h1>
 <ul>
-<li>既存の<code>NSDate</code>オブジェクトの時間だけ変更したいとか、その日の0:00を取得したいという場合に対応したい。ActiveSupportとかmoment.jsの<code>beginning_of_day</code>, <code>endOf(&quot;day&quot;)</code>のようなやつ。</li>
+<li>既存の<code>NSDate</code>オブジェクトの時間だけ変更したいとか、その日の0:00を取得したいという場合に対応したい。ActiveSupportとかmoment.jsの<code>beginning_of_day</code>, <code>endOf("day")</code>のようなやつ。</li>
 <li>範囲オブジェクトのようなものを生成できるようにしたい。例えば、今日から1週間分の<code>NSDate</code>オブジェクトの範囲オブジェクトを作って繰り返し処理させられたら便利そう。</li>
 </ul>
 <h1>悩み</h1>

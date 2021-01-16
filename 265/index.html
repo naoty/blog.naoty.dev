@@ -6,6 +6,7 @@
     <title>Pocketのもう読んでない記事を掃除するヤツ書いた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Pocketのもう読んでない記事を掃除するヤツ書いた">
     <meta property="og:type" content="website">
@@ -40,7 +41,7 @@
 <p>Heroku schedulerのダッシュボードで<code>sweep</code>を実行するタイミングを設定する。</p>
 </li>
 </ol>
-<p><a href="https://heroku.com/deploy?template=https://github.com/naoty/sweep"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy" /></a></p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/naoty/sweep"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a></p>
 <h1>所感</h1>
 <p>先日、Herokuが公式にGoをサポートしたので、さっそくテストを兼ねてこういうものをGoで書いてみた。<a href="https://github.com/tools/godep">tools/godep</a>の使い方を覚えなくてはいけないことを除けば、いつもどおりにHerokuにアプリケーションをデプロイできた。</p>
 <p>個人的にちょっとしたCLIツールをGoで書くことが増えたが、ちょっとしたジョブを定期実行させるときにGoでちょっとしたツールを書いてHeroku schedulerにやらせるという手法は非常にお手軽なので今後も機会がありそうだなと思った。</p>

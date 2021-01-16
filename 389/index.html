@@ -6,6 +6,7 @@
     <title>NATゲートウェイの冗長化</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="NATゲートウェイの冗長化">
     <meta property="og:type" content="website">
@@ -47,77 +48,77 @@
 </code></pre>
 <h1>Terraform</h1>
 <p>サブネットのAZを固定したいので、データソースを用意しておく。なくてもいいと思う。</p>
-<pre lang="hcl"><code>data &quot;aws_availability_zone&quot; &quot;ap_northeast_1a&quot; {
-  name = &quot;ap-northeast-1a&quot;
-}
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">data</span> <span class="s2">"aws_availability_zone"</span> <span class="s2">"ap_northeast_1a"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"ap-northeast-1a"</span>
+<span class="p">}</span>
 
-data &quot;aws_availability_zone&quot; &quot;ap_northeast_1c&quot; {
-  name = &quot;ap-northeast-1c&quot;
-}
-</code></pre>
+<span class="nx">data</span> <span class="s2">"aws_availability_zone"</span> <span class="s2">"ap_northeast_1c"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"ap-northeast-1c"</span>
+<span class="p">}</span>
+</pre>
 <p>パブリック/プライベートとAZのペアごとに4つのサブネットにVPCを分割する。<code>cidrblock</code>関数を使うとCIDRブロックの計算が簡単になる。</p>
-<pre lang="hcl"><code>resource &quot;aws_subnet&quot; &quot;public_1a&quot; {
-  vpc_id            = aws_vpc.default.id
-  availability_zone = data.aws_availability_zone.ap_northeast_1a.name
-  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 0)
-}
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">resource</span> <span class="s2">"aws_subnet"</span> <span class="s2">"public_1a"</span> <span class="p">{</span>
+  <span class="nx">vpc_id</span>            <span class="p">=</span> <span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">id</span>
+  <span class="nx">availability_zone</span> <span class="p">=</span> <span class="nx">data</span><span class="err">.</span><span class="nx">aws_availability_zone</span><span class="err">.</span><span class="nx">ap_northeast_1a</span><span class="err">.</span><span class="nx">name</span>
+  <span class="nx">cidr_block</span>        <span class="p">=</span> <span class="nx">cidrsubnet</span><span class="err">(</span><span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">cidr_block</span><span class="err">,</span> <span class="mi">2</span><span class="err">,</span> <span class="mi">0</span><span class="err">)</span>
+<span class="p">}</span>
 
-resource &quot;aws_subnet&quot; &quot;public_1c&quot; {
-  vpc_id            = aws_vpc.default.id
-  availability_zone = data.aws_availability_zone.ap_northeast_1c.name
-  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 1)
-}
+<span class="nx">resource</span> <span class="s2">"aws_subnet"</span> <span class="s2">"public_1c"</span> <span class="p">{</span>
+  <span class="nx">vpc_id</span>            <span class="p">=</span> <span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">id</span>
+  <span class="nx">availability_zone</span> <span class="p">=</span> <span class="nx">data</span><span class="err">.</span><span class="nx">aws_availability_zone</span><span class="err">.</span><span class="nx">ap_northeast_1c</span><span class="err">.</span><span class="nx">name</span>
+  <span class="nx">cidr_block</span>        <span class="p">=</span> <span class="nx">cidrsubnet</span><span class="err">(</span><span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">cidr_block</span><span class="err">,</span> <span class="mi">2</span><span class="err">,</span> <span class="mi">1</span><span class="err">)</span>
+<span class="p">}</span>
 
-resource &quot;aws_subnet&quot; &quot;private_1a&quot; {
-  vpc_id            = aws_vpc.default.id
-  availability_zone = data.aws_availability_zone.ap_northeast_1a.name
-  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 2)
-}
+<span class="nx">resource</span> <span class="s2">"aws_subnet"</span> <span class="s2">"private_1a"</span> <span class="p">{</span>
+  <span class="nx">vpc_id</span>            <span class="p">=</span> <span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">id</span>
+  <span class="nx">availability_zone</span> <span class="p">=</span> <span class="nx">data</span><span class="err">.</span><span class="nx">aws_availability_zone</span><span class="err">.</span><span class="nx">ap_northeast_1a</span><span class="err">.</span><span class="nx">name</span>
+  <span class="nx">cidr_block</span>        <span class="p">=</span> <span class="nx">cidrsubnet</span><span class="err">(</span><span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">cidr_block</span><span class="err">,</span> <span class="mi">2</span><span class="err">,</span> <span class="mi">2</span><span class="err">)</span>
+<span class="p">}</span>
 
-resource &quot;aws_subnet&quot; &quot;private_1c&quot; {
-  vpc_id            = aws_vpc.default.id
-  availability_zone = data.aws_availability_zone.ap_northeast_1c.name
-  cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 2, 3)
-}
-</code></pre>
+<span class="nx">resource</span> <span class="s2">"aws_subnet"</span> <span class="s2">"private_1c"</span> <span class="p">{</span>
+  <span class="nx">vpc_id</span>            <span class="p">=</span> <span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">id</span>
+  <span class="nx">availability_zone</span> <span class="p">=</span> <span class="nx">data</span><span class="err">.</span><span class="nx">aws_availability_zone</span><span class="err">.</span><span class="nx">ap_northeast_1c</span><span class="err">.</span><span class="nx">name</span>
+  <span class="nx">cidr_block</span>        <span class="p">=</span> <span class="nx">cidrsubnet</span><span class="err">(</span><span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">cidr_block</span><span class="err">,</span> <span class="mi">2</span><span class="err">,</span> <span class="mi">3</span><span class="err">)</span>
+<span class="p">}</span>
+</pre>
 <p>NATゲートウェイをパブリックサブネットごとに作る。</p>
-<pre lang="hcl"><code>resource &quot;aws_eip&quot; &quot;nat_gateway_1a&quot; {
-  vpc = true
-}
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">resource</span> <span class="s2">"aws_eip"</span> <span class="s2">"nat_gateway_1a"</span> <span class="p">{</span>
+  <span class="nx">vpc</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="p">}</span>
 
-resource &quot;aws_nat_gateway&quot; &quot;nat_gateway_1a&quot; {
-  allocation_id = aws_eip.nat_gateway_1a.id
-  subnet_id     = aws_subnet.public_1a.id
-}
+<span class="nx">resource</span> <span class="s2">"aws_nat_gateway"</span> <span class="s2">"nat_gateway_1a"</span> <span class="p">{</span>
+  <span class="nx">allocation_id</span> <span class="p">=</span> <span class="nx">aws_eip</span><span class="err">.</span><span class="nx">nat_gateway_1a</span><span class="err">.</span><span class="nx">id</span>
+  <span class="nx">subnet_id</span>     <span class="p">=</span> <span class="nx">aws_subnet</span><span class="err">.</span><span class="nx">public_1a</span><span class="err">.</span><span class="nx">id</span>
+<span class="p">}</span>
 
-resource &quot;aws_eip&quot; &quot;nat_gateway_1c&quot; {
-  vpc = true
-}
+<span class="nx">resource</span> <span class="s2">"aws_eip"</span> <span class="s2">"nat_gateway_1c"</span> <span class="p">{</span>
+  <span class="nx">vpc</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="p">}</span>
 
-resource &quot;aws_nat_gateway&quot; &quot;nat_gateway_1c&quot; {
-  allocation_id = aws_eip.nat_gateway_1c.id
-  subnet_id     = aws_subnet.public_1c.id
-}
-</code></pre>
+<span class="nx">resource</span> <span class="s2">"aws_nat_gateway"</span> <span class="s2">"nat_gateway_1c"</span> <span class="p">{</span>
+  <span class="nx">allocation_id</span> <span class="p">=</span> <span class="nx">aws_eip</span><span class="err">.</span><span class="nx">nat_gateway_1c</span><span class="err">.</span><span class="nx">id</span>
+  <span class="nx">subnet_id</span>     <span class="p">=</span> <span class="nx">aws_subnet</span><span class="err">.</span><span class="nx">public_1c</span><span class="err">.</span><span class="nx">id</span>
+<span class="p">}</span>
+</pre>
 <p>同じAZのNATゲートウェイを参照するようにルートテーブルを作る。</p>
-<pre lang="hcl"><code>resource &quot;aws_route_table&quot; &quot;private_1a&quot; {
-  vpc_id = aws_vpc.default.id
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">resource</span> <span class="s2">"aws_route_table"</span> <span class="s2">"private_1a"</span> <span class="p">{</span>
+  <span class="nx">vpc_id</span> <span class="p">=</span> <span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">id</span>
 
-  route {
-    cidr_block     = &quot;0.0.0.0/0&quot;
-    nat_gateway_id = aws_nat_gateway.private_1a.id
-  }
-}
+  <span class="nx">route</span> <span class="p">{</span>
+    <span class="nx">cidr_block</span>     <span class="p">=</span> <span class="s2">"0.0.0.0/0"</span>
+    <span class="nx">nat_gateway_id</span> <span class="p">=</span> <span class="nx">aws_nat_gateway</span><span class="err">.</span><span class="nx">private_1a</span><span class="err">.</span><span class="nx">id</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-resource &quot;aws_route_table&quot; &quot;private_1c&quot; {
-  vpc_id = aws_vpc.default.id
+<span class="nx">resource</span> <span class="s2">"aws_route_table"</span> <span class="s2">"private_1c"</span> <span class="p">{</span>
+  <span class="nx">vpc_id</span> <span class="p">=</span> <span class="nx">aws_vpc</span><span class="err">.</span><span class="nx">default</span><span class="err">.</span><span class="nx">id</span>
 
-  route {
-    cidr_block     = &quot;0.0.0.0/0&quot;
-    nat_gateway_id = aws_nat_gateway.private_1c.id
-  }
-}
-</code></pre>
+  <span class="nx">route</span> <span class="p">{</span>
+    <span class="nx">cidr_block</span>     <span class="p">=</span> <span class="s2">"0.0.0.0/0"</span>
+    <span class="nx">nat_gateway_id</span> <span class="p">=</span> <span class="nx">aws_nat_gateway</span><span class="err">.</span><span class="nx">private_1c</span><span class="err">.</span><span class="nx">id</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
         </section>
         <footer>
           <nav>

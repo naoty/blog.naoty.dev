@@ -6,6 +6,7 @@
     <title>Mermaid.jsでデータフロー図を描く</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Mermaid.jsでデータフロー図を描く">
     <meta property="og:type" content="website">
@@ -30,10 +31,14 @@
 <h1>データフロー図</h1>
 <p>データフロー図は4つの要素から構成されている。</p>
 <ul>
-<li><strong>外部実体</strong>: システムの外部にあるデータの発生源や出力先</li>
-<li><strong>プロセス</strong>: データを入力し、データを出力する処理</li>
-<li><strong>データストア</strong>: データを永続的に保管する場所</li>
-<li><strong>データフロー</strong>: データの入力から出力への流れ</li>
+<li>
+<strong>外部実体</strong>: システムの外部にあるデータの発生源や出力先</li>
+<li>
+<strong>プロセス</strong>: データを入力し、データを出力する処理</li>
+<li>
+<strong>データストア</strong>: データを永続的に保管する場所</li>
+<li>
+<strong>データフロー</strong>: データの入力から出力への流れ</li>
 </ul>
 <h1>Mermaid.js流データフロー図</h1>
 <p>Mermaid.jsにはデータフロー図を描くための専用の記法があるわけじゃない。だけど、フローチャート図の記法を使ってうまく描けそうということがわかった。</p>
@@ -60,7 +65,9 @@
 </tr>
 <tr>
 <td>データフロー</td>
-<td><code>-- input --&gt;</code>, <code>-- output --&gt;</code></td>
+<td>
+<code>-- input --&gt;</code>, <code>-- output --&gt;</code>
+</td>
 </tr>
 </tbody>
 </table>

@@ -6,6 +6,7 @@
     <title>plistから数値を読み込む</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="plistから数値を読み込む">
     <meta property="og:type" content="website">
@@ -26,12 +27,12 @@
           </p>
         </header>
         <section class="body">
-          <pre><code>NSString *path = [[NSBundle mainBundle] pathForResource:@&quot;places&quot; ofType:@&quot;plist&quot;];
+          <pre><code>NSString *path = [[NSBundle mainBundle] pathForResource:@"places" ofType:@"plist"];
 placesDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
-NSArray *places = [placesDictionary objectForKey:@&quot;places&quot;];
+NSArray *places = [placesDictionary objectForKey:@"places"];
 NSDictionary *place = [places objectAtIndex:indexPath.row];
-NSNumber *lat = [place objectForKey:@&quot;latitude&quot;];
-NSNumber *lng = [place objectForKey:@&quot;longitude&quot;];
+NSNumber *lat = [place objectForKey:@"latitude"];
+NSNumber *lng = [place objectForKey:@"longitude"];
 
 PlaceAppDelegate *appDelegate = (PlaceAppDelegate *) [[UIApplication sharedApplication] delegate];
 appDelegate.latitude = [lat doubleValue];
@@ -42,9 +43,9 @@ appDelegate.longitude = [lng doubleValue];
 <li>数値をオブジェクトとして扱うためにNSNumberを使う</li>
 <li>NSNumberを通してプリミティブ型に変換する</li>
 </ul>
-<pre><code>xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-version=&quot;1.0&quot;&gt;
+<pre><code>xml version="1.0" encoding="UTF-8"?&gt;
+DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+version="1.0"&gt;
 
 	places
 	

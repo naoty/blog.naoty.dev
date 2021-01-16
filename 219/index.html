@@ -6,6 +6,7 @@
     <title>PecoからRakeタスクを実行する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="PecoからRakeタスクを実行する">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
         </header>
         <section class="body">
           <p>Rakeタスクを先頭から入力するのがダルいのでpecoを組み合わせてみた。</p>
-<pre lang="zsh:.zshrc"><code>pecorake() { local task=$(rake -W | peco | cut -d &quot; &quot; -f 2); rake $task }
+<pre lang="zsh:.zshrc"><code>pecorake() { local task=$(rake -W | peco | cut -d " " -f 2); rake $task }
 </code></pre>
 <p>Escでキャンセルしたときを考慮してないけど、これだけの設定でかなり捗るようになった。peco便利。</p>
         </section>

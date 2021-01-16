@@ -6,6 +6,7 @@
     <title>spf13/pflagの使い方</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="spf13/pflagの使い方">
     <meta property="og:type" content="website">
@@ -29,37 +30,40 @@
           <p>GoでCLIツールを作るとき、いつも<a href="https://github.com/spf13/pflag">spf13/pflag</a>を使ってオプションを実装している。</p>
 <p>spf13/pflagは標準パッケージの<a href="https://golang.org/pkg/flag/">flag</a>と同じインターフェイスを持ちつつ、<code>-h</code>と<code>--help</code>のようなよくある形式のオプションを簡単に実装できる。標準パッケージのflagでは、<code>-help</code>のような形式になってしまう。</p>
 <h1>使い方</h1>
-<pre lang="go"><code>func main() {
-  version := pflag.BoolP(&quot;version&quot;, &quot;v&quot;, false, &quot;show version&quot;)
-  pflag.Parse()
+<pre lang="go" class="highlight highlight-go"><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">version</span> <span class="o">:=</span> <span class="n">pflag</span><span class="o">.</span><span class="n">BoolP</span><span class="p">(</span><span class="s">"version"</span><span class="p">,</span> <span class="s">"v"</span><span class="p">,</span> <span class="no">false</span><span class="p">,</span> <span class="s">"show version"</span><span class="p">)</span>
+  <span class="n">pflag</span><span class="o">.</span><span class="n">Parse</span><span class="p">()</span>
 
-  if pflag.NArg() == 0 {
-    pflag.Usage()
-    os.Exit(1)
-  }
+  <span class="k">if</span> <span class="n">pflag</span><span class="o">.</span><span class="n">NArg</span><span class="p">()</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+    <span class="n">pflag</span><span class="o">.</span><span class="n">Usage</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+  <span class="p">}</span>
 
-  if *version {
-    fmt.Println(&quot;1.0.0&quot;)
-    return
-  }
+  <span class="k">if</span> <span class="o">*</span><span class="n">version</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"1.0.0"</span><span class="p">)</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
 
-  switch pflag.Arg(0) {
-  case &quot;list&quot;:
-    // snip
-  default:
-    fmt.Fprintf(os.Stderr, &quot;subcommand not found: %s\n&quot;, pflag.Arg(0))
-    os.Exit(1)
-  }
-}
-</code></pre>
-<pre lang="bash"><code>% sample
+  <span class="k">switch</span> <span class="n">pflag</span><span class="o">.</span><span class="n">Arg</span><span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">case</span> <span class="s">"list"</span><span class="o">:</span>
+    <span class="c">// snip</span>
+  <span class="k">default</span><span class="o">:</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Fprintf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stderr</span><span class="p">,</span> <span class="s">"subcommand not found: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pflag</span><span class="o">.</span><span class="n">Arg</span><span class="p">(</span><span class="m">0</span><span class="p">))</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<pre lang="bash" class="highlight highlight-bash">% sample
 Usage of sample:
-  -v, --version   show version
-</code></pre>
+  <span class="nt">-v</span>, <span class="nt">--version</span>   show version
+</pre>
 <ul>
-<li><code>pflag.BoolP</code>のようにflagパッケージの関数名に<code>P</code>がついた関数をつかうと、よくある形式のオプションを追加できる。</li>
-<li><code>pflag.Usage()</code>でヘルプメッセージを生成する。</li>
-<li><code>NArg()</code>や<code>Arg()</code>などの関数はflagパッケージにあるものと同じなので、覚えていることをそのまま使える。</li>
+<li>
+<code>pflag.BoolP</code>のようにflagパッケージの関数名に<code>P</code>がついた関数をつかうと、よくある形式のオプションを追加できる。</li>
+<li>
+<code>pflag.Usage()</code>でヘルプメッセージを生成する。</li>
+<li>
+<code>NArg()</code>や<code>Arg()</code>などの関数はflagパッケージにあるものと同じなので、覚えていることをそのまま使える。</li>
 </ul>
         </section>
         <footer>

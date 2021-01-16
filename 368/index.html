@@ -6,6 +6,7 @@
     <title>MySQLコンテナの起動時にDBを初期化する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="MySQLコンテナの起動時にDBを初期化する">
     <meta property="og:type" content="website">
@@ -45,20 +46,22 @@
     └── tasks.csv
 </code></pre>
 <p><code>Dockerfile</code>はこうなっている。</p>
-<pre lang="docker"><code>FROM mysql:8
-ADD mysqld.cnf /etc/mysql/conf.d/
-ADD docker-entrypoint-initdb.d /docker-entrypoint-initdb.d/
-ADD seed /seed/
-</code></pre>
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> mysql:8</span>
+<span class="k">ADD</span><span class="s"> mysqld.cnf /etc/mysql/conf.d/</span>
+<span class="k">ADD</span><span class="s"> docker-entrypoint-initdb.d /docker-entrypoint-initdb.d/</span>
+<span class="k">ADD</span><span class="s"> seed /seed/</span>
+</pre>
 <ul>
-<li><code>/etc/mysql/conf.d/</code>以下に設定ファイルを配置するとincludeされるようになっている。</li>
-<li><code>/docker-entrypoint-initdb.d/</code>ディレクトリ以下に配置した<code>*.sql</code>や<code>*.sh</code>といったファイルは初回起動時に実行される。</li>
+<li>
+<code>/etc/mysql/conf.d/</code>以下に設定ファイルを配置するとincludeされるようになっている。</li>
+<li>
+<code>/docker-entrypoint-initdb.d/</code>ディレクトリ以下に配置した<code>*.sql</code>や<code>*.sh</code>といったファイルは初回起動時に実行される。</li>
 <li>この例では、<code>1_schema.sql</code>でテーブルが作成され、<code>2_seed.sql</code>でシードデータが作成されるようになっている。番号をprefixにつけることで実行順を制御している。</li>
 </ul>
 <p>シードデータの作成は以下のように行っている。</p>
-<pre lang="sql"><code>LOAD DATA INFILE '/seed/statuses.csv' INTO TABLE statuses FIELDS TERMINATED BY ',' ENCLOSED BY '&quot;';
-LOAD DATA INFILE '/seed/tasks.csv' INTO TABLE tasks FIELDS TERMINATED BY ',' ENCLOSED BY '&quot;';
-</code></pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">LOAD</span> <span class="k">DATA</span> <span class="n">INFILE</span> <span class="s1">'/seed/statuses.csv'</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="n">statuses</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span> <span class="n">ENCLOSED</span> <span class="k">BY</span> <span class="s1">'"'</span><span class="p">;</span>
+<span class="k">LOAD</span> <span class="k">DATA</span> <span class="n">INFILE</span> <span class="s1">'/seed/tasks.csv'</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="n">tasks</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span> <span class="n">ENCLOSED</span> <span class="k">BY</span> <span class="s1">'"'</span><span class="p">;</span>
+</pre>
 <p>ちなみにシードデータはこんな感じ。ヘッダーはつけられなさそうだった。</p>
 <pre><code>1,TODO,1
 2,DOING,2
@@ -67,7 +70,7 @@ LOAD DATA INFILE '/seed/tasks.csv' INTO TABLE tasks FIELDS TERMINATED BY ',' ENC
 </code></pre>
 <p><code>LOAD DATA INFILE</code>を使ってコンテナ内のCSVファイルからデータを作成しているんだけど、これを行うには設定を追加する必要がある。そのため、以下のような<code>mysqld.cnf</code>を<code>/etc/mysql/conf.d/</code>以下に配置している。</p>
 <pre><code>[mysqld]
-secure-file-priv = &quot;&quot;
+secure-file-priv = ""
 </code></pre>
 <p>以上のようなカスタムイメージを作ることで初回起動時に必要なセットアップがすべて完了した状態で起動できるようになる。</p>
         </section>

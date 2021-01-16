@@ -6,6 +6,7 @@
     <title>Kobito用カスタムCSSつくってみた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Kobito用カスタムCSSつくってみた">
     <meta property="og:type" content="website">
@@ -26,162 +27,162 @@
         </header>
         <section class="body">
           <p>むかし<a href="http://qiita.com/naoty_k/items/0fce93c683fcb476b2f3">Kobitoのスタイルをハックするtips</a>を書いたのですが、先ほどのアップデートでついにカスタムCSSに対応したとのことで、むかし書いたカスタムCSSを若干修正したヤツを共有しておきます。</p>
-<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/bb0317de-75a9-45b2-baf6-6f66f237c988.png" alt="スクリーンショット 2013-11-07 19.30.19.png" /></p>
-<pre lang="css"><code>/* See Kobito.app/Contents/Resources/markdown.css for predefined style. */
-/*
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/bb0317de-75a9-45b2-baf6-6f66f237c988.png" alt="スクリーンショット 2013-11-07 19.30.19.png"></p>
+<pre lang="css" class="highlight highlight-css"><span class="c">/* See Kobito.app/Contents/Resources/markdown.css for predefined style. */</span>
+<span class="c">/*
 Copyright (c) 2011, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.com/yui/license.html
 version: 2.9.0
-*/
-html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,select,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,button,caption,cite,code,dfn,em,input,optgroup,option,select,strong,textarea,th,var{font:inherit}del,ins{text-decoration:none}li{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:baseline}sub{vertical-align:baseline}legend{color:#000}
+*/</span>
+<span class="nt">html</span><span class="p">{</span><span class="nl">color</span><span class="p">:</span><span class="m">#000</span><span class="p">;</span><span class="nl">background</span><span class="p">:</span><span class="m">#FFF</span><span class="p">}</span><span class="nt">body</span><span class="o">,</span><span class="nt">div</span><span class="o">,</span><span class="nt">dl</span><span class="o">,</span><span class="nt">dt</span><span class="o">,</span><span class="nt">dd</span><span class="o">,</span><span class="nt">ul</span><span class="o">,</span><span class="nt">ol</span><span class="o">,</span><span class="nt">li</span><span class="o">,</span><span class="nt">h1</span><span class="o">,</span><span class="nt">h2</span><span class="o">,</span><span class="nt">h3</span><span class="o">,</span><span class="nt">h4</span><span class="o">,</span><span class="nt">h5</span><span class="o">,</span><span class="nt">h6</span><span class="o">,</span><span class="nt">pre</span><span class="o">,</span><span class="nt">code</span><span class="o">,</span><span class="nt">form</span><span class="o">,</span><span class="nt">fieldset</span><span class="o">,</span><span class="nt">legend</span><span class="o">,</span><span class="nt">input</span><span class="o">,</span><span class="nt">button</span><span class="o">,</span><span class="nt">textarea</span><span class="o">,</span><span class="nt">select</span><span class="o">,</span><span class="nt">p</span><span class="o">,</span><span class="nt">blockquote</span><span class="o">,</span><span class="nt">th</span><span class="o">,</span><span class="nt">td</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span><span class="p">;</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span><span class="p">}</span><span class="nt">table</span><span class="p">{</span><span class="nl">border-collapse</span><span class="p">:</span><span class="nb">collapse</span><span class="p">;</span><span class="nl">border-spacing</span><span class="p">:</span><span class="m">0</span><span class="p">}</span><span class="nt">fieldset</span><span class="o">,</span><span class="nt">img</span><span class="p">{</span><span class="nl">border</span><span class="p">:</span><span class="m">0</span><span class="p">}</span><span class="nt">address</span><span class="o">,</span><span class="nt">button</span><span class="o">,</span><span class="nt">caption</span><span class="o">,</span><span class="nt">cite</span><span class="o">,</span><span class="nt">code</span><span class="o">,</span><span class="nt">dfn</span><span class="o">,</span><span class="nt">em</span><span class="o">,</span><span class="nt">input</span><span class="o">,</span><span class="nt">optgroup</span><span class="o">,</span><span class="nt">option</span><span class="o">,</span><span class="nt">select</span><span class="o">,</span><span class="nt">strong</span><span class="o">,</span><span class="nt">textarea</span><span class="o">,</span><span class="nt">th</span><span class="o">,</span><span class="nt">var</span><span class="p">{</span><span class="nl">font</span><span class="p">:</span><span class="nb">inherit</span><span class="p">}</span><span class="nt">del</span><span class="o">,</span><span class="nt">ins</span><span class="p">{</span><span class="nl">text-decoration</span><span class="p">:</span><span class="nb">none</span><span class="p">}</span><span class="nt">li</span><span class="p">{</span><span class="nl">list-style</span><span class="p">:</span><span class="nb">none</span><span class="p">}</span><span class="nt">caption</span><span class="o">,</span><span class="nt">th</span><span class="p">{</span><span class="nl">text-align</span><span class="p">:</span><span class="nb">left</span><span class="p">}</span><span class="nt">h1</span><span class="o">,</span><span class="nt">h2</span><span class="o">,</span><span class="nt">h3</span><span class="o">,</span><span class="nt">h4</span><span class="o">,</span><span class="nt">h5</span><span class="o">,</span><span class="nt">h6</span><span class="p">{</span><span class="nl">font-size</span><span class="p">:</span><span class="m">100%</span><span class="p">;</span><span class="nl">font-weight</span><span class="p">:</span><span class="nb">normal</span><span class="p">}</span><span class="nt">q</span><span class="nd">:before</span><span class="o">,</span><span class="nt">q</span><span class="nd">:after</span><span class="p">{</span><span class="nl">content</span><span class="p">:</span><span class="s2">''</span><span class="p">}</span><span class="nt">abbr</span><span class="o">,</span><span class="nt">acronym</span><span class="p">{</span><span class="nl">border</span><span class="p">:</span><span class="m">0</span><span class="p">;</span><span class="nl">font-variant</span><span class="p">:</span><span class="nb">normal</span><span class="p">}</span><span class="nt">sup</span><span class="p">{</span><span class="nl">vertical-align</span><span class="p">:</span><span class="nb">baseline</span><span class="p">}</span><span class="nt">sub</span><span class="p">{</span><span class="nl">vertical-align</span><span class="p">:</span><span class="nb">baseline</span><span class="p">}</span><span class="nt">legend</span><span class="p">{</span><span class="nl">color</span><span class="p">:</span><span class="m">#000</span><span class="p">}</span>
 
-/* ------------------------------
+<span class="c">/* ------------------------------
  * HTML element
- * ------------------------------ */
+ * ------------------------------ */</span>
 
-html {
-  background-color: #FFFFFF;
-  font-size: 14px;
-  padding: 0;
-}
+<span class="nt">html</span> <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">14px</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-body {
-  background-color: #FFFFFF;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-}
+<span class="nt">body</span> <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+  <span class="nl">font-family</span><span class="p">:</span> <span class="s2">'Helvetica Neue'</span><span class="p">,</span> <span class="n">Helvetica</span><span class="p">,</span> <span class="n">Arial</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
+  <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
+<span class="p">}</span>
 
-p, h1, h2, h3, ul, ol, pre {
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
+<span class="nt">p</span><span class="o">,</span> <span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span><span class="o">,</span> <span class="nt">ul</span><span class="o">,</span> <span class="nt">ol</span><span class="o">,</span> <span class="nt">pre</span> <span class="p">{</span>
+  <span class="nl">line-height</span><span class="p">:</span> <span class="m">1.6</span><span class="p">;</span>
+  <span class="nl">margin-bottom</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
+<span class="p">}</span>
 
-h1, h2, h3 {
-  color: #404040;
-  font-weight: bold;
-}
+<span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span> <span class="p">{</span>
+  <span class="nl">color</span><span class="p">:</span> <span class="m">#404040</span><span class="p">;</span>
+  <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span><span class="p">;</span>
+<span class="p">}</span>
 
-h1 {
-  border-bottom: 1px solid #AAAAAA;
-  font-size: 24px;
-}
+<span class="nt">h1</span> <span class="p">{</span>
+  <span class="nl">border-bottom</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="m">#AAAAAA</span><span class="p">;</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">24px</span><span class="p">;</span>
+<span class="p">}</span>
 
-h1:first-of-type {
-  margin-top: 0;
-}
+<span class="nt">h1</span><span class="nd">:first-of-type</span> <span class="p">{</span>
+  <span class="nl">margin-top</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-h2 {
-  font-size: 18px;
-}
+<span class="nt">h2</span> <span class="p">{</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">18px</span><span class="p">;</span>
+<span class="p">}</span>
 
-em {
-  font-style: italic;
-}
+<span class="nt">em</span> <span class="p">{</span>
+  <span class="nl">font-style</span><span class="p">:</span> <span class="nb">italic</span><span class="p">;</span>
+<span class="p">}</span>
 
-ul, ol {
-  margin-left: 30px;
-}
+<span class="nt">ul</span><span class="o">,</span> <span class="nt">ol</span> <span class="p">{</span>
+  <span class="nl">margin-left</span><span class="p">:</span> <span class="m">30px</span><span class="p">;</span>
+<span class="p">}</span>
 
-li {
-  list-style: disc;
-  margin-bottom: 10px;
-}
+<span class="nt">li</span> <span class="p">{</span>
+  <span class="nl">list-style</span><span class="p">:</span> <span class="nb">disc</span><span class="p">;</span>
+  <span class="nl">margin-bottom</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
 
-code, pre {
-  background-color: #EEEEEE;
-  border: 1px solid #AAAAAA;
-  font-family: Courier, monospace;
-}
+<span class="nt">code</span><span class="o">,</span> <span class="nt">pre</span> <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#EEEEEE</span><span class="p">;</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="m">#AAAAAA</span><span class="p">;</span>
+  <span class="nl">font-family</span><span class="p">:</span> <span class="n">Courier</span><span class="p">,</span> <span class="nb">monospace</span><span class="p">;</span>
+<span class="p">}</span>
 
-code {
-  margin: 0 5px;
-  padding: 0 5px;
-}
+<span class="nt">code</span> <span class="p">{</span>
+  <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span> <span class="m">5px</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span> <span class="m">5px</span><span class="p">;</span>
+<span class="p">}</span>
 
-pre {
-  line-height: 1.5;
-  overflow: auto;
-  padding: 10px;
-}
+<span class="nt">pre</span> <span class="p">{</span>
+  <span class="nl">line-height</span><span class="p">:</span> <span class="m">1.5</span><span class="p">;</span>
+  <span class="nl">overflow</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
 
-pre code {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
+<span class="nt">pre</span> <span class="nt">code</span> <span class="p">{</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+  <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-blockquote {
-  padding-left: 10px;
-}
+<span class="nt">blockquote</span> <span class="p">{</span>
+  <span class="nl">padding-left</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
 
-/* ------------------------------
+<span class="c">/* ------------------------------
  * syntax hightlight for Kobito
  * inspired by https://github.com/mojombo/tpw/blob/master/css/syntax.css
- * ------------------------------ */
+ * ------------------------------ */</span>
 
-.highlight  { background: #ffffff; }
-.highlight .c { color: #999988; font-style: italic } /* Comment */
-.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
-.highlight .k { font-weight: bold } /* Keyword */
-/* .highlight .o { font-weight: bold } */  /* Operator */
-.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
-.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
-.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
-.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
-.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
-.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
-.highlight .ge { font-style: italic } /* Generic.Emph */
-.highlight .gr { color: #aa0000 } /* Generic.Error */
-.highlight .gh { color: #999999 } /* Generic.Heading */
-.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
-.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
-.highlight .go { color: #888888 } /* Generic.Output */
-.highlight .gp { color: #555555 } /* Generic.Prompt */
-.highlight .gs { font-weight: bold } /* Generic.Strong */
-.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
-.highlight .gt { color: #aa0000 } /* Generic.Traceback */
-.highlight .kc { font-weight: bold } /* Keyword.Constant */
-.highlight .kd { font-weight: bold } /* Keyword.Declaration */
-.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
-.highlight .kr { font-weight: bold } /* Keyword.Reserved */
-.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
-.highlight .m { color: #009999 } /* Literal.Number */
-.highlight .s { color: #d14 } /* Literal.String */
-.highlight .na { color: #008080 } /* Name.Attribute */
-.highlight .nb { color: #0086B3 } /* Name.Builtin */
-.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
-.highlight .no { color: #008080 } /* Name.Constant */
-.highlight .ni { color: #800080 } /* Name.Entity */
-.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
-.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
-.highlight .nn { color: #555555 } /* Name.Namespace */
-.highlight .nt { color: #000080 } /* Name.Tag */
-.highlight .nv { color: #008080 } /* Name.Variable */
-.highlight .ow { font-weight: bold } /* Operator.Word */
-.highlight .w { color: #bbbbbb } /* Text.Whitespace */
-.highlight .mf { color: #009999 } /* Literal.Number.Float */
-.highlight .mh { color: #009999 } /* Literal.Number.Hex */
-.highlight .mi { color: #009999 } /* Literal.Number.Integer */
-.highlight .mo { color: #009999 } /* Literal.Number.Oct */
-.highlight .sb { color: #d14 } /* Literal.String.Backtick */
-.highlight .sc { color: #d14 } /* Literal.String.Char */
-.highlight .sd { color: #d14 } /* Literal.String.Doc */
-.highlight .s2 { color: #d14 } /* Literal.String.Double */
-.highlight .se { color: #d14 } /* Literal.String.Escape */
-.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
-.highlight .si { color: #d14 } /* Literal.String.Interpol */
-.highlight .sx { color: #d14 } /* Literal.String.Other */
-.highlight .sr { color: #009926 } /* Literal.String.Regex */
-.highlight .s1 { color: #d14 } /* Literal.String.Single */
-.highlight .ss { color: #990073 } /* Literal.String.Symbol */
-.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
-.highlight .vc { color: #008080 } /* Name.Variable.Class */
-.highlight .vg { color: #008080 } /* Name.Variable.Global */
-.highlight .vi { color: #008080 } /* Name.Variable.Instance */
-.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
-</code></pre>
+<span class="nc">.highlight</span>  <span class="p">{</span> <span class="nl">background</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.highlight</span> <span class="nc">.c</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999988</span><span class="p">;</span> <span class="nl">font-style</span><span class="p">:</span> <span class="nb">italic</span> <span class="p">}</span> <span class="c">/* Comment */</span>
+<span class="nc">.highlight</span> <span class="nc">.err</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#a61717</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="m">#e3d2d2</span> <span class="p">}</span> <span class="c">/* Error */</span>
+<span class="nc">.highlight</span> <span class="nc">.k</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Keyword */</span>
+<span class="c">/* .highlight .o { font-weight: bold } */</span>  <span class="c">/* Operator */</span>
+<span class="nc">.highlight</span> <span class="nc">.cm</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999988</span><span class="p">;</span> <span class="nl">font-style</span><span class="p">:</span> <span class="nb">italic</span> <span class="p">}</span> <span class="c">/* Comment.Multiline */</span>
+<span class="nc">.highlight</span> <span class="nc">.cp</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999999</span><span class="p">;</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Comment.Preproc */</span>
+<span class="nc">.highlight</span> <span class="nc">.c1</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999988</span><span class="p">;</span> <span class="nl">font-style</span><span class="p">:</span> <span class="nb">italic</span> <span class="p">}</span> <span class="c">/* Comment.Single */</span>
+<span class="nc">.highlight</span> <span class="nc">.cs</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999999</span><span class="p">;</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span><span class="p">;</span> <span class="nl">font-style</span><span class="p">:</span> <span class="nb">italic</span> <span class="p">}</span> <span class="c">/* Comment.Special */</span>
+<span class="nc">.highlight</span> <span class="nc">.gd</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ffdddd</span> <span class="p">}</span> <span class="c">/* Generic.Deleted */</span>
+<span class="nc">.highlight</span> <span class="nc">.gd</span> <span class="nc">.x</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ffaaaa</span> <span class="p">}</span> <span class="c">/* Generic.Deleted.Specific */</span>
+<span class="nc">.highlight</span> <span class="nc">.ge</span> <span class="p">{</span> <span class="nl">font-style</span><span class="p">:</span> <span class="nb">italic</span> <span class="p">}</span> <span class="c">/* Generic.Emph */</span>
+<span class="nc">.highlight</span> <span class="nc">.gr</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#aa0000</span> <span class="p">}</span> <span class="c">/* Generic.Error */</span>
+<span class="nc">.highlight</span> <span class="nc">.gh</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999999</span> <span class="p">}</span> <span class="c">/* Generic.Heading */</span>
+<span class="nc">.highlight</span> <span class="nc">.gi</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ddffdd</span> <span class="p">}</span> <span class="c">/* Generic.Inserted */</span>
+<span class="nc">.highlight</span> <span class="nc">.gi</span> <span class="nc">.x</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="m">#aaffaa</span> <span class="p">}</span> <span class="c">/* Generic.Inserted.Specific */</span>
+<span class="nc">.highlight</span> <span class="nc">.go</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#888888</span> <span class="p">}</span> <span class="c">/* Generic.Output */</span>
+<span class="nc">.highlight</span> <span class="nc">.gp</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#555555</span> <span class="p">}</span> <span class="c">/* Generic.Prompt */</span>
+<span class="nc">.highlight</span> <span class="nc">.gs</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Generic.Strong */</span>
+<span class="nc">.highlight</span> <span class="nc">.gu</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#aaaaaa</span> <span class="p">}</span> <span class="c">/* Generic.Subheading */</span>
+<span class="nc">.highlight</span> <span class="nc">.gt</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#aa0000</span> <span class="p">}</span> <span class="c">/* Generic.Traceback */</span>
+<span class="nc">.highlight</span> <span class="nc">.kc</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Keyword.Constant */</span>
+<span class="nc">.highlight</span> <span class="nc">.kd</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Keyword.Declaration */</span>
+<span class="nc">.highlight</span> <span class="nc">.kp</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Keyword.Pseudo */</span>
+<span class="nc">.highlight</span> <span class="nc">.kr</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Keyword.Reserved */</span>
+<span class="nc">.highlight</span> <span class="nc">.kt</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#445588</span><span class="p">;</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Keyword.Type */</span>
+<span class="nc">.highlight</span> <span class="nc">.m</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009999</span> <span class="p">}</span> <span class="c">/* Literal.Number */</span>
+<span class="nc">.highlight</span> <span class="nc">.s</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String */</span>
+<span class="nc">.highlight</span> <span class="nc">.na</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#008080</span> <span class="p">}</span> <span class="c">/* Name.Attribute */</span>
+<span class="nc">.highlight</span> <span class="nc">.nb</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#0086B3</span> <span class="p">}</span> <span class="c">/* Name.Builtin */</span>
+<span class="nc">.highlight</span> <span class="nc">.nc</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#445588</span><span class="p">;</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Name.Class */</span>
+<span class="nc">.highlight</span> <span class="nc">.no</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#008080</span> <span class="p">}</span> <span class="c">/* Name.Constant */</span>
+<span class="nc">.highlight</span> <span class="nc">.ni</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#800080</span> <span class="p">}</span> <span class="c">/* Name.Entity */</span>
+<span class="nc">.highlight</span> <span class="nc">.ne</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#990000</span><span class="p">;</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Name.Exception */</span>
+<span class="nc">.highlight</span> <span class="nc">.nf</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#990000</span><span class="p">;</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Name.Function */</span>
+<span class="nc">.highlight</span> <span class="nc">.nn</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#555555</span> <span class="p">}</span> <span class="c">/* Name.Namespace */</span>
+<span class="nc">.highlight</span> <span class="nc">.nt</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#000080</span> <span class="p">}</span> <span class="c">/* Name.Tag */</span>
+<span class="nc">.highlight</span> <span class="nc">.nv</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#008080</span> <span class="p">}</span> <span class="c">/* Name.Variable */</span>
+<span class="nc">.highlight</span> <span class="nc">.ow</span> <span class="p">{</span> <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="p">}</span> <span class="c">/* Operator.Word */</span>
+<span class="nc">.highlight</span> <span class="nc">.w</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#bbbbbb</span> <span class="p">}</span> <span class="c">/* Text.Whitespace */</span>
+<span class="nc">.highlight</span> <span class="nc">.mf</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009999</span> <span class="p">}</span> <span class="c">/* Literal.Number.Float */</span>
+<span class="nc">.highlight</span> <span class="nc">.mh</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009999</span> <span class="p">}</span> <span class="c">/* Literal.Number.Hex */</span>
+<span class="nc">.highlight</span> <span class="nc">.mi</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009999</span> <span class="p">}</span> <span class="c">/* Literal.Number.Integer */</span>
+<span class="nc">.highlight</span> <span class="nc">.mo</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009999</span> <span class="p">}</span> <span class="c">/* Literal.Number.Oct */</span>
+<span class="nc">.highlight</span> <span class="nc">.sb</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Backtick */</span>
+<span class="nc">.highlight</span> <span class="nc">.sc</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Char */</span>
+<span class="nc">.highlight</span> <span class="nc">.sd</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Doc */</span>
+<span class="nc">.highlight</span> <span class="nc">.s2</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Double */</span>
+<span class="nc">.highlight</span> <span class="nc">.se</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Escape */</span>
+<span class="nc">.highlight</span> <span class="nc">.sh</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Heredoc */</span>
+<span class="nc">.highlight</span> <span class="nc">.si</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Interpol */</span>
+<span class="nc">.highlight</span> <span class="nc">.sx</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Other */</span>
+<span class="nc">.highlight</span> <span class="nc">.sr</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009926</span> <span class="p">}</span> <span class="c">/* Literal.String.Regex */</span>
+<span class="nc">.highlight</span> <span class="nc">.s1</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#d14</span> <span class="p">}</span> <span class="c">/* Literal.String.Single */</span>
+<span class="nc">.highlight</span> <span class="nc">.ss</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#990073</span> <span class="p">}</span> <span class="c">/* Literal.String.Symbol */</span>
+<span class="nc">.highlight</span> <span class="nc">.bp</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#999999</span> <span class="p">}</span> <span class="c">/* Name.Builtin.Pseudo */</span>
+<span class="nc">.highlight</span> <span class="nc">.vc</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#008080</span> <span class="p">}</span> <span class="c">/* Name.Variable.Class */</span>
+<span class="nc">.highlight</span> <span class="nc">.vg</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#008080</span> <span class="p">}</span> <span class="c">/* Name.Variable.Global */</span>
+<span class="nc">.highlight</span> <span class="nc">.vi</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#008080</span> <span class="p">}</span> <span class="c">/* Name.Variable.Instance */</span>
+<span class="nc">.highlight</span> <span class="nc">.il</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="m">#009999</span> <span class="p">}</span> <span class="c">/* Literal.Number.Integer.Long */</span>
+</pre>
         </section>
         <footer>
           <nav>

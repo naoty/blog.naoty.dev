@@ -6,6 +6,7 @@
     <title>ちゃんとテスト書き始めた話</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ちゃんとテスト書き始めた話">
     <meta property="og:type" content="website">
@@ -38,7 +39,8 @@
 <li>一番わかりやすいテスト項目として「ユーザーにエラー画面を表示していないか」というのがまずアタマに浮かんだ。</li>
 <li>モデルとか変更すると、影響範囲よくわからないし、怖い。</li>
 <li>手っ取り早く全部のアクションで500返ってないかテストする方法を考えてみた。</li>
-<li><code>response.should be_success</code>的なレスポンスをチェックするテストにタグをつけて、全コントローラーをまたいでレスポンスをチェックするテストだけを実行するってやり方を考えてみた。全コントローラーのテストは時間かかって、たぶん手元では試さなくなりそうだから。</li>
+<li>
+<code>response.should be_success</code>的なレスポンスをチェックするテストにタグをつけて、全コントローラーをまたいでレスポンスをチェックするテストだけを実行するってやり方を考えてみた。全コントローラーのテストは時間かかって、たぶん手元では試さなくなりそうだから。</li>
 </ul>
 <pre><code># spec/spec_helper.rb
 
@@ -48,7 +50,8 @@ end
 </code></pre>
 <ul>
 <li>RSpec 2.xだとこの設定が必要らしい。</li>
-<li><code>it 'hogehoge', status: true</code>みたいなのを<code>it 'hogehoge', :status</code>で書けるようになる。</li>
+<li>
+<code>it 'hogehoge', status: true</code>みたいなのを<code>it 'hogehoge', :status</code>で書けるようになる。</li>
 </ul>
 <pre><code># lib/tasks/spec/status.rake
 
@@ -88,11 +91,12 @@ end
 <pre><code># config/environments/test.rb
 
 NaotySample::Application.configure do
-  $LOAD_PATH.unshift &quot;#{Rails.root}/script&quot;
+  $LOAD_PATH.unshift "#{Rails.root}/script"
 end
 </code></pre>
 <ul>
-<li><code>script/</code>以下を<code>require</code>するためにパスに追加しておく</li>
+<li>
+<code>script/</code>以下を<code>require</code>するためにパスに追加しておく</li>
 </ul>
 <pre><code># spec/scripts/create_naoty_spec.rb
 
@@ -122,12 +126,13 @@ CreateNaoty.run if __FILE__ == $0
 </code></pre>
 <ul>
 <li>処理の中身をモジュールにまとめておいて、テスト内で実行しやすくしておく。</li>
-<li><code>if __FILE__ == $0</code>で<code>require</code>されたときにスクリプトが実行されるのを回避してる。</li>
+<li>
+<code>if __FILE__ == $0</code>で<code>require</code>されたときにスクリプトが実行されるのを回避してる。</li>
 </ul>
 <pre><code># Guardfile
 
 guard 'rspec' do
-  watch(%r{^script/(.+)\.rb$}) {|m| &quot;spec/scripts/${m[1]}_spec.rb&quot; }
+  watch(%r{^script/(.+)\.rb$}) {|m| "spec/scripts/${m[1]}_spec.rb" }
 end
 </code></pre>
 <ul>
@@ -141,7 +146,7 @@ end
 <li>rspec-railsで対応できなければ、rspecの便利機能を駆使して試行錯誤する。RSpec bookにお世話になってる。</li>
 </ul>
 <h2>参考</h2>
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798121932/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51-3T735zLL._SL160_.jpg" alt="The RSpec Book (Professional Ruby Series)" title="The RSpec Book (Professional Ruby Series)" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798121932/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51-3T735zLL._SL160_.jpg" alt="The RSpec Book (Professional Ruby Series)" title="The RSpec Book (Professional Ruby Series)"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798121932/hatena-blog-22/">The RSpec Book (Professional Ruby Series)</a></p>
 <ul>
 <li>

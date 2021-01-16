@@ -6,6 +6,7 @@
     <title>Resultをio::Resultに変換する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Resultをio::Resultに変換する">
     <meta property="og:type" content="website">
@@ -27,17 +28,20 @@
         </header>
         <section class="body">
           <p><code>Read</code>トレイトや<code>Write</code>トレイトを実装するには、<code>io::Result</code>を返す必要がある。これらの関数のなかで<code>std::result::Result</code>を扱うとき、これを<code>io::Result</code>に変換したい。</p>
-<pre lang="rust"><code>fn write(&amp;mut self, buf: &amp;[u8]) -&gt; io::Result {
-  let string = String::from_utf8(buf.to_vec());
-    .map_err(io::Error::from(io::ErrorKind::InvalidData))?;
+<pre lang="rust" class="highlight highlight-rust"><span class="k">fn</span> <span class="nf">write</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="nb">u8</span><span class="p">])</span> <span class="k">-&gt;</span> <span class="nn">io</span><span class="p">::</span><span class="n">Result</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="n">string</span> <span class="o">=</span> <span class="nn">String</span><span class="p">::</span><span class="nf">from_utf8</span><span class="p">(</span><span class="n">buf</span><span class="nf">.to_vec</span><span class="p">());</span>
+    <span class="nf">.map_err</span><span class="p">(</span><span class="nn">io</span><span class="p">::</span><span class="nn">Error</span><span class="p">::</span><span class="nf">from</span><span class="p">(</span><span class="nn">io</span><span class="p">::</span><span class="nn">ErrorKind</span><span class="p">::</span><span class="n">InvalidData</span><span class="p">))</span><span class="o">?</span><span class="p">;</span>
 
-  // ...
-}
-</code></pre>
+  <span class="c">// ...</span>
+<span class="p">}</span>
+</pre>
 <ul>
-<li><code>io::Result</code>にするために、<code>map_err</code>を使ってエラーの型を<code>io::Error</code>に変換する。</li>
-<li><code>io::Error</code>は<code>io::ErrorKind</code>から<code>from</code>関数で生成できる。</li>
-<li><code>io::ErrorKind</code>は<a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html">ドキュメント</a>にあるようにenumとして定義されている。このコードのような不正なデータを受け取った場合は<code>InvalidData</code>で表せそう。</li>
+<li>
+<code>io::Result</code>にするために、<code>map_err</code>を使ってエラーの型を<code>io::Error</code>に変換する。</li>
+<li>
+<code>io::Error</code>は<code>io::ErrorKind</code>から<code>from</code>関数で生成できる。</li>
+<li>
+<code>io::ErrorKind</code>は<a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html">ドキュメント</a>にあるようにenumとして定義されている。このコードのような不正なデータを受け取った場合は<code>InvalidData</code>で表せそう。</li>
 </ul>
         </section>
         <footer>

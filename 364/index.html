@@ -6,6 +6,7 @@
     <title>ヘルスチェックのエンドポイントを分ける</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ヘルスチェックのエンドポイントを分ける">
     <meta property="og:type" content="website">
@@ -34,8 +35,8 @@
 <p>ロードバランサー用のエンドポイントでは、Webアプリケーションの健康状態のみを返すようにする。外形監視用のエンドポイントは依存するサービスも合わせてシステム全体の健康状態を返すようにする。</p>
 <h1>実装</h1>
 <p>Railsアプリの場合、<a href="https://github.com/sportngin/okcomputer">okcomputer</a>というrubygemが使いやすい。</p>
-<pre lang="ruby"><code>gem &quot;okcomputer&quot;
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">gem</span> <span class="s2">"okcomputer"</span>
+</pre>
 <p>gemをインストールするだけでエンドポイントが2つ定義される。<code>GET /okcomputer</code>でRailsアプリの健康状態だけを返す。このエンドポイントをロードバランサー用のヘルスチェックに使う。</p>
 <pre><code>$ curl http://localhost:3000/okcomputer
 default: PASSED Application is running (0s)

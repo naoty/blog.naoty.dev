@@ -6,6 +6,7 @@
     <title>class_evalとinstance_eval</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="class_evalとinstance_eval">
     <meta property="og:type" content="website">
@@ -36,7 +37,7 @@ naoty = Person.new # Personクラスのインスタンスの作成
     p 'Hello, my world!'
   end
 end
-naoty.greet #=&gt; &quot;Hello, my world!&quot;
+naoty.greet #=&gt; "Hello, my world!"
 </code></pre>
 <ul>
 <li>class_evalはレシーバ（＝Person）をクラスとしてブロック内を実行する。クラス内で実行されたのと同じ。</li>
@@ -48,7 +49,7 @@ naoty.greet #=&gt; &quot;Hello, my world!&quot;
     p 'Hello, world!'
   end
 end
-Person.greet #=&gt; &quot;Hello, world!&quot;
+Person.greet #=&gt; "Hello, world!"
 naoty.greet #=&gt; NoMethodError: undefined method 'greet' for ...
 </code></pre>
 <ul>

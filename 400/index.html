@@ -6,6 +6,7 @@
     <title>pictで複雑な組み合わせを生成する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="pictで複雑な組み合わせを生成する">
     <meta property="og:type" content="website">
@@ -74,8 +75,8 @@ guest	premium	card
 plan: free,pro,premium
 payment: -,iap,card,paypal
 
-if [status] = &quot;guest&quot; then [payment] IN {&quot;-&quot;, &quot;iap&quot;};
-if [plan] = &quot;free&quot; then [payment] = &quot;-&quot;;
+if [status] = "guest" then [payment] IN {"-", "iap"};
+if [plan] = "free" then [payment] = "-";
 </code></pre>
 <pre><code>% pict user_pattern.txt | table -H
 +--------+---------+---------+

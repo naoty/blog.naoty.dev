@@ -6,6 +6,7 @@
     <title>最近のテスト事情</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="最近のテスト事情">
     <meta property="og:type" content="website">
@@ -46,8 +47,8 @@ end
 <pre><code>FactoryGirl.define do
   factory :user do
     # 連番を使えばuniquenessのバリデーションにかからなくなる
-    sequence(:name) {|n| &quot;user #{n}&quot; }
-    sequence(:email) {|n| &quot;user#{n}@example.com&quot; }
+    sequence(:name) {|n| "user #{n}" }
+    sequence(:email) {|n| "user#{n}@example.com" }
     age { rand(18..30) }
 
     after(:build) do |user|
@@ -70,14 +71,14 @@ end
 end
 
 user = FactoryGirl.create(:user)
-p user.name #=&gt; &quot;user 1&quot;
+p user.name #=&gt; "user 1"
 
 naoty = FactoryGirl.create(:naoty)
-p naoty.name #=&gt; &quot;naoty&quot;
+p naoty.name #=&gt; "naoty"
 
 resigned_user = FactoryGirl.create(:user, :resigned)
-p resigned_user.name #=&gt; &quot;user 2&quot;
-p resigned_user.resigned_at #=&gt; &quot;2013-01-19 00:43:59 +0900&quot;
+p resigned_user.name #=&gt; "user 2"
+p resigned_user.resigned_at #=&gt; "2013-01-19 00:43:59 +0900"
 </code></pre>
 <p><code>factory_girl</code>はテスト用のデータを簡単につくるためのgem。似たようなgemは他にもあるけど、こういうgemを使うと、テストデータを作るロジックとテストコードを分離できる。なので、いろんなテストで使われるテストデータを重複なく簡単に作ることができる。</p>
 <p>FactoryGirlでテストデータを作成するときに、よくひっかかるのがバリデーションや<code>after_save</code>などのコールバック内の余計な処理だと思う。こういう鬱陶しい処理は、FactoryGirlのコールバックを使ってスキップしてる。</p>

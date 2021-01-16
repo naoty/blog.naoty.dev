@@ -6,6 +6,7 @@
     <title>KafkaのDockerイメージを用意する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="KafkaのDockerイメージを用意する">
     <meta property="og:type" content="website">
@@ -28,31 +29,32 @@
         </header>
         <section class="body">
           <p>そろそろKafkaを手を動かしながら学ぶ必要が出てきたので、簡単に試せるようにDockerイメージを用意した。</p>
-<pre lang="dockerfile"><code>FROM openjdk:11-jre
+<pre lang="dockerfile" class="highlight highlight-dockerfile"><span class="k">FROM</span><span class="s"> openjdk:11-jre</span>
 
-RUN apt-get update
+<span class="k">RUN </span>apt-get update
 
-# Kafka
-RUN wget -q -O - http://ftp.meisei-u.ac.jp/mirror/apache/dist/kafka/2.5.0/kafka_2.12-2.5.0.tgz | tar xzf - &amp;&amp; \
-  mv /kafka_2.12-2.5.0 /kafka
-ENV PATH=/kafka/bin:$PATH
+<span class="c"># Kafka</span>
+<span class="k">RUN </span>wget <span class="nt">-q</span> <span class="nt">-O</span> - http://ftp.meisei-u.ac.jp/mirror/apache/dist/kafka/2.5.0/kafka_2.12-2.5.0.tgz | <span class="nb">tar </span>xzf - <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  <span class="nb">mv</span> /kafka_2.12-2.5.0 /kafka
+<span class="k">ENV</span><span class="s"> PATH=/kafka/bin:$PATH</span>
 
-WORKDIR /root/
-COPY start.sh  /root/
-CMD [&quot;./start.sh&quot;]
-</code></pre>
+<span class="k">WORKDIR</span><span class="s"> /root/</span>
+<span class="k">COPY</span><span class="s"> start.sh  /root/</span>
+<span class="k">CMD</span><span class="s"> ["./start.sh"]</span>
+</pre>
 <ul>
 <li>Java 11がサポートされているのでOpenJDK 11をベースイメージにする。</li>
 <li>ダウンロードリンクからダウンロードして展開する。</li>
 <li>ZooKeeperとKafkaを同時に起動する必要があるので、起動スクリプトを用意する。</li>
 </ul>
-<pre lang="shell"><code>#!/bin/bash -e
+<pre lang="shell" class="highlight highlight-shell"><span class="c">#!/bin/bash -e</span>
 
 /kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties &amp;
 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties
-</code></pre>
+</pre>
 <ul>
-<li><a href="https://kafka.apache.org/quickstart">Quickstart</a>に載っているようにZooKeeperとKafkaを起動する。</li>
+<li>
+<a href="https://kafka.apache.org/quickstart">Quickstart</a>に載っているようにZooKeeperとKafkaを起動する。</li>
 </ul>
         </section>
         <footer>

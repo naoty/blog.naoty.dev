@@ -6,6 +6,7 @@
     <title>HIGで推奨されているアラートをSwiftで効率的に組み立てる</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="HIGで推奨されているアラートをSwiftで効率的に組み立てる">
     <meta property="og:type" content="website">
@@ -30,8 +31,10 @@
           <p>最近、Swiftにおけるエラーハンドリングについて興味をもっている。エラーハンドリングの中でアラートを組み立てて表示するコードをよく書いたり、目にしている。アラートを実装する際に気をつけているのは、ユーザーが目にしたときになるべく怒らせないようにすることだ。 <strong>ユーザーフレンドリーなアラートを実装する上で参考にするため、Human Interface Guidelines（以下、HIG）を読んでいる</strong> 。HIGを読むと、アラートの実装にあたって問題点が見えてきた。</p>
 <h1>問題点</h1>
 <ul>
-<li><code>UIAlertController</code>でアラートを組み立てるとき、テンプレのようなコードを長々書かないといけない。</li>
-<li><code>UIAlertController</code>を使ってHIGで推奨されるアラートを組み立てるには、HIGの理解と注意深い実装が必要になる。</li>
+<li>
+<code>UIAlertController</code>でアラートを組み立てるとき、テンプレのようなコードを長々書かないといけない。</li>
+<li>
+<code>UIAlertController</code>を使ってHIGで推奨されるアラートを組み立てるには、HIGの理解と注意深い実装が必要になる。</li>
 </ul>
 <h1>解決策</h1>
 <p>Swiftの表現力を駆使して、テンプレのようなコードをなるべく排除し、HIGの中で望ましいとされるUIを効率的に組み立てられるような設計を考えた。HIGでは、アラートは1つまたは2つのボタンを持つべきで、ボタンが3つ以上の場合はアクションシートを検討すべきだと書かれている。 <strong>アラートを1つのボタンを持つ<code>Confirmation</code>と2つのボタンを持つ<code>Suggestion</code>という2つのタイプに分類して、以下のようなenumで表現する</strong> ことを考えてみた。</p>
@@ -50,7 +53,7 @@
         case .Confirmation(let error):
             let alertController = buildAlertControllerWithError(error)
 
-            let cancel = UIAlertAction(title: &quot;OK&quot;, style: .Cancel, handler: nil)
+            let cancel = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
             alertController.addAction(cancel)
 
             return alertController
@@ -85,7 +88,7 @@
             // 省略
         case .Suggestion(let error, let recovery):
             let alertController = buildAlertControllerWithError(error)
-            let cancel = UIAlertAction(title: &quot;Cancel&quot;, style: .Default, handler: nil)
+            let cancel = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
 
             switch recovery.style {
             case .Nondestructive:
@@ -108,21 +111,21 @@
 <pre><code>let alert = Alert.Confirmation(error)
 presentViewController(alert.viewController, animated: true, completion: nil)
 </code></pre>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000628.png" alt="f:id:naoty_k:20160216000628p:plain" title="f:id:naoty_k:20160216000628p:plain" /></p>
-<pre><code>let recovery = Alert.Recovery(name: &quot;Recover&quot;, style: .Nondestructive) { action in
-    print(&quot;Recover!!&quot;)
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000628.png" alt="f:id:naoty_k:20160216000628p:plain" title="f:id:naoty_k:20160216000628p:plain"></p>
+<pre><code>let recovery = Alert.Recovery(name: "Recover", style: .Nondestructive) { action in
+    print("Recover!!")
 }
 let alert = Alert.Suggestion(error, recovery)
 presentViewController(alert.viewController, animated: true, completion: nil)
 </code></pre>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216001159.png" alt="f:id:naoty_k:20160216001159p:plain" title="f:id:naoty_k:20160216001159p:plain" /></p>
-<pre><code>let recovery = Alert.Recovery(name: &quot;Recover&quot;, style: .Destructive) { action in
-    print(&quot;Recover!!&quot;)
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216001159.png" alt="f:id:naoty_k:20160216001159p:plain" title="f:id:naoty_k:20160216001159p:plain"></p>
+<pre><code>let recovery = Alert.Recovery(name: "Recover", style: .Destructive) { action in
+    print("Recover!!")
 }
 let alert = Alert.Suggestion(error, recovery)
 presentViewController(alert.viewController, animated: true, completion: nil)
 </code></pre>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000952.png" alt="f:id:naoty_k:20160216000952p:plain" title="f:id:naoty_k:20160216000952p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000952.png" alt="f:id:naoty_k:20160216000952p:plain" title="f:id:naoty_k:20160216000952p:plain"></p>
 <h1>まとめ</h1>
 <ul>
 <li>HIGに沿って実装するとユーザーフレンドリーなアラートになる（はず）。</li>

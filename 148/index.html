@@ -6,6 +6,7 @@
     <title>Hello, Sinatra! (1)</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Hello, Sinatra! (1)">
     <meta property="og:type" content="website">
@@ -61,7 +62,8 @@ end
 <pre><code>$ ruby -rubygems app.rb
 </code></pre>
 <ul>
-<li><a href="http://localhost:4567">http://localhost:4567</a> で起動を確認。</li>
+<li>
+<a href="http://localhost:4567">http://localhost:4567</a> で起動を確認。</li>
 <li>スモールスタートがいい。</li>
 </ul>
 <h2>rabl</h2>
@@ -121,7 +123,8 @@ end
 </code></pre>
 <ul>
 <li>Herokuやpowで起動する際config.ruが必要っぽい。</li>
-<li><code>run [app name]</code>は必須。これがないと動かない。</li>
+<li>
+<code>run [app name]</code>は必須。これがないと動かない。</li>
 </ul>
 <h2>pow</h2>
 <pre><code># Gemfile
@@ -249,13 +252,13 @@ Running `rake --trace db:migrate RACK_ENV=production` attached to terminal... up
 ** Execute db:migrate
 rake aborted!
 could not connect to server: Connection refused
-        Is the server running on host &quot;localhost&quot; and accepting
+        Is the server running on host "localhost" and accepting
         TCP/IP connections on port 5432?
 </code></pre>
 <ul>
 <li>DBに接続できない。。。</li>
 </ul>
-<hr />
+<hr>
 <p>連休やったのはここまで。 時間があれば(2)もやる予定。</p>
         </section>
         <footer>

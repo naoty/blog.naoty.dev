@@ -6,6 +6,7 @@
     <title>ブログで使うHTML5</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ブログで使うHTML5">
     <meta property="og:type" content="website">
@@ -27,7 +28,7 @@
         <section class="body">
           <p>ブログを作るにあたって適切なセマンティックを使おうと思い、HTML5のタグを調べた。</p>
 <h1>レイアウト</h1>
-<pre lang="html"><code>
+<pre lang="html" class="highlight highlight-html">
   
     ブログタイトル
     公開：2017-12-01 12:00:00
@@ -40,35 +41,36 @@
     トップ
   
 
-</code></pre>
+</pre>
 <ul>
 <li>``：ブログのエントリーを表すために使う。</li>
-<li><code>, </code>：ブログのヘッダーおよびフッターを表すために使う。このブログでは、ブログタイトルやメタデータをヘッダーに表示して、ナビゲーションのリンクをフッターに表示している。</li>
+<li>
+<code>, </code>：ブログのヘッダーおよびフッターを表すために使う。このブログでは、ブログタイトルやメタデータをヘッダーに表示して、ナビゲーションのリンクをフッターに表示している。</li>
 <li>``：ブログ本文をヘッダーやフッターと区別して表すために使う。</li>
 <li>``：ブログのエントリーの公開日時を表すために使う。<code>datetime</code>属性によって公開日時を指定できる。</li>
 </ul>
 <h1>コード</h1>
-<pre lang="html"><code>
+<pre lang="html" class="highlight highlight-html">
   app/models/pokemon.rb
   
     
     
   
 
-</code></pre>
+</pre>
 <ul>
 <li>``：文書とは別に参考資料として付け加えたコンテンツを表すために使う。画像やコードに対して使えるようだ。</li>
 <li>``：参考資料のキャプションを表すために使う。</li>
 </ul>
 <h1>画像</h1>
-<pre lang="html"><code>
+<pre lang="html" class="highlight highlight-html">
   図1
   
     
     
   
 
-</code></pre>
+</pre>
 <ul>
 <li>``：条件に合わせて表示する画像を切り替えることができる。レスポンシブデザインをサポートしたり、画像の最適化のために使う。</li>
 <li>``：複数のリソースを指定するために使う。</li>

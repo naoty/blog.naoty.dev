@@ -6,6 +6,7 @@
     <title>scss内でimageを参照したいとき</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="scss内でimageを参照したいとき">
     <meta property="og:type" content="website">
@@ -28,8 +29,8 @@
         <section class="body">
           <p>background-imageで画像を参照したいとき、sass-railsが提供するヘルパーを使うと簡単に書ける。</p>
 <pre lang="scss:app/assets/stylesheets/application.css.scss"><code>span.naoty {
-  background-image: image-url(&quot;naoty.png&quot;) //=&gt; url(/assets/naoty.png)
-  // or backgroud-image: url(image-path(&quot;naoty.png&quot;))
+  background-image: image-url("naoty.png") //=&gt; url(/assets/naoty.png)
+  // or backgroud-image: url(image-path("naoty.png"))
 }
 </code></pre>
         </section>

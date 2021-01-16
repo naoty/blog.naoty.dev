@@ -6,6 +6,7 @@
     <title>ある条件であるクラスを追加するヘルパーメソッドつくりました</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ある条件であるクラスを追加するヘルパーメソッドつくりました">
     <meta property="og:type" content="website">
@@ -30,7 +31,7 @@
 def tag_add_class_if(tag, conditions, cl, attributes = {}, &amp;block)
   if conditions
     if attributes.keys.include?(:class)
-      attributes[:class] += &quot; #{cl}&quot;
+      attributes[:class] += " #{cl}"
     else
       attributes.merge(:class =&gt; cl)
     end

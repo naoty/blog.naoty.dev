@@ -6,6 +6,7 @@
     <title>Rails開発環境 2012夏</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Rails開発環境 2012夏">
     <meta property="og:type" content="website">
@@ -51,7 +52,7 @@ $ ln -s ~/workspace/rails/cui-aboutme
 ...
 </code></pre>
 <p>ifconfig等で調べた結果、上のようになった場合、<a href="http://cui-aboutme.192.168.1.4.xip.io">http://cui-aboutme.192.168.1.4.xip.io</a>で他のデバイスからもアクセスできます。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808013751.jpg" alt="f:id:naoty_k:20120808013751j:plain" title="f:id:naoty_k:20120808013751j:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808013751.jpg" alt="f:id:naoty_k:20120808013751j:plain" title="f:id:naoty_k:20120808013751j:plain"></p>
 <p>注意点としては、Lionでは「システム環境設定」→「共有」→「Web共有」を有効にしておく必要があります。これがオフになっててハマりました…＞＜ちなみに、Mountain Lionでは「Web共有」の項目がなくなっていますが、手元では無事に成功しています。</p>
 <p>実際にプロジェクトで使っていく中でのTipsをいくつかご紹介します。</p>
 <h4>powder</h4>
@@ -84,7 +85,7 @@ end
 <h3>2. tmuxinator</h3>
 <p>tmuxinatorは、tmuxで起動するセッションをあらかじめ定義しておいて、コマンド一発で開発環境を起動することができるツールです。gemで配布されているので、bundlerでインストールします。<a href="https://github.com/aziz/tmuxinator/">公式ページ</a>にしたがって準備します。</p>
 <pre><code>$ gem install tmuxinator
-$ echo &quot;[[-s $HOME/.tmuxinator/scripts/tmuxinator]] &amp;&amp; source $HOME/.tmuxinator/scripts/tmuxinator&quot; &gt;&gt; .zshrc
+$ echo "[[-s $HOME/.tmuxinator/scripts/tmuxinator]] &amp;&amp; source $HOME/.tmuxinator/scripts/tmuxinator" &gt;&gt; .zshrc
 $ source .zshrc
 </code></pre>
 <p>使い方としては、mux new [project name]でテンプレートを作って、起動するセッションを定義していきます。</p>
@@ -117,9 +118,9 @@ tabs:
 <p>その他、いろいろな設定ができるようなので詳しくは<a href="https://github.com/aziz/tmuxinator/">公式ページ</a>をご覧ください。</p>
 <h3>3. ctrlp.vim</h3>
 <p>ctrlp.vimは、Ctrl-pで起動するファイラーです。unite.vimと近いのかもしれませんが、僕はこっちの方がサクサクしてて操作もわかりやすくて好きです。下はスクリーンショットです。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808095402.jpg" alt="f:id:naoty_k:20120808095402j:plain" title="f:id:naoty_k:20120808095402j:plain" /> <img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808100021.jpg" alt="f:id:naoty_k:20120808100021j:plain" title="f:id:naoty_k:20120808100021j:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808095402.jpg" alt="f:id:naoty_k:20120808095402j:plain" title="f:id:naoty_k:20120808095402j:plain"> <img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808100021.jpg" alt="f:id:naoty_k:20120808100021j:plain" title="f:id:naoty_k:20120808100021j:plain"></p>
 <p>.vimrcで以下のように設定しました。</p>
-<pre><code>&quot; .vimrc
+<pre><code>" .vimrc
 
 Bundle 'kien/ctrlp.vim'
 

@@ -6,6 +6,7 @@
     <title>RailsのReloaderの仕組み</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="RailsのReloaderの仕組み">
     <meta property="og:type" content="website">
@@ -135,7 +136,7 @@ end
     if load?
       # ...
 
-      load_args = [&quot;#{file_name}.rb&quot;]
+      load_args = ["#{file_name}.rb"]
       load_args &lt;&lt; const_path unless const_path.nil?
 
       if !warnings_on_first_load or history.include?(expanded)
@@ -174,7 +175,7 @@ end
   result
 end
 </code></pre>
-<p><code>const_paths</code>は<code>app/models/user.rb</code>と<code>app/controllers/users_controller.rb</code>いうファイルがあれば<code>&quot;User&quot;</code>と<code>&quot;UsersController&quot;</code>という表す文字列を含む配列となる。<code>parent_paths</code>は<code>const_paths</code>の中で<code>&quot;Admin::UsersController&quot;</code>のようなネストするものと<code>&quot;::Object&quot;</code>を抽出した配列となる。<code>new_constants_in</code>は渡したブロックを実行し、その中で新たにロードされた定数を返す。なので、<code>Kernel.load</code>がとりあえず実行されるようだ。</p>
+<p><code>const_paths</code>は<code>app/models/user.rb</code>と<code>app/controllers/users_controller.rb</code>いうファイルがあれば<code>"User"</code>と<code>"UsersController"</code>という表す文字列を含む配列となる。<code>parent_paths</code>は<code>const_paths</code>の中で<code>"Admin::UsersController"</code>のようなネストするものと<code>"::Object"</code>を抽出した配列となる。<code>new_constants_in</code>は渡したブロックを実行し、その中で新たにロードされた定数を返す。なので、<code>Kernel.load</code>がとりあえず実行されるようだ。</p>
 <p>話を少し戻して<code>require_or_load</code>はどこで呼ばれているかを調べると、<code>load_missing_constant</code>で呼ばれており、さらにこのメソッドは<code>ActiveSupport::ModuleConstMissing#const_missing</code>で呼ばれている。</p>
 <pre><code>module ModuleConstMissing
   # ...

@@ -6,6 +6,7 @@
     <title>ビルドに必要なファイルの種類を整理する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ビルドに必要なファイルの種類を整理する">
     <meta property="og:type" content="website">
@@ -35,29 +36,31 @@
 <ul>
 <li>ヘッダーファイル。ソースコードで実装されている関数や構造体の宣言が書いてある。</li>
 <li>宣言をソースコードと分けることで、ソースコード内で関数や構造体を実装する順番を気にしなくてよくなる。</li>
-<li><code>#include </code>や<code>#include &quot;myheader.h&quot;</code>でヘッダーファイル内の宣言をソースコードに展開する。前者は<code>/usr/include</code>や<code>/usr/local/include</code>以下にあるヘッダーファイルを検索し、後者はソースコードからの相対パスで検索する。</li>
+<li>
+<code>#include </code>や<code>#include "myheader.h"</code>でヘッダーファイル内の宣言をソースコードに展開する。前者は<code>/usr/include</code>や<code>/usr/local/include</code>以下にあるヘッダーファイルを検索し、後者はソースコードからの相対パスで検索する。</li>
 </ul>
 <h1><code>*.o</code></h1>
 <ul>
 <li>オブジェクトコード。CPUが実際に実行できるバイナリ形式のコード。</li>
 <li>以下のように<code>gcc -c</code>でソースコードから生成できる。<code>-c</code>オプションはコンパイルするけどリンクしない。
-<pre lang="bash"><code># foo.oを生成する
-$ gcc -c foo.c
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># foo.oを生成する</span>
+<span class="nv">$ </span>gcc <span class="nt">-c</span> foo.c
+</pre>
 </li>
 </ul>
 <h1><code>lib*.a</code></h1>
 <ul>
 <li>スタティックリンクライブラリ。オブジェクトファイルを含んだzipファイルのようなアーカイブファイル。<code>/usr/lib</code>や<code>/usr/local/lib</code>のようなライブラリディレクトリに置かれている。</li>
-<li><code>ar</code>コマンドを使ってスタティックリンクライブラリを生成できる。
-<pre lang="bash"><code># foo1.oとfoo2.oを含むlibfoo.aを生成する
-$ ar -rcs libfoo.a foo1.o foo2.o
-</code></pre>
+<li>
+<code>ar</code>コマンドを使ってスタティックリンクライブラリを生成できる。
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># foo1.oとfoo2.oを含むlibfoo.aを生成する</span>
+<span class="nv">$ </span>ar <span class="nt">-rcs</span> libfoo.a foo1.o foo2.o
+</pre>
 </li>
 <li>スタティックリンクライブラリを使ったコンパイルは以下のようになる。
-<pre lang="bash"><code># libfoo.aを使ってbazを生成する
-$ gcc bar.c -lfoo -o baz
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># libfoo.aを使ってbazを生成する</span>
+<span class="nv">$ </span>gcc bar.c <span class="nt">-lfoo</span> <span class="nt">-o</span> baz
+</pre>
 </li>
 </ul>
 <h1><code>lib*.so</code></h1>
@@ -67,14 +70,14 @@ $ gcc bar.c -lfoo -o baz
 </li>
 <li>
 <p><code>gcc -shared</code>でオブジェクトファイルからダイナミックリンクライブラリを生成する</p>
-<pre lang="bash"><code># foo1.oを含むlibfoo.soを生成する
-$ gcc -shared foo1.o -o libfoo.so
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># foo1.oを含むlibfoo.soを生成する</span>
+<span class="nv">$ </span>gcc <span class="nt">-shared</span> foo1.o <span class="nt">-o</span> libfoo.so
+</pre>
 </li>
 <li>
 <p>ダイナミックリンクライブラリを使ったコンパイルは以下のようにスタティックリンクライブラリのときと同じ。</p>
-<pre lang="bash"><code>$ gcc bar.c -lfoo -o baz
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>gcc bar.c <span class="nt">-lfoo</span> <span class="nt">-o</span> baz
+</pre>
 <p>ただし、コンパイラはライブラリを実行可能ファイルに含めない。代わりに、実行時にライブラリを見つけ出してリンクするプレースホルダーを挿入する。</p>
 <p>このように生成された実行可能ファイルはダイナミックリンクライブラリを変更しても再コンパイルする必要はなく、ダイナミックリンクライブラリをコンパイルするだけでいい。</p>
 </li>
@@ -83,9 +86,9 @@ $ gcc -shared foo1.o -o libfoo.so
 <ul>
 <li>複数のオブジェクトファイルをリンクして実行可能な形式に変換される。</li>
 <li>以下のように<code>gcc -o</code>でオブジェクトファイルから生成できる。
-<pre lang="bash"><code># すべてのオブジェクトファイルからfooを生成する
-$ gcc *.o -o foo
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># すべてのオブジェクトファイルからfooを生成する</span>
+<span class="nv">$ </span>gcc <span class="k">*</span>.o <span class="nt">-o</span> foo
+</pre>
 </li>
 </ul>
 <h1>まとめ</h1>

@@ -6,6 +6,7 @@
     <title>select_datetimeからの日付検索</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="select_datetimeからの日付検索">
     <meta property="og:type" content="website">
@@ -33,14 +34,14 @@
 <li>@fromと@toという変数を使ってパラメータを保持しておくことで、入力した日付を引き続き表示させます。select_datetimeの第1引数で表示する日付を設定できます。</li>
 </ul>
 <p>View</p>
-<pre><code> &quot;from&quot;}) %&gt; 〜 
- &quot;to&quot;}) %&gt;
+<pre><code> "from"}) %&gt; 〜 
+ "to"}) %&gt;
 </code></pre>
 <p>Controller</p>
 <pre><code>def index
   conditions = []
-  conditions &lt;&lt; [&quot;created_at&gt;=?&quot;, mktime_from_select(params[:from])] unless params[:from][:year].empty?
-  conditions &lt;&lt; [&quot;created_at&lt;=?&quot;, mktime_from_select(params[:from])] unless params[:from][:year].empty?
+  conditions &lt;&lt; ["created_at&gt;=?", mktime_from_select(params[:from])] unless params[:from][:year].empty?
+  conditions &lt;&lt; ["created_at&lt;=?", mktime_from_select(params[:from])] unless params[:from][:year].empty?
   @users = User.find(:all, :condition =&gt; flatten_conditions(conditions))
   @from = mktime_from_select(params[:from]) || Time.now
   @to = mktime_from_select(params[:to]) || Time.now
@@ -53,15 +54,15 @@ def mktime_from_select(params)
   year = 0; month = 0; day = 0; hour = 0; minute = 0
   params.each do |key, val|
     case key
-    when &quot;year&quot;
+    when "year"
       year = val
-    when &quot;month&quot;
+    when "month"
       month = val
-    when &quot;day&quot;
+    when "day"
       day = val
-    when &quot;hour&quot;
+    when "hour"
       hour = val
-    when &quot;minute&quot;
+    when "minute"
       minute = val
     end
   end
@@ -69,7 +70,7 @@ def mktime_from_select(params)
 end
 </code></pre>
 <blockquote>
-<p>※flatten_conditionsについて<br />
+<p>※flatten_conditionsについて<br>
 <a href="http://d.hatena.ne.jp/zenpou/20080131/1201773558">http://d.hatena.ne.jp/zenpou/20080131/1201773558</a></p>
 </blockquote>
         </section>

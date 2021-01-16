@@ -6,6 +6,7 @@
     <title>SlackTextViewControllerを読んだ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="SlackTextViewControllerを読んだ">
     <meta property="og:type" content="website">
@@ -35,7 +36,8 @@
 <h1>TL;DR</h1>
 <ul>
 <li>キーボードの表示／非表示の際に送信される通知<code>UIKeyboardWillShowNotification</code>等を使ってレイアウトを調整している。レイアウトはすべてAuto Layout上の制約をプログラムで制御することで調整している。例えば、キーボードの高さに併せてスクロールビューの高さを大きくしたり小さくしたりしている。</li>
-<li><code>UITextView</code>上のカーソル位置が変更されるタイミングで、事前に登録されたプレフィックスにマッチするかどうかチェックしている。マッチすれば、補完候補を表示する<code>UITextView</code>を表示し、それに併せて各Viewのレイアウトを調整している。</li>
+<li>
+<code>UITextView</code>上のカーソル位置が変更されるタイミングで、事前に登録されたプレフィックスにマッチするかどうかチェックしている。マッチすれば、補完候補を表示する<code>UITextView</code>を表示し、それに併せて各Viewのレイアウトを調整している。</li>
 <li>全体を通して「キーボード等の状態が変化する」→「各Viewの適切な高さを計算する」→「<code>-[NSLayoutConstraint constant]</code>を更新する」→「<code>-[CALayer layoutIfNeeded]</code>を呼んで再描画する」という流れだった。</li>
 </ul>
 <h1>初期化から表示まで</h1>
@@ -43,7 +45,7 @@
 <h2>SlackTextViewController.m:115</h2>
 <pre><code>- (instancetype)initWithCoder:(NSCoder *)decoder
 {
-    NSAssert([self class] != [SLKTextViewController class], @&quot;Oops! You must subclass SLKTextViewController.&quot;);
+    NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
     
     if (self = [super initWithCoder:decoder])
     {
@@ -66,14 +68,19 @@
 }
 </code></pre>
 <ul>
-<li><code>NSAssert()</code>は第一引数が<code>true</code>であることを表明するために使われる。<code>false</code>ならそこで第二引数のメッセージをログに出力して強制終了する。</li>
-<li><code>-[tableViewWithStyle:]</code>がやっていることは主に2つ。
+<li>
+<code>NSAssert()</code>は第一引数が<code>true</code>であることを表明するために使われる。<code>false</code>ならそこで第二引数のメッセージをログに出力して強制終了する。</li>
+<li>
+<code>-[tableViewWithStyle:]</code>がやっていることは主に2つ。
 <ul>
-<li><code>_tableView</code>の初期化。</li>
-<li><code>_scrollViewProxy</code>の初期化。これは実際には<code>_tableView</code>を参照している。また、タップしたらキーボードを閉じる設定をしている。</li>
+<li>
+<code>_tableView</code>の初期化。</li>
+<li>
+<code>_scrollViewProxy</code>の初期化。これは実際には<code>_tableView</code>を参照している。また、タップしたらキーボードを閉じる設定をしている。</li>
 </ul>
 </li>
-<li><code>-[commonInit]</code>は名前の通り、他の初期化メソッド内でも呼ばれており、主に以下のようなことを行っている。
+<li>
+<code>-[commonInit]</code>は名前の通り、他の初期化メソッド内でも呼ばれており、主に以下のようなことを行っている。
 <ul>
 <li>各状態プロパティの初期化。</li>
 <li>多数のオブザーバーを登録する。</li>
@@ -93,12 +100,17 @@
 }
 </code></pre>
 <ul>
-<li><code>self.view</code>を初期化したあと、<code>self.scrollViewProxy</code>, <code>self.autoCompletionView</code>, <code>self.typingIndicatorView</code>, <code>self.textInputbar</code>の4つのサブビューが追加されている。それぞれのサブビューは以下のようなものだ。
+<li>
+<code>self.view</code>を初期化したあと、<code>self.scrollViewProxy</code>, <code>self.autoCompletionView</code>, <code>self.typingIndicatorView</code>, <code>self.textInputbar</code>の4つのサブビューが追加されている。それぞれのサブビューは以下のようなものだ。
 <ul>
-<li><code>self.scrollViewProxy</code>: 上でも見たように<code>self.tableView</code>のこと。</li>
-<li><code>self.autoCompletionView</code>: おそらく補完候補を表示する<code>UITableView</code>だと思われる。</li>
-<li><code>self.typingIndicatorView</code>: 「◯◯が入力中…」のようなメッセージを表示するためのViewで、<code>SLKTextIndicatorView</code>というカスタムViewとして定義されている。</li>
-<li><code>self.textInputbar</code>: テキストの入力フォームや送信ボタンを含む<code>UIToolBar</code>で、これも<code>SLKTextInputbar</code>というカスタムViewとして定義されている。</li>
+<li>
+<code>self.scrollViewProxy</code>: 上でも見たように<code>self.tableView</code>のこと。</li>
+<li>
+<code>self.autoCompletionView</code>: おそらく補完候補を表示する<code>UITableView</code>だと思われる。</li>
+<li>
+<code>self.typingIndicatorView</code>: 「◯◯が入力中…」のようなメッセージを表示するためのViewで、<code>SLKTextIndicatorView</code>というカスタムViewとして定義されている。</li>
+<li>
+<code>self.textInputbar</code>: テキストの入力フォームや送信ボタンを含む<code>UIToolBar</code>で、これも<code>SLKTextInputbar</code>というカスタムViewとして定義されている。</li>
 </ul>
 </li>
 </ul>
@@ -114,23 +126,25 @@
 }
 </code></pre>
 <ul>
-<li><code>-[reloadTextView]</code>はキャッシュされた入力テキストを復旧してTextFieldに表示している。</li>
-<li><code>-[SlackTextViewController setupViewConstraints]</code>は全体を通して重要なメソッドなので、詳細に見ていく。</li>
+<li>
+<code>-[reloadTextView]</code>はキャッシュされた入力テキストを復旧してTextFieldに表示している。</li>
+<li>
+<code>-[SlackTextViewController setupViewConstraints]</code>は全体を通して重要なメソッドなので、詳細に見ていく。</li>
 </ul>
 <h2>SlackTextViewController.m:1681</h2>
 <pre><code>- (void)setupViewConstraints
 {
-    NSDictionary *views = @{@&quot;scrollView&quot;: self.scrollViewProxy,
-                            @&quot;autoCompletionView&quot;: self.autoCompletionView,
-                            @&quot;typingIndicatorView&quot;: self.typingIndicatorView,
-                            @&quot;textInputbar&quot;: self.textInputbar,
+    NSDictionary *views = @{@"scrollView": self.scrollViewProxy,
+                            @"autoCompletionView": self.autoCompletionView,
+                            @"typingIndicatorView": self.typingIndicatorView,
+                            @"textInputbar": self.textInputbar,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@&quot;V:|[scrollView(0@750)][autoCompletionView(0)][typingIndicatorView(0)]-0@999-[textInputbar(&gt;=0)]|&quot; options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@&quot;H:|[scrollView]|&quot; options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@&quot;H:|[autoCompletionView]|&quot; options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@&quot;H:|[typingIndicatorView]|&quot; options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@&quot;H:|[textInputbar]|&quot; options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0)][typingIndicatorView(0)]-0@999-[textInputbar(&gt;=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typingIndicatorView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textInputbar]|" options:0 metrics:nil views:views]];
     
     self.scrollViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.scrollViewProxy secondItem:nil];
     self.autoCompletionViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.autoCompletionView secondItem:nil];
@@ -147,7 +161,8 @@
 }
 </code></pre>
 <ul>
-<li><code>-[UIView addConstraints:]</code>の部分は<code>self.view</code>のサブビューに対する以下のような制約を追加している。
+<li>
+<code>-[UIView addConstraints:]</code>の部分は<code>self.view</code>のサブビューに対する以下のような制約を追加している。
 <ul>
 <li>各サブビューの高さ、およびサブビュー間の垂直方向の余白を設定</li>
 <li>各サブビューの水平方向の親Viewとの余白はなし</li>
@@ -170,7 +185,8 @@
 }
 </code></pre>
 <ul>
-<li><code>UIKeyboardWillShowNotification</code>がポストされたとき、<code>willShowOrHideKeyboard:</code>が呼ばれるようになっている。また、<code>UIKeyboardDidShowNotification</code>がポストされたとき、<code>didShowOrHideKeyboard:</code>が呼ばれるようになっている。</li>
+<li>
+<code>UIKeyboardWillShowNotification</code>がポストされたとき、<code>willShowOrHideKeyboard:</code>が呼ばれるようになっている。また、<code>UIKeyboardDidShowNotification</code>がポストされたとき、<code>didShowOrHideKeyboard:</code>が呼ばれるようになっている。</li>
 </ul>
 <h2>SlackTextViewController.m:1048</h2>
 <p><code>-[willShowOrHideKeyboard:]</code>の中でレイアウトの変更に関わる部分を抽出した。</p>
@@ -186,8 +202,10 @@
 }
 </code></pre>
 <ul>
-<li><code>self.keyboardHC</code>および<code>self.scrollViewHC</code>は<code>-[setupViewConstraints]</code>内で設定された、それぞれの高さに対する制約だ。</li>
-<li><code>-[appropriateKeyboardHeight:notification]</code>と<code>-[appropriateScrollViewHeight]</code>で適切な高さを計算しているようなので、詳細に見ていく。</li>
+<li>
+<code>self.keyboardHC</code>および<code>self.scrollViewHC</code>は<code>-[setupViewConstraints]</code>内で設定された、それぞれの高さに対する制約だ。</li>
+<li>
+<code>-[appropriateKeyboardHeight:notification]</code>と<code>-[appropriateScrollViewHeight]</code>で適切な高さを計算しているようなので、詳細に見ていく。</li>
 </ul>
 <h2>SlackTextViewController.m:412</h2>
 <pre><code>- (CGFloat)appropriateKeyboardHeight:(NSNotification *)notification
@@ -226,9 +244,12 @@
 </code></pre>
 <ul>
 <li>引数で渡される<code>notification</code>には<code>UIKeyboardWillShowNotification</code>などが入る。これらの通知の<code>userInfo</code>の<code>UIKeyboardFrameEndUserInfoKey</code>にはキーボードが表示された後のframeを表すCGRectが含まれる。</li>
-<li><code>self.isMovingKeyboard</code>はキーボードが閉じようといるとき、または開こうとしているときに<code>YES</code>となるようだ。</li>
-<li><code>self.isMovingKeyboard</code>が<code>YES</code>である場合、画面全体の高さからキーボードの<code>origin.y</code>を引いた値を<code>keyboardHeight</code>としている。</li>
-<li><code>self.isMovingKeyboard</code>が<code>NO</code>である場合、これからキーボードが表示されるかそれとも非表示になるかでまた分岐する。
+<li>
+<code>self.isMovingKeyboard</code>はキーボードが閉じようといるとき、または開こうとしているときに<code>YES</code>となるようだ。</li>
+<li>
+<code>self.isMovingKeyboard</code>が<code>YES</code>である場合、画面全体の高さからキーボードの<code>origin.y</code>を引いた値を<code>keyboardHeight</code>としている。</li>
+<li>
+<code>self.isMovingKeyboard</code>が<code>NO</code>である場合、これからキーボードが表示されるかそれとも非表示になるかでまた分岐する。
 <ul>
 <li>非表示になる場合は0。</li>
 <li>表示する場合、キーボードのframeのWindow座標系を変換してその高さを取得し<code>keyboardHeight</code>としている。キーボードの座標系はデバイスの向きを考慮していないため、Window座標系かView座標系に変換する必要がある。</li>
@@ -283,8 +304,10 @@
 }
 </code></pre>
 <ul>
-<li><code>-[reloadInputAccessoryViewIfNeeded]</code>で後ほど出てくる<code>textView.inputAccessoryView</code>が初期化される。</li>
-<li><code>-[updatekeyboarddismissmodeifneeded]</code>を詳しく見る。</li>
+<li>
+<code>-[reloadInputAccessoryViewIfNeeded]</code>で後ほど出てくる<code>textView.inputAccessoryView</code>が初期化される。</li>
+<li>
+<code>-[updatekeyboarddismissmodeifneeded]</code>を詳しく見る。</li>
 </ul>
 <h2>Slacktextviewcontroller.m:993</h2>
 <pre><code>- (void)updateKeyboardDismissModeIfNeeded
@@ -312,14 +335,19 @@
 }
 </code></pre>
 <ul>
-<li><code>UIScrollView</code>の<code>keyboardDismissMode</code>というプロパティはiOS 7から登場したプロパティで、スクロールビューがドラッグされたときのキーボードの振る舞いを以下の値で指定できる。
+<li>
+<code>UIScrollView</code>の<code>keyboardDismissMode</code>というプロパティはiOS 7から登場したプロパティで、スクロールビューがドラッグされたときのキーボードの振る舞いを以下の値で指定できる。
 <ul>
-<li><code>UIScrollViewKeyboardDismissModeNone</code>: ドラッグでキーボードを閉じない。デフォルト値。</li>
-<li><code>UIScrollViewKeyboardDismissModeOnDrag</code>: ドラッグが始まったときにキーボードを閉じる。</li>
-<li><code>UIScrollViewKeyboardDismissModeInteractive</code>: スクロールビューから下にドラッグするとキーボードを閉じ、途中で上にドラッグすると閉じるのをキャンセルできる。</li>
+<li>
+<code>UIScrollViewKeyboardDismissModeNone</code>: ドラッグでキーボードを閉じない。デフォルト値。</li>
+<li>
+<code>UIScrollViewKeyboardDismissModeOnDrag</code>: ドラッグが始まったときにキーボードを閉じる。</li>
+<li>
+<code>UIScrollViewKeyboardDismissModeInteractive</code>: スクロールビューから下にドラッグするとキーボードを閉じ、途中で上にドラッグすると閉じるのをキャンセルできる。</li>
 </ul>
 </li>
-<li><code>UITextView</code>の<code>inputAccessoryView</code>はキーボードの上に出てくる、よく「次へ」とか「閉じる」のようなボタンを載せるViewのこと。キーボードが表示され<code>-[didShowOrHideKeyboard:]</code>が呼ばれる中で初期化されているため、<code>isPannable</code>は<code>YES</code>となっているはず。</li>
+<li>
+<code>UITextView</code>の<code>inputAccessoryView</code>はキーボードの上に出てくる、よく「次へ」とか「閉じる」のようなボタンを載せるViewのこと。キーボードが表示され<code>-[didShowOrHideKeyboard:]</code>が呼ばれる中で初期化されているため、<code>isPannable</code>は<code>YES</code>となっているはず。</li>
 <li>よって、<code>keyboardDismissMode</code>が<code>UIScrollViewKeyboardDismissModeInteractive</code>に変更され、<code>SLKInputAccessoryViewKeyboardFrameDidChangeNotification</code>という通知に対して<code>didChangeKeyboardFrame</code>というメソッドが呼ばれるように登録される。
 <ul>
 <li>この通知は<code>textView</code>の<code>center</code>（iOS8以降場合）または<code>frame</code>（それ未満の場合）が変更されたときに送信される。</li>
@@ -348,20 +376,26 @@
 <p>ここまで、キーボードの表示／非表示に伴うレイアウトの調整についてどのように実装されているのか調べてきた。キーボードの表示からレイアウトの調整が反映されるまで、おおまかに以下のような流れで処理が進行する。</p>
 <ol>
 <li>ユーザーが入力を開始する。</li>
-<li><code>UIKeyboardWillShowNotification</code>が送信され、オブザーバーによって<code>-[willShowOrHideKeyboard:]</code>が呼ばれる。キーボードの高さとスクロールビューの適切な高さが再計算され、高さの制約上の数値が更新される（ここではまだViewに反映されない）。</li>
-<li><code>UIKeyboardDidShowNotification</code>が送信され、オブザーバーによって<code>-[didShowOrHideKeyboard:]</code>が呼ばれる。<code>textView</code>の<code>frame</code>の更新時に<code>-[didChangeKeyboardFrame:]</code>を呼ぶようにオブザーバーに登録する。</li>
-<li><strong>何かしらのタイミング</strong> で<code>textView</code>の<code>frame</code>が更新され、オブザーバーによって<code>-[didChangeKeyboardFrame:]</code>が呼ばれる。再度、キーボードとスクロールビューの高さが計算され設定される。そして、<code>-[CALayer layoutIfNeeded]</code>によって変更された制約上の値がViewに反映され再描画される。</li>
+<li>
+<code>UIKeyboardWillShowNotification</code>が送信され、オブザーバーによって<code>-[willShowOrHideKeyboard:]</code>が呼ばれる。キーボードの高さとスクロールビューの適切な高さが再計算され、高さの制約上の数値が更新される（ここではまだViewに反映されない）。</li>
+<li>
+<code>UIKeyboardDidShowNotification</code>が送信され、オブザーバーによって<code>-[didShowOrHideKeyboard:]</code>が呼ばれる。<code>textView</code>の<code>frame</code>の更新時に<code>-[didChangeKeyboardFrame:]</code>を呼ぶようにオブザーバーに登録する。</li>
+<li>
+<strong>何かしらのタイミング</strong> で<code>textView</code>の<code>frame</code>が更新され、オブザーバーによって<code>-[didChangeKeyboardFrame:]</code>が呼ばれる。再度、キーボードとスクロールビューの高さが計算され設定される。そして、<code>-[CALayer layoutIfNeeded]</code>によって変更された制約上の値がViewに反映され再描画される。</li>
 </ol>
 <p>ここで<code>textView</code>の<code>frame</code>が更新されるのはどのタイミングか考えてみると、2つ考えられる。</p>
 <ul>
-<li><code>textView</code>の中身のテキストの行数が変更された場合。<code>textView</code>の中でテキストが改行されると、当然その高さが変わるのでそれに併せてスクロールビューの高さを小さくしなければならなくなる。そういった場合に対処する実装だと思う。</li>
+<li>
+<code>textView</code>の中身のテキストの行数が変更された場合。<code>textView</code>の中でテキストが改行されると、当然その高さが変わるのでそれに併せてスクロールビューの高さを小さくしなければならなくなる。そういった場合に対処する実装だと思う。</li>
 <li>ユーザーによってtextViewの位置が変更された場合。<code>scrollViewProxy</code>の<code>keyboardDismissMode</code>は<code>UIScrollViewKeyboardDismissModeInteractive</code>となっているため、ユーザーの操作によってキーボードを閉じることができる。キーボードを閉じる動作をした場合、当然<code>frame</code>も変更されるのでこのタイミングでも<code>-[didChangeKeyboardFrame:]</code>が呼ばれることになる。</li>
 </ul>
 <h1>ユーザー名や絵文字の補完</h1>
 <p>続いて、ユーザー名や絵文字の補完がどのように実装されているのか調べる。ドキュメントによると、補完機能を利用する場合は<code>SlackTextViewController</code>のサブクラスは以下のような実装を行う必要がある。</p>
 <ol>
-<li><code>-[SlackTextViewController registerPrefixesForAutoCompletion:]</code>を呼んで自動補完を起動するプレフィックスを登録する。</li>
-<li><code>-[SlackTextViewController canShowAutoCompletion]</code>を実装して、自動補完Viewを表示するかどうかを<code>BOOL</code>で返すようにする。このメソッドはテキストが入力されたとき上で登録したプレフィックスを発見した場合に呼ばれる。自動補完Viewは<code>UITableView</code>のインスタンスであり、自由にカスタマイズできる。自動補完の候補はこのメソッドの中で用意する。</li>
+<li>
+<code>-[SlackTextViewController registerPrefixesForAutoCompletion:]</code>を呼んで自動補完を起動するプレフィックスを登録する。</li>
+<li>
+<code>-[SlackTextViewController canShowAutoCompletion]</code>を実装して、自動補完Viewを表示するかどうかを<code>BOOL</code>で返すようにする。このメソッドはテキストが入力されたとき上で登録したプレフィックスを発見した場合に呼ばれる。自動補完Viewは<code>UITableView</code>のインスタンスであり、自由にカスタマイズできる。自動補完の候補はこのメソッドの中で用意する。</li>
 <li>自動補完Viewの高さを返すメソッド<code>heightForAutoCompletionView</code>を実装する。</li>
 <li>自動補完の候補が選択された場合、自動補完Viewの<code>-[UITableViewDelegate tableView:didSelectRowAtIndexPath:]</code>が呼ばれるので、この中で<code>-[SlackTextViewController acceptAutoCompletionWithString:]</code>を呼ぶと選択されたテキストが補完される。</li>
 </ol>
@@ -411,7 +445,8 @@
 }
 </code></pre>
 <ul>
-<li><code>textView</code>の選択範囲、つまりカーソル位置が変わったとき<code>-[UITextViewDelegate textViewDidChangeSelection:]</code>が呼ばれる。</li>
+<li>
+<code>textView</code>の選択範囲、つまりカーソル位置が変わったとき<code>-[UITextViewDelegate textViewDidChangeSelection:]</code>が呼ばれる。</li>
 <li>この中で呼ばれる<code>-[SlackTextViewController processTextForAutoCompletion]</code>の中で、さらに呼ばれる<code>-[SlackTextViewController handleProcessesWord:range:]</code>を見る。</li>
 </ul>
 <h2>SlackTextViewController.m:1343</h2>
@@ -429,7 +464,8 @@
 }
 </code></pre>
 <ul>
-<li><code>-[UITableView reloadData]</code>の前に<code>-[SlackTextViewController canShowAutoCompletion]</code>が呼ばれているので、ドキュメントの通り、このタイミングで補完候補を用意する必要がある。</li>
+<li>
+<code>-[UITableView reloadData]</code>の前に<code>-[SlackTextViewController canShowAutoCompletion]</code>が呼ばれているので、ドキュメントの通り、このタイミングで補完候補を用意する必要がある。</li>
 </ul>
 <h2>SlackTextViewController.m:1417</h2>
 <pre><code>- (void)showAutoCompletionView:(BOOL)show
@@ -475,7 +511,8 @@
 </code></pre>
 <ul>
 <li>引数の<code>string</code>に選択された文字列が入っている。</li>
-<li><code>-[UITextView slk_insertText:]</code>で選択された文字列を<code>textView</code>に挿入しているようだ。</li>
+<li>
+<code>-[UITextView slk_insertText:]</code>で選択された文字列を<code>textView</code>に挿入しているようだ。</li>
 </ul>
 <h2>UITextView+SLKAdditions.m:90</h2>
 <pre><code>- (NSRange)slk_insertText:(NSString *)text inRange:(NSRange)range
@@ -488,7 +525,7 @@
         NSString *leftString = [self.text substringToIndex:range.location];
         NSString *rightString = [self.text substringFromIndex: range.location];
         
-        self.text = [NSString stringWithFormat:@&quot;%@%@%@&quot;, leftString, text, rightString];
+        self.text = [NSString stringWithFormat:@"%@%@%@", leftString, text, rightString];
         
         range.location += [text length];
         return range;
@@ -506,8 +543,10 @@
 }
 </code></pre>
 <ul>
-<li><code>-[NSRange length]</code>が<code>0</code>の場合、何も選択されていない状態なので、カーソルのある位置に足りない部分の文字列を挿入している。</li>
-<li><code>-[NSRange length]</code>が<code>1</code>以上の場合、文字列が選択されている状態なので、補完されるテキストと置換する。</li>
+<li>
+<code>-[NSRange length]</code>が<code>0</code>の場合、何も選択されていない状態なので、カーソルのある位置に足りない部分の文字列を挿入している。</li>
+<li>
+<code>-[NSRange length]</code>が<code>1</code>以上の場合、文字列が選択されている状態なので、補完されるテキストと置換する。</li>
 </ul>
         </section>
         <footer>

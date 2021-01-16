@@ -6,6 +6,7 @@
     <title>dotfilesをgithubで管理する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="dotfilesをgithubで管理する">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
         </header>
         <section class="body">
           <p>例えば、家PCとオフィスPCで.vimrcと.zshrcを共有したいとします。</p>
-<p>（例：家PC）<br />
+<p>（例：家PC）<br>
 １．dotfilesというディレクトリを用意</p>
 <pre><code>naoty@home% cd
 naoty@home% mkdir dotfiles
@@ -51,7 +52,7 @@ naoty@home% git commit -m '.vimrcと.zshrcを追加'
 <pre><code>naoty@home% git remote add github git@github.com:naoty:dotfiles.git
 naoty@home% git push github master
 </code></pre>
-<p>（例：オフィスPC）<br />
+<p>（例：オフィスPC）<br>
 ７．githubからdotfilesをcloneしてくる</p>
 <pre><code>naoty@office% cd
 naoty@office% git clone git@github.com:naoty:dotfiles.git

@@ -6,6 +6,7 @@
     <title>net/httpによるHTTPメソッドを含んだルーティングの実装</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="net/httpによるHTTPメソッドを含んだルーティングの実装">
     <meta property="og:type" content="website">
@@ -29,7 +30,7 @@
           <p>最近GoによるWebアプリケーション開発を学び始めたので間違っている箇所があればコメントください。</p>
 <h2>ServeMux型によるルーティング</h2>
 <p><code>http.Handle</code>関数を使うとパスに対するルーティングを登録することができる。<code>http.Handler</code>型は実際にリクエストを処理するオブジェクトで、下のように実装すると<code>/foods</code>へのリクエストを<code>*FoodsHandler</code>型が処理することになる。</p>
-<pre><code>http.Handle(&quot;/foods&quot;, &amp;handlers.FoodsHandler{})
+<pre><code>http.Handle("/foods", &amp;handlers.FoodsHandler{})
 </code></pre>
 <p><code>http.Handle</code>関数によって登録されたルーティングは<code>http.DefaultServeMux</code>という<code>*ServeMux</code>型の変数が保持することになる。</p>
 <pre><code>type ServeMux struct {
@@ -47,7 +48,7 @@ type muxEntry struct {
 <p>見たところ、<code>ServeMux</code>型では<code>GET</code>, <code>POST</code>等のHTTPメソッドを考慮していない。RESTful APIを実装するにはHTTPメソッドを考慮する必要があるため、<code>ServeMux</code>型によるルーティングでは不十分だと分かる。そこで、ルーティングを自前で実装する。</p>
 <h2>Handlerによるルーティング</h2>
 <p><code>http.Handle</code>関数の代わりに<code>http.ListenAndServe</code>関数に渡す<code>http.Handler</code>によってルーティングを実装する。</p>
-<pre><code>http.ListenAndServe(&quot;:8080&quot;, handler)
+<pre><code>http.ListenAndServe(":8080", handler)
 </code></pre>
 <p><code>http.DefaultServeMux</code>を使う場合は<code>handler</code>の代わりに<code>nil</code>を渡すが、自前のハンドラーを使う場合はここに渡す。</p>
 <pre><code>type RoutesHandler struct {
@@ -72,11 +73,11 @@ func (h *RoutesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 </code></pre>
 <p><code>*ServeMux</code>型とは違い、<code>map[string]map[string]http.Handler</code>型のフィールド<code>routes</code>でHTTPメソッドを含むルーティングを管理するようにした。<code>ServeHTTP</code>関数を実装することで<code>http.Handler</code>型のインターフェイスを満たしている。内部で<code>routes</code>から一致するハンドラーを呼び出す。</p>
 <pre><code>func (h *RoutesHandler) GET(path string, handler http.Handler) {
-    h.register(&quot;GET&quot;, path, handler)
+    h.register("GET", path, handler)
 }
 
 func (h *RoutesHandler) POST(path string, handler http.Handler) {
-    h.register(&quot;POST&quot;, path, handler)
+    h.register("POST", path, handler)
 }
 
 func (h *RoutesHandler) register(method, path string, handler http.Handler) {
@@ -94,9 +95,9 @@ func (h *RoutesHandler) register(method, path string, handler http.Handler) {
 </code></pre>
 <p>こうした関数を定義し、ルーティングを登録できるようにする。</p>
 <pre><code>routesHandler := &amp;handlers.RoutesHandler{}
-routesHandler.GET(&quot;/foods&quot;, &amp;handlers.FoodsHandler{})
+routesHandler.GET("/foods", &amp;handlers.FoodsHandler{})
 
-http.ListenAndServe(&quot;:8080&quot;, routesHandler)
+http.ListenAndServe(":8080", routesHandler)
 </code></pre>
         </section>
         <footer>

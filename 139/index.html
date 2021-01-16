@@ -6,6 +6,7 @@
     <title>ローカルIPアドレスをtmuxのステータスラインに表示する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ローカルIPアドレスをtmuxのステータスラインに表示する">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
         </header>
         <section class="body">
           <p>xip.ioを使うときにいちいち<code>ifconfig</code>打つのが面倒くさくなってきたので表示してみました。</p>
-<p><img src="http://gyazo.com/0508093e26dcd9bc69ed2721f179b0ce.png?1344392749" alt="tmux_statusline" /></p>
+<p><img src="http://gyazo.com/0508093e26dcd9bc69ed2721f179b0ce.png?1344392749" alt="tmux_statusline"></p>
 <pre lang="sh:localip"><code>#!/bin/sh
 
 ifconfig en0 inet | sed -e '1d' -e 's/^.*inet //' -e 's/ netmask.*$//'

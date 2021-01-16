@@ -6,6 +6,7 @@
     <title>iOS6以降のAVAudioSessionのdelegate設定方法</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="iOS6以降のAVAudioSessionのdelegate設定方法">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
           </p>
         </header>
         <section class="body">
-          <p>iOS 6以降<code>AVAudioSession</code>の<code>delegate</code>プロパティがdeprecatedになったんだけど、その代わりにどうやって設定するのかあんまり情報がなかった。&quot;notification送る&quot;とは書いてあったんだけど、サンプルコードがなかったので、動作確認したコードを載せておく。</p>
+          <p>iOS 6以降<code>AVAudioSession</code>の<code>delegate</code>プロパティがdeprecatedになったんだけど、その代わりにどうやって設定するのかあんまり情報がなかった。"notification送る"とは書いてあったんだけど、サンプルコードがなかったので、動作確認したコードを載せておく。</p>
 <p>各イベントに対応する通知名があるので、それを<code>NSNotificationCenter</code>に登録しておけばいい。</p>
 <pre lang="objc:AppDelegate.m"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)options
 {
@@ -41,21 +42,21 @@
 {
     switch ([notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue]) {
         case AVAudioSessionInterruptionTypeBegan:
-            NSLog(@&quot;Interruption began&quot;);
+            NSLog(@"Interruption began");
             break;
         case AVAudioSessionInterruptionTypeEnded:
         default:
-            NSLog(@&quot;Interruption ended&quot;);
+            NSLog(@"Interruption ended");
             break;
     }
 }
 
 - (void)sessionRouteDidChange
 {
-    NSLog(@&quot;%s&quot;, __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 </code></pre>
-<hr />
+<hr>
 <h3>参考</h3>
 <ul>
 <li><a href="http://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioSession_ClassReference/Reference/Reference.html">AVAudioSession Class Reference</a></li>

@@ -6,6 +6,7 @@
     <title>FriendlyErrorType</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="FriendlyErrorType">
     <meta property="og:type" content="website">
@@ -44,9 +45,9 @@
     var summary: String {
         switch self {
         case .SomethingWrong:
-            return &quot;Something wrong&quot;
+            return "Something wrong"
         case .DecodeFailed(_):
-            return &quot;Decode failed&quot;
+            return "Decode failed"
         }
     }
 
@@ -55,8 +56,8 @@
         case .SomethingWrong:
             return .None
         case .DecodeFailed(let fields):
-            let failedFields = fields.joinWithSeparator(&quot;, &quot;)
-            return &quot;Failed to decode following fields: \(failedFields)&quot;
+            let failedFields = fields.joinWithSeparator(", ")
+            return "Failed to decode following fields: \(failedFields)"
         }
     }
     
@@ -89,7 +90,7 @@
 <p>protocol extensionだと<code>ErrorType</code>にデフォルトの実装を与えることになる。その場合、<code>ErrorType</code>として渡されたエラーに対してメソッドを呼ぶと、すべてそのデフォルトの実装の結果が返るようになる。一方、<code>FriendlyErrorType</code>はただのprotocolなので、メソッドの結果はメソッドを実装する各クラスの結果を反映する。</p>
 <pre><code>extension ErrorType {
     var summary: String {
-        return &quot;&quot;
+        return ""
     }
 }
 
@@ -99,8 +100,8 @@ extension NSError {
     }
 }
 
-let error: ErrorType = NSError(domain: &quot;com.github.naoty.playground&quot;, code: 1000, userInfo: [NSLocalizedDescriptionKey: &quot;Something wrong&quot;])
-print(error.summary) //=&gt; &quot;\n&quot;
+let error: ErrorType = NSError(domain: "com.github.naoty.playground", code: 1000, userInfo: [NSLocalizedDescriptionKey: "Something wrong"])
+print(error.summary) //=&gt; "\n"
 </code></pre>
 <pre><code>protocol FriendlyErrorType: ErrorType {
     var summary: String { get }
@@ -112,13 +113,13 @@ extension NSError: FriendlyErrorType {
     }
 }
 
-let error: FriendlyErrorType = NSError(domain: &quot;com.github.naoty.playground&quot;, code: 1000, userInfo: [NSLocalizedDescriptionKey: &quot;Something wrong&quot;])
-print(error.summary) //=&gt; &quot;Something wrong\n&quot;
+let error: FriendlyErrorType = NSError(domain: "com.github.naoty.playground", code: 1000, userInfo: [NSLocalizedDescriptionKey: "Something wrong"])
+print(error.summary) //=&gt; "Something wrong\n"
 </code></pre>
 <h1>エラーの利用例</h1>
 <p><code>FriendlyErrorType</code>を実装したエラー型を実際に利用してみる。Alamofire、SwiftTask、Himotokiを使ってQiita APIを呼び出している。</p>
 <pre><code>return Task { progress, fulfill, reject, configure in
-    Alamofire.request(.GET, &quot;https://qiita.com/api/v2/items&quot;).responseJSON { response in
+    Alamofire.request(.GET, "https://qiita.com/api/v2/items").responseJSON { response in
         switch response.status {
         case .Success(let value):
             if let objects = value as? [AnyObject] {
@@ -135,7 +136,7 @@ print(error.summary) //=&gt; &quot;Something wrong\n&quot;
                 }
                 fulfill(items)
             } else {
-                reject(ApplicationError.DecodeFailed([&quot;root&quot;]))
+                reject(ApplicationError.DecodeFailed(["root"]))
             }
         case .Failure(let error):
             reject(error)
@@ -147,10 +148,10 @@ print(error.summary) //=&gt; &quot;Something wrong\n&quot;
 <p><code>FriendlyErrorType</code>を使ってアラートを表示する実装は以下のようなイメージだ。</p>
 <pre><code>let title = error.summary
 
-var message = &quot;&quot;
+var message = ""
 if let reason = error.reason {
     message += reason
-    message += &quot;\n&quot;
+    message += "\n"
 }
 if let suggestion = error.suggestion {
     message += suggestion

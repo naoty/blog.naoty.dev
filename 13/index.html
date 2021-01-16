@@ -6,6 +6,7 @@
     <title>ハノイの塔　ver.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ハノイの塔　ver.1">
     <meta property="og:type" content="website">
@@ -26,54 +27,54 @@
           </p>
         </header>
         <section class="body">
-          <p>　ハノイの塔を解くプログラムを作りました。かなり時間がかかりました。ずっとひっかかっていたところは、論理演算の初歩的なところでした。でも、そこに気づけてよかったです。これで論理演算は基礎が固まったかな。<br />
-　3つの塔に見立てた配列から数値を出したり入れたりしています。どの配列から数値を取り出しどの配列に入れるかは全部で6パターンあり、それぞれについて4つの条件式を評価しています。<br />
+          <p>　ハノイの塔を解くプログラムを作りました。かなり時間がかかりました。ずっとひっかかっていたところは、論理演算の初歩的なところでした。でも、そこに気づけてよかったです。これで論理演算は基礎が固まったかな。<br>
+　3つの塔に見立てた配列から数値を出したり入れたりしています。どの配列から数値を取り出しどの配列に入れるかは全部で6パターンあり、それぞれについて4つの条件式を評価しています。<br>
 　ただ、完成形が真ん中になってしまう場合も出てきてしまい、このプログラムは完璧とは言えません。また、この問題は再帰的プログラミングの典型例らしいので、この解き方は本筋ではないかもしれないです。</p>
 <pre><code>def tower(n)
 	towers = [[], [], []]
 	towers[0] = (1..n).to_a
 	p towers
-	puts &quot;--&quot;
+	puts "--"
 	times = 0
 	disks = []
 	loop do
 		if towers[0].first != disks.last &amp;&amp; !towers[0].empty? &amp;&amp;
                  (towers[1].empty? || towers[0].first &lt; towers[1].first)
-			puts &quot;towers[0] -&gt; #{towers[0].first} -&gt; towers[1]&quot;
+			puts "towers[0] -&gt; #{towers[0].first} -&gt; towers[1]"
 			disks &lt;&lt; towers[0].first
 			towers[1].unshift(towers[0].shift)
 		elsif towers[0].first != disks.last &amp;&amp; !towers[0].empty? &amp;&amp;
                     (towers[2].empty? || towers[0].first &lt; towers[2].first)
-			puts &quot;towers[0] -&gt; #{towers[0].first} -&gt; towers[2]&quot;
+			puts "towers[0] -&gt; #{towers[0].first} -&gt; towers[2]"
 			disks &lt;&lt; towers[0].first
 			towers[2].unshift(towers[0].shift)
 		elsif towers[1].first != disks.last &amp;&amp; !towers[1].empty? &amp;&amp;
                     (towers[2].empty? || towers[1].first &lt; towers[2].first)
-			puts &quot;towers[1] -&gt; #{towers[1].first} -&gt; towers[2]&quot;
+			puts "towers[1] -&gt; #{towers[1].first} -&gt; towers[2]"
 			disks &lt;&lt; towers[1].first
 			towers[2].unshift(towers[1].shift)
 		elsif towers[1].first != disks.last &amp;&amp; !towers[1].empty? &amp;&amp;
                     (towers[0].empty? || towers[1].first &lt; towers[0].first)
-			puts &quot;towers[1] -&gt; #{towers[1].first} -&gt; towers[0]&quot;
+			puts "towers[1] -&gt; #{towers[1].first} -&gt; towers[0]"
 			disks &lt;&lt; towers[1].first
 			towers[0].unshift(towers[1].shift)
 		elsif towers[2].first != disks.last &amp;&amp; !towers[2].empty? &amp;&amp;
                     (towers[0].empty? || towers[2].first &lt; towers[0].first)
-			puts &quot;towers[2] -&gt; #{towers[2].first} -&gt; towers[0]&quot;
+			puts "towers[2] -&gt; #{towers[2].first} -&gt; towers[0]"
 			disks &lt;&lt; towers[2].first
 			towers[0].unshift(towers[2].shift)
 		elsif towers[2].first != disks.last &amp;&amp; !towers[2].empty? &amp;&amp;
                     (towers[1].empty? || towers[2].first &lt; towers[1].first)
-			puts &quot;towers[2] -&gt; #{towers[2].first} -&gt; towers[1]&quot;
+			puts "towers[2] -&gt; #{towers[2].first} -&gt; towers[1]"
 			disks &lt;&lt; towers[2].first
 			towers[1].unshift(towers[2].shift)
 		end
 		p towers
-		puts &quot;--&quot;
+		puts "--"
 		times += 1
 		break if towers[2] == (1..n).to_a || towers[1] == (1..n).to_a
 	end
-	puts &quot;total times: #{times}&quot;
+	puts "total times: #{times}"
 end
 
 tower(ARGV[0].to_i)

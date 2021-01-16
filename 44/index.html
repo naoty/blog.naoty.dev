@@ -6,6 +6,7 @@
     <title>jQueryによるアコーディオンパネル</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="jQueryによるアコーディオンパネル">
     <meta property="og:type" content="website">
@@ -39,25 +40,25 @@
     soumaa&gt;li&gt;
 ul&gt;
 </code></pre>
-<pre><code>$(&quot;li.pref&quot;).click(accordion); // (1)
+<pre><code>$("li.pref").click(accordion); // (1)
 
 function accordion(e) {
     var $this = $(this);
-    if (!$this.hasClass(&quot;opened&quot;)) { // (2)
-        $(&quot;li.opened&quot;).removeClass(&quot;opened&quot;).nextUntil(&quot;.pref&quot;).slideUp(); // (3)
-        $this.addClass(&quot;opened&quot;).nextUntil(&quot;.pref&quot;).slideDown(); // (4)
+    if (!$this.hasClass("opened")) { // (2)
+        $("li.opened").removeClass("opened").nextUntil(".pref").slideUp(); // (3)
+        $this.addClass("opened").nextUntil(".pref").slideDown(); // (4)
     } else { // (5)
-        $this.removeClass(&quot;opened&quot;).nextUntil(&quot;.pref&quot;).slideUp(); // (6)
+        $this.removeClass("opened").nextUntil(".pref").slideUp(); // (6)
     }
     e.preventDefault(); // (7)
 }
 </code></pre>
-<p>(1)：「pref」クラスを持つli要素がクリックされると、accordion関数が実行される。<br />
-(2)：クリックされたli要素が「opened」クラスを持っていなければ、<br />
-(3)：「opened」クラスを持つli要素から「opened」クラスを取り除き、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideUpする。<br />
-(4)：クリックされたli要素に「opened」クラスをつけ、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideDownする。<br />
-(5)：クリックされたli要素が「opened」クラスを持っていれば、<br />
-(6)：クリックされたli要素から「opened」クラスを取り除き、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideUpする。<br />
+<p>(1)：「pref」クラスを持つli要素がクリックされると、accordion関数が実行される。<br>
+(2)：クリックされたli要素が「opened」クラスを持っていなければ、<br>
+(3)：「opened」クラスを持つli要素から「opened」クラスを取り除き、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideUpする。<br>
+(4)：クリックされたli要素に「opened」クラスをつけ、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideDownする。<br>
+(5)：クリックされたli要素が「opened」クラスを持っていれば、<br>
+(6)：クリックされたli要素から「opened」クラスを取り除き、このli要素と次に現れる「pref」クラスを持つli要素との間にあるli要素をslideUpする。<br>
 (7)：li直下にあるa要素にデフォルトでセットされているイベント（他ページへのジャンプ）を実行させない。</p>
         </section>
         <footer>

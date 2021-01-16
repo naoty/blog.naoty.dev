@@ -6,6 +6,7 @@
     <title>MailHogによるメールの受信確認</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="MailHogによるメールの受信確認">
     <meta property="og:type" content="website">
@@ -29,29 +30,29 @@
           <p>メール送信機能を開発する際、メールの受信を確認したい。従来のRailsアプリ開発では、<a href="https://github.com/ryanb/letter_opener">letter_opener</a>のようなライブラリを使っていた。</p>
 <p>現在のコンテナを中心とした開発環境では、Railsの外側にSMTPサーバーのコンテナを用意し、環境変数によって接続先を設定する方法が一般的ではないかと思った。調べてみると、<a href="https://github.com/mailhog/MailHog">MailHog</a>というツールが見つかった。MailHogはSMTPサーバーであり、かつ受信したメールを確認できるHTTPサーバーも兼ね備えている。</p>
 <p>MailHogはDocker Hubでコンテナを公開しているため、docker-composeを使うと簡単に開発環境に組み込むことができる。</p>
-<pre lang="yaml"><code># docker-compose.yml
-services:
-  web:
-    build: .
-    command: bin/rails s -p 3000 -b 0.0.0.0
-    environment:
-      SMTP_HOST: mail
-      SMTP_PORT: 1025
-    depends_on:
-      - mail
-  mail:
-    image: mailhog/mailhog
-    ports:
-      - 8025:8025
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="c1"># docker-compose.yml</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span> <span class="s">.</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">bin/rails s -p 3000 -b 0.0.0.0</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">SMTP_HOST</span><span class="pi">:</span> <span class="s">mail</span>
+      <span class="na">SMTP_PORT</span><span class="pi">:</span> <span class="m">1025</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">mail</span>
+  <span class="na">mail</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">mailhog/mailhog</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">8025:8025</span>
+</pre>
 <p>Railsではこんな感じで環境変数によってメールの送信先を設定するだけでいい。</p>
-<pre lang="ruby"><code># application.rb
-config.action_mailer.delivery_method = :smtp
-config.action_mailer.smtp_settings = {
-  address: ENV[&quot;SMTP_HOST&quot;],
-  port: ENV[&quot;SMTP_PORT&quot;],
-}
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="c1"># application.rb</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">action_mailer</span><span class="p">.</span><span class="nf">delivery_method</span> <span class="o">=</span> <span class="ss">:smtp</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">action_mailer</span><span class="p">.</span><span class="nf">smtp_settings</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">address: </span><span class="no">ENV</span><span class="p">[</span><span class="s2">"SMTP_HOST"</span><span class="p">],</span>
+  <span class="ss">port: </span><span class="no">ENV</span><span class="p">[</span><span class="s2">"SMTP_PORT"</span><span class="p">],</span>
+<span class="p">}</span>
+</pre>
 <p>本番環境などでは、この環境変数を実際に運用するSMTPサーバーのものに替えるだけでいい。</p>
         </section>
         <footer>

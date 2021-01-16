@@ -6,6 +6,7 @@
     <title>rvm installでyamlがmakeできない件</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="rvm installでyamlがmakeできない件">
     <meta property="og:type" content="website">
@@ -57,8 +58,8 @@ make[2]: `all' に対して行うべき事はありません.
 make[2]: ディレクトリ `/usr/local/rvm/src/yaml-0.1.4/include' から出ます
 Making all in src
 make[2]: ディレクトリ `/usr/local/rvm/src/yaml-0.1.4/src' に入ります
-if /bin/sh ../libtool --tag=CC --mode=compile gcc -DHAVE_CONFIG_H -I. -I. -I.. -I../include -g -O2 -MT api.lo -MD -MP -MF &quot;.deps/api.Tpo&quot; -c -o api.lo api.c; \
-        then mv -f &quot;.deps/api.Tpo&quot; &quot;.deps/api.Plo&quot;; else rm -f &quot;.deps/api.Tpo&quot;; exit 1; fi
+if /bin/sh ../libtool --tag=CC --mode=compile gcc -DHAVE_CONFIG_H -I. -I. -I.. -I../include -g -O2 -MT api.lo -MD -MP -MF ".deps/api.Tpo" -c -o api.lo api.c; \
+        then mv -f ".deps/api.Tpo" ".deps/api.Plo"; else rm -f ".deps/api.Tpo"; exit 1; fi
 ../libtool: line 466: CDPATH: command not found
 ../libtool: line 1144: func_opt_split: command not found
 libtool: Version mismatch error. This is libtool 2.2.6b Debian-2.2.6b-2ubuntu1, but the

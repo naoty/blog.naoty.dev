@@ -6,6 +6,7 @@
     <title>Vagrant rsync + Railsでコードの変更が反映されない件</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Vagrant rsync + Railsでコードの変更が反映されない件">
     <meta property="og:type" content="website">
@@ -63,7 +64,7 @@ end
 </code></pre>
 <p>変更したファイルのmtimeをローカルとVMで比べてみると、下のようになった。</p>
 <pre lang="bash:local"><code>$ stat -x app/controllers/accounts_controller.rb
-  File: &quot;app/controllers/accounts_controller.rb&quot;
+  File: "app/controllers/accounts_controller.rb"
   Size: 117          FileType: Regular File
   Mode: (0644/-rw-r--r--)         Uid: (  501/   naoty)  Gid: (   20/   staff)
 Device: 1,4   Inode: 17448444    Links: 1
@@ -84,7 +85,7 @@ Change: 2015-10-06 17:47:43.386929905 +0000
 <p>確かにVM上のmtimeはぜんぜん更新されてない…。</p>
 <h1>解決</h1>
 <p>rsyncの<code>--times</code>オプションをVagrantのrsyncオプションに渡すことで、ファイルのmtimeも転送されるようにする。</p>
-<pre lang="ruby:Vagrantfile"><code>config.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, type: &quot;rsync&quot;,
+<pre lang="ruby:Vagrantfile"><code>config.vm.synced_folder ".", "/vagrant", type: "rsync",
   rsync__args: %w(--verbose --archive --delete -z --copy-links --times),
   rsync__exclude: %w(.git/ log/ tmp/ vendor/)
 </code></pre>

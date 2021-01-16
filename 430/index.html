@@ -6,6 +6,7 @@
     <title>データフロー図を簡単に書くやつを作った</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="データフロー図を簡単に書くやつを作った">
     <meta property="og:type" content="website">
@@ -29,13 +30,13 @@
           <h1>背景</h1>
 <p>仕事で複雑なシステムを理解するためにデータフロー図を書くことが多い。esaでmermaid.jsの記法で書いている。例えばこんな感じ。</p>
 <pre><code>graph TD
-  e_user[&quot;User&quot;]
-  p_api_post_sign_up(&quot;API(POST /sign_up)&quot;)
-  d_mysql_users[(&quot;MySQL(users)&quot;)]
-  p_fluentd(&quot;Fluentd&quot;)
-  d_s3_my-access-logs[(&quot;S3(my-access-logs)&quot;)]
-  p_embulk(&quot;Embulk&quot;)
-  d_bigquery_users[(&quot;BigQuery(users)&quot;)]
+  e_user["User"]
+  p_api_post_sign_up("API(POST /sign_up)")
+  d_mysql_users[("MySQL(users)")]
+  p_fluentd("Fluentd")
+  d_s3_my-access-logs[("S3(my-access-logs)")]
+  p_embulk("Embulk")
+  d_bigquery_users[("BigQuery(users)")]
 
   e_user -- params --&gt; p_api_post_sign_up
   p_api_post_sign_up -- user --&gt; d_mysql_users
@@ -46,13 +47,13 @@
 </code></pre>
 <p>これはこうなる（このブログのレンダリングの実装の問題で潰れているけどしょうがない）。</p>
 <pre lang="mermaid"><code>graph TD
-  e_user[&quot;User&quot;]
-  p_api_post_sign_up(&quot;API(POST /sign_up)&quot;)
-  d_mysql_users[(&quot;MySQL(users)&quot;)]
-  p_fluentd(&quot;Fluentd&quot;)
-  d_s3_my-access-logs[(&quot;S3(my-access-logs)&quot;)]
-  p_embulk(&quot;Embulk&quot;)
-  d_bigquery_users[(&quot;BigQuery(users)&quot;)]
+  e_user["User"]
+  p_api_post_sign_up("API(POST /sign_up)")
+  d_mysql_users[("MySQL(users)")]
+  p_fluentd("Fluentd")
+  d_s3_my-access-logs[("S3(my-access-logs)")]
+  p_embulk("Embulk")
+  d_bigquery_users[("BigQuery(users)")]
 
   e_user -- params --&gt; p_api_post_sign_up
   p_api_post_sign_up -- user --&gt; d_mysql_users
@@ -67,7 +68,7 @@
 <h1>解決策</h1>
 <p>Next.js + TypeScriptの練習がてら、フォームから上のようなデータフロー図とmermaid.jsの記法のテキストを生成するアプリケーションを作った。</p>
 <p><a href="https://github.com/naoty/dfd-editor">naoty/dfd-editor</a></p>
-<p><img src="dfd-editor.png" alt="dfd-editor" /></p>
+<p><img src="dfd-editor.png" alt="dfd-editor"></p>
 <p>左側のテーブルでポチポチに入力していくと、右側にデータフロー図がリアルタイムに生成される。また、別タブでmermaid.jsのテキストも生成されるので、データフロー図の作成だけこれでやって結果をesaにコピペするみたいな使い方ができる。</p>
 <p>最低限必要な機能を作っただけでまだどこかにデプロイもしていないけど、とりあえずこれで解決したい問題は解決できそうだ。</p>
         </section>

@@ -6,6 +6,7 @@
     <title>Circle CIからHeroku registryにpushする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Circle CIからHeroku registryにpushする">
     <meta property="og:type" content="website">
@@ -27,20 +28,20 @@
         </header>
         <section class="body">
           <p>DockerコンテナをHeroku上で実行したい場合、Heroku registryにDockerイメージをpushすることになる。これをCircle CIで行いたい。</p>
-<p>Heroku registryの認証はHeroku CLIか<code>docker login</code>コマンドで行うことができるが、Heroku CLIのセットアップを&quot;Docker in Docker&quot;イメージ（ベースがalpine）上で行うのはけっこうたいへんなので、以下のように<code>docker login</code>コマンドから行うと良い。</p>
-<pre lang="bash"><code>$ docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
-</code></pre>
+<p>Heroku registryの認証はHeroku CLIか<code>docker login</code>コマンドで行うことができるが、Heroku CLIのセットアップを"Docker in Docker"イメージ（ベースがalpine）上で行うのはけっこうたいへんなので、以下のように<code>docker login</code>コマンドから行うと良い。</p>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>docker login <span class="nt">-u</span> _ <span class="nt">-p</span> <span class="nv">$HEROKU_API_KEY</span> registry.heroku.com
+</pre>
 <p><code>$HEROKU_API_KEY</code>は<code>heroku auth:token</code>コマンドで取得したトークンを環境変数で設定しておく。</p>
 <p><code>.circle/config.yml</code>はこんな感じになる。</p>
-<pre lang="yaml"><code>steps:
-  # ...
-  - deploy:
-      name: Push image to Heroku registry
-      command: |
-        docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
-        docker tag myapp registry.heroku.com/$HEROKU_APP/web/myapp
-        docker push registry.heroku.com/$HEROKU_APP/web/myapp
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">steps</span><span class="pi">:</span>
+  <span class="c1"># ...</span>
+  <span class="pi">-</span> <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">Push image to Heroku registry</span>
+      <span class="na">command</span><span class="pi">:</span> <span class="pi">|</span>
+        <span class="s">docker login -u _ -p $HEROKU_API_KEY registry.heroku.com</span>
+        <span class="s">docker tag myapp registry.heroku.com/$HEROKU_APP/web/myapp</span>
+        <span class="s">docker push registry.heroku.com/$HEROKU_APP/web/myapp</span>
+</pre>
         </section>
         <footer>
           <nav>

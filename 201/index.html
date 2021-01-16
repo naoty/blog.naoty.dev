@@ -6,6 +6,7 @@
     <title>Unite.vimで.gitignoreで無視したファイルを候補から除外する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Unite.vimで.gitignoreで無視したファイルを候補から除外する">
     <meta property="og:type" content="website">
@@ -27,13 +28,13 @@
         </header>
         <section class="body">
           <p>Unite.vimでfile_recとかgrepとかでvendor/bundle以下のgemとかが出てきてウザいときがある。そこで<code>.gitignore</code>で無視したファイルを候補から除外するように設定した。</p>
-<pre lang="vim:.vimrc"><code>&quot; .gitignoreで指定したファイルと.git/以下のファイルを候補から除外する
+<pre lang="vim:.vimrc"><code>" .gitignoreで指定したファイルと.git/以下のファイルを候補から除外する
 function! s:unite_gitignore_source()
   let sources = []
   if filereadable('./.gitignore')
     for file in readfile('./.gitignore')
-      &quot; コメント行と空行は追加しない
-      if file !~ &quot;^#\\|^\s\*$&quot;
+      " コメント行と空行は追加しない
+      if file !~ "^#\\|^\s\*$"
         call add(sources, file)
       endif
     endfor

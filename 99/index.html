@@ -6,6 +6,7 @@
     <title>容赦無いCollection Insert</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="容赦無いCollection Insert">
     <meta property="og:type" content="website">
@@ -27,14 +28,14 @@
         </header>
         <section class="body">
           <p>Mongodbに大量のデータをぶち込もうとすると、「Exceded maximum insert size of 16,000,000 bytes」などとエラーを吐くので、入るまで半分にしてねじ込み続ける容赦無いスクリプトを書いた。</p>
-<pre lang="ruby"><code>def yousyanai_insert(data)
-  begin
-    NaotyModel.collection.insert(data)
-  rescue
-    data.each_slice(data.length / 2) {|half_data| yousyanai_insert(half_data) }
-  end
-end
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">def</span> <span class="nf">yousyanai_insert</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+  <span class="k">begin</span>
+    <span class="no">NaotyModel</span><span class="p">.</span><span class="nf">collection</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+  <span class="k">rescue</span>
+    <span class="n">data</span><span class="p">.</span><span class="nf">each_slice</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">half_data</span><span class="o">|</span> <span class="n">yousyanai_insert</span><span class="p">(</span><span class="n">half_data</span><span class="p">)</span> <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
         </section>
         <footer>
           <nav>

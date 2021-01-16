@@ -6,6 +6,7 @@
     <title>IntelliJ IDEAをvimっぽくする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="IntelliJ IDEAをvimっぽくする">
     <meta property="og:type" content="website">
@@ -33,38 +34,50 @@
 <h2>テーマを黒にする</h2>
 <ul>
 <li>こっちの方がイケてる。</li>
-<li><code>Preferences &gt; Appearance &gt; Theme</code>をDarculaに変更する。</li>
+<li>
+<code>Preferences &gt; Appearance &gt; Theme</code>をDarculaに変更する。</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233050.png" alt="f:id:naoty_k:20130104233050p:plain" title="f:id:naoty_k:20130104233050p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233050.png" alt="f:id:naoty_k:20130104233050p:plain" title="f:id:naoty_k:20130104233050p:plain"></p>
 <h2>IdeaVimを追加</h2>
 <ul>
 <li>キーマップをvim化する。</li>
-<li><code>Preferences &gt; Plugins &gt; Browse repositories &gt; IdeaVim</code>でダブルクリックするとインストールできる。</li>
+<li>
+<code>Preferences &gt; Plugins &gt; Browse repositories &gt; IdeaVim</code>でダブルクリックするとインストールできる。</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233555.png" alt="f:id:naoty_k:20130104233555p:plain" title="f:id:naoty_k:20130104233555p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233555.png" alt="f:id:naoty_k:20130104233555p:plain" title="f:id:naoty_k:20130104233555p:plain"></p>
 <h2>カーソルがどこまでも右にいける設定をオフにする</h2>
 <ul>
-<li><code>Preferences &gt; Editor &gt; Allow placement of caret after end of line</code>をオフにする。</li>
+<li>
+<code>Preferences &gt; Editor &gt; Allow placement of caret after end of line</code>をオフにする。</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233620.png" alt="f:id:naoty_k:20130104233620p:plain" title="f:id:naoty_k:20130104233620p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233620.png" alt="f:id:naoty_k:20130104233620p:plain" title="f:id:naoty_k:20130104233620p:plain"></p>
 <h2>行番号を表示する</h2>
 <ul>
-<li><code>Preferences &gt; Editor &gt; Appearance &gt; Show line numbers</code>をオンにする。</li>
+<li>
+<code>Preferences &gt; Editor &gt; Appearance &gt; Show line numbers</code>をオンにする。</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233646.png" alt="f:id:naoty_k:20130104233646p:plain" title="f:id:naoty_k:20130104233646p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233646.png" alt="f:id:naoty_k:20130104233646p:plain" title="f:id:naoty_k:20130104233646p:plain"></p>
 <h2>キーマッピングをカスタマイズする</h2>
 <ul>
-<li><code>Preferences &gt; Keymap</code>からいろいろ変更できる。</li>
-<li><code>Second Stroke</code>を指定することでPrefixみたいなキーマッピングも設定できる。</li>
+<li>
+<code>Preferences &gt; Keymap</code>からいろいろ変更できる。</li>
+<li>
+<code>Second Stroke</code>を指定することでPrefixみたいなキーマッピングも設定できる。</li>
 <li>変更したのは以下のとおり。これでだいたいvimと同じ動きになる。</li>
-<li><code>Run</code>：実行</li>
-<li><code>Select Next Tab</code>, <code>Select Previous Tab</code>：タブを前後に移動</li>
-<li><code>Recent Files</code>：最近開いたファイルのファイラーを起動（unite.vimっぽく使える）</li>
-<li><code>Split Horizontally</code>, <code>Split Vertically</code>：エディタを水平分割、垂直分割</li>
-<li><code>Goto Next Splitter</code>, <code>Goto Previous Splitter</code>：分割したエディタを前後に移動</li>
-<li><code>Close</code>：エディタを閉じる</li>
+<li>
+<code>Run</code>：実行</li>
+<li>
+<code>Select Next Tab</code>, <code>Select Previous Tab</code>：タブを前後に移動</li>
+<li>
+<code>Recent Files</code>：最近開いたファイルのファイラーを起動（unite.vimっぽく使える）</li>
+<li>
+<code>Split Horizontally</code>, <code>Split Vertically</code>：エディタを水平分割、垂直分割</li>
+<li>
+<code>Goto Next Splitter</code>, <code>Goto Previous Splitter</code>：分割したエディタを前後に移動</li>
+<li>
+<code>Close</code>：エディタを閉じる</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233706.png" alt="f:id:naoty_k:20130104233706p:plain" title="f:id:naoty_k:20130104233706p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233706.png" alt="f:id:naoty_k:20130104233706p:plain" title="f:id:naoty_k:20130104233706p:plain"></p>
 <p>Eclipseだとタブの移動とか画面分割をショートカットからできなかった気がするので、これだけでもインテリJ氏に替える価値があると思う。作業効率がだいぶ上がる。</p>
         </section>
         <footer>

@@ -6,6 +6,7 @@
     <title>自分専用のtodo管理ツールを書いた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="自分専用のtodo管理ツールを書いた">
     <meta property="og:type" content="website">
@@ -53,16 +54,19 @@ $ todo list
 </code></pre>
 <p>これを使ってQiita:Teamの日報に今日やったこと、やれなかったことを簡単にコピペできる。一日の作業フローはこうだ。</p>
 <ol>
-<li><code>todo list</code>で残タスクを確認する。</li>
+<li>
+<code>todo list</code>で残タスクを確認する。</li>
 <li>適宜<code>todo add</code>でタスクを追加したり、<code>todo move</code>で順番を入れ替えて優先度を調整する。</li>
 <li>完了したら<code>todo done</code>でタスクを完了させる。</li>
 <li>一日の終わりに<code>todo list -m</code>で作業内容を出力してQiita:Teamにコピペして、感想などを付け加えて日報として公開する。</li>
-<li><code>todo clear</code>で完了したタスクを消去する。</li>
+<li>
+<code>todo clear</code>で完了したタスクを消去する。</li>
 </ol>
 <h2>tips</h2>
 <ul>
 <li>todoはLTSV形式のファイルとして保存され、ファイルのパスは<code>TODO_PATH</code>という環境変数で指定できる（デフォルトは<code>HOME</code>）。なので、環境変数でDropbox内のパスを指定すれば簡単にtodoを同期できる。</li>
-<li><a href="https://github.com/zimbatm/direnv">zimbatm/direnv</a>を使うと、プロジェクトルートに<code>cd</code>したときに<code>TODO_PATH</code>を書き換えられるのでプロジェクトのスコープのtodoを別に管理できる。</li>
+<li>
+<a href="https://github.com/zimbatm/direnv">zimbatm/direnv</a>を使うと、プロジェクトルートに<code>cd</code>したときに<code>TODO_PATH</code>を書き換えられるのでプロジェクトのスコープのtodoを別に管理できる。</li>
 </ul>
 <h1>実装</h1>
 <p>最近はGoが気に入っているので、コマンドラインツールを作るときはすべてGoで書いている。CLIを作る際のフレームワークはいくつかあるようだが、一番Starが多そうだった<a href="https://github.com/codegangsta/cli">codegangsta/cli</a>を使っている。標準の出力とmarkdown形式の出力の切り替えを実装する際に<code>interface</code>を使ってみた。ファイルの入出力には<code>ioutil</code>パッケージが手っ取り早かった。ファイルの扱いを通じて<code>io.Writer</code>インターフェイスについても理解が深まった。</p>

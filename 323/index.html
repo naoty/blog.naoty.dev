@@ -6,6 +6,7 @@
     <title>react-railsによるCSRF対策</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="react-railsによるCSRF対策">
     <meta property="og:type" content="website">
@@ -30,18 +31,18 @@
           <p>最近、react-railsを使ってRails上でReactコンポーネントを実装している。フォームを実装する際、Railsのフォームヘルパーは自動的にCSRFトークンを送るように``を生成してくれるが、Reactコンポーネントでフォームを実装する場合はそれを自分で実装する必要がある。</p>
 <p>react-railsであれば、Reactコンポーネントにpropsを簡単に渡せるため、props経由でCSRFトークンを渡すことで実装することができる。</p>
 <pre><code>// new.html.slim
-= react_component &quot;SignUpForm&quot;,
+= react_component "SignUpForm",
   { csrf_params: request_forgery_protection_token, csrf_token: form_authenticity_token }
 </code></pre>
-<pre lang="jsx"><code>// SignUpForm.jsx
-render() {
-  return (
+<pre lang="jsx" class="highlight highlight-jsx"><span class="c1">// SignUpForm.jsx</span>
+<span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
     
       
     
-  );
-}
-</code></pre>
+  <span class="p">);</span>
+<span class="p">}</span>
+</pre>
         </section>
         <footer>
           <nav>

@@ -6,6 +6,7 @@
     <title>rspec, factory_girl, spork, guardによる自動テスト環境の構築</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="rspec, factory_girl, spork, guardによる自動テスト環境の構築">
     <meta property="og:type" content="website">
@@ -64,7 +65,7 @@ end
 <pre><code>$ rails g rspec:install
 </code></pre>
 <p>これでspec_helper.rbが作成される。rspecに関する設定はここで行う。</p>
-<p>２．rspec-rails, factory_girl_railsの設定<br />
+<p>２．rspec-rails, factory_girl_railsの設定<br>
 ２．１．Generatorの設定（修正しました！追記２をご覧ください。）</p>
 <ul>
 <li>「rails g」でspecファイルとファクトリファイルが生成されるように設定を変更する。</li>
@@ -95,8 +96,8 @@ end
 <pre><code># spec/spec_helper.rb
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV[&quot;RAILS_ENV&quot;] ||= 'test'
-require File.expand_path(&quot;../../config/environment&quot;, __FILE__ )
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__ )
 require 'rspec/rails'
 require 'factory_girl' # 追加
 
@@ -106,7 +107,7 @@ RSpec.configure do |config|
   # ...
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  # config.fixture_path = &quot;#{::Rails.root}/spec/fixtures&quot; # コメントアウト
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures" # コメントアウト
 
   # ...
 end
@@ -226,7 +227,7 @@ end
 <ul>
 <li>
 <ul>
-<li></li>
+<li>
 </ul>
 </li>
 </ul>
@@ -253,12 +254,12 @@ guard 'spork', :rspec_env =&gt; { 'RAILS_ENV' =&gt; 'test' }, :test_unit =&gt; f
   watch('spec/spec_helper.rb')
 end
 </code></pre>
-<p>:waitパラメータはデフォルトで20なのですが、これを少し増やすと直るかもしれません。<br />
+<p>:waitパラメータはデフォルトで20なのですが、これを少し増やすと直るかもしれません。<br>
 githubで開発者がアナウンスしてます。</p>
 <blockquote>
 <p><a href="https://github.com/guard/guard-spork">https://github.com/guard/guard-spork</a></p>
 </blockquote>
-<p>追記２：rspecのgeneratorの設定について<br />
+<p>追記２：rspecのgeneratorの設定について<br>
 config/application.rbのgeneratorの設定を以下のように修正します。</p>
 <pre><code>config.generators do |g|
   # g.test_framework :rspec, fixture: true, views:false

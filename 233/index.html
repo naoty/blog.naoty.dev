@@ -6,6 +6,7 @@
     <title>Swiftでストリームを扱うライブラリを書いた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Swiftでストリームを扱うライブラリを書いた">
     <meta property="og:type" content="website">
@@ -37,14 +38,15 @@ let counterStream: Stream = stream.map({ message in
 }).subscribe({ message in
     println(message)
 })
-stream.publish(&quot;Hello, &quot;) //=&gt; 7
-stream.publish(&quot;wor&quot;) //=&gt; 10
-stream.publish(&quot;ld!&quot;) //=&gt; 13
+stream.publish("Hello, ") //=&gt; 7
+stream.publish("wor") //=&gt; 10
+stream.publish("ld!") //=&gt; 13
 </code></pre>
 <h1>機能</h1>
 <ul>
 <li>ストリームに<code>subscribe</code>で関数を渡すと、<code>publish</code>されたときにその関数が<code>publish</code>の引数が渡されて実行される。<code>subscribe</code>は失敗時と完了時に実行する関数を指定することもできる。ストリームに失敗を通知するのは<code>publish</code>の代わりに<code>fail</code>、完了を通知するのは<code>complete</code>。</li>
-<li>その他FRPのライブラリで実装されている次のような基本的なストリーム操作を実装した: <code>map</code>, <code>filter</code>, <code>scan</code>, <code>flatMap</code>, <code>throttle</code>, <code>debounce</code>, <code>buffer</code>, <code>merge</code></li>
+<li>その他FRPのライブラリで実装されている次のような基本的なストリーム操作を実装した: <code>map</code>, <code>filter</code>, <code>scan</code>, <code>flatMap</code>, <code>throttle</code>, <code>debounce</code>, <code>buffer</code>, <code>merge</code>
+</li>
 </ul>
 <h1>結果</h1>
 <ul>

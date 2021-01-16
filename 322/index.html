@@ -6,6 +6,7 @@
     <title>webpacker用のDockerfile</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="webpacker用のDockerfile">
     <meta property="og:type" content="website">
@@ -28,18 +29,18 @@
         </header>
         <section class="body">
           <p>webpackerを導入する際にDockerイメージにNode.jsとYarnが必要になるため、以下のようにDockerfileにインストールコマンドを追加する。いつも調べるのが面倒なので、メモしておく。</p>
-<pre lang="docker"><code>FROM ruby:2.5.0
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> ruby:2.5.0</span>
 
-# Node.js
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - &amp;&amp; \
-  apt-get install -y nodejs
+<span class="c"># Node.js</span>
+<span class="k">RUN </span>curl <span class="nt">-sL</span> https://deb.nodesource.com/setup_8.x | bash - <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  apt-get <span class="nb">install</span> <span class="nt">-y</span> nodejs
 
-# Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &amp;&amp; \
-  echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; | tee /etc/apt/sources.list.d/yarn.list &amp;&amp; \
-  apt-get update &amp;&amp; \
-  apt-get install -y yarn
-</code></pre>
+<span class="c"># Yarn</span>
+<span class="k">RUN </span>curl <span class="nt">-sS</span> https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  <span class="nb">echo</span> <span class="s2">"deb https://dl.yarnpkg.com/debian/ stable main"</span> | <span class="nb">tee</span> /etc/apt/sources.list.d/yarn.list <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  apt-get update <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  apt-get <span class="nb">install</span> <span class="nt">-y</span> yarn
+</pre>
 <h1>参考</h1>
 <ul>
 <li><a href="https://nodejs.org/ja/download/package-manager/">https://nodejs.org/ja/download/package-manager/</a></li>

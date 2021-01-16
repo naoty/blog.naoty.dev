@@ -6,6 +6,7 @@
     <title>コンソールで直前の結果を参照する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="コンソールで直前の結果を参照する">
     <meta property="og:type" content="website">
@@ -26,11 +27,11 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="ruby"><code>&gt; User.first
-=&gt; #
-&gt; _.name
-=&gt; &quot;naoty&quot;
-</code></pre>
+          <pre lang="ruby" class="highlight highlight-ruby"><span class="o">&gt;</span> <span class="no">User</span><span class="p">.</span><span class="nf">first</span>
+<span class="o">=&gt;</span> <span class="c1">#</span>
+<span class="o">&gt;</span> <span class="n">_</span><span class="p">.</span><span class="nf">name</span>
+<span class="o">=&gt;</span> <span class="s2">"naoty"</span>
+</pre>
 <p><code>_</code>で直前の結果を参照できるの、最近知った。</p>
         </section>
         <footer>

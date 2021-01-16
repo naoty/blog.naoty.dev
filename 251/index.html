@@ -6,6 +6,7 @@
     <title>ブランチごとにDB切り替えるヤツ作った</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ブランチごとにDB切り替えるヤツ作った">
     <meta property="og:type" content="website">
@@ -30,7 +31,7 @@
 <p><a href="https://github.com/naoty/brancher">naoty/brancher</a></p>
 <h1>使い方</h1>
 <pre><code>group :development do
-  gem &quot;brancher&quot;
+  gem "brancher"
 end
 </code></pre>
 <p>Gemfileに書いて<code>bundle install</code>するだけ。あとは自動的にブランチごとに別々のDBが使われるようになる。</p>
@@ -42,7 +43,7 @@ end
 <p>Railsアプリケーションを初期化する際、<code>ActiveRecord::Base</code>がロードされたあとに<code>establish_connection</code>が実行される。このメソッドはconfig/database.ymlに基いてDBとのコネクションを接続するものなので、これが実行される前にDB名をブランチ名に従っていじってあげる必要がある。実際に実行されているコードは以下の通りだ。</p>
 <pre><code># lib/active_record/railtie.rb
 
-initializer &quot;active_record.initialize_database&quot; do |app|
+initializer "active_record.initialize_database" do |app|
   ActiveSupport.on_load(:active_record) do
     self.configurations = Rails.application.config.database_configuration
 
@@ -57,7 +58,7 @@ end
 <p>初期化処理の一連の流れに割り込むには<code>Rails::Initializable.initializer</code>メソッドのオプションを使う。そして、その中で<code>Rails.application.config.database_configuration</code>の中身を上書きする。</p>
 <pre><code># lib/brancher/railtie.rb
 
-initializer &quot;brancher.rename_database&quot;, before: &quot;active_record.initialize_database&quot; do
+initializer "brancher.rename_database", before: "active_record.initialize_database" do
   Rails::Application::Configuration.send(:prepend, DatabaseConfigurationRenaming)
 end
 </code></pre>

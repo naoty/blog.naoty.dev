@@ -6,6 +6,7 @@
     <title>Arduinoで構造体をつかう</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Arduinoで構造体をつかう">
     <meta property="og:type" content="website">
@@ -27,7 +28,7 @@
         </header>
         <section class="body">
           <p>引数が長くなったときに構造体使いたくなったんだけど、公式リファレンスがわかりづらかった &amp;&amp; 公式以外にちゃんとした情報がなかったので、がんばった記録を投稿しておく。</p>
-<pre lang="c:struct_sample.ino"><code>#include &quot;types.h&quot;
+<pre lang="c:struct_sample.ino"><code>#include "types.h"
 
 void setup() {
   Serial.begin(9600);
@@ -56,7 +57,7 @@ RGB getBlue();
 <p>IDEの新しいタブから適当な名前のヘッダーファイルを作成して、そこに構造体の定義と構造体を返り値または引数のデータ型に持つ関数の宣言をする。</p>
 <p>関数で構造体を使わないのであれば、こうする必要はなかったはず。</p>
 <p>なぜこうするのかはまだよくわかっていない。</p>
-<hr />
+<hr>
 <p>参考</p>
 <ul>
 <li><a href="http://playground.arduino.cc/Code/Struct">Arduino Playground - Struct Resource</a></li>

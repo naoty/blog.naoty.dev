@@ -6,6 +6,7 @@
     <title>PostCSSを導入した</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="PostCSSを導入した">
     <meta property="og:type" content="website">
@@ -30,10 +31,14 @@
 <p>PostCSSの導入にともなって、SASSで記述していたstylesheetをcssnextで書き換えた。SASSのような独自記法を覚えるよりも標準的な規格を覚える方が学習コストを回収しやすい。ちょうどCoffeeScriptからECMAScript 6への移行と同じような感じだ。</p>
 <p>導入したPostCSSプラグインは以下の通り。</p>
 <ul>
-<li><code>postcss-cssnext</code>：cssnextを導入する。これでcssで変数を利用したり、ネストした書き方ができる。<code>autoprefixer</code>が内部で使われており、サポートするブラウザに基づいてベンダープレフィックスを付与してくれる。</li>
-<li><code>postcss-import</code>：<code>@import</code>で宣言した外部のファイルを1つのファイルにまとめることができる。</li>
-<li><code>stylelint</code>：CSSのlintを行う。</li>
-<li><code>cssnano</code>：CSSの圧縮を行う。</li>
+<li>
+<code>postcss-cssnext</code>：cssnextを導入する。これでcssで変数を利用したり、ネストした書き方ができる。<code>autoprefixer</code>が内部で使われており、サポートするブラウザに基づいてベンダープレフィックスを付与してくれる。</li>
+<li>
+<code>postcss-import</code>：<code>@import</code>で宣言した外部のファイルを1つのファイルにまとめることができる。</li>
+<li>
+<code>stylelint</code>：CSSのlintを行う。</li>
+<li>
+<code>cssnano</code>：CSSの圧縮を行う。</li>
 </ul>
         </section>
         <footer>

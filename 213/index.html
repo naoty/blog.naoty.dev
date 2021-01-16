@@ -6,6 +6,7 @@
     <title>tmux 1.9でもウィンドウ作成時にパスを引き継ぐ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="tmux 1.9でもウィンドウ作成時にパスを引き継ぐ">
     <meta property="og:type" content="website">
@@ -26,13 +27,13 @@
         </header>
         <section class="body">
           <p>tmuxを1.9aにアップデートしたら、ウィンドウを作成したり分割したときにパスを引き継がなくなってしまった。<a href="http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/CHANGES">ChangeLog</a>を見てみると、default pathというものを廃止したとのことだった。元の挙動に戻すための設定も書いてあったので、<code>.tmux.conf</code>を以下のように修正した。</p>
-<pre lang="conf:.tmux.conf"><code>bind-key    c     new-window -c &quot;#{pane_current_path}&quot;
-bind-key    v     split-window -h -c &quot;#{pane_current_path}&quot;
-bind-key    C-v   split-window -h -c &quot;#{pane_current_path}&quot;
-bind-key    s     split-window -v -c &quot;#{pane_current_path}&quot;
-bind-key    C-s   split-window -v -c &quot;#{pane_current_path}&quot;
+<pre lang="conf:.tmux.conf"><code>bind-key    c     new-window -c "#{pane_current_path}"
+bind-key    v     split-window -h -c "#{pane_current_path}"
+bind-key    C-v   split-window -h -c "#{pane_current_path}"
+bind-key    s     split-window -v -c "#{pane_current_path}"
+bind-key    C-s   split-window -v -c "#{pane_current_path}"
 </code></pre>
-<p><code>new-window</code>や<code>split-window</code>のオプションに<code>-c &quot;#{pane_current_path}&quot;</code>を付けてあげるとパスを引き継ぐようになった。</p>
+<p><code>new-window</code>や<code>split-window</code>のオプションに<code>-c "#{pane_current_path}"</code>を付けてあげるとパスを引き継ぐようになった。</p>
         </section>
         <footer>
           <nav>

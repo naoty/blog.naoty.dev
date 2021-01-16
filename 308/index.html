@@ -6,6 +6,7 @@
     <title>GitHub Pagesの更新をCIで自動化した</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="GitHub Pagesの更新をCIで自動化した">
     <meta property="og:type" content="website">
@@ -32,43 +33,43 @@
 <ul>
 <li>GitHub pagesのリポジトリをcloneする必要があったが、その際にSSH接続で<code>Are you sure you want to continue connecting (yes/no)?</code>と聞かれてしまい、ビルドが止まってしまった。そこで、以下のようにすることで回避した。</li>
 </ul>
-<pre lang="yaml"><code>- run:
-    name: SSH settings
-    command: mkdir ~/.ssh/ &amp;&amp; echo -e &quot;Host github.com\n\tStrictHostKeyChecking no\n&quot; &gt; ~/.ssh/config
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="pi">-</span> <span class="na">run</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">SSH settings</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">mkdir ~/.ssh/ &amp;&amp; echo -e "Host github.com\n\tStrictHostKeyChecking no\n" &gt; ~/.ssh/config</span>
+</pre>
 <ul>
 <li>Circle CIで他のリポジトリにアクセスするには鍵を追加する必要があるため、設定画面から鍵を追加した。</li>
 <li>Circle CI上でgit commitする際に<code>username/repo@commit_id</code>の記法をメッセージに追加することで、GitHub pagesのコミットメッセージから対応する管理リポジトリのコミットに辿れるようにした。</li>
 </ul>
 <p>config.ymlは今のところ以下のようになっている。<code>npm install</code>でキャッシュを使っていないけど、そこらへんは徐々に最適化していきたい。</p>
-<pre lang="yaml"><code>version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node
-    steps:
-      - run:
-          name: SSH settings
-          command: mkdir ~/.ssh/ &amp;&amp; echo -e &quot;Host github.com\n\tStrictHostKeyChecking no\n&quot; &gt; ~/.ssh/config
-      - run:
-          name: Clone GitHub pages
-          command: |
-            git clone git@github.com:naoty/naoty.github.io.git .
-            git config user.email &quot;naoty.k@gmail.com&quot;
-            git config user.name &quot;Naoto Kaneko&quot;
-          working_directory: ~/naoty.github.io
-      - checkout
-      - run: npm install
-      - run: npm run build
-      - run:
-          name: Publish GitHub pages
-          command: |
-            cp -pr public/* ~/naoty.github.io/
-            cd ~/naoty.github.io
-            git add .
-            git commit -m &quot;Publish naoty/homepage@${CIRCLE_SHA1}&quot;
-            git push origin master
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">version</span><span class="pi">:</span> <span class="m">2</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">build</span><span class="pi">:</span>
+    <span class="na">docker</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">image</span><span class="pi">:</span> <span class="s">circleci/node</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">SSH settings</span>
+          <span class="na">command</span><span class="pi">:</span> <span class="s">mkdir ~/.ssh/ &amp;&amp; echo -e "Host github.com\n\tStrictHostKeyChecking no\n" &gt; ~/.ssh/config</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">Clone GitHub pages</span>
+          <span class="na">command</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">git clone git@github.com:naoty/naoty.github.io.git .</span>
+            <span class="s">git config user.email "naoty.k@gmail.com"</span>
+            <span class="s">git config user.name "Naoto Kaneko"</span>
+          <span class="na">working_directory</span><span class="pi">:</span> <span class="s">~/naoty.github.io</span>
+      <span class="pi">-</span> <span class="s">checkout</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">npm install</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">npm run build</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">Publish GitHub pages</span>
+          <span class="na">command</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">cp -pr public/* ~/naoty.github.io/</span>
+            <span class="s">cd ~/naoty.github.io</span>
+            <span class="s">git add .</span>
+            <span class="s">git commit -m "Publish naoty/homepage@${CIRCLE_SHA1}"</span>
+            <span class="s">git push origin master</span>
+</pre>
         </section>
         <footer>
           <nav>

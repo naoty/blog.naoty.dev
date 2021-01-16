@@ -6,6 +6,7 @@
     <title>プログラムにフリックさせてイベントを受け取る</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="プログラムにフリックさせてイベントを受け取る">
     <meta property="og:type" content="website">
@@ -37,11 +38,11 @@
 }
 
 - (void)scrollViewWillBeginDragging:(ScrollContainer *)scrollContainer {
-	NSLog(@&quot;offset: %d&quot;, self.scrollContainer.contentOffset.x);
+	NSLog(@"offset: %d", self.scrollContainer.contentOffset.x);
 }
 
 - (void)scrollViewDidEndDecelerating:(ScrollContainer *)scrollContainer {
-	NSLog(@&quot;offset: %d&quot;, self.scrollContainer.contentOffset.x);
+	NSLog(@"offset: %d", self.scrollContainer.contentOffset.x);
 }
 
 - (void)segmentDidChange:(id)sender {
@@ -58,8 +59,10 @@
 }
 </code></pre>
 <ul>
-<li><code>UISegmentControl</code>で作ったボタンが押されると、<code>ScrollContainer</code>クラスのメソッドを呼び出して、左右どちらかにスクロールされる。</li>
-<li><code>ScrollContainer</code>は以下のような<code>UIScrollView</code>のサブクラス。</li>
+<li>
+<code>UISegmentControl</code>で作ったボタンが押されると、<code>ScrollContainer</code>クラスのメソッドを呼び出して、左右どちらかにスクロールされる。</li>
+<li>
+<code>ScrollContainer</code>は以下のような<code>UIScrollView</code>のサブクラス。</li>
 </ul>
 <pre lang="obj-c:ScrollContainer.m"><code>static CGFloat kContentWidth = 320.0f;
 
@@ -90,9 +93,11 @@
 }
 </code></pre>
 <ul>
-<li><code>setContentOffset:animated:</code>メソッドでもプログラムによるフリックを実現できるんだけど、スクロール前後のイベントを受け取ってあれこれすることはできないっぽい。</li>
+<li>
+<code>setContentOffset:animated:</code>メソッドでもプログラムによるフリックを実現できるんだけど、スクロール前後のイベントを受け取ってあれこれすることはできないっぽい。</li>
 <li>そこで、<code>UIView</code>クラスのアニメーションを使って、アニメーション前後のイベントを利用する。</li>
-<li><code>setAnimationWillStartSelector:</code>や<code>setAnimationDidStopSelector:</code>に直接<code>scrollViewDidEndDecelerating:</code>などを指定することで、プログラムによるフリックの場合でもイベントを受け取ることができる。</li>
+<li>
+<code>setAnimationWillStartSelector:</code>や<code>setAnimationDidStopSelector:</code>に直接<code>scrollViewDidEndDecelerating:</code>などを指定することで、プログラムによるフリックの場合でもイベントを受け取ることができる。</li>
 </ul>
         </section>
         <footer>

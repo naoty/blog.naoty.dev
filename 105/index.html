@@ -6,6 +6,7 @@
     <title>capistranoでのunicorn再起動タスク</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="capistranoでのunicorn再起動タスク">
     <meta property="og:type" content="website">
@@ -29,16 +30,16 @@
           <p>最低限こんなもんでいいんじゃね程度</p>
 <pre lang="ruby:config/deploy.rb"><code>namespace :deploy do
   task :start do
-    run &quot;bundle exec unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D&quot;
+    run "bundle exec unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D"
   end
 
   task :stop do
-    run &quot;kill -QUIT `cat #{current_path}/tmp/pids/unicorn.pid`&quot;
+    run "kill -QUIT `cat #{current_path}/tmp/pids/unicorn.pid`"
   end
 
   task :restart do
-    run &quot;kill -USR2 `cat #{current_path}/tmp/pids/unicorn.pid`&quot;
-    run &quot;kill -QUIT `cat #{current_path}/tmp/pids/unicorn.pid.oldbin`&quot;
+    run "kill -USR2 `cat #{current_path}/tmp/pids/unicorn.pid`"
+    run "kill -QUIT `cat #{current_path}/tmp/pids/unicorn.pid.oldbin`"
   end
 end
 </code></pre>

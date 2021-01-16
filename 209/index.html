@@ -6,6 +6,7 @@
     <title>プラットフォーム依存のgemのせいでデプロイがこける件</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="プラットフォーム依存のgemのせいでデプロイがこける件">
     <meta property="og:type" content="website">
@@ -36,18 +37,18 @@ You have deleted from the Gemfile:
 <p>みたいなメッセージがでてきてデプロイ大失敗した。</p>
 <p>原因はGemfileに<code>RUBY_PLATFORM</code>を使ったことだった。</p>
 <pre lang="rb:Gemfile"><code>group :test do
-  gem &quot;growl&quot; if RUBY_PLATFORM =~ /darwin/
+  gem "growl" if RUBY_PLATFORM =~ /darwin/
 end
 </code></pre>
-<p>上のメッセージはGemfileとGemfile.lockに不整合があるときに表示される。このようなGemfileの書き方だと、デプロイ先で実行したとき、<code>gem &quot;growl&quot;</code>が存在しないことになりGemfile.lockとの不整合が生まれると考えられる。</p>
+<p>上のメッセージはGemfileとGemfile.lockに不整合があるときに表示される。このようなGemfileの書き方だと、デプロイ先で実行したとき、<code>gem "growl"</code>が存在しないことになりGemfile.lockとの不整合が生まれると考えられる。</p>
 <p>そこで、Gemfileをこう書き替えた。</p>
 <pre lang="rb:Gemfile"><code>group :test do
-  gem &quot;growl&quot;, group: :darwin
+  gem "growl", group: :darwin
 end
 </code></pre>
 <p>で、capistranoにこのグループをインストールしないように設定する。</p>
 <pre lang="rb:deploy.rb"><code># Ignore platform-specific gems
-set :bundle_without, %w(development test darwin).join(&quot; &quot;)
+set :bundle_without, %w(development test darwin).join(" ")
 </code></pre>
         </section>
         <footer>

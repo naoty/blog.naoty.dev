@@ -6,6 +6,7 @@
     <title>ハッピーになれるpry拡張詰め合わせGemfile</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ハッピーになれるpry拡張詰め合わせGemfile">
     <meta property="og:type" content="website">
@@ -46,10 +47,11 @@ Pry.config.print = proc do |output, value|
   Hirb::View.view_or_page_output(value) || old_print.call(output, value)
 end
 </code></pre>
-<hr />
+<hr>
 <h3>追記：2012/3/20</h3>
 <ul>
-<li><code>pry-coolline</code>は日本語を入力すると表示が崩れてしまうのでいったん外しました</li>
+<li>
+<code>pry-coolline</code>は日本語を入力すると表示が崩れてしまうのでいったん外しました</li>
 </ul>
         </section>
         <footer>

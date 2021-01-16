@@ -6,6 +6,7 @@
     <title>Rails 4.0だとCSRFトークンでエラーになる</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Rails 4.0だとCSRFトークンでエラーになる">
     <meta property="og:type" content="website">
@@ -28,7 +29,7 @@
         <section class="body">
           <p>ついにRails 4がリリースされたので軽く触ってみたら、3.xから変わったところを見つけたので共有。まだ日本語の情報は見当たらなかった。</p>
 <p>APIを試しに作ってみようと思い<code>curl</code>でPOSTリクエストを送ろうとしたら以下のようなエラーが。</p>
-<pre><code>$ curl -X POST -d &quot;name='hoge'&quot; http://localhost:3000/bikes
+<pre><code>$ curl -X POST -d "name='hoge'" http://localhost:3000/bikes
 Can't verify CSRF token authenticity
 Completed 422 Unprocessable Entity in 1ms
 
@@ -97,7 +98,7 @@ end
 end
 </code></pre>
 <p>で、<code>NullSession</code>クラスを見てみると、<code>NullSessionHash</code>オブジェクトと<code>NullCookieJar</code>オブジェクトというのが出てきますが、こいつらはどうやら中身が空っぽのモックオブジェクトっぽいです。</p>
-<hr />
+<hr>
 <h3>参考</h3>
 <p>Rails 3.xのときに<code>protect_from_forgery</code>の中身を追いかけた記録です。</p>
 <p><a href="http://qiita.com/naoty_k/items/ce037ea79bb5893f2b89">CSRFトークンの検証プロセス</a></p>

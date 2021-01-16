@@ -6,6 +6,7 @@
     <title>PumaのメトリクスをDatadogに送る</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="PumaのメトリクスをDatadogに送る">
     <meta property="og:type" content="website">
@@ -33,15 +34,19 @@
 <h1>Pumaのメトリクス</h1>
 <p>Pumaは<code>Puma.stats</code>から以下のようなメトリクスを取得することができる。</p>
 <ul>
-<li><code>backlog</code>: スレッドによる処理を待つコネクション数</li>
-<li><code>running</code>: 実行中のスレッド数</li>
-<li><code>pool_capacity</code>: 現在サーバーが取得できるリクエスト数</li>
-<li><code>max_threads</code>: 最大スレッド数</li>
+<li>
+<code>backlog</code>: スレッドによる処理を待つコネクション数</li>
+<li>
+<code>running</code>: 実行中のスレッド数</li>
+<li>
+<code>pool_capacity</code>: 現在サーバーが取得できるリクエスト数</li>
+<li>
+<code>max_threads</code>: 最大スレッド数</li>
 </ul>
 <h1>puma-plugin-statsd</h1>
 <p><a href="https://github.com/yob/puma-plugin-statsd">puma-plugin-statsd</a>は<code>Puma.stats</code>から取得したメトリクスをStatsDサーバーに送る。Pumaのプラグインなので、以下のように<code>config/puma.rb</code>に指定する。</p>
-<pre lang="ruby"><code>plugin :statsd
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">plugin</span> <span class="ss">:statsd</span>
+</pre>
 <p>そして、起動時に環境変数<code>STATSD_HOST</code>でStatsDサーバーのホストを指定する。DogStatsDを使う場合、datadog-agentのホストを指定すればいい。</p>
 <p>これで、PumaのメトリクスがDatadogに送られるようになる。</p>
         </section>

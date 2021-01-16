@@ -6,6 +6,7 @@
     <title>HadoopをDockerコンテナで動かす</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="HadoopをDockerコンテナで動かす">
     <meta property="og:type" content="website">
@@ -29,72 +30,75 @@
         <section class="body">
           <p><a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html">公式ドキュメント</a>を見ながらDockerイメージをセットアップしていく。</p>
 <h1>Javaをインストールする</h1>
-<pre lang="diff"><code>+FROM openjdk:8
-</code></pre>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+FROM openjdk:8
+</span></pre>
 <ul>
-<li><a href="https://hub.docker.com/_/openjdk">openjdk</a>をベースイメージにする。</li>
-<li><a href="https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions">ドキュメント</a>を見ると、Hadoop 3.xだとJava 8しかサポートしていないとのことだったので、<code>openjdk:8</code>を使う。</li>
+<li>
+<a href="https://hub.docker.com/_/openjdk">openjdk</a>をベースイメージにする。</li>
+<li>
+<a href="https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions">ドキュメント</a>を見ると、Hadoop 3.xだとJava 8しかサポートしていないとのことだったので、<code>openjdk:8</code>を使う。</li>
 </ul>
 <h1>sshdを起動する</h1>
 <p><code>Required Software</code>の項目を見ると、Javaの他にsshを必要としている。また、pdshも推奨されている。</p>
-<pre lang="diff"><code> FROM openjdk:8
-+RUN apt-get update \
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
+<span class="gi">+RUN apt-get update \
 +  &amp;&amp; apt-get install -y --no-install-recommends ssh pdsh \
 +  &amp;&amp; apt-get clean \
 +  &amp;&amp; rm -rf /var/lib/apt/lists/*
 +RUN mkdir /run/sshd
-+CMD [&quot;/usr/sbin/sshd&quot;]
-</code></pre>
++CMD ["/usr/sbin/sshd"]
+</span></pre>
 <ul>
-<li><code>apt-get</code>でsshとpdshをインストールする。イメージサイズを減らす工夫もしてある。</li>
+<li>
+<code>apt-get</code>でsshとpdshをインストールする。イメージサイズを減らす工夫もしてある。</li>
 <li>sshdが必要とするディレクトリを作ってからsshdを起動する。</li>
 </ul>
 <h1>Hadoopをダウンロードする</h1>
-<pre lang="diff"><code> FROM openjdk:8
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
  RUN apt-get update \
    &amp;&amp; apt-get install -y --no-install-recommends ssh pdsh \
    &amp;&amp; apt-get clean \
    &amp;&amp; rm -rf /var/lib/apt/lists/*
  RUN mkdir /run/sshd
-+RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
+<span class="gi">+RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
 +ENV PATH=/hadoop-3.2.1/bin:$PATH
- CMD [&quot;/usr/sbin/sshd&quot;]
-</code></pre>
+</span> CMD ["/usr/sbin/sshd"]
+</pre>
 <ul>
 <li>ミラーサイトからHadoopをダウンロードする。</li>
 </ul>
 <h1>スタンドアロンモード</h1>
 <p>この時点でスタンドアロンモードで動作確認ができる。</p>
-<pre lang="bash"><code>% docker build -t naoty/hello-hadoop .
-% docker run --rm -it naoty/hello-hadoop bash
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% docker build <span class="nt">-t</span> naoty/hello-hadoop <span class="nb">.</span>
+% docker run <span class="nt">--rm</span> <span class="nt">-it</span> naoty/hello-hadoop bash
+</pre>
 <p>ドキュメントに載っているスタンドアロンモードの動作確認をおこなう。</p>
-<pre lang="bash"><code>% cd /hadoop-3.2.1
-% mkdir input
-% cp etc/hadoop/*.xml input
-% bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar grep input output 'dfs[a-z.]+'
-% cat output/*
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% <span class="nb">cd</span> /hadoop-3.2.1
+% <span class="nb">mkdir </span>input
+% <span class="nb">cp </span>etc/hadoop/<span class="k">*</span>.xml input
+% bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar <span class="nb">grep </span>input output <span class="s1">'dfs[a-z.]+'</span>
+% <span class="nb">cat </span>output/<span class="k">*</span>
+</pre>
 <h1>疑似分散モード</h1>
 <h2>設定</h2>
 <p>疑似分散モードに必要な設定を追加する。設定ファイルをコンテナからローカルにコピーして編集する。</p>
-<pre lang="xml"><code>
+<pre lang="xml" class="highlight highlight-xml">
 
   
     fs.defaultFS
     hdfs://localhost:9000
   
 
-</code></pre>
-<pre lang="xml"><code>
+</pre>
+<pre lang="xml" class="highlight highlight-xml">
 
   
     dfs.replication
     1
   
 
-</code></pre>
-<pre lang="diff"><code> FROM openjdk:8
+</pre>
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
  RUN apt-get update \
    &amp;&amp; apt-get install -y --no-install-recommends ssh pdsh \
    &amp;&amp; apt-get clean \
@@ -102,69 +106,69 @@
  RUN mkdir /run/sshd
  RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
  ENV PATH=/hadoop-3.2.1/bin:/hadoop-3.2.1/sbin:$PATH
-+COPY config /hadoop-3.2.1/etc/hadoop/
- CMD [&quot;/usr/sbin/sshd&quot;]
-</code></pre>
+<span class="gi">+COPY config /hadoop-3.2.1/etc/hadoop/
+</span> CMD ["/usr/sbin/sshd"]
+</pre>
 <h2>localhostにsshできるようにする</h2>
-<pre lang="diff"><code> FROM openjdk:8
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
  RUN apt-get update \
    &amp;&amp; apt-get install -y --no-install-recommends ssh pdsh \
    &amp;&amp; apt-get clean \
    &amp;&amp; rm -rf /var/lib/apt/lists/*
--RUN mkdir /run/sshd
-+RUN mkdir /run/sshd \
+<span class="gd">-RUN mkdir /run/sshd
+</span><span class="gi">+RUN mkdir /run/sshd \
 +  &amp;&amp; ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
 +  &amp;&amp; cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys \
 +  &amp;&amp; chmod 0600 ~/.ssh/authorized_keys
- RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
+</span> RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
  ENV PATH=/hadoop-3.2.1/bin:$PATH
  COPY config /hadoop-3.2.1/etc/hadoop/
- CMD [&quot;/usr/sbin/sshd&quot;]
-</code></pre>
+ CMD ["/usr/sbin/sshd"]
+</pre>
 <h2>動作確認</h2>
-<pre lang="bash"><code>% docker build -t naoty/hello-hadoop .
-% docker run --rm -it naoty/hello-hadoop bash
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% docker build <span class="nt">-t</span> naoty/hello-hadoop <span class="nb">.</span>
+% docker run <span class="nt">--rm</span> <span class="nt">-it</span> naoty/hello-hadoop bash
+</pre>
 <p>公式ドキュメントにある通りに疑似分散モードの動作確認をおこなう。</p>
-<pre lang="bash"><code>% /usr/sbin/sshd
-% hdfs namenode -format
+<pre lang="bash" class="highlight highlight-bash">% /usr/sbin/sshd
+% hdfs namenode <span class="nt">-format</span>
 % start-dfs.sh
-Starting namenodes on [localhost]
+Starting namenodes on <span class="o">[</span>localhost]
 ERROR: Attempting to operate on hdfs namenode as root
 ERROR: but there is no HDFS_NAMENODE_USER defined. Aborting operation.
 Starting datanodes
 ERROR: Attempting to operate on hdfs datanode as root
 ERROR: but there is no HDFS_DATANODE_USER defined. Aborting operation.
-Starting secondary namenodes [2ce45712f331]
+Starting secondary namenodes <span class="o">[</span>2ce45712f331]
 ERROR: Attempting to operate on hdfs secondarynamenode as root
 ERROR: but there is no HDFS_SECONDARYNAMENODE_USER defined. Aborting operation.
-</code></pre>
+</pre>
 <p>Hadoopが利用する環境変数を設定するため、コンテナから<code>hadoop-env.sh</code>をコピーして環境変数を追加する。</p>
-<pre lang="bash"><code>% docker cp xxxxxxx:/hadoop-3.2.1/etc/hadoop/hadoop-env.sh config/
-</code></pre>
-<pre lang="diff"><code>+export HDFS_NAMENODE_USER=root
+<pre lang="bash" class="highlight highlight-bash">% docker <span class="nb">cp </span>xxxxxxx:/hadoop-3.2.1/etc/hadoop/hadoop-env.sh config/
+</pre>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+export HDFS_NAMENODE_USER=root
 +export HDFS_DATANODE_USER=root
 +export HDFS_SECONDARYNAMENODE_USER=root
-</code></pre>
+</span></pre>
 <p>もう一回動作確認する。</p>
-<pre lang="bash"><code>% start-dfs.sh
-Starting namenodes on [localhost]
-ERROR: JAVA_HOME is not set and could not be found.
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% start-dfs.sh
+Starting namenodes on <span class="o">[</span>localhost]
+ERROR: JAVA_HOME is not <span class="nb">set </span>and could not be found.
+</pre>
 <p><code>JAVA_HOME</code>をOpenJDKのホームディレクトリに設定する。</p>
-<pre lang="diff"><code>+export JAVA_HOME=/usr/local/openjdk-8
-</code></pre>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+export JAVA_HOME=/usr/local/openjdk-8
+</span></pre>
 <p>もう一回動作確認する。</p>
-<pre lang="bash"><code>% start-dfs.sh
-Starting namenodes on [localhost]
+<pre lang="bash" class="highlight highlight-bash">% start-dfs.sh
+Starting namenodes on <span class="o">[</span>localhost]
 pdsh@098622af1ce0: localhost: connect: Connection refused
-</code></pre>
+</pre>
 <p><a href="https://stackoverflow.com/questions/48189954/hadoop-start-dfs-sh-connection-refused">stack overflow</a>によると、pdshを使わなければエラーにならないとのことなので、pdshは削除する。</p>
-<pre lang="diff"><code> FROM openjdk:8
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
  RUN apt-get update \
--  &amp;&amp; apt-get install -y --no-install-recommends ssh pdsh \
-+  &amp;&amp; apt-get install -y --no-install-recommends ssh \
-   &amp;&amp; apt-get clean \
+<span class="gd">-  &amp;&amp; apt-get install -y --no-install-recommends ssh pdsh \
+</span><span class="gi">+  &amp;&amp; apt-get install -y --no-install-recommends ssh \
+</span>   &amp;&amp; apt-get clean \
    &amp;&amp; rm -rf /var/lib/apt/lists/*
  RUN mkdir /run/sshd
  RUN mkdir /run/sshd \
@@ -174,50 +178,50 @@ pdsh@098622af1ce0: localhost: connect: Connection refused
  RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
  ENV PATH=/hadoop-3.2.1/bin:$PATH
  COPY config /hadoop-3.2.1/etc/hadoop/
- CMD [&quot;/usr/sbin/sshd&quot;]
-</code></pre>
+ CMD ["/usr/sbin/sshd"]
+</pre>
 <p>動作確認する。</p>
-<pre lang="bash"><code>% start-dfs.sh
-Starting namenodes on [localhost]
+<pre lang="bash" class="highlight highlight-bash">% start-dfs.sh
+Starting namenodes on <span class="o">[</span>localhost]
 Starting datanodes
-Starting secondary namenodes [098622af1ce0]
+Starting secondary namenodes <span class="o">[</span>098622af1ce0]
 098622af1ce0: Host key verification failed.
-</code></pre>
+</pre>
 <p><a href="https://stackoverflow.com/questions/24524886/error-in-starting-namenode-in-hadoop-2-4-1">stack overflow</a>によると、<code>HADOOP_OPTS</code>に手を加えるとよいとのことだったのでhadoop-env.shを修正する。</p>
-<pre lang="diff"><code>+export HADOOP_OPTS=&quot;${HADOOP_OPTS} -XX:-PrintWarnings -Djava.net.preferIPv4Stack=true&quot;
-</code></pre>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+export HADOOP_OPTS="${HADOOP_OPTS} -XX:-PrintWarnings -Djava.net.preferIPv4Stack=true"
+</span></pre>
 <p>動作確認する。</p>
-<pre lang="bash"><code>% start-dfs.sh
-Starting namenodes on [localhost]
-localhost: Warning: Permanently added 'localhost' (ECDSA) to the list of known hosts.
+<pre lang="bash" class="highlight highlight-bash">% start-dfs.sh
+Starting namenodes on <span class="o">[</span>localhost]
+localhost: Warning: Permanently added <span class="s1">'localhost'</span> <span class="o">(</span>ECDSA<span class="o">)</span> to the list of known hosts.
 Starting datanodes
-Starting secondary namenodes [1a7271d1d014]
-1a7271d1d014: Warning: Permanently added '1a7271d1d014,172.17.0.2' (ECDSA) to the list of known hosts.
-</code></pre>
+Starting secondary namenodes <span class="o">[</span>1a7271d1d014]
+1a7271d1d014: Warning: Permanently added <span class="s1">'1a7271d1d014,172.17.0.2'</span> <span class="o">(</span>ECDSA<span class="o">)</span> to the list of known hosts.
+</pre>
 <p>うまくいった。動作確認を続ける。</p>
-<pre lang="bash"><code>% bin/hdfs dfs -mkdir /user
-% bin/hdfs dfs -mkdir /user/root
-% bin/hdfs dfs -mkdir input
-% bin/hdfs dfs -put etc/hadoop/*.xml input
-% bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar grep input output 'dfs[a-z.]+'
-% bin/hdfs dfs -cat output/*
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% bin/hdfs dfs <span class="nt">-mkdir</span> /user
+% bin/hdfs dfs <span class="nt">-mkdir</span> /user/root
+% bin/hdfs dfs <span class="nt">-mkdir</span> input
+% bin/hdfs dfs <span class="nt">-put</span> etc/hadoop/<span class="k">*</span>.xml input
+% bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar <span class="nb">grep </span>input output <span class="s1">'dfs[a-z.]+'</span>
+% bin/hdfs dfs <span class="nt">-cat</span> output/<span class="k">*</span>
+</pre>
 <p>動作確認ができた。</p>
 <h2>起動スクリプト</h2>
 <p>Hadoopの起動にはsshdとNameNode, DataNodeの起動が必要になるため、それらを起動するためのスクリプトをつくる。</p>
-<pre lang="bash"><code>#!/bin/bash
+<pre lang="bash" class="highlight highlight-bash"><span class="c">#!/bin/bash</span>
 
 /usr/sbin/sshd
 start-dfs.sh
 
-# daemonize
-while true; do
-  sleep 1000
-done
-</code></pre>
+<span class="c"># daemonize</span>
+<span class="k">while </span><span class="nb">true</span><span class="p">;</span> <span class="k">do
+  </span><span class="nb">sleep </span>1000
+<span class="k">done</span>
+</pre>
 <p><code>start-dfs.sh</code>はデーモンを起動するだけのスクリプトなので、無限ループを実行してコンテナが終了しないようにしている。</p>
 <p>また、NameNodeのフォーマットはビルド時におこなうようにする。</p>
-<pre lang="diff"><code> FROM openjdk:8
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
  RUN apt-get update \
    &amp;&amp; apt-get install -y --no-install-recommends ssh \
    &amp;&amp; apt-get clean \
@@ -229,16 +233,16 @@ done
  RUN wget -q -O - http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz | tar zxf -
  ENV PATH=/hadoop-3.2.1/bin:/hadoop-3.2.1/sbin:$PATH
  COPY config /hadoop-3.2.1/etc/hadoop/
-+RUN hdfs namenode -format
+<span class="gi">+RUN hdfs namenode -format
 +COPY start /
--CMD [&quot;/usr/sbin/sshd&quot;]
-+CMD [&quot;/start&quot;]
-</code></pre>
-<pre lang="bash"><code>% docker build -t naoty/hello-hadoop .
-% docker run --rm -it -p 9870:9870 naoty/hello-hadoop
-</code></pre>
+</span><span class="gd">-CMD ["/usr/sbin/sshd"]
+</span><span class="gi">+CMD ["/start"]
+</span></pre>
+<pre lang="bash" class="highlight highlight-bash">% docker build <span class="nt">-t</span> naoty/hello-hadoop <span class="nb">.</span>
+% docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="nt">-p</span> 9870:9870 naoty/hello-hadoop
+</pre>
 <p>NameNodeは9870番ポートでUIを提供しているのでポートフォワーディングを設定して<code>localhost:9870</code>から確認できるようになった。</p>
-<p><img src="hadoop-ui.png" alt="localhost:9870" /></p>
+<p><img src="hadoop-ui.png" alt="localhost:9870"></p>
         </section>
         <footer>
           <nav>

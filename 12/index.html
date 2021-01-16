@@ -6,6 +6,7 @@
     <title>Fizzbuzz問題（Ruby） ver.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Fizzbuzz問題（Ruby） ver.1">
     <meta property="og:type" content="website">
@@ -26,13 +27,13 @@
           </p>
         </header>
         <section class="body">
-          <p>　有名なFizzbuzz問題をRubyで解いてみました。Fizzbuzz問題とは、「1から任意の数までの自然数を表示せよ。ただし、3で割り切れる数は「Fizz」、5で割り切れる数は「Buzz」、両方で割り切れる数は「FizzBuzz」と表示すること。」というものです。<br />
+          <p>　有名なFizzbuzz問題をRubyで解いてみました。Fizzbuzz問題とは、「1から任意の数までの自然数を表示せよ。ただし、3で割り切れる数は「Fizz」、5で割り切れる数は「Buzz」、両方で割り切れる数は「FizzBuzz」と表示すること。」というものです。<br>
 　今回はRubyでやってみました。洗練された回答を出すために、2,3の新しい知識を得ました。非常に勉強になる問題だと思います。</p>
 <pre><code>def fizzbuzz(num)
 	1.upto(num) do |i|
-		x ||= i % 15 == 0 || i % 3 == 0 &amp;&amp; &quot;Fizz&quot;
-		x ||= i % 15 == 0 || i % 5 == 0 &amp;&amp; &quot;Buzz&quot;
-		puts x == true ? &quot;FizzBuzz&quot; : x || i
+		x ||= i % 15 == 0 || i % 3 == 0 &amp;&amp; "Fizz"
+		x ||= i % 15 == 0 || i % 5 == 0 &amp;&amp; "Buzz"
+		puts x == true ? "FizzBuzz" : x || i
 	end
 end
 

@@ -6,6 +6,7 @@
     <title>bundle execを使わずにすむ方法</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="bundle execを使わずにすむ方法">
     <meta property="og:type" content="website">
@@ -31,35 +32,40 @@
 <ul>
 <li>プロジェクトで使うライブラリはできるだけbundlerで管理したい。</li>
 <li>でも、いちいち<code>bundle exec rails s</code>とかやるのめんどい。</li>
-<li><code>alias be=&quot;bundle exec&quot;</code>として<code>be rails s</code>ってやるのもめんどくさくなってきた。</li>
+<li>
+<code>alias be="bundle exec"</code>として<code>be rails s</code>ってやるのもめんどくさくなってきた。</li>
 <li>なんかいい方法ないの？ってことで調べたら、すぐ見つかったのでご紹介。</li>
 </ul>
 <h2>まとめ</h2>
 <ol>
 <li>rvmのフックスクリプトに実行権限を与える</li>
-<li><code>--binstubs</code>をつけて<code>bundle install</code></li>
+<li>
+<code>--binstubs</code>をつけて<code>bundle install</code>
+</li>
 </ol>
 <h2>具体例</h2>
-<pre lang="sh"><code>$ cd
-$ chmod +x .rvm/hooks/after_cd_bundler
-$ cd workspaces/sampleapp
-$ vi Gemfile
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span><span class="nb">chmod</span> +x .rvm/hooks/after_cd_bundler
+<span class="nv">$ </span><span class="nb">cd </span>workspaces/sampleapp
+<span class="nv">$ </span>vi Gemfile
+</pre>
+<pre lang="ruby:Gemfile"><code>source "http://rubygems.org"
+gem "heroku"
 </code></pre>
-<pre lang="ruby:Gemfile"><code>source &quot;http://rubygems.org&quot;
-gem &quot;heroku&quot;
-</code></pre>
-<pre lang="sh"><code>$ bundle install --path vendor/bundle --binstubs
-$ ls
-Gemfile Gemfile.lock bin vendor
-$ cd
-$ cd workspaces/sampleapp
-$ heroku --version
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>bundle <span class="nb">install</span> <span class="nt">--path</span> vendor/bundle <span class="nt">--binstubs</span>
+<span class="nv">$ </span><span class="nb">ls
+</span>Gemfile Gemfile.lock bin vendor
+<span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span><span class="nb">cd </span>workspaces/sampleapp
+<span class="nv">$ </span>heroku <span class="nt">--version</span>
 heroku-gem/2.20.0
-</code></pre>
+</pre>
 <h2>解説</h2>
 <ul>
-<li><code>.rvm/hooks/after_cd_bundle</code>は<code>.bundle</code>ディレクトリが存在するプロジェクトに<code>cd</code>で移動したとき実行されるスクリプトで、<code>--binstubs</code>オプションで生成された<code>bin</code>ディレクトリにパスを渡す。</li>
-<li><code>--binstubs</code>オプションは<code>bundle install</code>でインストールされたライブラリの実行スクリプトを<code>bin</code>ディレクトリのなかに生成する。</li>
+<li>
+<code>.rvm/hooks/after_cd_bundle</code>は<code>.bundle</code>ディレクトリが存在するプロジェクトに<code>cd</code>で移動したとき実行されるスクリプトで、<code>--binstubs</code>オプションで生成された<code>bin</code>ディレクトリにパスを渡す。</li>
+<li>
+<code>--binstubs</code>オプションは<code>bundle install</code>でインストールされたライブラリの実行スクリプトを<code>bin</code>ディレクトリのなかに生成する。</li>
 </ul>
 <h2>参考</h2>
 <ul>

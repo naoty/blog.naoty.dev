@@ -6,6 +6,7 @@
     <title>D3.jsで"+09:00"がパースできない件</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="D3.jsで"+09:00"がパースできない件">
     <meta property="og:type" content="website">
@@ -26,14 +27,14 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="js"><code>var dateString = &quot;2014-07-23T00:00:00.000+09:00&quot;;
+          <pre lang="js" class="highlight highlight-js"><span class="kd">var</span> <span class="nx">dateString</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">2014-07-23T00:00:00.000+09:00</span><span class="dl">"</span><span class="p">;</span>
 
-var wrongFormat = d3.time.format(&quot;%Y-%m-%dT%H:%M:%S.%L%Z&quot;);
-wrongFormat.parse(dateString); //=&gt; null
+<span class="kd">var</span> <span class="nx">wrongFormat</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="dl">"</span><span class="s2">%Y-%m-%dT%H:%M:%S.%L%Z</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">wrongFormat</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">dateString</span><span class="p">);</span> <span class="c1">//=&gt; null</span>
 
-var rightFormat = d3.time.format(&quot;%Y-%m-%dT%H:%M:%S.%L+09:00&quot;);
-rightFormat.parse(dateString); //=&gt; Date
-</code></pre>
+<span class="kd">var</span> <span class="nx">rightFormat</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="dl">"</span><span class="s2">%Y-%m-%dT%H:%M:%S.%L+09:00</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">rightFormat</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">dateString</span><span class="p">);</span> <span class="c1">//=&gt; Date</span>
+</pre>
 <p>タイムゾーンを表す<code>%Z</code>は<code>+0900</code>のようなフォーマットはパースできるけど、<code>:</code>が含まれるとパースできない。上のようにしたら解決した。</p>
 <h3>参考</h3>
 <ul>

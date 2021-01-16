@@ -6,6 +6,7 @@
     <title>VimによるRails開発環境の構築　ver.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="VimによるRails開発環境の構築　ver.1">
     <meta property="og:type" content="website">
@@ -45,18 +46,18 @@
 <li>project.vimを上記リンクからダウンロードし、「project.vim」を「C:\Program Files\vim\runtime\plugin」直下に、「project.txt」を「C:\Program Files\vim\runtime\doc」直下に配置。</li>
 <li>「_vimrc」を以下のように記述し、「C:\Program Files\vim」直下に配置。</li>
 </ol>
-<pre><code>&quot; rails.vim
+<pre><code>" rails.vim
 let g:rails_level=4
-let g:rails_default_file=&quot;app/controllers/application.rb&quot;
-let g:rails_default_database=&quot;sqlite3&quot;
+let g:rails_default_file="app/controllers/application.rb"
+let g:rails_default_database="sqlite3"
 
-&quot; rubycomplete.vim
+" rubycomplete.vim
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 </code></pre>
-<p>何も変化なし・・・。<br />
+<p>何も変化なし・・・。<br>
 rails.vimとかディレクトリに入れておくだけじゃだめなんだろうか・・・。</p>
         </section>
         <footer>

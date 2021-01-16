@@ -6,6 +6,7 @@
     <title>掲示板 ver.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="掲示板 ver.1">
     <meta property="og:type" content="website">
@@ -33,21 +34,21 @@
 </ul>
 <pre><code>
 
-include_once(&quot;./ini.php&quot;);
-include_once(&quot;./sql_request.php&quot;);
+include_once("./ini.php");
+include_once("./sql_request.php");
 
 //DB作成
-sql_request(&quot;CREATE DATABASE IF NOT EXISTS &quot;.DB_NAME.&quot; ;&quot;);
+sql_request("CREATE DATABASE IF NOT EXISTS ".DB_NAME." ;");
 
 //テーブル作成
-$sql = &quot;
+$sql = "
 CREATE TABLE IF NOT EXISTS mb (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	actime TIMESTAMP(11) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR(255) NULL,
 	msg VARCHAR(4095) NULL
 )
-&quot;;
+";
 sql_request($sql);
 
 ?&gt;
@@ -61,15 +62,15 @@ sql_request($sql);
 form&gt;
 
 //フォームから送信された情報をテーブルに挿入
-if(($_POST[&quot;name&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;msg&quot;] != &quot;&quot;)){
-	$sql = &quot;INSERT INTO mb (name,msg) VALUES ('&quot;;
-	$sql .= mysql_escape_string($_POST[&quot;name&quot;]).&quot;','&quot;;
-	$sql .= mysql_escape_string($_POST[&quot;msg&quot;]).&quot;')&quot;;
+if(($_POST["name"] != "") &amp;&amp; ($_POST["msg"] != "")){
+	$sql = "INSERT INTO mb (name,msg) VALUES ('";
+	$sql .= mysql_escape_string($_POST["name"])."','";
+	$sql .= mysql_escape_string($_POST["msg"])."')";
 	sql_request($sql);
 }
 
 //テーブルの情報を時間順に並び替えて表示
-$arr = sql_request(&quot;SELECT * FROM mb ORDER BY actime DESC&quot;);
+$arr = sql_request("SELECT * FROM mb ORDER BY actime DESC");
 if($arr !== false){
 	for($i=0;$i
 

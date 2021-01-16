@@ -6,6 +6,7 @@
     <title>Swiftのオブジェクトグラフを生成する flock を作った</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Swiftのオブジェクトグラフを生成する flock を作った">
     <meta property="og:type" content="website">
@@ -37,9 +38,9 @@ $ brew install flock
 <pre><code>$ flock 
 </code></pre>
 <p>試しに <a href="https://github.com/Alamofire/Alamofire">Alamofire</a> で flock を試してみた。</p>
-<p><img src="https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313230437.png" alt="f:id:naoty_k:20170313230437p:plain" title="f:id:naoty_k:20170313230437p:plain" /></p>
+<p><img src="https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313230437.png" alt="f:id:naoty_k:20170313230437p:plain" title="f:id:naoty_k:20170313230437p:plain"></p>
 <p>横長になってしまうので、一部を切り取った。</p>
-<p><img src="https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313231019.png" alt="f:id:naoty_k:20170313231019p:plain" title="f:id:naoty_k:20170313231019p:plain" /></p>
+<p><img src="https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313231019.png" alt="f:id:naoty_k:20170313231019p:plain" title="f:id:naoty_k:20170313231019p:plain"></p>
 <p>コードの依存関係がハッキリと把握できるようになった。</p>
 <h1>How it works</h1>
 <p>Objective-C では <a href="https://github.com/nst/objc_dep">nst/objc_dep</a> というツールがあった。これはシンプルな Python によるスクリプトでありながら、コードベースを把握する上で強力なツールだった。しかし、 Swift は Objective-C よりも文法がはるかに複雑なため、正規表現で依存関係を抽出するのは困難だ。</p>

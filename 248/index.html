@@ -6,6 +6,7 @@
     <title>Qiita:TeamのテンプレートとJSONからテキストを組み立てるヤツ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Qiita:TeamのテンプレートとJSONからテキストを組み立てるヤツ">
     <meta property="og:type" content="website">
@@ -35,7 +36,7 @@
 * 生年月日: %{birthday}
 </code></pre>
 <p>標準入力でJSON文字列を渡すと、変数の中身をそれで展開するだけ。</p>
-<pre><code>$ echo '{&quot;fullname&quot;: &quot;Naoto Kaneko&quot;, &quot;nickname&quot;: &quot;naoty&quot;, &quot;location&quot;: &quot;Tokyo&quot;, &quot;birthday&quot;: &quot;1987/6/2&quot;}' | qiita-build -t  -a  
+<pre><code>$ echo '{"fullname": "Naoto Kaneko", "nickname": "naoty", "location": "Tokyo", "birthday": "1987/6/2"}' | qiita-build -t  -a  
 # 自己紹介
 * 氏名: Naoto Kaneko
 * ニックネーム: naoty

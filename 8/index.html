@@ -6,6 +6,7 @@
     <title>sql_request ver.2</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="sql_request ver.2">
     <meta property="og:type" content="website">
@@ -27,7 +28,7 @@
         </header>
         <section class="body">
           <p>　SQL文を簡単に実行するためのユーザー定義関数を改良しました。非常に便利。ini.phpにDBの基本情報をいれてあります。</p>
-<pre><code>require_once(&quot;ini.php&quot;);
+<pre><code>require_once("ini.php");
 
 function sql_request($sql){
 	$con = mysql_connect(DB_HOST,DB_USER,DB_PASS);

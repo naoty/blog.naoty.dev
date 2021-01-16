@@ -6,6 +6,7 @@
     <title>Qiita API v2のSwiftクライアントを書き始めた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Qiita API v2のSwiftクライアントを書き始めた">
     <meta property="og:type" content="website">
@@ -29,9 +30,9 @@
           <p>昨日、<a href="http://peatix.com/event/55420">Qiita API v2 Hackathon</a>に参加してきた。</p>
 <p>僕はハッカソンで<a href="https://github.com/naoty/qiita-swift">naoty/qiita-swift</a>を作った。Qiita API v2のSwiftクライアントだ。動機としては、Swiftはすごく楽しいのだけどJSONのパースあたりがとてもつらいという問題があって、そこらへんの地味な実装を代わりに担うライブラリを書くことで、楽しいSwiftの開発をより楽しくできると思った。</p>
 <h1>使い方</h1>
-<pre><code>let client = Qiita.Client(accessToken: &quot;...&quot;)
+<pre><code>let client = Qiita.Client(accessToken: "...")
 
-let parameters = [&quot;query&quot;: &quot;user:naoty_k&quot;]
+let parameters = ["query": "user:naoty_k"]
 client.getItems(parameters: parameters).onComplete({ items in
   // ...
 }).onError({ error in

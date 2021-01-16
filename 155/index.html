@@ -6,6 +6,7 @@
     <title>ruby-2.0.0-preview1をインストールしてみた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ruby-2.0.0-preview1をインストールしてみた">
     <meta property="og:type" content="website">
@@ -33,15 +34,15 @@
 <li>Homebrew</li>
 </ul>
 <h2>作業メモ</h2>
-<pre lang="sh"><code>$ rvm get stable
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>rvm get stable
+</pre>
 <ul>
 <li>RVMをアップデートしておく。</li>
 </ul>
-<pre lang="sh"><code>$ rvm install ruby-2.0.0-preview1
-No binary rubies available for: osx/10.8/x86_64/ruby-2.0.0-preview1.
-Continuing with compilation. Please read 'rvm mount' to get more information on binary rubies.
-Building 'ruby-2.0.0-preview1' using clang - but it's not (fully) supported, expect errors.
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>rvm <span class="nb">install </span>ruby-2.0.0-preview1
+No binary rubies available <span class="k">for</span>: osx/10.8/x86_64/ruby-2.0.0-preview1.
+Continuing with compilation. Please <span class="nb">read</span> <span class="s1">'rvm mount'</span> to get more information on binary rubies.
+Building <span class="s1">'ruby-2.0.0-preview1'</span> using clang - but it<span class="s1">'s not (fully) supported, expect errors.
 Installing Ruby from source to: /Users/naoty/.rvm/rubies/ruby-2.0.0-preview1, this may take a while depending on your cpu(s)...
 ruby-2.0.0-preview1 - #downloading ruby-2.0.0-preview1, this may take a while depending on your connection...
 ruby-2.0.0-preview1 - #extracting ruby-2.0.0-preview1 to /Users/naoty/.rvm/src/ruby-2.0.0-preview1
@@ -51,32 +52,34 @@ ruby-2.0.0-preview1 - #compiling
 ruby-2.0.0-preview1 - #installing 
 Removing old Rubygems files...
 Installing rubygems-1.8.24 for ruby-2.0.0-preview1 ...
-Error running 'env GEM_PATH=/Users/naoty/.rvm/gems/ruby-2.0.0-preview1:/Users/naoty/.rvm/gems/ruby-2.0.0-preview1@global:/Users/naoty/.rvm/gems/ruby-2.0.0-preview1:/Users/naoty/.rvm/gems/ruby-2.0.0-preview1@global GEM_HOME=/Users/naoty/.rvm/gems/ruby-2.0.0-preview1 /Users/naoty/.rvm/rubies/ruby-2.0.0-preview1/bin/ruby /Users/naoty/.rvm/src/rubygems-1.8.24/setup.rb', please read /Users/naoty/.rvm/log/ruby-2.0.0-preview1/rubygems.install.log
+Error running '</span><span class="nb">env </span><span class="nv">GEM_PATH</span><span class="o">=</span>/Users/naoty/.rvm/gems/ruby-2.0.0-preview1:/Users/naoty/.rvm/gems/ruby-2.0.0-preview1@global:/Users/naoty/.rvm/gems/ruby-2.0.0-preview1:/Users/naoty/.rvm/gems/ruby-2.0.0-preview1@global <span class="nv">GEM_HOME</span><span class="o">=</span>/Users/naoty/.rvm/gems/ruby-2.0.0-preview1 /Users/naoty/.rvm/rubies/ruby-2.0.0-preview1/bin/ruby /Users/naoty/.rvm/src/rubygems-1.8.24/setup.rb<span class="s1">', please read /Users/naoty/.rvm/log/ruby-2.0.0-preview1/rubygems.install.log
 Installation of rubygems did not complete successfully.
-Ruby 'ruby-2.0.0-preview1' was built using clang - but it's not (fully) supported, expect errors.
-</code></pre>
+Ruby '</span>ruby-2.0.0-preview1<span class="s1">' was built using clang - but it'</span>s not <span class="o">(</span>fully<span class="o">)</span> supported, expect errors.
+</pre>
 <ul>
-<li><code>ruby-2.0.0-preview1</code>とちゃんと入れないとダメだった。</li>
+<li>
+<code>ruby-2.0.0-preview1</code>とちゃんと入れないとダメだった。</li>
 <li>なんかエラーが出たので、<code>~/.rvm/log/ruby-2.0.0=preview1/rubygems.install.log</code>を読む。</li>
 </ul>
-<pre lang="sh"><code>$ less .rvm/log/ruby-2.0.0-preview1/rubygems.install.log
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>less .rvm/log/ruby-2.0.0-preview1/rubygems.install.log
 …
-It seems your ruby installation is missing psych (for YAML output).
-To eliminate this warning, please install libyaml and reinstall your ruby.
-</code></pre>
+It seems your ruby installation is missing psych <span class="o">(</span><span class="k">for </span>YAML output<span class="o">)</span><span class="nb">.</span>
+To eliminate this warning, please <span class="nb">install </span>libyaml and reinstall your ruby.
+</pre>
 <ul>
-<li><code>libyaml</code>というものを入れる必要があるっぽい。</li>
+<li>
+<code>libyaml</code>というものを入れる必要があるっぽい。</li>
 <li>Homebrewで見つけたので入れる。</li>
 </ul>
-<pre lang="sh"><code>$ brew install libyaml
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>brew <span class="nb">install </span>libyaml
+</pre>
 <p>リトライ！</p>
-<pre lang="sh"><code>$ rvm reinstall ruby-2.0.0-preview1
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>rvm reinstall ruby-2.0.0-preview1
 Removing /Users/naoty/.rvm/src/ruby-2.0.0-preview1...
 Removing /Users/naoty/.rvm/rubies/ruby-2.0.0-preview1...
-No binary rubies available for: osx/10.8/x86_64/ruby-2.0.0-preview1.
-Continuing with compilation. Please read 'rvm mount' to get more information on binary rubies.
-Building 'ruby-2.0.0-preview1' using clang - but it's not (fully) supported, expect errors.
+No binary rubies available <span class="k">for</span>: osx/10.8/x86_64/ruby-2.0.0-preview1.
+Continuing with compilation. Please <span class="nb">read</span> <span class="s1">'rvm mount'</span> to get more information on binary rubies.
+Building <span class="s1">'ruby-2.0.0-preview1'</span> using clang - but it<span class="s1">'s not (fully) supported, expect errors.
 Installing Ruby from source to: /Users/naoty/.rvm/rubies/ruby-2.0.0-preview1, this may take a while depending on your cpu(s)...
 ruby-2.0.0-preview1 - #downloading ruby-2.0.0-preview1, this may take a while depending on your connection...
 ruby-2.0.0-preview1 - #extracting ruby-2.0.0-preview1 to /Users/naoty/.rvm/src/ruby-2.0.0-preview1
@@ -87,23 +90,23 @@ ruby-2.0.0-preview1 - #installing
 Removing old Rubygems files...
 Installing rubygems-1.8.24 for ruby-2.0.0-preview1 ...
 Installation of rubygems completed successfully.
-Saving wrappers to '/Users/naoty/.rvm/bin'.
+Saving wrappers to '</span>/Users/naoty/.rvm/bin<span class="s1">'.
 ruby-2.0.0-preview1 - #adjusting #shebangs for (gem irb erb ri rdoc testrb rake).
 ruby-2.0.0-preview1 - #importing default gemsets (/Users/naoty/.rvm/gemsets/)
 Install of ruby-2.0.0-preview1 - #complete 
-Ruby 'ruby-2.0.0-preview1' was built using clang - but it's not (fully) supported, expect errors.
+Ruby '</span>ruby-2.0.0-preview1<span class="s1">' was built using clang - but it'</span>s not <span class="o">(</span>fully<span class="o">)</span> supported, expect errors.
 Making gemset ruby-2.0.0-preview1 pristine.
 Making gemset ruby-2.0.0-preview1@global pristine.
 % rvm list
 rvm rubies
 
-=* ruby-1.9.3-p194 [ x86_64 ]
-   ruby-2.0.0-preview1 [ x86_64 ]
+<span class="o">=</span><span class="k">*</span> ruby-1.9.3-p194 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-2.0.0-preview1 <span class="o">[</span> x86_64 <span class="o">]</span>
 
-# =&gt; - current
-# =* - current &amp;&amp; default
-#  * - default
-</code></pre>
+<span class="c"># =&gt; - current</span>
+<span class="c"># =* - current &amp;&amp; default</span>
+<span class="c">#  * - default</span>
+</pre>
 <ul>
 <li>警告出てるけど、一応インストールできた〜</li>
 <li>当面は<code>.rvmrc</code>を使って、特定のプロジェクトだけ2.0で開発してみようと思います。</li>

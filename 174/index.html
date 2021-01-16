@@ -6,6 +6,7 @@
     <title>Arduinoと感圧センサーで圧力をサーバーに送信する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Arduinoと感圧センサーで圧力をサーバーに送信する">
     <meta property="og:type" content="website">
@@ -28,10 +29,10 @@
         <section class="body">
           <p>秋葉原の秋月電子に行って、慣れない雰囲気の中、なんとか<a href="http://akizukidenshi.com/catalog/g/gP-04002/">この感圧センサー</a>をゲットしました。</p>
 <p>オライリーの<a href="http://www.oreilly.co.jp/books/9784873114538/">Prototyping Lab</a>という本を見ながら回路を接続して、上のようなプログラムを実行するとこんな感じになりました。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130123/20130123235951.gif" alt="f:id:naoty_k:20130123235951g:plain" title="f:id:naoty_k:20130123235951g:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130123/20130123235951.gif" alt="f:id:naoty_k:20130123235951g:plain" title="f:id:naoty_k:20130123235951g:plain"></p>
 <p>センサーに加わった圧力を0番のアナログピンから受け取り、シリアル通信でそのままモニタに出力しています。</p>
 <p>この圧力をサーバーに送信するために、以下のものを買いました。</p>
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B007YJA4WE/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51U3f1gyqVL._SL160_.jpg" alt="イーサネットシールド for Arduino (micro SD, Wiznet W5100)" title="イーサネットシールド for Arduino (micro SD, Wiznet W5100)" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B007YJA4WE/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51U3f1gyqVL._SL160_.jpg" alt="イーサネットシールド for Arduino (micro SD, Wiznet W5100)" title="イーサネットシールド for Arduino (micro SD, Wiznet W5100)"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B007YJA4WE/hatena-blog-22/">イーサネットシールド for Arduino (micro SD, Wiznet W5100)</a></p>
 <ul>
 <li>出版社/メーカー: OEM</li>
@@ -39,7 +40,7 @@
 <li><a href="http://d.hatena.ne.jp/asin/B007YJA4WE/hatena-blog-22">この商品を含むブログを見る</a></li>
 </ul>
 <p>ArduinoにぶっさすEthernetシールド。ここにLANケーブルをさしてインターネットに接続できます。</p>
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B003STEHMW/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/316uVztilYL._SL160_.jpg" alt="PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N" title="PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B003STEHMW/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/316uVztilYL._SL160_.jpg" alt="PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N" title="PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B003STEHMW/hatena-blog-22/">PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N</a></p>
 <ul>
 <li>出版社/メーカー: プラネックス</li>
@@ -49,7 +50,7 @@
 <li><a href="http://d.hatena.ne.jp/asin/B003STEHMW/hatena-blog-22">この商品を含むブログ (14件) を見る</a></li>
 </ul>
 <p>うちがE-mobileのpocket wifiを使っててLANケーブルをさすところがなかったので、有線を無線で使えるようにするコンバータも買いました。</p>
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B0040ZO6H4/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/41D0lVfgD%2BL._SL160_.jpg" alt="PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02" title="PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B0040ZO6H4/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/41D0lVfgD%2BL._SL160_.jpg" alt="PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02" title="PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B0040ZO6H4/hatena-blog-22/">PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02</a></p>
 <ul>
 <li>出版社/メーカー: プラネックス</li>

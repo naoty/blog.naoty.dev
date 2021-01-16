@@ -6,6 +6,7 @@
     <title>SwiftでRubyのInteger#timesを実装してみた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="SwiftでRubyのInteger#timesを実装してみた">
     <meta property="og:type" content="website">
@@ -27,43 +28,43 @@
         </header>
         <section class="body">
           <p>Swiftでは数値リテラルがオブジェクトとして扱えるので、Rubyっぽく数値にいろんなメソッドを定義することができる。そこで、簡単な<code>#times</code>をSwiftで実装してみた。</p>
-<pre lang="swift"><code>extension Int {
-	func times(repeat: (Int) -&gt; ()) {
-		for var index = 0; index &lt; self; index++ {
-			repeat(index)
-		}
-	}
-}
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">extension</span> <span class="kt">Int</span> <span class="p">{</span>
+	<span class="kd">func</span> <span class="nf">times</span><span class="p">(</span><span class="nv">repeat</span><span class="p">:</span> <span class="p">(</span><span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="k">var</span> <span class="nv">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="k">self</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nf">repeat</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
 
-5.times { n in println(&quot;naoty \(n)&quot;) }
-//=&gt; naoty 0
-//=&gt; naoty 1
-//=&gt; naoty 2
-//=&gt; naoty 3
-//=&gt; naoty 4
-</code></pre>
+<span class="mi">5</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="n">n</span> <span class="k">in</span> <span class="nf">println</span><span class="p">(</span><span class="s">"naoty </span><span class="se">\(</span><span class="n">n</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="p">}</span>
+<span class="c1">//=&gt; naoty 0</span>
+<span class="c1">//=&gt; naoty 1</span>
+<span class="c1">//=&gt; naoty 2</span>
+<span class="c1">//=&gt; naoty 3</span>
+<span class="c1">//=&gt; naoty 4</span>
+</pre>
 <p>きっと誰かがActiveSupportのような<code>1.minutes</code>みたいなExtensionを書くのでしょう（予言）。</p>
-<hr />
+<hr>
 <p>せっかくなので、Swiftのクロージャの文法について軽く補足してみる。</p>
 <p>まず、<code>#times</code>メソッドは<code>(Int) -&gt; ()</code>型の関数を引数にとる。このとき、以下のように書くことができる。</p>
-<pre lang="swift"><code>5.times({ (n: Int) -&gt; () in
-	println(&quot;naoty \(n)&quot;)
-	})
-</code></pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="mi">5</span><span class="o">.</span><span class="nf">times</span><span class="p">({</span> <span class="p">(</span><span class="nv">n</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="k">in</span>
+	<span class="nf">println</span><span class="p">(</span><span class="s">"naoty </span><span class="se">\(</span><span class="n">n</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+	<span class="p">})</span>
+</pre>
 <p><code>in</code>以下が十分に短い場合は一行に続けることもできる。</p>
-<pre lang="swift"><code>5.times({ (n: Int) -&gt; () in println(&quot;naoty \(n)&quot;) })
-</code></pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="mi">5</span><span class="o">.</span><span class="nf">times</span><span class="p">({</span> <span class="p">(</span><span class="nv">n</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="k">in</span> <span class="nf">println</span><span class="p">(</span><span class="s">"naoty </span><span class="se">\(</span><span class="n">n</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="p">})</span>
+</pre>
 <p>ところで、<code>#times</code>の定義で引数の関数の型は<code>(Int) -&gt; ()</code>であると明示的に宣言しているので、型推論を利用できる。実際に引数に関数を渡すとき、その関数の型をわざわざ宣言する必要がない。そのため、以下のように書き直せる。</p>
-<pre lang="swift"><code>5.times({ n in println(&quot;naoty \(n)&quot;) })
-</code></pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="mi">5</span><span class="o">.</span><span class="nf">times</span><span class="p">({</span> <span class="n">n</span> <span class="k">in</span> <span class="nf">println</span><span class="p">(</span><span class="s">"naoty </span><span class="se">\(</span><span class="n">n</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="p">})</span>
+</pre>
 <p>もし、あるクロージャを関数の最後の引数として渡す場合、クロージャを<code>()</code>の外に追い出すことができる。なので、さらに以下のように書き直せる。</p>
-<pre lang="swift"><code>5.times() { n in println(&quot;naoty \(n)&quot;) }
-</code></pre>
-<hr />
+<pre lang="swift" class="highlight highlight-swift"><span class="mi">5</span><span class="o">.</span><span class="nf">times</span><span class="p">()</span> <span class="p">{</span> <span class="n">n</span> <span class="k">in</span> <span class="nf">println</span><span class="p">(</span><span class="s">"naoty </span><span class="se">\(</span><span class="n">n</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="p">}</span>
+</pre>
+<hr>
 <h3>追記</h3>
 <p>さらに、クロージャが関数の唯一の引数である場合は<code>()</code>を省略できるので、以下のように書き直せる。</p>
-<pre lang="swift"><code>5.times { n in println(&quot;naoty \(n)&quot;) }
-</code></pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="mi">5</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="n">n</span> <span class="k">in</span> <span class="nf">println</span><span class="p">(</span><span class="s">"naoty </span><span class="se">\(</span><span class="n">n</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="p">}</span>
+</pre>
 <p>ここまで来るとほとんどRubyと同じように書ける。</p>
         </section>
         <footer>

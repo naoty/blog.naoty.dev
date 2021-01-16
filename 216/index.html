@@ -6,6 +6,7 @@
     <title>Objective-CでCSVをパースする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Objective-CでCSVをパースする">
     <meta property="og:type" content="website">
@@ -29,7 +30,7 @@
           <p><a href="https://github.com/naoty/NTYCSVTable">NTYCSVTable</a>というライブラリを使うと簡単にパースできる。名前の通りCSVをテーブル構造のオブジェクトにパースしてくれるので直感的に扱いやすい。Rubyの<code>CSV::Table</code>クラスを参考に開発されている。</p>
 <h2>インストール</h2>
 <p>CocoaPodsに公開されているのでPodfileにこのように書いて<code>pod install</code>すればインストールできる。</p>
-<pre lang="ruby:Podfile"><code>pod &quot;NTYCSVTable&quot;
+<pre lang="ruby:Podfile"><code>pod "NTYCSVTable"
 </code></pre>
 <h2>使い方</h2>
 <p>このようなCSVのパースを想定する。</p>
@@ -39,25 +40,25 @@
 3,Charlie,20
 </code></pre>
 <p>これをパースするにはこうすればいい。</p>
-<pre lang="objective-c"><code>NSURL *csvURL = [NSURL URLWithString:@&quot;users.csv&quot;];
+<pre lang="objective-c"><code>NSURL *csvURL = [NSURL URLWithString:@"users.csv"];
 NTYCSVTable *table = [[NTYCSVTable alloc] initWithContentsOfURL:csvURL];
 
 // Rows
 NSArray *rows = table.rows;
-NSArray *headers = table.headers;    //=&gt; @[@&quot;id&quot;, @&quot;name&quot;, @&quot;age&quot;]
-NSDictionary *alice = table.rows[0]; //=&gt; @{@&quot;id&quot;: @1, @&quot;name&quot;: @&quot;Alice&quot;, @&quot;age&quot;: @18}
-NSDictionary *bob = table.rows[1];   //=&gt; @{@&quot;id&quot;: @2, @&quot;name&quot;: @&quot;Bob&quot;, @&quot;age&quot;: @19}
+NSArray *headers = table.headers;    //=&gt; @[@"id", @"name", @"age"]
+NSDictionary *alice = table.rows[0]; //=&gt; @{@"id": @1, @"name": @"Alice", @"age": @18}
+NSDictionary *bob = table.rows[1];   //=&gt; @{@"id": @2, @"name": @"Bob", @"age": @19}
 
 // Columns
 NSDictionary *columns = table.columns;
-NSArray *names = table.columns[@&quot;name&quot;]; //=&gt; @[@&quot;Alice&quot;, @&quot;Bob&quot;, @&quot;Charlie&quot;]
-NSArray *ages = table.columns[@&quot;age&quot;];   //=&gt; @[@18, @19, @20]
+NSArray *names = table.columns[@"name"]; //=&gt; @[@"Alice", @"Bob", @"Charlie"]
+NSArray *ages = table.columns[@"age"];   //=&gt; @[@18, @19, @20]
 </code></pre>
 <p>また、あるヘッダーに特定の値を持つ列を検索するためにこのようなメソッドも用意されている。</p>
-<pre lang="objective-c"><code>[table rowsOfValue:@1 forHeader:@&quot;id&quot;];  //=&gt; @[@{@&quot;id&quot;: @1, @&quot;name&quot;: @&quot;Alice&quot;, @&quot;age&quot;: @18}]
-[table rowsOfValue:@20 forHeader:@&quot;age&quot;] //=&gt; @[@{@&quot;id&quot;: @3, @&quot;name&quot;: @&quot;Charlie&quot;, @&quot;age&quot;: @20}]
+<pre lang="objective-c"><code>[table rowsOfValue:@1 forHeader:@"id"];  //=&gt; @[@{@"id": @1, @"name": @"Alice", @"age": @18}]
+[table rowsOfValue:@20 forHeader:@"age"] //=&gt; @[@{@"id": @3, @"name": @"Charlie", @"age": @20}]
 </code></pre>
-<hr />
+<hr>
 <p>以上、ステマでした。</p>
         </section>
         <footer>

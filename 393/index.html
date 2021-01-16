@@ -6,6 +6,7 @@
     <title>作業ファイルという習慣</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="作業ファイルという習慣">
     <meta property="og:type" content="website">
@@ -34,22 +35,22 @@
 </ul>
 <h1>作業ファイル</h1>
 <p>タイトルと完了/未完了をfront matterで書くことを仕様とした。</p>
-<pre lang="markdown"><code>---
-title: ブログを書く
-done: false
----
+<pre lang="markdown" class="highlight highlight-markdown"><span class="nn">---</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s">ブログを書く</span>
+<span class="na">done</span><span class="pi">:</span> <span class="no">false</span>
+<span class="nn">---</span>
 
-# 2019-12-26
-* アウトラインを書く
+<span class="gh"># 2019-12-26</span>
+<span class="p">*</span> アウトラインを書く
 
-# 2019-12-27
-* 文章に組み立てる
-* スクショをとる
-</code></pre>
+<span class="gh"># 2019-12-27</span>
+<span class="p">*</span> 文章に組み立てる
+<span class="p">*</span> スクショをとる
+</pre>
 <p>これまでは日報ファイルの中に各作業のメモを残していたけど、今後は逆に作業ファイルの中に日報を書くスタイルにした。この方が後で見返しやすかった。</p>
 <h1>新しいTODO管理ツール</h1>
 <p>作業ファイルを読み取って表示するTUIベースのツールを開発している。</p>
-<p><img src="task.gif" alt="task" /></p>
+<p><img src="task.gif" alt="task"></p>
 <p>まだ機能は不足しているけど、ファイルの変更を自動的に反映する機能をがんばって作り込んだ結果、使えないこともないくらいのレベルにはなった。</p>
         </section>
         <footer>

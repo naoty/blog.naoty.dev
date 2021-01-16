@@ -6,6 +6,7 @@
     <title>activeadmin読んだ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="activeadmin読んだ">
     <meta property="og:type" content="website">
@@ -29,7 +30,8 @@
           <p><a href="https://github.com/activeadmin/activeadmin">activeadmin/activeadmin</a>を初めて使うことになったので、どういう仕組みになっているのか調べてみた。</p>
 <h1>TL;DR</h1>
 <ul>
-<li><code>rails g active_admin:install</code>を実行するとlib/generators/active_admin/install_generator.rbが実行され、<code>ActiveAdmin.routes(self)</code>がconfig/routes.rbに追加される。</li>
+<li>
+<code>rails g active_admin:install</code>を実行するとlib/generators/active_admin/install_generator.rbが実行され、<code>ActiveAdmin.routes(self)</code>がconfig/routes.rbに追加される。</li>
 <li>app/admin/以下にあるResource定義ファイル内で実行される<code>ActiveAdmin.register</code>では、<code>ActiveAdmin::Resource</code>インスタンスが生成され、動的にResourceごとのcontrollerが生成される。それらはすべて<code>ActiveAdmin::ResourceController</code>を継承している。</li>
 <li>config/routes.rbに追加された<code>ActiveAdmin.routes(self)</code>は内部でapp/admin/以下のファイルをロードし（このタイミングで上述の<code>ActiveAdmin.register</code>が実行される）、<code>ActiveAdmin::Resource</code>インスタンスから動的にroutingが定義される。</li>
 </ul>
@@ -46,9 +48,9 @@ module ActiveAdmin
 
       def setup_routes
         if options[:user]
-          inject_into_file &quot;config/routes.rb&quot;, &quot;\n ActiveAdmin.routes(self)&quot;, after: /devise_for .*, ActiveAdmin::Devise\.config/
+          inject_into_file "config/routes.rb", "\n ActiveAdmin.routes(self)", after: /devise_for .*, ActiveAdmin::Devise\.config/
         else
-          route &quot;ActiveAdmin.routes(self)&quot;
+          route "ActiveAdmin.routes(self)"
         end
       end
 
@@ -111,7 +113,7 @@ end
 <pre><code># lib/active_admin/namespace.rb
 
 def register_resource_controller
-  eval &quot;class ::#{config.controller_name} &lt; ActiveAdmin::ResourceController; end&quot;
+  eval "class ::#{config.controller_name} &lt; ActiveAdmin::ResourceController; end"
   config.controller.active_admin_config = config
 end
 </code></pre>
@@ -169,7 +171,7 @@ def define_root_routes(router)
 end
 </code></pre>
 <p>この<code>router</code>は<code>ActionDispatch::Routing::Mapper</code>であり、<code>@application.namespaces.values</code>は<code>AA::Namespace</code>インスタンスの配列だ。</p>
-<p><code>ActiveAdmin.register</code>に特にoptionを指定しない場合、<code>namespace.root?</code>は<code>true</code>となる。<code>namespace.root_to_options</code>と<code>namespace.root_to</code>がどこで定義されているのか不明。。。なんだけど、<code>AA::Application</code>内にこれらが定義されており、<code>root_to_options</code>は<code>{}</code>で<code>root_to</code>は<code>&quot;dashboard#index&quot;</code>となっている。どのようにして<code>AA::Namespace</code>にそれらが定義されるのか不明ではあるが、おそらくこれらの値が使われるのだと思う。よって、結局このメソッドは<code>root to: &quot;dashboard#index&quot;</code>としているだけだ。</p>
+<p><code>ActiveAdmin.register</code>に特にoptionを指定しない場合、<code>namespace.root?</code>は<code>true</code>となる。<code>namespace.root_to_options</code>と<code>namespace.root_to</code>がどこで定義されているのか不明。。。なんだけど、<code>AA::Application</code>内にこれらが定義されており、<code>root_to_options</code>は<code>{}</code>で<code>root_to</code>は<code>"dashboard#index"</code>となっている。どのようにして<code>AA::Namespace</code>にそれらが定義されるのか不明ではあるが、おそらくこれらの値が使われるのだと思う。よって、結局このメソッドは<code>root to: "dashboard#index"</code>としているだけだ。</p>
 <pre><code># lib/active_admin/router.rb
 
 def define_resource_routes(router)

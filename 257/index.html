@@ -6,6 +6,7 @@
     <title>ghqを読んだ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ghqを読んだ">
     <meta property="og:type" content="website">
@@ -31,28 +32,28 @@
 <pre><code>import {
     // ...
 
-    &quot;github.com/codegangsta/cli&quot;
+    "github.com/codegangsta/cli"
 }
 
 func main() {
     app := cli.NewApp()
-    app.Name = &quot;ghq&quot;
-    app.Usage = &quot;Manage GitHub repository clones&quot;
-    app.Version = &quot;0.1.0&quot;
-    app.Author = &quot;motemen&quot;
-    app.Email = &quot;motemen@gmail.com&quot;
+    app.Name = "ghq"
+    app.Usage = "Manage GitHub repository clones"
+    app.Version = "0.1.0"
+    app.Author = "motemen"
+    app.Email = "motemen@gmail.com"
     app.Commands = []cli.Command{
         {
-            Name: &quot;get&quot;,
-            Usage: &quot;Clone/sync with a remote repository&quot;,
+            Name: "get",
+            Usage: "Clone/sync with a remote repository",
             Action: CommandGet,
         },
         {
-            Name: &quot;list&quot;,
-            Usage: &quot;List local repositories&quot;,
+            Name: "list",
+            Usage: "List local repositories",
             Action: CommandList,
             Flags: []cli.Flag{
-                cli.BoolFlag{&quot;exact, e&quot;, &quot;Exact match&quot;}
+                cli.BoolFlag{"exact, e", "Exact match"}
             }
         }
     }
@@ -61,17 +62,20 @@ func main() {
 }
 </code></pre>
 <ul>
-<li><code>cli</code>パッケージは<a href="https://github.com/codegangsta/cli">codegangsta/cli</a>というコマンドを簡単に作成するライブラリのもののようだ。</li>
-<li><code>cli.NewApp()</code>は<code>*cli.App</code>（構造体<code>App</code>のポインタ）を返している。この構造体はCLIアプリケーションを表している。これに続くコードはそのCLIアプリケーションの情報を設定している。</li>
-<li><code>app.Commands</code>というフィールドには<code>cli.Command</code>型のスライスが入る。<code>cli.Command</code>型はCLIアプリケーションのサブコマンドを定義するために使われる。サブコマンドの名前、ドキュメント、フラグなどを設定し実際に実行される関数を指定することができる。実行される関数は<code>Action</code>というフィールドに指定する。このフィールドは<code>func(context *Context)</code>という型になっている。ここでは、<code>get</code>と<code>list</code>というサブコマンドが定義されており、それぞれ<code>CommandGet</code>, <code>CommandList</code>という関数が実行されるように設定されている。</li>
+<li>
+<code>cli</code>パッケージは<a href="https://github.com/codegangsta/cli">codegangsta/cli</a>というコマンドを簡単に作成するライブラリのもののようだ。</li>
+<li>
+<code>cli.NewApp()</code>は<code>*cli.App</code>（構造体<code>App</code>のポインタ）を返している。この構造体はCLIアプリケーションを表している。これに続くコードはそのCLIアプリケーションの情報を設定している。</li>
+<li>
+<code>app.Commands</code>というフィールドには<code>cli.Command</code>型のスライスが入る。<code>cli.Command</code>型はCLIアプリケーションのサブコマンドを定義するために使われる。サブコマンドの名前、ドキュメント、フラグなどを設定し実際に実行される関数を指定することができる。実行される関数は<code>Action</code>というフィールドに指定する。このフィールドは<code>func(context *Context)</code>という型になっている。ここでは、<code>get</code>と<code>list</code>というサブコマンドが定義されており、それぞれ<code>CommandGet</code>, <code>CommandList</code>という関数が実行されるように設定されている。</li>
 <li>最後に<code>app.Run()</code>でコマンドライン引数を受け取ってCLIアプリケーションを実行している。</li>
 </ul>
 <p>とりあえず<code>get</code>サブコマンドを理解したいので、<code>CommandGet</code>を見ていく。</p>
 <pre><code>func CommandGet(c *cli.Context) {
     argUrl := c.Args().Get(0)
 
-    if argUrl == &quot;&quot; {
-        cli.ShowCommandHelp(c, &quot;get&quot;)
+    if argUrl == "" {
+        cli.ShowCommandHelp(c, "get")
         os.Exit(1)
     }
 
@@ -80,8 +84,10 @@ func main() {
 </code></pre>
 <ul>
 <li>上述の通り、<code>Command.Action</code>は<code>func(context *Context)</code>という型なので、<code>CommandGet</code>関数もそれに従っている。</li>
-<li><code>cli.Context.Args()</code>は<code>cli.Args</code>型を返すが、これは<code>type Args []string</code>と定義されており、実体は<code>string</code>のスライスだ。<code>Args.Get(n int)</code>は<code>n</code>がスライスのサイズより大きかった場合に空文字を返すようになっている。</li>
-<li><code>ShowCommandHelp</code>は<code>Context</code>ポインタとサブコマンドを表す文字列を渡すことで、そのサブコマンドのヘルプメッセージを出力する。</li>
+<li>
+<code>cli.Context.Args()</code>は<code>cli.Args</code>型を返すが、これは<code>type Args []string</code>と定義されており、実体は<code>string</code>のスライスだ。<code>Args.Get(n int)</code>は<code>n</code>がスライスのサイズより大きかった場合に空文字を返すようになっている。</li>
+<li>
+<code>ShowCommandHelp</code>は<code>Context</code>ポインタとサブコマンドを表す文字列を渡すことで、そのサブコマンドのヘルプメッセージを出力する。</li>
 <li>第1引数をURLとして取得し、それが空であればヘルプメッセージを表示するようになっている。</li>
 </ul>
 <pre><code>func CommandGet(c *cli.Context) {
@@ -89,19 +95,20 @@ func main() {
 
     u, err := ParseGithubURL(argUrl)
     if err != nil {
-        log.Fatalf(&quot;While parsing URL: %s&quot;, err)
+        log.Fatalf("While parsing URL: %s", err)
     }
 
     path := pathForRepository(u)
     if err != nil {
-        log.Fatalf(&quot;Could not obtain path for repository %s: %s&quot;, u, err)
+        log.Fatalf("Could not obtain path for repository %s: %s", u, err)
     }
 
     // ...
 }
 </code></pre>
 <ul>
-<li><code>ParseGithubURL()</code>と<code>pathForRepository()</code>いう関数についてはあとで見ていくことにする。</li>
+<li>
+<code>ParseGithubURL()</code>と<code>pathForRepository()</code>いう関数についてはあとで見ていくことにする。</li>
 <li>エラーがあった場合、<code>log.Fatalf</code>関数でエラーメッセージを表示するものと思われる。<code>log</code>パッケージはGoの標準パッケージで、<code>log.Fatalf</code>関数はエラーメッセージを表示するだけでなく<code>exit(1)</code>によってプログラムを異常終了させる。</li>
 </ul>
 <pre><code>func CommandGet(c *cli.Context) {
@@ -122,9 +129,12 @@ func main() {
 }
 </code></pre>
 <ul>
-<li><code>os.Stat</code>関数はファイルの存在をチェックする際によく用いられるようだ。この関数は指定したパスにあるファイルの情報を表す<code>FileInfo</code>構造体と、エラー時にはエラーを返す。</li>
-<li><code>os.IsNotExist()</code>関数も存在チェックを行うように見える。ファイルの存在をチェックするGoの実装は諸説あるようだ。</li>
-<li><code>mustBeOkay()</code>関数は定義を見てみると、引数の渡したエラーが存在すればエラーメッセージを表示して異常終了させるようだ。アサーションのような役割を果たしているようだ。</li>
+<li>
+<code>os.Stat</code>関数はファイルの存在をチェックする際によく用いられるようだ。この関数は指定したパスにあるファイルの情報を表す<code>FileInfo</code>構造体と、エラー時にはエラーを返す。</li>
+<li>
+<code>os.IsNotExist()</code>関数も存在チェックを行うように見える。ファイルの存在をチェックするGoの実装は諸説あるようだ。</li>
+<li>
+<code>mustBeOkay()</code>関数は定義を見てみると、引数の渡したエラーが存在すればエラーメッセージを表示して異常終了させるようだ。アサーションのような役割を果たしているようだ。</li>
 <li>ファイルパスが存在しない場合は<code>newPath</code>が<code>true</code>になる。また、<code>err</code>が<code>nil</code>になるため、<code>mustBeOkay()</code>で異常終了は起きなくなる。</li>
 </ul>
 <pre><code>func CommandGet(c *cli.Context) {
@@ -133,17 +143,20 @@ func main() {
     if newPath {
         dir, _ := filepath.Split(path)
         mustBeOkay(os.MkdirAll(dir, 0755))
-        Git(&quot;clone&quot;, u.String(), path)
+        Git("clone", u.String(), path)
     } else {
         mustBeOkay(os.Chdir(path))
-        Git(&quot;remote&quot;, &quot;update&quot;)
+        Git("remote", "update")
     }
 }
 </code></pre>
 <ul>
-<li><code>filepath.Split()</code>は与えられたパスをディレクトリとファイル名に分け、ディレクトリ、ファイル名の順に返す。</li>
-<li><code>Git()</code>関数はあとで詳しく見る。</li>
-<li><code>newPath</code>が<code>true</code>になるのは上述の通り<code>path</code>が存在しない場合で、このときは<code>git clone</code>が行われ、そうでなければ<code>git remote update</code>が行われるようだ。</li>
+<li>
+<code>filepath.Split()</code>は与えられたパスをディレクトリとファイル名に分け、ディレクトリ、ファイル名の順に返す。</li>
+<li>
+<code>Git()</code>関数はあとで詳しく見る。</li>
+<li>
+<code>newPath</code>が<code>true</code>になるのは上述の通り<code>path</code>が存在しない場合で、このときは<code>git clone</code>が行われ、そうでなければ<code>git remote update</code>が行われるようだ。</li>
 </ul>
 <p><code>ghq get</code>コマンドの全体像についておおまかに理解できたので、飛ばした関数について1つずつ読んでいく。</p>
 <pre><code>type GitHubURL struct {
@@ -159,20 +172,20 @@ func ParseGitHubURL(urlString string) (*GitHubURL, error) {
     }
 
     if !u.IsAbs() {
-        u.Scheme = &quot;https&quot;
-        u.Host = &quot;github.com&quot;
+        u.Scheme = "https"
+        u.Host = "github.com"
         if u.Path[0] != '/' {
             u.Path = '/' + u.Path
         }
     }
 
-    if u.Host != &quot;github.com&quot; {
-        return nil, fmt.Errorf(&quot;URL is not of github.com: %s&quot;, u)
+    if u.Host != "github.com" {
+        return nil, fmt.Errorf("URL is not of github.com: %s", u)
     }
 
-    components := strings.Split(u.Path, &quot;/&quot;)
+    components := strings.Split(u.Path, "/")
     if len(components) &lt; 3 {
-        return nil, fmt.Errorf(&quot;URL does not contain user and repo: %s %v&quot;, u, components)
+        return nil, fmt.Errorf("URL does not contain user and repo: %s %v", u, components)
     }
     user, repo := components[1], components[2]
 
@@ -180,60 +193,72 @@ func ParseGitHubURL(urlString string) (*GitHubURL, error) {
 }
 </code></pre>
 <ul>
-<li><code>url.Parse()</code>は与えられた文字列をパースして<code>URL</code>構造体のポインタと失敗した場合は<code>error</code>を返す。</li>
-<li><code>URL</code>構造体は<code>Scheme</code>や<code>Host</code>といったフィールドを持っているため、相対パスであればこれらを設定している。</li>
-<li><code>fmt.Errorf()</code>はフォーマット化された文字列からエラー値を返す。</li>
-<li><code>strings.Split()</code>は文字列を第2引数で渡されたセパレータで分解し<code>string</code>のスライスとして返す。</li>
+<li>
+<code>url.Parse()</code>は与えられた文字列をパースして<code>URL</code>構造体のポインタと失敗した場合は<code>error</code>を返す。</li>
+<li>
+<code>URL</code>構造体は<code>Scheme</code>や<code>Host</code>といったフィールドを持っているため、相対パスであればこれらを設定している。</li>
+<li>
+<code>fmt.Errorf()</code>はフォーマット化された文字列からエラー値を返す。</li>
+<li>
+<code>strings.Split()</code>は文字列を第2引数で渡されたセパレータで分解し<code>string</code>のスライスとして返す。</li>
 </ul>
 <p>続いて<code>pathForRepository()</code>関数を読んでいく。</p>
 <pre><code>func reposRoot() string {
-    reposRoot, err := GitConfig(&quot;ghq.root&quot;)
+    reposRoot, err := GitConfig("ghq.root")
     mustBeOkay(err)
 
-    if reposRoot == &quot;&quot; {
+    if reposRoot == "" {
         usr, err := user.Current()
         mustBeOkay(err)
 
-        reposRoot = path.Join(usr.HomeDir, &quot;.ghq&quot;, &quot;repos&quot;)
+        reposRoot = path.Join(usr.HomeDir, ".ghq", "repos")
     }
 
     return reposRoot
 }
 
 func pathForRepository(u *GitHubURL) string {
-    return path.Join(reposRoot(), &quot;@&quot;+u.User, u.Repo)
+    return path.Join(reposRoot(), "@"+u.User, u.Repo)
 }
 </code></pre>
 <ul>
-<li><code>path.Join</code>はパスの要素を<code>/</code>で結合してパスにする。</li>
-<li><code>GitConfig()</code>は後ほど読んでいく。おそらくリポジトリのルートパスを返すものと思われる。</li>
-<li><code>reposRoot</code>が空であれば<code>$HOME/.ghq/repos</code>を返すようになっている。<code>user.Current()</code>はカレントユーザーを表す<code>User</code>構造体のポインタを返す。<code>User</code>構造体はユーザー名やホームディレクトリなどの情報を持っている。<code>usr.HomeDir</code>でホームディレクトリを取得している。</li>
+<li>
+<code>path.Join</code>はパスの要素を<code>/</code>で結合してパスにする。</li>
+<li>
+<code>GitConfig()</code>は後ほど読んでいく。おそらくリポジトリのルートパスを返すものと思われる。</li>
+<li>
+<code>reposRoot</code>が空であれば<code>$HOME/.ghq/repos</code>を返すようになっている。<code>user.Current()</code>はカレントユーザーを表す<code>User</code>構造体のポインタを返す。<code>User</code>構造体はユーザー名やホームディレクトリなどの情報を持っている。<code>usr.HomeDir</code>でホームディレクトリを取得している。</li>
 </ul>
 <p>続いて<code>Git()</code>関数を読んでいく。</p>
 <pre><code>func Git(command ...string) {
-    log.Printf(&quot;Running 'git %s'\n&quot;, strings.Join(command, &quot; &quot;))
-    cmd := exec.Command(&quot;git&quot;, command...)
+    log.Printf("Running 'git %s'\n", strings.Join(command, " "))
+    cmd := exec.Command("git", command...)
     cmd.Stdout = os.Stdout
     cmd.Stderr = os.Stderr
 
     err := cmd.Run()
     if err != nil {
-        log.Fatalf(&quot;git %s: %s&quot;, strings.Join(command, &quot; &quot;), err)
+        log.Fatalf("git %s: %s", strings.Join(command, " "), err)
     }
 }
 </code></pre>
 <ul>
-<li><code>...string</code>のように引数の型名の前に<code>...</code>をつけると可変長引数をとることができる。この引数の型は型名で指定した型のスライスとなる。つまりここでは<code>string</code>のスライスとなる。</li>
-<li><code>fmt.Printf()</code>関数は標準出力に出力するものだが、<code>log.Printf</code>はロガーで指定された出力先に出力する点が異なる。</li>
-<li><code>exec.Command()</code>関数は、第1引数で指定された名前のコマンドを渡された可変長引数で実行するコマンドを表す<code>Cmd</code>構造体のポインタを返す。</li>
-<li><code>...</code>で渡された可変長引数は上述の通りスライスなのだけど、スライスを展開して可変長引数として関数に渡す場合は<code>command...</code>のようにスライスのあとに<code>...</code>とつける。</li>
-<li><code>cmd.Run</code>で指定されたコマンドを実行する。</li>
+<li>
+<code>...string</code>のように引数の型名の前に<code>...</code>をつけると可変長引数をとることができる。この引数の型は型名で指定した型のスライスとなる。つまりここでは<code>string</code>のスライスとなる。</li>
+<li>
+<code>fmt.Printf()</code>関数は標準出力に出力するものだが、<code>log.Printf</code>はロガーで指定された出力先に出力する点が異なる。</li>
+<li>
+<code>exec.Command()</code>関数は、第1引数で指定された名前のコマンドを渡された可変長引数で実行するコマンドを表す<code>Cmd</code>構造体のポインタを返す。</li>
+<li>
+<code>...</code>で渡された可変長引数は上述の通りスライスなのだけど、スライスを展開して可変長引数として関数に渡す場合は<code>command...</code>のようにスライスのあとに<code>...</code>とつける。</li>
+<li>
+<code>cmd.Run</code>で指定されたコマンドを実行する。</li>
 </ul>
 <p>続いて<code>GitConfig()</code>関数を読んでいく。</p>
 <pre><code>func GitConfig(key string) (string, error) {
-    defaultValue := &quot;&quot;
+    defaultValue := ""
 
-    cmd := exec.Command(&quot;git&quot;, &quot;config&quot;, &quot;--path&quot;, &quot;--null&quot;, &quot;--get&quot;, key)
+    cmd := exec.Command("git", "config", "--path", "--null", "--get", key)
     cmd.Stderr = os.Stderr
 
     buf, err := cmd.Output()
@@ -243,21 +268,24 @@ func pathForRepository(u *GitHubURL) string {
             if waitStatus.ExitStatus() == 1 {
                 return defaultValue, nil
             } else {
-                return &quot;&quot;, err
+                return "", err
             }
         } else {
-            return &quot;&quot;, err
+            return "", err
         }
     }
 
-    return strings.TrimRight(string(buf), &quot;\000&quot;), nil
+    return strings.TrimRight(string(buf), "\000"), nil
 }
 </code></pre>
 <ul>
-<li><code>cmd.Output()</code>関数はコマンドを実行して標準出力を返す。</li>
-<li><code>err.(*exec.ExitError)</code>というのは型アサーションという文法だそうだ。<code>err</code>は<code>error</code>インターフェイス型で、これが<code>*exec.ExitError</code>型の値であると断定する。変換された値が第1返り値、変換に成功したかどうかが第2返り値になる。</li>
+<li>
+<code>cmd.Output()</code>関数はコマンドを実行して標準出力を返す。</li>
+<li>
+<code>err.(*exec.ExitError)</code>というのは型アサーションという文法だそうだ。<code>err</code>は<code>error</code>インターフェイス型で、これが<code>*exec.ExitError</code>型の値であると断定する。変換された値が第1返り値、変換に成功したかどうかが第2返り値になる。</li>
 <li>ここらへんでやっていることは終了ステータスを取得しようとしている。</li>
-<li><code>strings.TrimRight()</code>関数は第2引数を削除した<code>string</code>スライスを返す。</li>
+<li>
+<code>strings.TrimRight()</code>関数は第2引数を削除した<code>string</code>スライスを返す。</li>
 </ul>
         </section>
         <footer>

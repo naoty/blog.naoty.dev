@@ -6,6 +6,7 @@
     <title>Grepコマンドもどき ver.2（完成版）</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Grepコマンドもどき ver.2（完成版）">
     <meta property="og:type" content="website">
@@ -35,7 +36,7 @@ def grep(pattern, directory)
       file = open(path)
       path = File.expand_path(path).sub(Regexp.new(File.expand_path(directory)), '')
       while line = file.gets
-        puts &quot;#{path}: #{file.lineno}&quot; if line =~ pattern
+        puts "#{path}: #{file.lineno}" if line =~ pattern
       end
       file.close
     end
@@ -71,7 +72,7 @@ grep(Regexp.new(ARGV[0]), ARGV[1])
 /app/controllers/admin/tasks_controller.rb: 77
 /app/controllers/admin/tasks_controller.rb: 78
 </code></pre>
-<p>　ブラボー！！<br />
+<p>　ブラボー！！<br>
 　どうやらうまくいかなかった原因は、subの中でマッチングされずうまくパス名が変換できなかったからのようですね。</p>
 <pre><code>path = File.expand_path(path).sub(Regexp.new(File.expand_path(directory)), '')
 </code></pre>

@@ -6,6 +6,7 @@
     <title>Assets precompileに必要最小限のファイル</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Assets precompileに必要最小限のファイル">
     <meta property="og:type" content="website">
@@ -28,21 +29,21 @@
         </header>
         <section class="body">
           <p>Dockerfileで<code>rails assets:precompile</code>を実行する前に<code>COPY</code>するファイルを必要最小限にしておけると、キャッシュを有効活用できてビルド時間を短縮できる。</p>
-<pre lang="docker"><code>WORKDIR /myapp
+<pre lang="docker" class="highlight highlight-docker"><span class="k">WORKDIR</span><span class="s"> /myapp</span>
 
-COPY app/assets /myapp/
-COPY bin/rails /myapp/bin/
-COPY config/environments /myapp/config/environments/
-COPY config/initializers /myapp/config/initializers/
-COPY config/application.rb /myapp/config/application.rb
-COPY config/boot.rb /myapp/config/boot.rb
-COPY config/environment.rb /myapp/config/environment.rb
-COPY config/secrets.yml.enc /myapp/config/secrets.yml.enc
-COPY lib/assets /myapp/lib/assets/
-COPY vendor/assets /myapp/vendor/assets/
-COPY Rakefile /myapp/
-RUN bin/rails assets:precompile
-</code></pre>
+<span class="k">COPY</span><span class="s"> app/assets /myapp/</span>
+<span class="k">COPY</span><span class="s"> bin/rails /myapp/bin/</span>
+<span class="k">COPY</span><span class="s"> config/environments /myapp/config/environments/</span>
+<span class="k">COPY</span><span class="s"> config/initializers /myapp/config/initializers/</span>
+<span class="k">COPY</span><span class="s"> config/application.rb /myapp/config/application.rb</span>
+<span class="k">COPY</span><span class="s"> config/boot.rb /myapp/config/boot.rb</span>
+<span class="k">COPY</span><span class="s"> config/environment.rb /myapp/config/environment.rb</span>
+<span class="k">COPY</span><span class="s"> config/secrets.yml.enc /myapp/config/secrets.yml.enc</span>
+<span class="k">COPY</span><span class="s"> lib/assets /myapp/lib/assets/</span>
+<span class="k">COPY</span><span class="s"> vendor/assets /myapp/vendor/assets/</span>
+<span class="k">COPY</span><span class="s"> Rakefile /myapp/</span>
+<span class="k">RUN </span>bin/rails assets:precompile
+</pre>
 <p>とりあえずこれだけで動いた。<code>config/initializers/</code>以下も削れそうな気がするけど、プロジェクトによってケースバイケースだと思うので、これで十分だとおもう。</p>
         </section>
         <footer>

@@ -6,6 +6,7 @@
     <title>Regexp#+を定義して「または」を簡単に作る</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Regexp#+を定義して「または」を簡単に作る">
     <meta property="og:type" content="website">
@@ -27,20 +28,20 @@
         </header>
         <section class="body">
           <p>「AまたはB」のような正規表現を簡単に作ろうと思って以下のようにしてみたら、うまくいかなかった。</p>
-<pre lang="ruby"><code>001 &gt; /qiita/ + /kobito/
-NoMethodError: undefined method `+' for /qiita/:Regexp
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="mo">001</span> <span class="o">&gt;</span> <span class="sr">/qiita/</span> <span class="o">+</span> <span class="sr">/kobito/</span>
+<span class="no">NoMethodError</span><span class="p">:</span> <span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`+' for /qiita/:Regexp
+</span></pre>
 <p>意外にも<code>Regexp#+</code>が定義されてなかったので、以下のようにクラスを拡張してみた。</p>
-<pre lang="ruby"><code>class Regexp
-  def +(other)
-    Regexp.new(self.source + '|' + other.source)
-  end
-end
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">Regexp</span>
+  <span class="k">def</span> <span class="nf">+</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+    <span class="no">Regexp</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="nf">source</span> <span class="o">+</span> <span class="s1">'|'</span> <span class="o">+</span> <span class="n">other</span><span class="p">.</span><span class="nf">source</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <p><code>Regexp#source</code>はその正規表現の文字列を返すメソッド。で、期待通りにうまくいった。</p>
-<pre lang="ruby"><code>002 &gt; /qiita/ + /kobito/
-=&gt; /qiita|kobito/
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="mo">002</span> <span class="o">&gt;</span> <span class="sr">/qiita/</span> <span class="o">+</span> <span class="sr">/kobito/</span>
+<span class="o">=&gt;</span> <span class="sr">/qiita|kobito/</span>
+</pre>
         </section>
         <footer>
           <nav>

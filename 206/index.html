@@ -6,6 +6,7 @@
     <title>アプリのアイコンを自動生成する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="アプリのアイコンを自動生成する">
     <meta property="og:type" content="website">
@@ -32,17 +33,17 @@
 <p>一目でどれがどのアプリか分かって、かつ開発中のアプリで覆い尽くされてもホーム画面が華やかに見える状態を目指して、今回のソリューションを考案しました。</p>
 <h2>picon</h2>
 <p>以上のような問題を解決するため、<a href="https://github.com/naoty/picon">picon</a>というrubygemを作りました。Xcode 5.0以降が必須です。使い方は簡単で以下のとおりです。</p>
-<pre lang="zsh"><code>$ gem install picon
-$ cd path/to/project
-$ picon generate
-</code></pre>
+<pre lang="zsh" class="highlight highlight-zsh"><span class="nv">$ </span>gem <span class="nb">install </span>picon
+<span class="nv">$ </span><span class="nb">cd </span>path/to/project
+<span class="nv">$ </span>picon generate
+</pre>
 <p>これでこんな感じになります。</p>
 <h3>Before</h3>
-<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/bd35114d-5177-835d-bf5d-77a68f3d410a.png" alt="picon_before_s.png" title="picon_before_s.png" /></p>
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/bd35114d-5177-835d-bf5d-77a68f3d410a.png" alt="picon_before_s.png" title="picon_before_s.png"></p>
 <h3>After</h3>
-<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/f117fb38-7db7-d1f2-e558-af2c3437d344.png" alt="picon_after_s.png" title="picon_after_s.png" /></p>
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/1044/f117fb38-7db7-d1f2-e558-af2c3437d344.png" alt="picon_after_s.png" title="picon_after_s.png"></p>
 <p>piconはアプリのbundle identifier（com.example.SampleApp的なアレ）のハッシュ値に基づいた<a href="http://en.wikipedia.org/wiki/Identicon">identicon</a>を生成し、デフォルトのアイコンと差し替えます。bundle identifierに基づいているので、アプリ毎にユニークなアイコンが生成されます。もちろんiPadやiOS 7など各解像度に合わせて生成して差し替えてくれます。実装の中身としては、Xcode 5.0から追加されたAsset Catalogという機能を使っています。新しいAsset Catalogを作成し、そこに生成したidenticonを追加して、最後にデフォルトのアイコンのAsset Catalogと入れ替えています。ちょっと強引なやり方をしていますが。</p>
-<hr />
+<hr>
 <p>デフォルトのアイコンに見飽きたという方は、ぜひお使いください。また、まだまだ完成度は高くないのでpull reqやissueもお待ちしております。</p>
         </section>
         <footer>

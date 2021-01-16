@@ -6,6 +6,7 @@
     <title>HiveをDockerで動かす</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="HiveをDockerで動かす">
     <meta property="og:type" content="website">
@@ -31,8 +32,8 @@
 <p>すべてのコードは<a href="https://github.com/naoty/hello-hive">naoty/hello-hive</a>にある。</p>
 <h1>Java</h1>
 <p>Java 1.8への移行が推奨されているので、<code>openjdk:8</code>をベースイメージに使う。</p>
-<pre lang="diff"><code>+FROM openjdk:8
-</code></pre>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+FROM openjdk:8
+</span></pre>
 <h1>Hadoop</h1>
 <p>Hive 2系に合わせてHadoopも2系をインストールする。以前の<a href="/406/">ブログ</a>で紹介したとおり、HadoopをDockerコンテナで動かすには下のようなことが必要になる。</p>
 <ul>
@@ -40,10 +41,10 @@
 <li>Hadoopのダウンロード</li>
 <li>HDFSのフォーマット</li>
 </ul>
-<pre lang="diff"><code> FROM openjdk:8
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
 
 +# sshd
-+RUN apt-get update \
+<span class="gi">+RUN apt-get update \
 +  &amp;&amp; apt-get install -y --no-install-recommends ssh \
 +  &amp;&amp; apt-get clean \
 +  &amp;&amp; rm -rf /var/lib/apt/lists/*
@@ -57,9 +58,9 @@
 +ENV PATH=/hadoop-2.9.2/bin:/hadoop-2.9.2/sbin:$PATH
 +COPY config/hadoop /hadoop-2.9.2/etc/hadoop/
 +RUN hdfs namenode -format
-</code></pre>
+</span></pre>
 <h1>Hive</h1>
-<pre lang="diff"><code> FROM openjdk:8
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
 
  # sshd
  RUN apt-get update \
@@ -78,10 +79,10 @@
  RUN hdfs namenode -format
 
 +# Hive
-+RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
+<span class="gi">+RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
 +ENV HIVE_HOME=/apache-hive-2.3.6-bin PATH=/apache-hive-2.3.6-bin/bin:$PATH
 +COPY config/hive /apache-hive-2.3.6-bin/conf/
-</code></pre>
+</span></pre>
 <h1>起動スクリプト</h1>
 <p>コンテナの起動スクリプトを追加し、下のようなことを起動時におこなうようにする。</p>
 <ul>
@@ -91,21 +92,21 @@
 <li>Hive metastoreの初期化（今回は埋め込み型のmetastoreを使う）</li>
 <li>hiveserver2の起動（コンテナ外部から接続してHiveQLを利用できるようにするため）</li>
 </ul>
-<pre lang="bash"><code>#!/bin/bash -ex
+<pre lang="bash" class="highlight highlight-bash"><span class="c">#!/bin/bash -ex</span>
 
 /usr/sbin/sshd
 start-dfs.sh
 
-hdfs dfs -mkdir -p /tmp
-hdfs dfs -mkdir -p /user/hive/warehouse
-hdfs dfs -chmod g+w /tmp
-hdfs dfs -chmod g+w /user/hive/warehouse
+hdfs dfs <span class="nt">-mkdir</span> <span class="nt">-p</span> /tmp
+hdfs dfs <span class="nt">-mkdir</span> <span class="nt">-p</span> /user/hive/warehouse
+hdfs dfs <span class="nt">-chmod</span> g+w /tmp
+hdfs dfs <span class="nt">-chmod</span> g+w /user/hive/warehouse
 
-schematool -dbType derby -initSchema
+schematool <span class="nt">-dbType</span> derby <span class="nt">-initSchema</span>
 
 hiveserver2
-</code></pre>
-<pre lang="diff"><code> FROM openjdk:8
+</pre>
+<pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
 
  # sshd
  RUN apt-get update \
@@ -129,18 +130,18 @@ hiveserver2
  COPY config/hive /apache-hive-2.3.6-bin/conf/
 
 +WORKDIR /root
-+COPY start /root/
-+CMD [&quot;./start&quot;]
-</code></pre>
+<span class="gi">+COPY start /root/
++CMD ["./start"]
+</span></pre>
 <h1>動作確認</h1>
 <p>hiveserver2を起動する。</p>
-<pre lang="bash"><code>% docker build -t naoty/hello-hive .
-% docker run --rm -it naoty/hello-hive
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% docker build <span class="nt">-t</span> naoty/hello-hive <span class="nb">.</span>
+% docker run <span class="nt">--rm</span> <span class="nt">-it</span> naoty/hello-hive
+</pre>
 <p>beelineを使ってhiveserver2に接続する。</p>
-<pre lang="bash"><code>% docker exec xxxxxxxx -it beeline -u jdbc:hive2://localhost:10000
+<pre lang="bash" class="highlight highlight-bash">% docker <span class="nb">exec </span>xxxxxxxx <span class="nt">-it</span> beeline <span class="nt">-u</span> jdbc:hive2://localhost:10000
 0: jdbc:hive2://localhost:10000&gt; 
-</code></pre>
+</pre>
         </section>
         <footer>
           <nav>

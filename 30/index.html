@@ -6,6 +6,7 @@
     <title>セレクタのリファクタリング</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="セレクタのリファクタリング">
     <meta property="og:type" content="website">
@@ -28,12 +29,12 @@
         <section class="body">
           <p>　セレクタがごちゃごちゃするとき、以下のように書き換えると処理速度が向上するそうです。なるべくセレクタはシンプルにまとめて、find()を利用するといいそうです。</p>
 <p>Before</p>
-<pre><code>$(&quot;tr td&quot;).remove();
-$(&quot;tr:first&quot;, this).remove();
+<pre><code>$("tr td").remove();
+$("tr:first", this).remove();
 </code></pre>
 <p>After</p>
-<pre><code>$(&quot;tr&quot;).find(&quot;td&quot;).remove();
-$(this).find(&quot;tr&quot;).first().remove();
+<pre><code>$("tr").find("td").remove();
+$(this).find("tr").first().remove();
 </code></pre>
         </section>
         <footer>

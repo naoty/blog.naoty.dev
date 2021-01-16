@@ -6,6 +6,7 @@
     <title>Grepコマンドもどき ver.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Grepコマンドもどき ver.1">
     <meta property="og:type" content="website">
@@ -34,7 +35,7 @@ def grep(pattern, directory)
     if FileTest.file?(path)
       file = open(path)
       while line = file.gets
-        puts &quot;#{path}: #{file.lineno}&quot; if line =~ pattern
+        puts "#{path}: #{file.lineno}" if line =~ pattern
       end
       file.close
     end
@@ -70,7 +71,7 @@ c:\codes\rails\rails_apps\task/app/controllers/admin/tasks_controller.rb: 69
 c:\codes\rails\rails_apps\task/app/controllers/admin/tasks_controller.rb: 77
 c:\codes\rails\rails_apps\task/app/controllers/admin/tasks_controller.rb: 78
 </code></pre>
-<p>　ご覧の通り、修正しなきゃいけないのは出力するパス名が絶対パスになっているというところです。引数に渡したパスに対して相対パスにしたい。<br />
+<p>　ご覧の通り、修正しなきゃいけないのは出力するパス名が絶対パスになっているというところです。引数に渡したパスに対して相対パスにしたい。<br>
 　でも、なんかうまくいかないんですよね。例えば</p>
 <pre><code>path = path.sub(Regexp.new(directory), '')
 </code></pre>

@@ -6,6 +6,7 @@
     <title>2017年に作ったもの</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="2017年に作ったもの">
     <meta property="og:type" content="website">
@@ -31,37 +32,37 @@
 <p>自分が抱えている問題を自分のコードで解決できるというのは、豊かな体験だとおもっている。来年も続けていけるように今年を振り返る。</p>
 <h1>使っているもの</h1>
 <h2><a href="https://github.com/naoty/table">table</a></h2>
-<pre lang="bash"><code>$ echo &quot;day\tDAU\n2017-01-01\t10000\n2017-01-02\t8000&quot; | table -H
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"day</span><span class="se">\t</span><span class="s2">DAU</span><span class="se">\n</span><span class="s2">2017-01-01</span><span class="se">\t</span><span class="s2">10000</span><span class="se">\n</span><span class="s2">2017-01-02</span><span class="se">\t</span><span class="s2">8000"</span> | table <span class="nt">-H</span>
 +------------+-------+
 | day        | DAU   |
 +------------+-------+
 | 2017-01-01 | 10000 |
 | 2017-01-02 | 8000  |
 +------------+-------+
-</code></pre>
+</pre>
 <p><code>table</code>はタブ区切りの文字列をASCIIのテーブル形式に変換する。Google Spreadsheetなど表形式のテキストをSlackにコピペしたくて作った。そんなに使う頻度は多くないけど、使うときはとても便利でたまに使う。</p>
 <h2><a href="https://github.com/naoty/homebrew-misc">homebrew-misc</a></h2>
-<pre lang="bash"><code>$ brew tap naoty/misc
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>brew tap naoty/misc
+</pre>
 <p>自作のちょっとしたツールを簡単にインストール・アンインストールするためにリポジトリを作った。今年作ったツールはここからHomebrewでインストールできるようにした。プライベートのPCで作ったツールを業務用のPCでインストールするときにラクなので作ってよかった。</p>
 <h2>fish-*</h2>
 <p>fishのためのプラグインをいくつか書いた。今年からzshからfishに移行した。fishにはfishermanというプラグイン管理ツールがあり、簡単にfishの機能を拡張できる。pecoを使ったスクリプトやプロンプトまでプラグインとして作った。</p>
 <h2><a href="https://github.com/naoty/license">license</a></h2>
-<pre lang="bash"><code>$ license &gt; LICENSE
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>license <span class="o">&gt;</span> LICENSE
+</pre>
 <p>MITのLICENSEファイルを出力するだけのツール。新しいリポジトリを作るときは初手で上を実行している。</p>
 <h2><a href="https://github.com/naoty/git-misc">git-misc</a></h2>
-<pre lang="bash"><code>$ git prune-branch
-$ git tag-timestamp
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>git prune-branch
+<span class="nv">$ </span>git tag-timestamp
+</pre>
 <p>git-miscにはgit関連のスクリプトがいくつか入っている。その中でも<code>git-prune-branch</code>という不要なbranchを削除するコマンドはほぼ毎日使っている気がする。</p>
 <h2><a href="https://github.com/naoty/nippo">nippo</a></h2>
-<pre lang="bash"><code>$ nippo
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>nippo
+</pre>
 <p><code>nippo</code>はその名の通り日報を作るためのスクリプト。<code>2017-12-21.md</code>のようなファイル名でファイルを作成してエディタを起動する。今年は10月くらいから毎日日報をつけるようにした。このスクリプトのおかげで続いていると言っても過言ではないと思う。</p>
 <h2><a href="https://github.com/naoty/icon">icon</a></h2>
-<pre lang="bash"><code>$ icon
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>icon
+</pre>
 <p><code>icon</code>は自分のアイコンを生成するためのツール。引数を指定することで自由なサイズで生成できるので、ダミー画像を作る用途でも使える。</p>
 <h2><a href="https://github.com/naoty/homepage">homepage</a></h2>
 <p>このGitHub Pagesを管理するためのリポジトリ。既存の静的サイトジェネレーターを使わずにGulpプラグインだけでページを生成するようにしている。おかげで自由にカスタマイズすることができており、いまのところこのGitHub Pagesに移行してよかったと思っている。</p>

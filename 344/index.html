@@ -6,6 +6,7 @@
     <title>ISUCON 8予選のKPT</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ISUCON 8予選のKPT">
     <meta property="og:type" content="website">
@@ -30,7 +31,8 @@
 <ul>
 <li>N+1クエリを直したり<code>SELECT * FROM reservations</code>のような全カラムを取得する箇所を直すなど、基本的な修正は短時間でできた。</li>
 <li>事前に確認しておいたRedisの導入がスムーズにできた。そこまで大きいインパクトはなかったけど。</li>
-<li><code>git tag 1310</code>のようにスコアをタグ付けする運用がけっこうよかった。failが続いた局面でどこまでrollbackすればいいか分かりやすかった。</li>
+<li>
+<code>git tag 1310</code>のようにスコアをタグ付けする運用がけっこうよかった。failが続いた局面でどこまでrollbackすればいいか分かりやすかった。</li>
 </ul>
 <h1>Problem</h1>
 <ul>

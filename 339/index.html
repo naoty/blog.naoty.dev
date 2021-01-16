@@ -6,6 +6,7 @@
     <title>決定境界のプロット</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="決定境界のプロット">
     <meta property="og:type" content="website">
@@ -30,59 +31,60 @@
           <p>ロジスティック回帰など分類を行うアルゴリズムがちゃんとトレーニングデータを分類できているか確認するため、決定境界をプロットする方法を学んだ。そのメモをブログに残す。</p>
 <h2>まとめ</h2>
 <ul>
-<li><code>np.meshgrid()</code>で格子点を取得する。しかも、<code>np.arange()</code>などを使ってできるだけ細かく格子点を取得する。</li>
+<li>
+<code>np.meshgrid()</code>で格子点を取得する。しかも、<code>np.arange()</code>などを使ってできるだけ細かく格子点を取得する。</li>
 <li>格子点を分類器に適用するため、トレーニングデータの形状に変換する。</li>
 <li>格子点に対して分類を予測する。</li>
 <li>格子点とその分類の予測を<code>plt.contourf()</code>を使って等高線としてプロットする。</li>
 </ul>
 <h2>格子点の取得</h2>
-<pre lang="python"><code>x1 = np.arange(0, 5, 0.5)
-x2 = np.arange(0, 10, 0.5)
-X1, X2 = np.meshgrid(x1, x2)
+<pre lang="python" class="highlight highlight-python"><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">X1</span><span class="p">,</span> <span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
 
-plt.plot(X1, X2, 'ok')
-plt.xlimit(-1, 11)
-plt.ylimit(-1, 11)
-plt.show()
-</code></pre>
-<p><img src="meshgrid.png" alt="meshgrid" /></p>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="s">'ok'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlimit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylimit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre>
+<p><img src="meshgrid.png" alt="meshgrid"></p>
 <p>上のように<code>np.meshgrid()</code>を使うと、2つの配列<code>x1</code>と<code>x2</code>からなる平面上にある格子点を取得できる。</p>
 <p>この格子点の間隔を小さくすると、<code>x1</code>と<code>x2</code>からなる平面上の「すべての点」を擬似的に再現できる。</p>
-<pre lang="python"><code>x1 = np.arange(0, 5, 0.01)
-x2 = np.arange(0, 10, 0.01)
+<pre lang="python" class="highlight highlight-python"><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
 
-# 以下同じ
-</code></pre>
-<p><img src="dense_meshgrid.png" alt="dense meshgrid" /></p>
+<span class="c1"># 以下同じ
+</span></pre>
+<p><img src="dense_meshgrid.png" alt="dense meshgrid"></p>
 <h2>格子点の変換</h2>
 <p>ある平面上の「すべての点」を分類器に適用すると、平面上に分類した結果をマッピングできるようになる。</p>
 <p>そのために格子点をトレーニングデータの形状に変換する。つまり、$(x_1, x_2)$のようにする。</p>
-<pre lang="python"><code># flatにする
-X1_flatten = X1.ravel()
-X2_flatten = X2.ravel()
+<pre lang="python" class="highlight highlight-python"><span class="c1"># flatにする
+</span><span class="n">X1_flatten</span> <span class="o">=</span> <span class="n">X1</span><span class="p">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="n">X2_flatten</span> <span class="o">=</span> <span class="n">X2</span><span class="p">.</span><span class="n">ravel</span><span class="p">()</span>
 
-# 結合して行列にする
-X = np.array([X1_flatten, X2_flatten])
+<span class="c1"># 結合して行列にする
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">X1_flatten</span><span class="p">,</span> <span class="n">X2_flatten</span><span class="p">])</span>
 
-# 行方向がトレーニングデータ、列方向がフィーチャーになるように転置する
-X = X.T
-</code></pre>
+<span class="c1"># 行方向がトレーニングデータ、列方向がフィーチャーになるように転置する
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">.</span><span class="n">T</span>
+</pre>
 <h2>格子点を分類器に適用する</h2>
-<pre lang="python"><code>Z = classifier.predict(X)
-</code></pre>
+<pre lang="python" class="highlight highlight-python"><span class="n">Z</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre>
 <p>上で分類器に適用できるように変換できたので、あとは予測する。</p>
 <h2>等高線図でプロットする</h2>
-<pre lang="python"><code># プロットできるように形状を揃える
-Z = Z.reshape(X1.shape)
+<pre lang="python" class="highlight highlight-python"><span class="c1"># プロットできるように形状を揃える
+</span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X1</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
 
-plt.contourf(X1, X2, Z, cmap='RdBu', alpha=0.5)
-plt.xlim(-1, 11)
-plt.ylim(-1, 11)
-plt.xlabel('x1')
-plt.ylabel('x2')
-plt.show()
-</code></pre>
-<p><img src="decision_regions.png" alt="decision regions" /></p>
+<span class="n">plt</span><span class="p">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'RdBu'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'x1'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'x2'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre>
+<p><img src="decision_regions.png" alt="decision regions"></p>
 <p><em>（上図は適当な関数を適用しただけです）</em></p>
 <p><code>plt.contourf()</code>は等高線図を引きつつ、領域を塗りつぶしてくれるので決定境界をプロットするのに便利。</p>
         </section>

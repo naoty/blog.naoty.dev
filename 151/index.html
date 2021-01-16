@@ -6,6 +6,7 @@
     <title>SinatraでのRABLの使い方</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="SinatraでのRABLの使い方">
     <meta property="og:type" content="website">
@@ -38,8 +39,8 @@
 gem 'sinatra'
 gem 'rabl'
 </code></pre>
-<pre lang="sh"><code>$ bundle install
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>bundle <span class="nb">install</span>
+</pre>
 <h2>基本</h2>
 <pre lang="ruby:my_app.rb"><code>class MyApp &lt; Sinatra::Base
   Rabl.register!
@@ -55,29 +56,29 @@ end
   'Hello, Sinatra with RABL!'
 end
 </code></pre>
-<pre lang="sh"><code>$ curl http://myapp.dev
-{&quot;greeting&quot;:&quot;Hello, Sinatra with RABL!&quot;}
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>curl http://myapp.dev
+<span class="o">{</span><span class="s2">"greeting"</span>:<span class="s2">"Hello, Sinatra with RABL!"</span><span class="o">}</span>
+</pre>
 <h2>レイアウト</h2>
 <ul>
 <li>APIのレスポンスとしては、ステータスコードなどのメタ情報をすべてのレスポンスに共通して含めたい。</li>
 <li>なので、Sinatraのテンプレートを使ってみる。</li>
 </ul>
 <pre lang="ruby:views/layout.erb"><code>{
-  &quot;status&quot;: ,
-  &quot;result&quot;: 
+  "status": ,
+  "result": 
 }
 </code></pre>
 <pre lang="ruby:my_app.rb"><code>get '/' do
   render :rabl, :home, :layout_engine =&gt; :erb
 end
 </code></pre>
-<pre lang="sh"><code>$ curl http://myapp.dev
-{
-  &quot;status&quot;: 200,
-  &quot;result&quot;: {&quot;greeting&quot;:&quot;Hello, Sinatra with RABL!&quot;}
-}
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>curl http://myapp.dev
+<span class="o">{</span>
+  <span class="s2">"status"</span>: 200,
+  <span class="s2">"result"</span>: <span class="o">{</span><span class="s2">"greeting"</span>:<span class="s2">"Hello, Sinatra with RABL!"</span><span class="o">}</span>
+<span class="o">}</span>
+</pre>
 <ul>
 <li>RABLの<a href="https://github.com/nesquena/rabl/wiki/Using-Layouts">wiki</a>にあるように、ruby 1.9.xではRABLでレイアウトを書けないので、erbを使う。</li>
 <li>レスポンス本体とレイアウトのエンジンが異なる場合は、<code>:layout_engine =&gt; :erb</code>と指定する必要があるっぽい。</li>

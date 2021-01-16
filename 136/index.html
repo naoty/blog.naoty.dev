@@ -6,6 +6,7 @@
     <title>tmuxinatorで一瞬で開発環境を起動する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="tmuxinatorで一瞬で開発環境を起動する">
     <meta property="og:type" content="website">
@@ -30,26 +31,28 @@
 <h2>tmuxinator とは</h2>
 <p>tmuxinatorとは、tmuxで起動するセッションを予め定義しておき、コマンド一発でそのセッションを起動できるようにしたものです。ちなみに、screenで同じことをする<a href="https://github.com/jondruse/screeninator">screeninator</a>というツールもあります。こちらが先に開発されたようです。</p>
 <h2>インストール</h2>
-<pre lang="sh"><code>$ cd
-$ gem install tmuxinator
-$ echo &quot;[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] &amp;&amp; source $HOME/.tmuxinator/scripts/tmuxinator&quot; &gt;&gt; .zshrc
-$ source .zshrc
-$ echo $EDITOR
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span>gem <span class="nb">install </span>tmuxinator
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"[[ -s </span><span class="nv">$HOME</span><span class="s2">/.tmuxinator/scripts/tmuxinator ]] &amp;&amp; source </span><span class="nv">$HOME</span><span class="s2">/.tmuxinator/scripts/tmuxinator"</span> <span class="o">&gt;&gt;</span> .zshrc
+<span class="nv">$ </span><span class="nb">source</span> .zshrc
+<span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$EDITOR</span>
 /usr/bin/vi
-$ echo $SHELL
+<span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$SHELL</span>
 /bin/zsh
-</code></pre>
+</pre>
 <ul>
 <li>tmuxinatorはgemで提供されているので、<code>gem install</code>します。</li>
 <li>その後、補完スクリプトを<code>.zshrc</code>や<code>.bashrc</code>に追加して読み込みます。</li>
 <li>tmuxinatorは環境変数<code>$EDITOR</code>と<code>$SHELL</code>を使うそうなので、確認しておきます。</li>
 </ul>
 <h2>設定</h2>
-<pre lang="sh"><code>$ mux new cui-aboutme
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>mux new cui-aboutme
+</pre>
 <ul>
-<li><code>tmuxinator</code>とそのaliasの<code>mux</code>というコマンドが用意されています。</li>
-<li><code>mux new [project name]</code>でプロジェクトの設定ファイルを作成します。</li>
+<li>
+<code>tmuxinator</code>とそのaliasの<code>mux</code>というコマンドが用意されています。</li>
+<li>
+<code>mux new [project name]</code>でプロジェクトの設定ファイルを作成します。</li>
 <li>このコマンドを実行すると、<code>$EDITOR</code>で設定されたエディタで以下のような設定ファイルが開きます。</li>
 </ul>
 <pre lang="yml:~/.tmuxinator/cui-about.yml"><code># ~/.tmuxinator/sample.yml
@@ -76,14 +79,18 @@ tabs:
   - server: ssh me@myhost
 </code></pre>
 <ul>
-<li><code>rvm</code>で利用するrubyのバージョンを指定したり、<code>pre</code>でセッション起動時に実行するコマンドを指定できたりします。</li>
-<li><code>tabs</code>でセッション内で起動するウィンドウを定義します。この初期設定だと、8つウィンドウを起動します。</li>
-<li><code>tabs</code>内では、<code>editor</code>や<code>shell</code>といったキーがウィンドウ名を表し、値がそのウィンドウが起動したときに実行されるコマンドとなります。この初期設定だと、セッション起動と同時に8つのウィンドウが起動して、自動的に<code>git pull</code>したり<code>rails s</code>したり<code>ssh</code>したりします。</li>
-<li><code>layout</code>と<code>panes</code>で、そのウィンドウ内のペインとその配置を定義します。<code>editor</code>を例にとると、ウィンドウ内に<code>vim</code>のペインと何もしないペインと<code>top</code>のペインが<code>main-vertical</code>で表示されます。</li>
+<li>
+<code>rvm</code>で利用するrubyのバージョンを指定したり、<code>pre</code>でセッション起動時に実行するコマンドを指定できたりします。</li>
+<li>
+<code>tabs</code>でセッション内で起動するウィンドウを定義します。この初期設定だと、8つウィンドウを起動します。</li>
+<li>
+<code>tabs</code>内では、<code>editor</code>や<code>shell</code>といったキーがウィンドウ名を表し、値がそのウィンドウが起動したときに実行されるコマンドとなります。この初期設定だと、セッション起動と同時に8つのウィンドウが起動して、自動的に<code>git pull</code>したり<code>rails s</code>したり<code>ssh</code>したりします。</li>
+<li>
+<code>layout</code>と<code>panes</code>で、そのウィンドウ内のペインとその配置を定義します。<code>editor</code>を例にとると、ウィンドウ内に<code>vim</code>のペインと何もしないペインと<code>top</code>のペインが<code>main-vertical</code>で表示されます。</li>
 </ul>
 <h2>起動</h2>
-<pre lang="sh"><code>$ mux cui-aboutme
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>mux cui-aboutme
+</pre>
 <ul>
 <li>このコマンド一発で、上記で設定したセッションを起動します。</li>
 <li>起動と同時に設定されたコマンドも自動で実行されます。</li>

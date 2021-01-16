@@ -6,6 +6,7 @@
     <title>自分をコピーするbotを作る</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="自分をコピーするbotを作る">
     <meta property="og:type" content="website">
@@ -35,16 +36,16 @@
 <h1>コピーbotを作る手順</h1>
 <p>１. bot用のアカウントを作ります。</p>
 <p>２. 人間とbotそれぞれのアカウントでTwitterアプリケーションを作ります。<a href="https://apps.twitter.com/app/new">ここ</a>から作れます。そして、人間とbotの両方のアカウント用の「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を取得します（下のスクショのモザイクかかってるところです）。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230321.png" alt="f:id:naoty_k:20141110230321p:plain" title="f:id:naoty_k:20141110230321p:plain" /></p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230752.png" alt="f:id:naoty_k:20141110230752p:plain" title="f:id:naoty_k:20141110230752p:plain" /></p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230803.png" alt="f:id:naoty_k:20141110230803p:plain" title="f:id:naoty_k:20141110230803p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230321.png" alt="f:id:naoty_k:20141110230321p:plain" title="f:id:naoty_k:20141110230321p:plain"></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230752.png" alt="f:id:naoty_k:20141110230752p:plain" title="f:id:naoty_k:20141110230752p:plain"></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230803.png" alt="f:id:naoty_k:20141110230803p:plain" title="f:id:naoty_k:20141110230803p:plain"></p>
 <p><strong>追記</strong> : bot用のアプリケーションを作成する際、権限を <strong>Read and Write</strong> にする必要があります。一度Read Onlyでアクセストークンを発行している場合は権限を変更した後もう一度発行しなおして、Herokuアプリケーションの環境変数を新しいアクセストークンに替えてください。</p>
 <p>３. こちらのHerokuボタンを押します（別サイトに飛びます）。もしHerokuのアカウントがなければ作ってください。</p>
-<p><a href="https://heroku.com/deploy?template=https://github.com/naoty/mirror_bot"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy" /></a></p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/naoty/mirror_bot"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a></p>
 <p>４. 適当なHerokuアプリ名を入れて、「Env」の各項目に2.で取得した「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を入力します。人間のアカウントのものは「HUMAN_*」に、botのアカウントのものは「BOT_*」に入れていきます。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232038.png" alt="f:id:naoty_k:20141110232038p:plain" title="f:id:naoty_k:20141110232038p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232038.png" alt="f:id:naoty_k:20141110232038p:plain" title="f:id:naoty_k:20141110232038p:plain"></p>
 <p>５．「Deploy for Free」ボタンを押してしばらく待ちます。Herokuにアプリケーションがデプロイされます。その後、アプリのダッシュボード画面で以下のようにdynosを1xにすると、アプリケーションが起動します。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232352.gif" alt="f:id:naoty_k:20141110232352g:plain" title="f:id:naoty_k:20141110232352g:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232352.gif" alt="f:id:naoty_k:20141110232352g:plain" title="f:id:naoty_k:20141110232352g:plain"></p>
 <p>６．終わり。</p>
 <h1>コピーbotの機能</h1>
 <ul>
@@ -65,8 +66,8 @@
 <p>以上の2つのモジュール、schedulerとclassifierを機能させるには事前に多くのデータを学習させることが必要です。schedulerについては過去3,200件のtweet、classifierについては800件ずつのfavったtweetとfavってないtweetを学習させています。これを行っているのがtrainerです。trainerは<code>./lib/mirror_bot/trainer.rb</code>で定義されており、<code>./bin/mirror_bot</code>スクリプトから実行します。</p>
 <p>Herokuボタンからbotをデプロイする場合、デプロイして起動するまでにtrainerを実行する必要があります。Herokuボタンによるデプロイを設定する<code>app.json</code>には<code>scripts</code>という項目があり、こうしたセットアップのための設定が可能です。以下のように指定するだけです。</p>
 <pre><code>{
-    &quot;scripts&quot;: {
-        &quot;postdeploy&quot;: &quot;bundle exec sequel -m migrations $DATABASE_URL &amp;&amp; bin/mirror_bot train scheduler &amp;&amp; bin/mirror_bot train classifier&quot;
+    "scripts": {
+        "postdeploy": "bundle exec sequel -m migrations $DATABASE_URL &amp;&amp; bin/mirror_bot train scheduler &amp;&amp; bin/mirror_bot train classifier"
     }
 }
 </code></pre>
@@ -81,9 +82,9 @@
 </ul>
 <h1>参考</h1>
 <ul>
-<li></li>
+<li>
 </ul>
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg" alt="集合知プログラミング" title="集合知プログラミング" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg" alt="集合知プログラミング" title="集合知プログラミング"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/">集合知プログラミング</a></p>
 <ul>
 <li>
@@ -104,9 +105,9 @@
 <li>
 <p><a href="http://d.hatena.ne.jp/asin/4873113644/hatena-blog-22">この商品を含むブログ (277件) を見る</a></p>
 </li>
-<li></li>
+<li>
 </ul>
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51Al%2BAe8d1L._SL160_.jpg" alt="はじめてのAIプログラミング―C言語で作る人工知能と人工無能" title="はじめてのAIプログラミング―C言語で作る人工知能と人工無能" /></a></p>
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/"><img src="http://ecx.images-amazon.com/images/I/51Al%2BAe8d1L._SL160_.jpg" alt="はじめてのAIプログラミング―C言語で作る人工知能と人工無能" title="はじめてのAIプログラミング―C言語で作る人工知能と人工無能"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/">はじめてのAIプログラミング―C言語で作る人工知能と人工無能</a></p>
 <ul>
 <li>

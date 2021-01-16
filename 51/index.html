@@ -6,6 +6,7 @@
     <title>CSV出力の機能テスト</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="CSV出力の機能テスト">
     <meta property="og:type" content="website">
@@ -38,7 +39,7 @@
 class AccessCountsControllerTest &lt; ActionController::TestCase
   test 'export' do
     ((Date.today.year - 5)..(Date.today.year)).each do |year|
-      post(:export, {:year =&gt; &quot;#{year}&quot;})
+      post(:export, {:year =&gt; "#{year}"})
       assert_response :success
       assert_not_nil @response.body
     end

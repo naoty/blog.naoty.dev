@@ -6,6 +6,7 @@
     <title>前後左右に移動する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="前後左右に移動する">
     <meta property="og:type" content="website">
@@ -27,26 +28,28 @@
         </header>
         <section class="body">
           <p>相変わらずUnityでVRゲームを作っている。自分を前後左右に移動させるスクリプトの書き方を学んだ。</p>
-<p><img src="walk.gif" alt="walk" /></p>
+<p><img src="walk.gif" alt="walk"></p>
 <p>まず、一人称のプレイヤーを制御するには<code>CharacterController</code>というコンポーネントを使う。これは<code>RigidBody</code>のような物理特性を持たない、つまり重力のような力の影響を受けないけど、衝突判定を持ち、段差や斜面を移動できるような特性を持つ。</p>
 <p><code>CharacterController</code>コンポーネントを持つGame Objectに以下のようなスクリプトを追加する。</p>
-<pre lang="csharp"><code>public class Walk : MonoBehaviour {
-    public float velocity = 1.0f;
-    private CharacterController controller;
+<pre lang="csharp" class="highlight highlight-csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">Walk</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">velocity</span> <span class="p">=</span> <span class="m">1.0f</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">CharacterController</span> <span class="n">controller</span><span class="p">;</span>
 
-    void Start () {
-        controller = GetComponent ();
-    }
+    <span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="n">controller</span> <span class="p">=</span> <span class="nf">GetComponent</span> <span class="p">();</span>
+    <span class="p">}</span>
 
-    void Update () {
-        controller.SimpleMove (Camera.main.transform.forward * velocity);
-    }
-}
-</code></pre>
+    <span class="k">void</span> <span class="nf">Update</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="n">controller</span><span class="p">.</span><span class="nf">SimpleMove</span> <span class="p">(</span><span class="n">Camera</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">forward</span> <span class="p">*</span> <span class="n">velocity</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <ul>
-<li><code>Camera.main.transform.forward</code>でカメラが向いている方向を単位ベクトルとして取得できる。単位ベクトルとは、距離が1となるベクトルのこと。</li>
+<li>
+<code>Camera.main.transform.forward</code>でカメラが向いている方向を単位ベクトルとして取得できる。単位ベクトルとは、距離が1となるベクトルのこと。</li>
 <li>単位ベクトルに速度<code>velocity</code>を掛けることで、移動先へのベクトル（向きと大きさ）が計算できる。</li>
-<li><code>CharacterController</code>の<code>SimpleMove</code>関数に移動先へのベクトルを渡すと、y軸（上下）方向を無視して移動させることができる。</li>
+<li>
+<code>CharacterController</code>の<code>SimpleMove</code>関数に移動先へのベクトルを渡すと、y軸（上下）方向を無視して移動させることができる。</li>
 </ul>
 <p>Unityやっててだんだんわかってきたけど、ベクトル（<code>Vector3</code>）を使った計算が頻繁に必要になってくる。Unity側でやってくれる部分もあるけど、自分で実装しないといけない場面もけっこうあるんだな〜と思った。なので、ベクトルを使った計算や物理法則もゆっくり勉強していきたい。</p>
         </section>

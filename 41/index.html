@@ -6,6 +6,7 @@
     <title>セレクトボックスの値を動的に設定する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="セレクトボックスの値を動的に設定する">
     <meta property="og:type" content="website">
@@ -45,8 +46,8 @@ select&gt;
 select&gt;
 </code></pre>
 <p>JavaScript</p>
-<pre><code>var select1 = document.getElementById(&quot;select1&quot;),
-    select2 = document.getElementById(&quot;select2&quot;);
+<pre><code>var select1 = document.getElementById("select1"),
+    select2 = document.getElementById("select2");
 select1.change = function () {
     select2.selectedIndex = select1.selectedIndex;
 };

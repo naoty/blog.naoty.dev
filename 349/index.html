@@ -6,6 +6,7 @@
     <title>デプロイに伴うデータ不整合を回避する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="デプロイに伴うデータ不整合を回避する">
     <meta property="og:type" content="website">
@@ -34,7 +35,8 @@
 <p>なので、<code>NOT NULL</code>制約をつけずにカラムの値が空であることを意識してコードを書く。コードがデプロイされてからカラムの値が空ではないことを確認できたら、<code>NOT NULL</code>制約をつける。</p>
 <p><code>NOT NULL</code>制約をつけるカラムを追加するデプロイは以下のように2段階に分けることが多い。</p>
 <ol>
-<li><code>NOT NULL</code>制約をつけずにカラムを追加するmigrationとそのカラムを利用するコードをデプロイする。このとき、カラムが空になっているレコードもあることに注意する。</li>
+<li>
+<code>NOT NULL</code>制約をつけずにカラムを追加するmigrationとそのカラムを利用するコードをデプロイする。このとき、カラムが空になっているレコードもあることに注意する。</li>
 <li>スクリプト等ですべてのレコードのカラムが空じゃないことが確認できたら、<code>NOT NULL</code>制約をつける。また、カラムが空でないことを前提にコードも修正する。</li>
 </ol>
 <h1>カラム削除時</h1>

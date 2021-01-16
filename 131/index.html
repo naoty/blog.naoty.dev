@@ -6,6 +6,7 @@
     <title>見やすいgit-grep</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="見やすいgit-grep">
     <meta property="og:type" content="website">
@@ -26,22 +27,27 @@
           </p>
         </header>
         <section class="body">
-          <pre lang=".zshrc"><code>alias gg=&quot;git grep -H --heading --break&quot;
+          <pre lang=".zshrc"><code>alias gg="git grep -H --heading --break"
 </code></pre>
 <pre lang=".gitconfig"><code>[grep]
   lineNumber = true
 </code></pre>
-<p><img src="http://gyazo.com/6896ca7dc18ae1ab53e05e6efa3602b9.png?1341209674" alt="git-grep" /></p>
+<p><img src="http://gyazo.com/6896ca7dc18ae1ab53e05e6efa3602b9.png?1341209674" alt="git-grep"></p>
 <ul>
-<li><code>-H</code>でファイル名を相対パスにする</li>
-<li><code>--heading</code>でファイル名をヒットした行の上にまとめて表示する</li>
-<li><code>--break</code>で空行を入れる</li>
-<li><code>git config --global grep.lineNumber true</code>と打つと、デフォルトでヒットした行数を表示する</li>
+<li>
+<code>-H</code>でファイル名を相対パスにする</li>
+<li>
+<code>--heading</code>でファイル名をヒットした行の上にまとめて表示する</li>
+<li>
+<code>--break</code>で空行を入れる</li>
+<li>
+<code>git config --global grep.lineNumber true</code>と打つと、デフォルトでヒットした行数を表示する</li>
 </ul>
-<hr />
+<hr>
 <h3>訂正</h3>
 <ul>
-<li><code>-H</code>はフルパスじゃなくて相対パスでした（manの英語がわかりにくい</li>
+<li>
+<code>-H</code>はフルパスじゃなくて相対パスでした（manの英語がわかりにくい</li>
 </ul>
         </section>
         <footer>

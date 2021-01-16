@@ -6,6 +6,7 @@
     <title>ECSタスクでRakeタスクを定期実行する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ECSタスクでRakeタスクを定期実行する">
     <meta property="og:type" content="website">
@@ -30,17 +31,17 @@
         <section class="body">
           <p>ECSサービスとしてRailsアプリケーションを運用しているとき、定期実行したいRakeタスクはcronで管理するよりもECS scheduled taskとして管理すると思う。</p>
 <p>まず、RakeタスクをECS（Fargate）上で実行するため、ECSタスク定義をつくる。</p>
-<pre lang="hcl"><code>resource &quot;aws_ecs_task_definition&quot; &quot;rake&quot; {
-  family                   = &quot;rake&quot;
-  task_role_arn            = aws_iam_role.ecs_task.arn
-  execution_role_arn       = aws_iam_role.ecs_execution.arn
-  network_mode             = &quot;awsvpc&quot;
-  cpu                      = 256
-  memory                   = 512
-  requires_compatibilities = [&quot;FARGATE&quot;]
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">resource</span> <span class="s2">"aws_ecs_task_definition"</span> <span class="s2">"rake"</span> <span class="p">{</span>
+  <span class="nx">family</span>                   <span class="p">=</span> <span class="s2">"rake"</span>
+  <span class="nx">task_role_arn</span>            <span class="p">=</span> <span class="nx">aws_iam_role</span><span class="err">.</span><span class="nx">ecs_task</span><span class="err">.</span><span class="nx">arn</span>
+  <span class="nx">execution_role_arn</span>       <span class="p">=</span> <span class="nx">aws_iam_role</span><span class="err">.</span><span class="nx">ecs_execution</span><span class="err">.</span><span class="nx">arn</span>
+  <span class="nx">network_mode</span>             <span class="p">=</span> <span class="s2">"awsvpc"</span>
+  <span class="nx">cpu</span>                      <span class="p">=</span> <span class="mi">256</span>
+  <span class="nx">memory</span>                   <span class="p">=</span> <span class="mi">512</span>
+  <span class="nx">requires_compatibilities</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"FARGATE"</span><span class="p">]</span>
 
-  container_definitions  = &lt;
-</code></pre>
+  <span class="nx">container_definitions</span>  <span class="p">=</span> <span class="err">&lt;</span>
+</pre>
         </section>
         <footer>
           <nav>

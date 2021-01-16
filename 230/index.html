@@ -6,6 +6,7 @@
     <title>Alamofire/**/*Tests.swiftを読んだ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Alamofire/**/*Tests.swiftを読んだ">
     <meta property="og:type" content="website">
@@ -27,7 +28,7 @@
         </header>
         <section class="body">
           <p><a href="http://naoty.hatenablog.com/entry/2014/08/14/225112">前回</a>Alamofireの実装を読んだので、ついでにテストコードも読んでみた。</p>
-<pre><code>$ tree -P &quot;*Tests.swift&quot; -I .git
+<pre><code>$ tree -P "*Tests.swift" -I .git
 .
 ├── Source
 └── Tests
@@ -59,33 +60,35 @@
 <h2>L:49</h2>
 <pre><code>class RequestResponseTestCase: XCTestCase {
     func testRequestResponse() {
-        let URL = &quot;http://httpbin.org/get&quot;
+        let URL = "http://httpbin.org/get"
         let serializer = Alamofire.Request.stringResponseSerializer(encoding: NSUTF8StringEncoding)
 
-        let expectation = expectationWithDescription(&quot;\(URL)&quot;)
+        let expectation = expectationWithDescription("\(URL)")
 
-        Alamofire.request(.GET, URL, parameters: [&quot;foo&quot;: &quot;bar&quot;])
+        Alamofire.request(.GET, URL, parameters: ["foo": "bar"])
                  .response(serializer: serializer){ (request, response, string, error) in
                    expectation.fulfill()
 
-                   XCTAssertNotNil(request, &quot;request should not be nil&quot;)
-                   XCTAssertNotNil(response, &quot;response should not be nil&quot;)
-                   XCTAssertNotNil(string, &quot;string should not be nil&quot;)
-                   XCTAssertNil(error, &quot;error should be nil&quot;)
+                   XCTAssertNotNil(request, "request should not be nil")
+                   XCTAssertNotNil(response, "response should not be nil")
+                   XCTAssertNotNil(string, "string should not be nil")
+                   XCTAssertNil(error, "error should be nil")
                  }
 
         waitForExpectationWithTimeout(10){ error in
-            XCTAssertNil(error, &quot;\(error)&quot;)
+            XCTAssertNil(error, "\(error)")
         }
     }
 }
 </code></pre>
 <ul>
-<li><code>expectationWithDescription</code>と<code>waitForExpectationWithTimeout</code>はXcode 6からXCTestに追加された非同期テスト用のAPI。</li>
+<li>
+<code>expectationWithDescription</code>と<code>waitForExpectationWithTimeout</code>はXcode 6からXCTestに追加された非同期テスト用のAPI。</li>
 <li>まず、<code>expectationWithDescription</code>メソッドで<code>XCTestExpectation</code>オブジェクトを生成する。</li>
-<li><code>waitForExpectationWithTimeout</code>は指定された秒数、上で生成された<code>XCTestExpectation</code>オブジェクトの<code>fulfill</code>メソッドが呼ばれるのを待つ。呼ばれれば成功、呼ばれずに指定された秒数が経過すると失敗となり引数に渡されたクロージャを実行する。</li>
+<li>
+<code>waitForExpectationWithTimeout</code>は指定された秒数、上で生成された<code>XCTestExpectation</code>オブジェクトの<code>fulfill</code>メソッドが呼ばれるのを待つ。呼ばれれば成功、呼ばれずに指定された秒数が経過すると失敗となり引数に渡されたクロージャを実行する。</li>
 </ul>
-<hr />
+<hr>
 <p>他のテストコードも読んでみたけど、上と同じようなコードがあり特に読む必要はなさそうだった。</p>
         </section>
         <footer>

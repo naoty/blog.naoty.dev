@@ -6,6 +6,7 @@
     <title>カスタムディレクティブでAPIから受け取ったデータを表示する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="カスタムディレクティブでAPIから受け取ったデータを表示する">
     <meta property="og:type" content="website">
@@ -32,26 +33,28 @@
 
 </code></pre>
 <ul>
-<li><code>my-directive</code>というディレクティブを作る。表示したいデータを参照するscopeのプロパティを<code>data</code>属性に指定する。</li>
+<li>
+<code>my-directive</code>というディレクティブを作る。表示したいデータを参照するscopeのプロパティを<code>data</code>属性に指定する。</li>
 </ul>
-<pre lang="coffeescript:my_controller.coffee"><code>window.ngApp.controller &quot;MyController&quot; [&quot;$scope&quot;, &quot;User&quot;, ($scope, User) -&gt;
+<pre lang="coffeescript:my_controller.coffee"><code>window.ngApp.controller "MyController" ["$scope", "User", ($scope, User) -&gt;
   $scope.users = User.query()
 ]
 </code></pre>
 <ul>
 <li>APIから受け取ったデータを<code>users</code>というプロパティで参照する。このとき、APIからデータを受け取るのを待たずに空の参照が渡される。非同期に返ってきたデータはこの参照に追加される。</li>
 </ul>
-<pre lang="coffeescript:my_directive.coffee"><code>window.ngApp.directive &quot;myDirective&quot;, -&gt;
-  restrict: &quot;E&quot;
+<pre lang="coffeescript:my_directive.coffee"><code>window.ngApp.directive "myDirective", -&gt;
+  restrict: "E"
   link: (scope, elements, attrs) -&gt;
     render = (data) -&gt;
       # 描画処理
     scope.$watch(attrs.data, ((newData, oldData) -&gt; render(newData)), true)
 </code></pre>
 <ul>
-<li><code>scope.$watch</code>でscopeのプロパティや、scopeのコンテキストで評価した式の結果を監視する。
+<li>
+<code>scope.$watch</code>でscopeのプロパティや、scopeのコンテキストで評価した式の結果を監視する。
 <ul>
-<li>第1引数に監視対象を指定する。<code>attrs.data</code>にはDOMで指定した<code>data</code>属性の値が入るので、今回は<code>&quot;users&quot;</code>となる。</li>
+<li>第1引数に監視対象を指定する。<code>attrs.data</code>にはDOMで指定した<code>data</code>属性の値が入るので、今回は<code>"users"</code>となる。</li>
 <li>第2引数に監視対象が変更されたときに実行する処理を渡す。今回は描画処理を渡す。</li>
 <li>第3引数にtrueを指定すると、監視対象の値が更新されたときに処理が実行されるようになる。監視対象である<code>users</code>はまず空の参照が渡されその後APIから受け取ったデータをそこに追加する（参照は変更されない）ので、ここでtrueを指定する必要がある。ここを省略すると参照が更新されたときのみ処理が行われる。</li>
 </ul>

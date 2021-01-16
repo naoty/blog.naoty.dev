@@ -6,6 +6,7 @@
     <title>最初のActivityに戻る</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="最初のActivityに戻る">
     <meta property="og:type" content="website">
@@ -33,8 +34,10 @@ intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 startActivity(intent);
 </code></pre>
 <ul>
-<li><code>FLAG_ACTIVITY_CLEAR_TOP</code>は、遷移先のアクティビティが既に動いていればそのアクティビティより上にある（この場合はB, C, D）アクティビティを消す、という挙動を設定する。これによって、A→B→C→D→Aと遷移した後にbackボタンを押してもDに戻ることはなくなる。</li>
-<li><code>FLAG_ACTIVITY_SINGLE_TOP</code>は、既に動いているアクティビティに遷移するとそのアクティビティを閉じてもう一度作りなおすデフォルトの挙動（multiple mode）から、作りなおさずに再利用する挙動に変更する。これによって、D→Aへの遷移のときのアニメーションが戻る動きになる。</li>
+<li>
+<code>FLAG_ACTIVITY_CLEAR_TOP</code>は、遷移先のアクティビティが既に動いていればそのアクティビティより上にある（この場合はB, C, D）アクティビティを消す、という挙動を設定する。これによって、A→B→C→D→Aと遷移した後にbackボタンを押してもDに戻ることはなくなる。</li>
+<li>
+<code>FLAG_ACTIVITY_SINGLE_TOP</code>は、既に動いているアクティビティに遷移するとそのアクティビティを閉じてもう一度作りなおすデフォルトの挙動（multiple mode）から、作りなおさずに再利用する挙動に変更する。これによって、D→Aへの遷移のときのアニメーションが戻る動きになる。</li>
 </ul>
 <h3>参考</h3>
 <ul>

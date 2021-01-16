@@ -6,6 +6,7 @@
     <title>モデルの差分更新</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="モデルの差分更新">
     <meta property="og:type" content="website">
@@ -34,31 +35,31 @@
 <li>新しいデータにないが、既存のデータにあるデータを削除する。</li>
 </ul>
 <p>これを実行するロジックをあらためて考えてみた。</p>
-<pre lang="ruby"><code>new_users = [{ id: 1, name: &quot;...&quot; }, { id: 2, name: &quot;...&quot; }]
-new_users_index = new_users.index_by { |new_user| new_user[:id] }
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">new_users</span> <span class="o">=</span> <span class="p">[{</span> <span class="ss">id: </span><span class="mi">1</span><span class="p">,</span> <span class="ss">name: </span><span class="s2">"..."</span> <span class="p">},</span> <span class="p">{</span> <span class="ss">id: </span><span class="mi">2</span><span class="p">,</span> <span class="ss">name: </span><span class="s2">"..."</span> <span class="p">}]</span>
+<span class="n">new_users_index</span> <span class="o">=</span> <span class="n">new_users</span><span class="p">.</span><span class="nf">index_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">new_user</span><span class="o">|</span> <span class="n">new_user</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span> <span class="p">}</span>
 
-User.all.in_batches do |users|
-  users.each do |user|
-    # インデックスから取得できたデータは取り除いていく
-    # 残ったデータはINSERT時に利用する
-    new_user = new_users_index.delete(user.id)
+<span class="no">User</span><span class="p">.</span><span class="nf">all</span><span class="p">.</span><span class="nf">in_batches</span> <span class="k">do</span> <span class="o">|</span><span class="n">users</span><span class="o">|</span>
+  <span class="n">users</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
+    <span class="c1"># インデックスから取得できたデータは取り除いていく</span>
+    <span class="c1"># 残ったデータはINSERT時に利用する</span>
+    <span class="n">new_user</span> <span class="o">=</span> <span class="n">new_users_index</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="nf">id</span><span class="p">)</span>
 
-    # 新しいデータに含まれているかチェック
-    if new_user.nil?
-      # 含まれていなければDELETE
-      user.destroy
-    else
-      # 含まれていればUPDATE
-      user.update_attributes(new_user)
-    end
-  end
-end
+    <span class="c1"># 新しいデータに含まれているかチェック</span>
+    <span class="k">if</span> <span class="n">new_user</span><span class="p">.</span><span class="nf">nil?</span>
+      <span class="c1"># 含まれていなければDELETE</span>
+      <span class="n">user</span><span class="p">.</span><span class="nf">destroy</span>
+    <span class="k">else</span>
+      <span class="c1"># 含まれていればUPDATE</span>
+      <span class="n">user</span><span class="p">.</span><span class="nf">update_attributes</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-# 残ったデータはすべてINSERTする
-new_users_index.values.each do |new_user|
-  User.create(new_user)
-end
-</code></pre>
+<span class="c1"># 残ったデータはすべてINSERTする</span>
+<span class="n">new_users_index</span><span class="p">.</span><span class="nf">values</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">new_user</span><span class="o">|</span>
+  <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+<span class="k">end</span>
+</pre>
         </section>
         <footer>
           <nav>

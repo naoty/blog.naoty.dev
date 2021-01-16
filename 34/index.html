@@ -6,6 +6,7 @@
     <title>プロパティの参照順序について</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="プロパティの参照順序について">
     <meta property="og:type" content="website">
@@ -43,8 +44,8 @@
 <li>undefined</li>
 </ol>
 <pre><code>function Employee() {
-    this.name = &quot;&quot;;
-    this.dept = &quot;general&quot;;
+    this.name = "";
+    this.dept = "general";
 }
 
 function WorkerBee() {
@@ -54,8 +55,8 @@ WorkerBee.prototype = new Employee; // 継承
 
 var naotoknk = new WorkerBee;
 </code></pre>
-<p>　この例では、WorkerBee.prototypeにEmployeeのインスタンスを定義しています。Employeeインスタンスにはnameプロパティとdeptプロパティが定義されているので、WorkerBee.prototype内にnameプロパティとdeptプロパティが定義されるのです（すなわち、継承）。<br />
-　このとき、naotoknk.nameを参照すると、naotoknk内にnameプロパティを探しに行きます。しかし、存在しないため、naotoknk.__proto__内に探しに行きます。ここには存在するため、&quot;&quot;（空文字列）を返します。</p>
+<p>　この例では、WorkerBee.prototypeにEmployeeのインスタンスを定義しています。Employeeインスタンスにはnameプロパティとdeptプロパティが定義されているので、WorkerBee.prototype内にnameプロパティとdeptプロパティが定義されるのです（すなわち、継承）。<br>
+　このとき、naotoknk.nameを参照すると、naotoknk内にnameプロパティを探しに行きます。しかし、存在しないため、naotoknk.__proto__内に探しに行きます。ここには存在するため、""（空文字列）を返します。</p>
 <pre><code>naotoknk.name == naotoknk. __proto__.name
 </code></pre>
         </section>

@@ -6,6 +6,7 @@
     <title>イテレータについて整理</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="イテレータについて整理">
     <meta property="og:type" content="website">
@@ -28,32 +29,32 @@
         <section class="body">
           <p>for式を書くと所有権まわりのエラーが出てしまい、よくわからなかったので整理する。</p>
 <h1>into_iter()</h1>
-<pre lang="rust"><code>let numbers = vec![1, 2, 3];
-for number in numbers {
-  // numberは要素そのもの
-}
-// numbersは再利用不可
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">numbers</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="k">for</span> <span class="n">number</span> <span class="n">in</span> <span class="n">numbers</span> <span class="p">{</span>
+  <span class="c">// numberは要素そのもの</span>
+<span class="p">}</span>
+<span class="c">// numbersは再利用不可</span>
+</pre>
 <p><a href="https://doc.rust-lang.org/std/iter/index.html#for-loops-and-intoiterator">公式ドキュメント</a>にある通り、for式はコレクションに対して<code>IntoIterator</code>トレイトの<code>into_iter()</code>を呼び<code>Iterator</code>トレイトを実装するものを生成する。そして、それに対し<code>next()</code>を呼ぶことで要素を取り出す。</p>
-<pre lang="rust"><code>fn into_iter(self) -&gt; Self::IntoIter
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">fn</span> <span class="nf">into_iter</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">Self</span><span class="p">::</span><span class="n">IntoIter</span>
+</pre>
 <p>定義によると<code>into_iter()</code>は<code>self</code>を受けるため、<code>Copy</code>トレイトが実装されていなければmoveが発生する。なので、for式のあとで再利用しようとしてエラーが発生してしまう。</p>
 <h1>iter(), iter_mut()</h1>
-<pre lang="rust"><code>let numbers = vec![1, 2, 3];
-for number = numbers.iter() {
-  // numberは要素への参照
-}
-// numbersは再利用可
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">numbers</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="k">for</span> <span class="n">number</span> <span class="o">=</span> <span class="n">numbers</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c">// numberは要素への参照</span>
+<span class="p">}</span>
+<span class="c">// numbersは再利用可</span>
+</pre>
 <p>ここからの話は<code>Vec</code>型を想定する。moveを発生させたくない場合、<code>iter()</code>や<code>iter_mut()</code>を使う。</p>
-<pre lang="rust"><code>pub fn iter(&amp;self) -&gt; Iter
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">iter</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Iter</span>
+</pre>
 <p><code>into_iter()</code>とは違い、<code>&amp;self</code>を受けるのでmoveは発生しない。<code>Vec</code>型の実装だと、<code>std::slice::Iter</code>型を返す。なので、for式はこの<code>Iter</code>型の<code>into_iter()</code>を呼ぶことになるが、<a href="https://doc.rust-lang.org/src/core/iter/traits/collect.rs.html#247-249">実装</a>を見ると<code>self</code>を返しているだけ。<code>Iter</code>型は<code>Iterator</code>トレイトも実装しているということになる。</p>
-<pre lang="rust"><code>let numbers = vec![1];
-let mut iterator = numbers.iter();
-assert_eq!(iterator.next(), Some(&amp;1));
-assert_eq!(iterator.next(), None);
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">numbers</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="k">let</span> <span class="k">mut</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">numbers</span><span class="nf">.iter</span><span class="p">();</span>
+<span class="nd">assert_eq!</span><span class="p">(</span><span class="n">iterator</span><span class="nf">.next</span><span class="p">(),</span> <span class="nf">Some</span><span class="p">(</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">));</span>
+<span class="nd">assert_eq!</span><span class="p">(</span><span class="n">iterator</span><span class="nf">.next</span><span class="p">(),</span> <span class="nb">None</span><span class="p">);</span>
+</pre>
 <p><code>Iter</code>型の<code>next()</code>の実装を見てみたけど、現時点では理解できそうになかった。ただ、上のコードの通り、<code>next()</code>は要素の不変の参照を返す。一方で、<code>iter_mut()</code>ではこれが可変の参照になる。</p>
         </section>
         <footer>

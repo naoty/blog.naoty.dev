@@ -6,6 +6,7 @@
     <title>tmuxのlaunchctlエラー対策</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="tmuxのlaunchctlエラー対策">
     <meta property="og:type" content="website">
@@ -31,9 +32,9 @@ Bug: launchctl.c:2425 (25957):13: (dbfd = open(g_job_overrides_db_path, O_RDONLY
 launch_msg(): Socket is not connected
 </code></pre>
 <p>この問題、<code>pbcopy</code>のときと同じ手法で解決できた。</p>
-<pre lang="sh:.zshrc"><code>if [[ &quot;$TMUX&quot; != &quot;&quot; ]]; then
-  alias pbcopy=&quot;ssh 127.0.0.1 pbcopy&quot;
-  alias launchctl=&quot;ssh 127.0.0.1 launchctl&quot;
+<pre lang="sh:.zshrc"><code>if [[ "$TMUX" != "" ]]; then
+  alias pbcopy="ssh 127.0.0.1 pbcopy"
+  alias launchctl="ssh 127.0.0.1 launchctl"
 fi
 </code></pre>
         </section>

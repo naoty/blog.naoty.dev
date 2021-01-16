@@ -6,6 +6,7 @@
     <title>count_letters ver.1</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="count_letters ver.1">
     <meta property="og:type" content="website">
@@ -26,23 +27,23 @@
           </p>
         </header>
         <section class="body">
-          <p>　文字列に含まれる文字数を文字ごとにカウントするメソッドを作成中です。&quot;Ruby is an object oriented programming language&quot;を例に実行すると、</p>
-<p>'R': *<br />
-'u': **<br />
-'b': **<br />
+          <p>　文字列に含まれる文字数を文字ごとにカウントするメソッドを作成中です。"Ruby is an object oriented programming language"を例に実行すると、</p>
+<p>'R': *<br>
+'u': **<br>
+'b': **<br>
 （以下に続く）</p>
-<p>といった感じで表示されます。<br />
+<p>といった感じで表示されます。<br>
 下のコードはやりかけですが、目下の問題は例えば「' ': ******」が一回表示されればいいものを六回表示されてしまうことです。さぁ、どうしたものか・・・。</p>
 <pre><code>def count_letters(str)
 	ary = str.split(//)
 	ary.each do |letter|
 		result = str.scan(/(#{letter})/)
-		print &quot;'&quot;, letter, &quot;': &quot;
-		result.count.times{print &quot;*&quot;}
-		print &quot;\n&quot;
+		print "'", letter, "': "
+		result.count.times{print "*"}
+		print "\n"
 	end
 end
-p count_letters(&quot;Ruby is an object oriented programming language&quot;)
+p count_letters("Ruby is an object oriented programming language")
 </code></pre>
         </section>
         <footer>

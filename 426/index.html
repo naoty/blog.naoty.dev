@@ -6,6 +6,7 @@
     <title>naoty/tableをRustで書き直した</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="naoty/tableをRustで書き直した">
     <meta property="og:type" content="website">
@@ -29,7 +30,7 @@
         <section class="body">
           <p>2017年頃にGoで書いた<a href="https://github.com/naoty/table">naoty/table</a>をRustで書き直した。</p>
 <p>これはCSVやTSV形式のデータをASCIIテーブルやMarkdown形式のテーブルに変換する。主にGoogle SpreadsheetやBigQueryの結果をmarkdown形式にしてドキュメントに貼り付けるときに使ったり、ASCIIテーブルにしてコードブロックに含めてSlackに貼ったりするのに使うことが多い。かつて作ったものの中でも長い間使い続けているツールの一つだ。</p>
-<pre><code>% echo -e &quot;day\tDAU\n2017-01-01\t10000\n2017-01-02\t8000&quot; | table -H
+<pre><code>% echo -e "day\tDAU\n2017-01-01\t10000\n2017-01-02\t8000" | table -H
 +------------+-------+
 | day        | DAU   |
 +------------+-------+

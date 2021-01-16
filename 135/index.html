@@ -6,6 +6,7 @@
     <title>Railsデフォルトのjqueryは圧縮されてない</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Railsデフォルトのjqueryは圧縮されてない">
     <meta property="og:type" content="website">
@@ -31,25 +32,26 @@
 <li>production環境ではassets precompileによって圧縮されるため、下記の設定は不要です。</li>
 <li>assets pipelineを理解する上での参考程度にしてもらえればと思います。</li>
 </ul>
-<hr />
+<hr>
 <pre lang="js:app/assets/javascripts/application.js"><code>//= require jquery
 //= require jquery_ujs
 //= require_tree .
 </code></pre>
-<pre lang="sh"><code>[1] pry(main)&gt; puts Rails.application.config.assets.paths
+<pre lang="sh" class="highlight highlight-sh"><span class="o">[</span>1] pry<span class="o">(</span>main<span class="o">)&gt;</span> puts Rails.application.config.assets.paths
 /Users/naoty/workspace/sample/app/assets/images
 /Users/naoty/workspace/sample/app/assets/javascripts
 /Users/naoty/workspace/sample/app/assets/stylesheets
 /Users/naoty/workspace/sample/vendor/assets/javascripts
 /Users/naoty/workspace/sample/vendor/assets/stylesheets
 /Users/naoty/workspace/sample/vendor/bundle/ruby/1.9.1/gems/jquery-rails-1.0.14/vendor/assets/javascripts
-</code></pre>
+</pre>
 <ul>
-<li><code>rails new</code>で生成されるapplication.jsでロードするjqueryは、上記のコマンドで確認できる通り、<code>jquery-rails</code>というgemに同梱されている<code>jquery.js</code>。ちなみに現時点では最新のv1.7.2。</li>
+<li>
+<code>rails new</code>で生成されるapplication.jsでロードするjqueryは、上記のコマンドで確認できる通り、<code>jquery-rails</code>というgemに同梱されている<code>jquery.js</code>。ちなみに現時点では最新のv1.7.2。</li>
 <li>なので、圧縮されてないものがデフォルトではロードされてしまう。これは、けっこう気づきにくい罠だと思う。</li>
 </ul>
-<pre lang="sh"><code>$ cd `bundle show jquery-rails`
-$ tree vendor/
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd</span> <span class="sb">`</span>bundle show jquery-rails<span class="sb">`</span>
+<span class="nv">$ </span>tree vendor/
 vendor/
 └── assets
     └── javascripts
@@ -58,11 +60,13 @@ vendor/
         ├── jquery.js
         ├── jquery.min.js
         └── jquery_ujs.js
-</code></pre>
+</pre>
 <ul>
-<li><code>jquery-rails</code>の中を見てみると、<code>jquery.min.js</code>がある。</li>
+<li>
+<code>jquery-rails</code>の中を見てみると、<code>jquery.min.js</code>がある。</li>
 <li>圧縮版あるんだから、こっち使う。</li>
-<li><code>jquery-ui.min</code>もあるから、jquery-ui使う場合も同じ。まあ、jquery-uiは必要なコンポーネントだけに絞るべきなので、<code>jquery-rails</code>内のjquery-uiは使うことないと思う。</li>
+<li>
+<code>jquery-ui.min</code>もあるから、jquery-ui使う場合も同じ。まあ、jquery-uiは必要なコンポーネントだけに絞るべきなので、<code>jquery-rails</code>内のjquery-uiは使うことないと思う。</li>
 </ul>
 <pre lang="js:app/assets/javascripts/application.js"><code>//= require jquery.min
 //= require jquery_ujs

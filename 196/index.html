@@ -6,6 +6,7 @@
     <title>Asset Pipelineでコントローラー・アクションごとにassetを管理する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Asset Pipelineでコントローラー・アクションごとにassetを管理する">
     <meta property="og:type" content="website">
@@ -55,10 +56,10 @@ this.MyApplication ?= {}
 <pre lang="coffeescript:users.js.coffee"><code>
 class UsersController
   index: -&gt;
-    console.log(&quot;UsersController#index&quot;)
+    console.log("UsersController#index")
 
   show: -&gt;
-    console.log(&quot;UsersController#show&quot;)
+    console.log("UsersController#show")
 
 this.MyApplication.users = new UsersController
 </code></pre>
@@ -70,9 +71,9 @@ this.MyApplication.users = new UsersController
 //= require_tree .
 
 $(function () {
-    var $body = $(&quot;body&quot;);
-    var controller = $body.data(&quot;controller&quot;).replace(/\//, &quot;_&quot;);
-    var action = $body.data(&quot;action&quot;);
+    var $body = $("body");
+    var controller = $body.data("controller").replace(/\//, "_");
+    var action = $body.data("action");
 
     var activeController = MyApplication[controller];
 
@@ -92,8 +93,8 @@ $(function () {
 </code></pre>
 <pre lang="rb:application_helper.rb"><code>
 def css_namespace
-  controller_namespace = controller.controller_path.gsub(/\//) { &quot;_&quot; }
-  &quot;#{controller_namespace} #{controller.action_name}&quot;
+  controller_namespace = controller.controller_path.gsub(/\//) { "_" }
+  "#{controller_namespace} #{controller.action_name}"
 end
 </code></pre>
 <h2>2. 名前空間ごとにCSSを定義する</h2>
@@ -108,7 +109,7 @@ end
   &amp;.show
   &amp;.new
 </code></pre>
-<hr />
+<hr>
 <h2>参考</h2>
 <ul>
 <li><a href="http://blog.jerodsanto.net/2012/02/a-simple-pattern-to-namespace-and-selectively-execute-certain-bits-of-javascript-depending-on-which-rails-controller-and-action-are-active/">A Simple Pattern to Namespace and Selectively Execute Certain Bits of JavaScript Depending on Which Rails Controller and Action are Active - Jerod Santo</a></li>

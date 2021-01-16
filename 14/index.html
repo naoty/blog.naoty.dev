@@ -6,6 +6,7 @@
     <title>ハノイの塔　ver.2</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ハノイの塔　ver.2">
     <meta property="og:type" content="website">
@@ -26,8 +27,8 @@
           </p>
         </header>
         <section class="body">
-          <p>　円盤がN枚のときの<a href="http://ja.wikipedia.org/wiki/%E3%83%8F%E3%83%8E%E3%82%A4%E3%81%AE%E5%A1%94">ハノイの塔</a>を完全に攻略することができました。前回のものを再帰的手法を用いて洗練させました。<br />
-　@towersは3つの塔を配列として表現したもの（@towers[0]が左、@towers[1]が真ん中、@towers[2]が右の塔）、timesは円盤を移動させた回数、nは円盤の枚数、startは最初に円盤が積んである塔の番号、goalは円盤を積んで完成させる塔の番号、tempはそのどちらでもない一時的に円盤を積んでおく塔の番号（start, goal, tempは0, 1, 2のどれかをとる）、をそれぞれ指します。<br />
+          <p>　円盤がN枚のときの<a href="http://ja.wikipedia.org/wiki/%E3%83%8F%E3%83%8E%E3%82%A4%E3%81%AE%E5%A1%94">ハノイの塔</a>を完全に攻略することができました。前回のものを再帰的手法を用いて洗練させました。<br>
+　@towersは3つの塔を配列として表現したもの（@towers[0]が左、@towers[1]が真ん中、@towers[2]が右の塔）、timesは円盤を移動させた回数、nは円盤の枚数、startは最初に円盤が積んである塔の番号、goalは円盤を積んで完成させる塔の番号、tempはそのどちらでもない一時的に円盤を積んでおく塔の番号（start, goal, tempは0, 1, 2のどれかをとる）、をそれぞれ指します。<br>
 　ハノイの塔の攻略法は、「n-1枚のハノイの塔を別に作って、n枚目の円盤を右側の塔に移し、その上に再度n-1枚のハノイの塔を作る」というものです。さらに、n-1枚のハノイの塔を作るには、n-2枚のハノイの塔をまたどこかに作って、n-1枚目の円盤をどこかに移し、n-2枚のハノイの塔をその上に作ることが必要です。これが「n-3, n-4,...,1」と続くわけです。数学の漸化式のような発想です。</p>
 <pre><code>@towers = [(1..ARGV[0].to_i).to_a, [], []]
 @times = 0
@@ -47,12 +48,12 @@ end
 
 def result
 	p @towers
-	puts &quot;--&quot;
+	puts "--"
 	@times += 1
 end
 
 hanoi(ARGV[0].to_i, 0, 2)
-puts &quot;total times: #{@times}&quot;
+puts "total times: #{@times}"
 </code></pre>
 <p>実行結果</p>
 <pre><code>c:\codes\ruby\exercise&gt;ruby hanoi.rb 3

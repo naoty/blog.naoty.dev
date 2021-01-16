@@ -6,6 +6,7 @@
     <title>ディレクトリ内のファイルの大きさを表示する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ディレクトリ内のファイルの大きさを表示する">
     <meta property="og:type" content="website">
@@ -35,14 +36,14 @@ def du(top)
 		if FileTest.file?(path)
 			base = File.basename(path)
 			size = File.size(path)
-			puts &quot;#{base}: #{size}&quot;
+			puts "#{base}: #{size}"
 			total_size += size
 		end
 	end
-	puts &quot;--&quot;, &quot;Total: #{total_size}&quot;
+	puts "--", "Total: #{total_size}"
 end
 
-du(ARGV[0] || &quot;.&quot;)
+du(ARGV[0] || ".")
 </code></pre>
         </section>
         <footer>

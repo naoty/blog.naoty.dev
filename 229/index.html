@@ -6,6 +6,7 @@
     <title>Alamofireを読んだ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Alamofireを読んだ">
     <meta property="og:type" content="website">
@@ -30,17 +31,18 @@
 <ul>
 <li><a href="https://github.com/Alamofire/Alamofire">https://github.com/Alamofire/Alamofire</a></li>
 <li>Swiftで書かれたHTTP通信ライブラリ。</li>
-<li><a href="http://afnetworking.com/">AFNetworking</a>の作者であるmatttさんの新作。</li>
+<li>
+<a href="http://afnetworking.com/">AFNetworking</a>の作者であるmatttさんの新作。</li>
 <li>AFNetworkingをリプレースするものではなく、AFNetworkingはSwiftでも安定して動くのでそのまま使えるとのこと。（参考: <a href="http://nshipster.com/alamofire/">http://nshipster.com/alamofire/</a>の最後の方）</li>
 <li>ファイルは<code>Alamofire.swift</code>だけで1000行に満たない。</li>
 </ul>
 <h1>使い方</h1>
-<pre><code>Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;)
+<pre><code>Alamofire.request(.GET, "http://httpbin.org/get")
          .responseJSON { (request, response, JSON, error) in
                            println(JSON)
                        }
 
-Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;foo&quot;: &quot;bar&quot;])
+Alamofire.request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"])
          .authenticate(HTTPBasic: user, password: password)
          .responseJSON { (request, response, JSON, error) in
                            println(JSON)
@@ -53,19 +55,24 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 <h1>Alamofire.swift</h1>
 <h2>tl;dr</h2>
 <ul>
-<li><code>Manager</code>オブジェクトが通信を行い、通信完了時のdelegateオブジェクトを管理する。
+<li>
+<code>Manager</code>オブジェクトが通信を行い、通信完了時のdelegateオブジェクトを管理する。
 <ul>
 <li>初期化時に<code>NSURLSession</code>オブジェクトやdelegateオブジェクトをプロパティとして保持する。</li>
 </ul>
 </li>
-<li><code>request</code>メソッドは以下のことをする。
+<li>
+<code>request</code>メソッドは以下のことをする。
 <ul>
-<li><code>NSURLSessionTask</code>を生成して通信を開始する。</li>
+<li>
+<code>NSURLSessionTask</code>を生成して通信を開始する。</li>
 <li>実行する通信タスクに合わせたdelegateオブジェクトを設定する。delegateオブジェクトはユニークなSerial Dispatch Queueを持つが、最初は停止状態になっている。</li>
-<li><code>Request</code>オブジェクトを生成して返す。</li>
+<li>
+<code>Request</code>オブジェクトを生成して返す。</li>
 </ul>
 </li>
-<li><code>response</code>メソッドは以下のことをする。
+<li>
+<code>response</code>メソッドは以下のことをする。
 <ul>
 <li>引数に渡されたクロージャを停止状態になっているSerial Dispatch Queueに追加する。</li>
 <li>自分自身を返すため、続けて<code>response</code>メソッドをメソッドチェーンで呼ぶことができる。</li>
@@ -83,7 +90,8 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 }
 </code></pre>
 <ul>
-<li><code>Alamofire</code>そのものはクラスではなくstructになっている。</li>
+<li>
+<code>Alamofire</code>そのものはクラスではなくstructになっている。</li>
 <li>Swiftにおいてstructはクラスと同様にプロパティやメソッドを持つことができたりprotocolに準拠することができる等多くの点で共通しているのだけど、structはクラスとは違って常に値渡しになり参照カウントを使わない。</li>
 </ul>
 <h2>L:928</h2>
@@ -97,7 +105,8 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 }
 </code></pre>
 <ul>
-<li><code>static</code>とついているのは、クラスではなくstructだから<code>class func</code>ではなく<code>static func</code>と書くのであろう。Javaみたいに<code>static</code>に統一してもいいと思う。</li>
+<li>
+<code>static</code>とついているのは、クラスではなくstructだから<code>class func</code>ではなく<code>static func</code>と書くのであろう。Javaみたいに<code>static</code>に統一してもいいと思う。</li>
 <li>内部では<code>Manager</code>クラスのシングルトンインスタンスの<code>request</code>メソッドを呼んでいる。</li>
 <li>引数に<code>ParameterEncoding</code>インスタンスの<code>encode</code>メソッドの返り値を渡している。<code>.0</code>というのはtupleの要素を取り出すときにこういう書き方をする。</li>
 </ul>
@@ -134,9 +143,12 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 }
 </code></pre>
 <ul>
-<li><code>NSURLSession</code>オブジェクトから<code>Request</code>オブジェクトを初期化している。</li>
-<li><code>delegate</code>を登録し、<code>Request</code>オブジェクトの<code>resume</code>メソッドを呼んでいる。</li>
-<li><code>Request</code>オブジェクトを返している。</li>
+<li>
+<code>NSURLSession</code>オブジェクトから<code>Request</code>オブジェクトを初期化している。</li>
+<li>
+<code>delegate</code>を登録し、<code>Request</code>オブジェクトの<code>resume</code>メソッドを呼んでいる。</li>
+<li>
+<code>Request</code>オブジェクトを返している。</li>
 </ul>
 <h2>L:403</h2>
 <pre><code>class Request {
@@ -164,9 +176,12 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 }
 </code></pre>
 <ul>
-<li><code>Request</code>オブジェクトは初期化されるときに渡された<code>task</code>のクラスに合わせて<code>delegate</code>プロパティを初期化している。</li>
-<li><code>is</code>はオブジェクトがその型に属するかどうかをチェックする。</li>
-<li><code>resume</code>メソッドは<code>task</code>プロパティ、つまり<code>NSURLSessionTask</code>（またはそのサブクラスの）オブジェクトの<code>resume</code>メソッドを呼び、ここで通信を開始する。</li>
+<li>
+<code>Request</code>オブジェクトは初期化されるときに渡された<code>task</code>のクラスに合わせて<code>delegate</code>プロパティを初期化している。</li>
+<li>
+<code>is</code>はオブジェクトがその型に属するかどうかをチェックする。</li>
+<li>
+<code>resume</code>メソッドは<code>task</code>プロパティ、つまり<code>NSURLSessionTask</code>（またはそのサブクラスの）オブジェクトの<code>resume</code>メソッドを呼び、ここで通信を開始する。</li>
 </ul>
 <h2>L:208</h2>
 <p><code>Request</code>オブジェクトの概要をつかんだので、<code>request</code>メソッドに戻る。</p>
@@ -181,8 +196,10 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 }
 </code></pre>
 <ul>
-<li><code>request.delegate</code>は実行する<code>task</code>に応じたdelegateクラス、つまり<code>UploadTaskDelegate</code>, <code>DownloadTaskDelegate</code>, <code>DataTaskDelegate</code>, <code>TaskDelegate</code>のいずれかが入る。</li>
-<li><code>request.resume()</code>で通信を開始する。</li>
+<li>
+<code>request.delegate</code>は実行する<code>task</code>に応じたdelegateクラス、つまり<code>UploadTaskDelegate</code>, <code>DownloadTaskDelegate</code>, <code>DataTaskDelegate</code>, <code>TaskDelegate</code>のいずれかが入る。</li>
+<li>
+<code>request.resume()</code>で通信を開始する。</li>
 <li>開始された通信が完了したときに呼ばれるdelegateは<code>request.delegate</code>であり、これは<code>self.delegate</code>という領域に確保される。このプロパティは<code>SessionDelegate</code>という型である。</li>
 </ul>
 <h2>L:229</h2>
@@ -207,7 +224,8 @@ Alamofire.request(.GET, &quot;http://httpbin.org/get&quot;, parameters: [&quot;f
 }
 </code></pre>
 <ul>
-<li><code>SessionDelegate</code>オブジェクトは複数のdelegateをラップする構造をもっているようだ。</li>
+<li>
+<code>SessionDelegate</code>オブジェクトは複数のdelegateをラップする構造をもっているようだ。</li>
 <li>subscriptを定義することで<code>self.delegate[request.delegate.task] = request.delegate</code>のようなアクセスを実現している。内部では、キーとして渡された<code>Request.TaskDelegate</code>オブジェクトの<code>taskIdentifier</code>を実際のキーとして使っているようだ。オブジェクトそのものではなくInt型のidentifierをキーとして使った方が効率がいいのだろう。</li>
 </ul>
 <p><code>request</code>メソッドの実装についておおまかに読んだので、続いて<code>response</code>メソッドを読んでいく。<code>response</code>メソッドは<code>request</code>メソッドの返り値である<code>Request</code>型に対して呼ばれているので、<code>Request</code>クラスの定義を調べる。</p>
@@ -234,8 +252,10 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 }
 </code></pre>
 <ul>
-<li><code>response</code>メソッドに<code>completionHandler</code>だけ渡すと、前者のメソッドが呼ばれ内部的に後者のメソッドが呼ばれる。</li>
-<li><code>self.delegate.queue</code>プロパティは<code>Request.TaskDelegate</code>クラス（またはそのサブクラス）のプロパティであり、レスポンスの処理はこのqueueで行われるようだ。このqueueについて詳しく見ていくことにする。</li>
+<li>
+<code>response</code>メソッドに<code>completionHandler</code>だけ渡すと、前者のメソッドが呼ばれ内部的に後者のメソッドが呼ばれる。</li>
+<li>
+<code>self.delegate.queue</code>プロパティは<code>Request.TaskDelegate</code>クラス（またはそのサブクラス）のプロパティであり、レスポンスの処理はこのqueueで行われるようだ。このqueueについて詳しく見ていくことにする。</li>
 </ul>
 <h2>L:497</h2>
 <pre><code>private class TaskDelegate: NSObject, NSURLSessionTaskDelegate {
@@ -248,7 +268,7 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
     init(task: NSURLSessionTask) {
         // ...
 
-        let label: String = &quot;com.alamofire.task-\(task.taskIdentifier)&quot;
+        let label: String = "com.alamofire.task-\(task.taskIdentifier)"
         let queue = dispatch_queue_create((label as NSString).UTF8String, DISPATCH_QUEUE_SERIAL)
         dispatch_suspend(queue)
         self.queue = queue
@@ -256,7 +276,8 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 }
 </code></pre>
 <ul>
-<li><code>queue</code>は<code>task</code>に対して一意なラベルを持ったSerial Dispatch Queueである。</li>
+<li>
+<code>queue</code>は<code>task</code>に対して一意なラベルを持ったSerial Dispatch Queueである。</li>
 <li>つまり、各タスクに対してキューが1つ作成される。そのキューは追加されたタスクを1つずつ順番に実行していく。</li>
 <li>そして、<code>dispatch_suspend</code>によってキューは停止された状態になっているため、この状態ではタスクが追加されてもすぐに実行されるわけではない。</li>
 </ul>
@@ -296,7 +317,8 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 </code></pre>
 <ul>
 <li>まず<code>NSURLSession</code>オブジェクトはManagerオブジェクトのプロパティである。</li>
-<li><code>NSURLSession</code>オブジェクトのdelegateは<code>SessionDelegate</code>オブジェクトとなっている。</li>
+<li>
+<code>NSURLSession</code>オブジェクトのdelegateは<code>SessionDelegate</code>オブジェクトとなっている。</li>
 </ul>
 <h2>L:229</h2>
 <pre><code>class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate {
@@ -318,8 +340,10 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 </code></pre>
 <ul>
 <li>上述の通り、<code>SessionDelegate</code>オブジェクトは<code>subdelegates</code>というプロパティに実際のdelegateを保持しており、独自のsubscriptからそこにアクセスできる。subdelegatesへのdelegateオブジェクトの追加は<code>request</code>メソッド内で行われているので、そこで追加されたdelegateオブジェクトが実際に処理を行うことになる。</li>
-<li><code>as?</code>はダウンキャストを行い失敗した場合はnilを返す。</li>
-<li><code>self.dataTaskDidReceiveData?</code>というのはOptional型のクロージャのプロパティ。どこかでセットされていればここで実行するような仕組みになっているのだと思う。</li>
+<li>
+<code>as?</code>はダウンキャストを行い失敗した場合はnilを返す。</li>
+<li>
+<code>self.dataTaskDidReceiveData?</code>というのはOptional型のクロージャのプロパティ。どこかでセットされていればここで実行するような仕組みになっているのだと思う。</li>
 </ul>
 <p>というわけで、実際にdelegateメソッドを実行しているクラスを読む。</p>
 <h2>L:598</h2>
@@ -341,7 +365,8 @@ func response(priority: Int = DISPATCH_QUEUE_PRIORITY_DEFAULT, queue: dispatch_q
 </code></pre>
 <ul>
 <li>このメソッドは先ほどのメソッドが実装されていた<code>DataTaskDelegate</code>クラスのスーパークラスである<code>TaskDelegate</code>に定義されている。</li>
-<li><code>dispatch_resume</code>で停止状態になっていたキューを再開し、追加されていたタスクを実行する。上述の通り、この<code>self.queue</code>はタスクごとに作られたSerial Dispatch Queueであり作成直後に停止状態にしておいたもので、<code>response</code>メソッド（およびそれに似たメソッド）で追加されたクロージャがここに追加されている。それらのメソッドが通信完了時によばれるdelegateでキューが再開することで順番に実行される、という仕組みになっていることが判明した。</li>
+<li>
+<code>dispatch_resume</code>で停止状態になっていたキューを再開し、追加されていたタスクを実行する。上述の通り、この<code>self.queue</code>はタスクごとに作られたSerial Dispatch Queueであり作成直後に停止状態にしておいたもので、<code>response</code>メソッド（およびそれに似たメソッド）で追加されたクロージャがここに追加されている。それらのメソッドが通信完了時によばれるdelegateでキューが再開することで順番に実行される、という仕組みになっていることが判明した。</li>
 </ul>
         </section>
         <footer>

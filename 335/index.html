@@ -6,6 +6,7 @@
     <title>Circle CIのSlackへの通知を分かりやすくする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Circle CIのSlackへの通知を分かりやすくする">
     <meta property="og:type" content="website">
@@ -29,47 +30,49 @@
           <p>Circle CI 2.0で導入されたworkflowを使うと、Slackへの通知にどのjobが完了したのかが含まれていなくて困ることがあった。特に失敗したときにどのjobが失敗したのかSlackでは分からないのが不便だった。</p>
 <p>そこで、Slackへの通知を分かりやすくするための設定をいくつかしてみたところ、劇的によくなったので紹介したい。</p>
 <h1>通知スクリプトを自作する</h1>
-<pre lang="bash"><code>#!/bin/bash -e
+<pre lang="bash" class="highlight highlight-bash"><span class="c">#!/bin/bash -e</span>
 
-payload=$(cat &lt;&lt; EOS
+<span class="nv">payload</span><span class="o">=</span><span class="si">$(</span><span class="nb">cat</span> <span class="o">&lt;&lt;</span> <span class="no">EOS</span><span class="sh">
 {
-  &quot;attachments&quot;: [
+  "attachments": [
     {
-      &quot;title&quot;: &quot;Success&quot;,
-      &quot;title_link&quot;: &quot;${CIRCLE_BUILD_URL}&quot;,
-      &quot;text&quot;: &quot;\`workflow/${CIRCLE_STAGE}\` in ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} (${CIRCLE_BRANCH})&quot;,
-      &quot;mrkdwn_in&quot;: [&quot;text&quot;],
-      &quot;color&quot;: &quot;good&quot;
+      "title": "Success",
+      "title_link": "</span><span class="k">${</span><span class="nv">CIRCLE_BUILD_URL</span><span class="k">}</span><span class="sh">",
+      "text": "</span><span class="se">\`</span><span class="sh">workflow/</span><span class="k">${</span><span class="nv">CIRCLE_STAGE</span><span class="k">}</span><span class="se">\`</span><span class="sh"> in </span><span class="k">${</span><span class="nv">CIRCLE_PROJECT_USERNAME</span><span class="k">}</span><span class="sh">/</span><span class="k">${</span><span class="nv">CIRCLE_PROJECT_REPONAME</span><span class="k">}</span><span class="sh"> (</span><span class="k">${</span><span class="nv">CIRCLE_BRANCH</span><span class="k">}</span><span class="sh">)",
+      "mrkdwn_in": ["text"],
+      "color": "good"
     }
   ]
 }
-EOS
-)
+</span><span class="no">EOS
+</span><span class="si">)</span>
 
-curl \
-  -X POST \
-  -H 'Content-Type: application/json' \
-  --data &quot;${payload}&quot; \
-  ${SLACK_WEBHOOK_URL}
-</code></pre>
+curl <span class="se">\</span>
+  <span class="nt">-X</span> POST <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s2">"</span><span class="k">${</span><span class="nv">payload</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+  <span class="k">${</span><span class="nv">SLACK_WEBHOOK_URL</span><span class="k">}</span>
+</pre>
 <ul>
 <li>Circle CIの連携時に生成されるWebhookを使って通知を送るスクリプトを書いた。</li>
-<li><code>attachments</code>フィールドを使ってリッチなメッセージを作る。</li>
+<li>
+<code>attachments</code>フィールドを使ってリッチなメッセージを作る。</li>
 <li>環境変数<code>CIRCLE_STAGE</code>には、workflow内で実行中のjob名が入っているため、これを使ってどのjobが成功したのか失敗したのかを通知できる。</li>
 </ul>
 <h1>通知スクリプトを設定する</h1>
-<pre lang="yaml"><code>jobs:
-  test:
-    steps:
-      # ...
-      - run: ./.circleci/notify-success
-      - run:
-          command: ./.circleci/notify-failure
-          when: on_fail
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">test</span><span class="pi">:</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="c1"># ...</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">./.circleci/notify-success</span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span>
+          <span class="na">command</span><span class="pi">:</span> <span class="s">./.circleci/notify-failure</span>
+          <span class="na">when</span><span class="pi">:</span> <span class="s">on_fail</span>
+</pre>
 <ul>
 <li>各jobの最後のstepに成功時の通知を送るスクリプトを設定する。</li>
-<li><code>when: on_fail</code>を設定すると、先に実行されたstepが失敗したときに呼ばれるstepを設定できる。それを利用して、失敗時の通知を送るスクリプトを設定する。</li>
+<li>
+<code>when: on_fail</code>を設定すると、先に実行されたstepが失敗したときに呼ばれるstepを設定できる。それを利用して、失敗時の通知を送るスクリプトを設定する。</li>
 </ul>
         </section>
         <footer>

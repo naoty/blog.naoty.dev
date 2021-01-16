@@ -6,6 +6,7 @@
     <title>ActiveRecordのattributeメソッド</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ActiveRecordのattributeメソッド">
     <meta property="og:type" content="website">
@@ -26,35 +27,36 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="ruby"><code>class User
-  attribute :unencrypted_password, :string
-end
-</code></pre>
+          <pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">User</span>
+  <span class="n">attribute</span> <span class="ss">:unencrypted_password</span><span class="p">,</span> <span class="ss">:string</span>
+<span class="k">end</span>
+</pre>
 <ul>
-<li><code>attribute</code>メソッドはモデルに属性を追加する。</li>
+<li>
+<code>attribute</code>メソッドはモデルに属性を追加する。</li>
 <li>DBのカラムがなくても追加できる。</li>
 <li>DBのカラムのアクセサをoverrideすることもできる。</li>
 </ul>
 <h1>例：パスワードのvalidation</h1>
 <p>パスワードのvalidationを実装する場合を考える。パスワードのvalidationというのは、暗号化される前の値に対して行われる。生パスワードはDBに保存しないが、アクセサがあると便利なので<code>attribute</code>メソッドで追加する。<code>attribute</code>メソッドで追加した仮想的なカラムにはvalidationが使える。</p>
-<pre lang="ruby"><code>class User
-  attribute :unencrypted_password, :string
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">User</span>
+  <span class="n">attribute</span> <span class="ss">:unencrypted_password</span><span class="p">,</span> <span class="ss">:string</span>
 
-  before_save :encrypt_password, if: unencrypted_password_changed?
+  <span class="n">before_save</span> <span class="ss">:encrypt_password</span><span class="p">,</span> <span class="ss">if: </span><span class="n">unencrypted_password_changed?</span>
 
-  validates :unencrypted_password,
-    format: { with: /\A[0-9a-zA-Z]\z/ },
-    length: { minimum: 8, maximum: 36 },
-    presence: true
+  <span class="n">validates</span> <span class="ss">:unencrypted_password</span><span class="p">,</span>
+    <span class="ss">format: </span><span class="p">{</span> <span class="ss">with: </span><span class="sr">/\A[0-9a-zA-Z]\z/</span> <span class="p">},</span>
+    <span class="ss">length: </span><span class="p">{</span> <span class="ss">minimum: </span><span class="mi">8</span><span class="p">,</span> <span class="ss">maximum: </span><span class="mi">36</span> <span class="p">},</span>
+    <span class="ss">presence: </span><span class="kp">true</span>
 
-  private
+  <span class="kp">private</span>
 
-  def encrypt_password
-    cost = BCrypt::Engine.cost
-    self.password = BCrypt::Password.create(unencrypted_password, cost)
-  end
-end
-</code></pre>
+  <span class="k">def</span> <span class="nf">encrypt_password</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Engine</span><span class="p">.</span><span class="nf">cost</span>
+    <span class="nb">self</span><span class="p">.</span><span class="nf">password</span> <span class="o">=</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">unencrypted_password</span><span class="p">,</span> <span class="n">cost</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
         </section>
         <footer>
           <nav>

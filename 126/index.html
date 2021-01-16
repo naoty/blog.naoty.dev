@@ -6,6 +6,7 @@
     <title>rablを使ってRailsのAPIレスポンスを簡潔に定義する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="rablを使ってRailsのAPIレスポンスを簡潔に定義する">
     <meta property="og:type" content="website">
@@ -62,7 +63,7 @@ child(:images) do
   node(:main) {|image| image.file.main.url }
 end
 </code></pre>
-<p>nodeを使うと、to_jsonの:methodオプションと同じことができるので、構造の深い部分にある値を取得したいときに便利です。<br />
+<p>nodeを使うと、to_jsonの:methodオプションと同じことができるので、構造の深い部分にある値を取得したいときに便利です。<br>
 rablで定義することによってコントローラもスリムになります。</p>
 <pre><code>class EntriesController &lt; ApplicationController
   def index

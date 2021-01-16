@@ -6,6 +6,7 @@
     <title>Twitter APIのエラーの回避方法</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Twitter APIのエラーの回避方法">
     <meta property="og:type" content="website">
@@ -27,8 +28,8 @@
         <section class="body">
           <pre><code>// http://api.twitter.com/statuses/friends.json
 {
-    error: &quot;This method requires authentication.&quot;
-    request: &quot;/statuses/friends.json&quot;
+    error: "This method requires authentication."
+    request: "/statuses/friends.json"
 }
 
 // http://api.twitter.com/statuses/friends.json?screen_name=naoty_k
@@ -36,7 +37,7 @@
   - errors: [
       - {
           code: 37
-          message: &quot;Not authorized to use this endpoint&quot;
+          message: "Not authorized to use this endpoint"
         }
   ]
 }

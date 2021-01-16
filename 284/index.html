@@ -6,6 +6,7 @@
     <title>GroupedなUITableViewで上端のmarginをとりたい</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="GroupedなUITableViewで上端のmarginをとりたい">
     <meta property="og:type" content="website">
@@ -26,17 +27,19 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="swift"><code>override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -&gt; CGFloat {
-    if section == 0 {
-        return .min
-    } else {
-        return super.tableView(tableView, heightForHeaderInSection: section)
-    }
-}
-</code></pre>
+          <pre lang="swift" class="highlight highlight-swift"><span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">heightForHeaderInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">section</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">.</span><span class="n">min</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">super</span><span class="o">.</span><span class="nf">tableView</span><span class="p">(</span><span class="n">tableView</span><span class="p">,</span> <span class="nv">heightForHeaderInSection</span><span class="p">:</span> <span class="n">section</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <ul>
-<li><code>return 0</code>だとうまくいかない。</li>
-<li><code>0</code>より大きい値を返すことで変更できるため、<code>CGFloat.min</code>を指定することで上端のmarginを消し去れる。</li>
+<li>
+<code>return 0</code>だとうまくいかない。</li>
+<li>
+<code>0</code>より大きい値を返すことで変更できるため、<code>CGFloat.min</code>を指定することで上端のmarginを消し去れる。</li>
 </ul>
         </section>
         <footer>

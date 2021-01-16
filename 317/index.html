@@ -6,6 +6,7 @@
     <title>スキーマファイルをSQL形式に変更する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="スキーマファイルをSQL形式に変更する">
     <meta property="og:type" content="website">
@@ -30,8 +31,8 @@
 <p>開発が進みデータベースのスキーマが複雑になると、ActiveRecordのDSLでの表現に限界が出てくる。DSLのメリットはデータベースに依存せず抽象的な表現ができることだが、データベース固有の設定をする場合にDSLで表現できなくなってくる。</p>
 <p>DSLで表現できなくなるとスキーマファイルと実際のスキーマに乖離が生まれる。スキーマに乖離があると、開発環境やCI上でデータベースをセットアップするのが困難になる。</p>
 <p>そこで、ActiveRecordはスキーマファイルの形式にSQLを選ぶことができる。<code>config/application.rb</code>で以下のように指定すると、<code>db/structure.sql</code>というSQL形式のスキーマファイルが生成される。</p>
-<pre lang="ruby"><code>config.active_record.schema_format = :sql
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">config</span><span class="p">.</span><span class="nf">active_record</span><span class="p">.</span><span class="nf">schema_format</span> <span class="o">=</span> <span class="ss">:sql</span>
+</pre>
 <p>なお、この設定はデフォルトでは<code>:ruby</code>が指定されている。</p>
 <p>SQL形式に変更した場合、コマンドを以下のように変える必要がある。</p>
 <table>

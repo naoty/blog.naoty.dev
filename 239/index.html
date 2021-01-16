@@ -6,6 +6,7 @@
     <title>pod installしたら自動的にghq getする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="pod installしたら自動的にghq getする">
     <meta property="og:type" content="website">
@@ -26,9 +27,9 @@
         </header>
         <section class="body">
           <p><a href="https://github.com/naoty/cocoapods-src">naoty/cocoapods-src</a>を使う。</p>
-<pre lang="bash"><code>$ gem install coocapods
-$ gem install cocoapods-src
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>gem <span class="nb">install </span>coocapods
+<span class="nv">$ </span>gem <span class="nb">install </span>cocoapods-src
+</pre>
 <pre lang="yaml:~/.cocoapods/.podrc"><code>cocoapods-src_use_ghq: true
 </code></pre>
 <p><code>pod install</code>するとインストールしたライブラリのソースコードを自動的に<code>ghq get</code>してくれる。</p>

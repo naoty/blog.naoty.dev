@@ -6,6 +6,7 @@
     <title>Rakeタスクの賢いロギング</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Rakeタスクの賢いロギング">
     <meta property="og:type" content="website">
@@ -33,10 +34,10 @@
 <li>いろんなところに<code>p</code>とか<code>Rails.logger.info</code>のような処理を書きたくない。</li>
 </ul>
 <h1>実装</h1>
-<pre lang="ruby:lib/tasks/setup_account.rake"><code>desc &quot;Setup an account&quot;
+<pre lang="ruby:lib/tasks/setup_account.rake"><code>desc "Setup an account"
 task setup_account: %i(common) do
-  logger.debug &quot;creating account...&quot;
-  logger.info  &quot;created account!&quot;
+  logger.debug "creating account..."
+  logger.info  "created account!"
 end
 </code></pre>
 <pre lang="ruby:lib/tasks/common.rake"><code># Extend logger to the main object
@@ -44,29 +45,29 @@ def logger
   Rails.logger
 end
 
-desc &quot;Setup a common setting for every tasks&quot;
+desc "Setup a common setting for every tasks"
 task common: %i(environment) do
   Rails.logger = Logger.new(STDOUT)
   Rails.logger.level = Logger::INFO
 end
 
-desc &quot;Switch the level of a logger to DEBUG&quot;
+desc "Switch the level of a logger to DEBUG"
 task debug: %i(common) do
   Rails.logger.level = Logger::DEBUG
 end
 
-require &quot;task_logging&quot;
+require "task_logging"
 </code></pre>
 <pre lang="ruby:lib/task_logging.rb"><code>module TaskLogging
   def task(*args, &amp;block)
     Rake::Task.define_task(*args) do |task|
       if block_given?
-        Rails.logger.debug &quot;[#{task.name}] started&quot;
+        Rails.logger.debug "[#{task.name}] started"
         begin
           block.call(task)
-          Rails.logger.debug &quot;[#{task.name}] finished&quot;
+          Rails.logger.debug "[#{task.name}] finished"
         rescue =&gt; exception
-          Rails.logger.debug &quot;[#{task.name}] failed&quot;
+          Rails.logger.debug "[#{task.name}] failed"
           raise exception
         end
       end
@@ -78,14 +79,14 @@ end
 extend TaskLogging
 </code></pre>
 <p>上のように実装すると、以下のように賢くログを出し分けられる。</p>
-<pre lang="zsh"><code>$ rake setup_account
-I, [2015-10-10T17:38:58.192968 #15178]  INFO -- : created account!
-$ rake debug setup_account
-D, [2015-10-10T17:38:00.704398 #11753] DEBUG -- : [setup_account] started
-D, [2015-10-10T17:38:00.704460 #11753] DEBUG -- : creating account...
-I, [2015-10-10T17:38:00.704478 #11753]  INFO -- : created account!
-D, [2015-10-10T17:38:00.704491 #11753] DEBUG -- : [setup_account] finished
-</code></pre>
+<pre lang="zsh" class="highlight highlight-zsh"><span class="nv">$ </span>rake setup_account
+I, <span class="o">[</span>2015-10-10T17:38:58.192968 <span class="c">#15178]  INFO -- : created account!</span>
+<span class="nv">$ </span>rake debug setup_account
+D, <span class="o">[</span>2015-10-10T17:38:00.704398 <span class="c">#11753] DEBUG -- : [setup_account] started</span>
+D, <span class="o">[</span>2015-10-10T17:38:00.704460 <span class="c">#11753] DEBUG -- : creating account...</span>
+I, <span class="o">[</span>2015-10-10T17:38:00.704478 <span class="c">#11753]  INFO -- : created account!</span>
+D, <span class="o">[</span>2015-10-10T17:38:00.704491 <span class="c">#11753] DEBUG -- : [setup_account] finished</span>
+</pre>
         </section>
         <footer>
           <nav>

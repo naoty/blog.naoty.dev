@@ -6,6 +6,7 @@
     <title>sidekiqコンテナのヘルスチェック</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="sidekiqコンテナのヘルスチェック">
     <meta property="og:type" content="website">
@@ -32,16 +33,16 @@
 </code></pre>
 <p>でヘルスチェックすればいい。</p>
 <p>sidekiqのDockerイメージはRailsアプリケーションのものを再利用することも多いだろうから、ECSではタスク定義内のコンテナ定義で下のようにヘルスチェックを指定する。</p>
-<pre lang="json"><code>[
-  {
-    &quot;name&quot;: &quot;sidekiq&quot;,
-    &quot;command&quot;: [&quot;sidekiq&quot;, &quot;--pidfile&quot;, &quot;./sidekiq.pid&quot;],
-    &quot;healthCheck&quot;: {
-      &quot;command&quot;: [&quot;test&quot;, &quot;-f&quot;, &quot;./sidekiq.pid&quot;]
-    }
-  }
-]
-</code></pre>
+<pre lang="json" class="highlight highlight-json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sidekiq"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"sidekiq"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--pidfile"</span><span class="p">,</span><span class="w"> </span><span class="s2">"./sidekiq.pid"</span><span class="p">],</span><span class="w">
+    </span><span class="nl">"healthCheck"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"test"</span><span class="p">,</span><span class="w"> </span><span class="s2">"-f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"./sidekiq.pid"</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></pre>
         </section>
         <footer>
           <nav>

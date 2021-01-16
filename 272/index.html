@@ -6,6 +6,7 @@
     <title>Vagrantfileを分割する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Vagrantfileを分割する">
     <meta property="og:type" content="website">
@@ -31,7 +32,7 @@
 end
 
 # Load local configurations
-load &quot;./Vagrantfile.local&quot; if File.exist?(&quot;./Vagrantfile.local&quot;)
+load "./Vagrantfile.local" if File.exist?("./Vagrantfile.local")
 </code></pre>
 <pre lang="rb:Vagrantfile.local"><code>Vagrant.configure(2) do |config|
   # ...

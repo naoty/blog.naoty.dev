@@ -6,6 +6,7 @@
     <title>Timepieceを0.2.0にアップデートした</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Timepieceを0.2.0にアップデートした">
     <meta property="og:type" content="website">
@@ -29,24 +30,26 @@
           <p><a href="https://github.com/naoty/Timepiece">naoty/Timepiece</a></p>
 <p>Swiftの日付操作ライブラリであるTimepieceに機能を追加し0.2.0にアップデートした。また、1ヶ月くらい前からしれっとCocoaPods（現在はまだrc版）をサポートしたのでCocoaPodsからインストールできるようになってる。</p>
 <h1>NSDate \ Stringの変換</h1>
-<pre><code>let timestamp = 3.years.ago.stringFromFormat(&quot;yyyy-MM-dd&quot;)
-XCTAssertEqual(timestamp, &quot;2012-03-01&quot;, &quot;&quot;)
+<pre><code>let timestamp = 3.years.ago.stringFromFormat("yyyy-MM-dd")
+XCTAssertEqual(timestamp, "2012-03-01", "")
 
-if let birthday = &quot;1987-06-02&quot;.dateFromFormat(&quot;yyyy-MM-dd&quot;) {
-    XCTAssertEqual(birthday.year, 1987, &quot;&quot;)
-    XCTAssertEqual(birthday.month, 6, &quot;&quot;)
-    XCTAssertEqual(birthday.day, 2, &quot;&quot;)
+if let birthday = "1987-06-02".dateFromFormat("yyyy-MM-dd") {
+    XCTAssertEqual(birthday.year, 1987, "")
+    XCTAssertEqual(birthday.month, 6, "")
+    XCTAssertEqual(birthday.day, 2, "")
 }
 </code></pre>
 <p><code>NSDateFormatter</code>をいちいち初期化するのが面倒だったので、これを内部的に呼び出す直感的なメソッドを追加した。フォーマット文字列は同じ。</p>
 <h1>オーバーロードの追加</h1>
-<p>Before: <img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301145950.png" alt="f:id:naoty_k:20150301145950p:plain" title="f:id:naoty_k:20150301145950p:plain" /></p>
-<p>After: <img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301150005.png" alt="f:id:naoty_k:20150301150005p:plain" title="f:id:naoty_k:20150301150005p:plain" /></p>
+<p>Before: <img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301145950.png" alt="f:id:naoty_k:20150301145950p:plain" title="f:id:naoty_k:20150301145950p:plain"></p>
+<p>After: <img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301150005.png" alt="f:id:naoty_k:20150301150005p:plain" title="f:id:naoty_k:20150301150005p:plain"></p>
 <p>これまでは<code>NSDate.date(year:month:day:hour:minute:second:)</code>は<code>hour</code>, <code>minute</code>, <code>second</code>のデフォルト引数を<code>0</code>にセットしていたが、これではBeforeのスクショの通り補完候補に<code>hour</code>, <code>minute</code>, <code>second</code>も含まれてしまう。デフォルト引数を使うよりも引数を省略したオーバーロードを提供した方が、補完候補に省略版のメソッドが現れるため使いやすいと思う。</p>
 <h1>今後の予定</h1>
 <ul>
-<li><code>NSDate</code>同士を比較演算子で比較できるようにしたい。</li>
-<li><code>1.5.hour</code>のような<code>Float</code>のサポート（けっこう難しそう）</li>
+<li>
+<code>NSDate</code>同士を比較演算子で比較できるようにしたい。</li>
+<li>
+<code>1.5.hour</code>のような<code>Float</code>のサポート（けっこう難しそう）</li>
 </ul>
         </section>
         <footer>

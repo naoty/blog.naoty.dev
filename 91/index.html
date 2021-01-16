@@ -6,6 +6,7 @@
     <title>Time::DATE_FORMATS</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Time::DATE_FORMATS">
     <meta property="og:type" content="website">
@@ -26,12 +27,12 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="ruby:config/initializers/time_formats.rb"><code>Time::DATE_FORMATS[:simple_time]     = lambda {|time| time = time.to_datetime; &quot;#{time.hour}:#{sprintf('%02d', time.minute)}&quot; }
-Time::DATE_FORMATS[:simple_datetime] = lambda {|time| time = time.to_datetime; &quot;#{time.month}/#{time.day} #{time.hour}:#{sprintf('%02d', time.minute)}&quot; }
+          <pre lang="ruby:config/initializers/time_formats.rb"><code>Time::DATE_FORMATS[:simple_time]     = lambda {|time| time = time.to_datetime; "#{time.hour}:#{sprintf('%02d', time.minute)}" }
+Time::DATE_FORMATS[:simple_datetime] = lambda {|time| time = time.to_datetime; "#{time.month}/#{time.day} #{time.hour}:#{sprintf('%02d', time.minute)}" }
 </code></pre>
-<pre lang="ruby"><code>user.created_at.to_s(:simple_time)     #=&gt; &quot;0:00&quot;
-user.created_at.to_s(:simple_datetime) #=&gt; &quot;11/14 0:00&quot;
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">user</span><span class="p">.</span><span class="nf">created_at</span><span class="p">.</span><span class="nf">to_s</span><span class="p">(</span><span class="ss">:simple_time</span><span class="p">)</span>     <span class="c1">#=&gt; "0:00"</span>
+<span class="n">user</span><span class="p">.</span><span class="nf">created_at</span><span class="p">.</span><span class="nf">to_s</span><span class="p">(</span><span class="ss">:simple_datetime</span><span class="p">)</span> <span class="c1">#=&gt; "11/14 0:00"</span>
+</pre>
         </section>
         <footer>
           <nav>

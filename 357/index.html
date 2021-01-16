@@ -6,6 +6,7 @@
     <title>Result型の返り値を使わないとき</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Result型の返り値を使わないとき">
     <meta property="og:type" content="website">
@@ -27,18 +28,18 @@
         </header>
         <section class="body">
           <p>以下のように<code>Result</code>型を返すメソッドの返り値を使わないと、コンパイラが<code>unused `std::result::Result` that must be used</code>のような警告を出す。</p>
-<pre lang="rust"><code>process::Command::new(&quot;ls&quot;).output()
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="nn">process</span><span class="p">::</span><span class="nn">Command</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"ls"</span><span class="p">)</span><span class="nf">.output</span><span class="p">()</span>
+</pre>
 <p><code>Result</code>型を返すメソッドが失敗したとき、返り値を使わないとそれに気づくことができないため、必ず返り値を使うようにコンパイラが警告してくれる。</p>
 <p>返り値を使わないときは<code>expect</code>を使う。このメソッドは<code>Result</code>が<code>Ok</code>であれば値を返し、<code>Err</code>であれば引数のメッセージを表示してpanicを起こす。</p>
-<pre lang="rust"><code>process::Command::new(&quot;ls&quot;).output().expect(&quot;failed&quot;);
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="nn">process</span><span class="p">::</span><span class="nn">Command</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"ls"</span><span class="p">)</span><span class="nf">.output</span><span class="p">()</span><span class="nf">.expect</span><span class="p">(</span><span class="s">"failed"</span><span class="p">);</span>
+</pre>
 <p>あるいは、<code>?</code>オペレータを使ってエラーをそのまま呼び出し元に転送することもできる。</p>
-<pre lang="rust"><code>fn execute_ls() -&gt; io::Result {
-    process::Command::new(&quot;ls&quot;).output()?;
-    Ok(())
-}
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">fn</span> <span class="nf">execute_ls</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nn">io</span><span class="p">::</span><span class="n">Result</span> <span class="p">{</span>
+    <span class="nn">process</span><span class="p">::</span><span class="nn">Command</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"ls"</span><span class="p">)</span><span class="nf">.output</span><span class="p">()</span><span class="o">?</span><span class="p">;</span>
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</pre>
         </section>
         <footer>
           <nav>

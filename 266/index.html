@@ -6,6 +6,7 @@
     <title>GeneratorとSequence</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="GeneratorとSequence">
     <meta property="og:type" content="website">
@@ -28,96 +29,96 @@
         <section class="body">
           <h1>GeneratorType</h1>
 <p>generatorとは新しい要素を返す処理のことで、以下の<code>GeneratorType</code>プロトコルに従う。</p>
-<pre lang="swift"><code>protocol GeneratorType {
-	typealias Element
-	func next() -&gt; Element?
-}
-</code></pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">protocol</span> <span class="kt">GeneratorType</span> <span class="p">{</span>
+	<span class="kd">typealias</span> <span class="kt">Element</span>
+	<span class="kd">func</span> <span class="nf">next</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span>
+<span class="p">}</span>
+</pre>
 <p>例えば、文字列を各行を返すgeneratorはこんな感じで実装する。</p>
-<pre lang="swift"><code>class LineGenerator: GeneratorType {
-    typealias Element = String
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">class</span> <span class="kt">LineGenerator</span><span class="p">:</span> <span class="kt">GeneratorType</span> <span class="p">{</span>
+    <span class="kd">typealias</span> <span class="kt">Element</span> <span class="o">=</span> <span class="kt">String</span>
     
-    var lines: [String]
+    <span class="k">var</span> <span class="nv">lines</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span>
     
-    init(text: String) {
-        self.lines = text.componentsSeparatedByString(&quot;\n&quot;)
-    }
+    <span class="nf">init</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="nf">componentsSeparatedByString</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
     
-    func next() -&gt; Element? {
-        return lines.isEmpty ? nil : lines.removeAtIndex(0)
-    }
-}
+    <span class="kd">func</span> <span class="nf">next</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">lines</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">?</span> <span class="nv">nil</span> <span class="p">:</span> <span class="n">lines</span><span class="o">.</span><span class="nf">removeAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-let text = &quot;いろはにほへと ちりぬるを\nわかよたれそ つねならむ\nういのおくやま けふこえて\nあさきゆめみし よひもせず&quot;
-let generator1 = LineGenerator(text: text)
-generator1.next() //=&gt; いろはにほへと ちりぬるを
-generator1.next() //=&gt; わかよたれそ つねならむ
-generator1.next() //=&gt; ういのおくやま けふこえて
-generator1.next() //=&gt; あさきゆめみし よひもせず
-generator1.next() //=&gt; nil
-</code></pre>
+<span class="k">let</span> <span class="nv">text</span> <span class="o">=</span> <span class="s">"いろはにほへと ちりぬるを</span><span class="se">\n</span><span class="s">わかよたれそ つねならむ</span><span class="se">\n</span><span class="s">ういのおくやま けふこえて</span><span class="se">\n</span><span class="s">あさきゆめみし よひもせず"</span>
+<span class="k">let</span> <span class="nv">generator1</span> <span class="o">=</span> <span class="kt">LineGenerator</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span>
+<span class="n">generator1</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; いろはにほへと ちりぬるを</span>
+<span class="n">generator1</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; わかよたれそ つねならむ</span>
+<span class="n">generator1</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; ういのおくやま けふこえて</span>
+<span class="n">generator1</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; あさきゆめみし よひもせず</span>
+<span class="n">generator1</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; nil</span>
+</pre>
 <h1>GeneratorOf</h1>
 <p>generatorを書くとき上のようにクラスを定義するのが面倒なら、<code>GeneratorOf</code>構造体が便利。以下のような感じで定義されている。</p>
-<pre lang="swift"><code>struct GeneratorOf: GeneratorType, SequenceType {
-	init(_ nextElement: () -&gt; T?)
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">struct</span> <span class="kt">GeneratorOf</span><span class="p">:</span> <span class="kt">GeneratorType</span><span class="p">,</span> <span class="kt">SequenceType</span> <span class="p">{</span>
+	<span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">nextElement</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?)</span>
 	
-	mutating func next() -&gt; T?
-}
-</code></pre>
+	<span class="k">mutating</span> <span class="kd">func</span> <span class="nf">next</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span>
+<span class="p">}</span>
+</pre>
 <p><code>GeneratorOf</code>構造体は<code>GeneratorType</code>プロトコルに従っており、初期化時に渡されたクロージャを<code>next()</code>で実行するようになっている。なので、上のコードは以下のように書き直せる。</p>
-<pre lang="swift"><code>func lineGenerator(#text: String) -&gt; GeneratorOf {
-    var lines = text.componentsSeparatedByString(&quot;\n&quot;)
-    return GeneratorOf { return lines.isEmpty ? nil : lines.removeAtIndex(0) }
-}
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">func</span> <span class="nf">lineGenerator</span><span class="p">(</span><span class="nv">#text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">GeneratorOf</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="nf">componentsSeparatedByString</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kt">GeneratorOf</span> <span class="p">{</span> <span class="k">return</span> <span class="n">lines</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">?</span> <span class="nv">nil</span> <span class="p">:</span> <span class="n">lines</span><span class="o">.</span><span class="nf">removeAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span>
 
-var generator2 = lineGenerator(text: text)
-generator2.next() //=&gt; いろはにほへと ちりぬるを
-generator2.next() //=&gt; わかよたれそ つねならむ
-generator2.next() //=&gt; ういのおくやま けふこえて
-generator2.next() //=&gt; あさきゆめみし よひもせず
-generator2.next() //=&gt; nil
-</code></pre>
+<span class="k">var</span> <span class="nv">generator2</span> <span class="o">=</span> <span class="nf">lineGenerator</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span>
+<span class="n">generator2</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; いろはにほへと ちりぬるを</span>
+<span class="n">generator2</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; わかよたれそ つねならむ</span>
+<span class="n">generator2</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; ういのおくやま けふこえて</span>
+<span class="n">generator2</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; あさきゆめみし よひもせず</span>
+<span class="n">generator2</span><span class="o">.</span><span class="nf">next</span><span class="p">()</span> <span class="c1">//=&gt; nil</span>
+</pre>
 <h1>SequenceType</h1>
 <p>sequenceはループによって中身の要素を走査できる構造のことで、以下の<code>SequenceType</code>プロトコルに従う。</p>
-<pre lang="swift"><code>protocol SequenceType {
-	typealias Generator: GeneratorType
-	func generate() -&gt; Generator
-}
-</code></pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">protocol</span> <span class="kt">SequenceType</span> <span class="p">{</span>
+	<span class="kd">typealias</span> <span class="kt">Generator</span><span class="p">:</span> <span class="kt">GeneratorType</span>
+	<span class="kd">func</span> <span class="nf">generate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Generator</span>
+<span class="p">}</span>
+</pre>
 <p>sequenceはgeneratorを<code>generate()</code>で生成して、それを使って中身の要素に順にアクセスする。<code>SequenceType</code>プロトコルに従うオブジェクトは<code>for-in</code>ループに渡すことができる。</p>
-<pre lang="swift"><code>class LineSequence: SequenceType {
-    typealias Generator = LineGenerator
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">class</span> <span class="kt">LineSequence</span><span class="p">:</span> <span class="kt">SequenceType</span> <span class="p">{</span>
+    <span class="kd">typealias</span> <span class="kt">Generator</span> <span class="o">=</span> <span class="kt">LineGenerator</span>
     
-    var text: String
+    <span class="k">var</span> <span class="nv">text</span><span class="p">:</span> <span class="kt">String</span>
     
-    init(text: String) {
-        self.text = text
-    }
+    <span class="nf">init</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+    <span class="p">}</span>
     
-    func generate() -&gt; Generator {
-        return LineGenerator(text: text)
-    }
-}
+    <span class="kd">func</span> <span class="nf">generate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Generator</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">LineGenerator</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-for line in LineSequence(text: text) {
-    print(line)
-}
-</code></pre>
+<span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="kt">LineSequence</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="p">}</span>
+</pre>
 <h1>SequenceOf</h1>
 <p><code>GeneratorOf</code>と同様に<code>SequenceOf</code>も存在する。</p>
-<pre lang="swift"><code>struct SequenceOf: SequenceType {
-	init(_ makeUnderlyingGenerator: () -&gt; G)
-	func generate() -&gt; GeneratorOf
-}
-</code></pre>
-<pre lang="swift"><code>func lineSequence(#text: String) -&gt; SequenceOf {
-	return SequenceOf { return lineGenerator(text: text) }
-}
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">struct</span> <span class="kt">SequenceOf</span><span class="p">:</span> <span class="kt">SequenceType</span> <span class="p">{</span>
+	<span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">makeUnderlyingGenerator</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">G</span><span class="p">)</span>
+	<span class="kd">func</span> <span class="nf">generate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">GeneratorOf</span>
+<span class="p">}</span>
+</pre>
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">func</span> <span class="nf">lineSequence</span><span class="p">(</span><span class="nv">#text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SequenceOf</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kt">SequenceOf</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">lineGenerator</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span>
 
-for line in lineSequence(text: text) {
-	print(line)
-}
-</code></pre>
+<span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="nf">lineSequence</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="n">text</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nf">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="p">}</span>
+</pre>
         </section>
         <footer>
           <nav>

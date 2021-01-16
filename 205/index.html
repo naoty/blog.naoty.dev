@@ -6,6 +6,7 @@
     <title>websocket-railsで簡単なPush通知を実装する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="websocket-railsで簡単なPush通知を実装する">
     <meta property="og:type" content="website">
@@ -29,11 +30,11 @@
           <p><a href="https://github.com/websocket-rails/websocket-rails">websocket-rails</a>を使ってRailsでWebSocketによるPush通知を実装する話をします。</p>
 <p>websocket-railsを使って簡単な<a href="http://naoty-timeline.herokuapp.com/">デモ</a>を作ってHerokuにアップしました。Twitter Streaming APIで受け取ったデータをWebSocketでリアルタイムにクライアントへ送るものです。ソースコードも<a href="https://github.com/naoty/twitter_streaming_sample">github</a>にありますので参考にどうぞ。</p>
 <h2>セットアップ</h2>
-<pre lang="rb:Gemfile"><code>gem &quot;websocket-rails&quot;
+<pre lang="rb:Gemfile"><code>gem "websocket-rails"
 </code></pre>
-<pre lang="bash"><code>$ bundle
-$ rails g websocket_rails:install
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>bundle
+<span class="nv">$ </span>rails g websocket_rails:install
+</pre>
 <p>最後のコマンドで設定ファイルを追加し、<code>application.js</code>をクライアント側のライブラリを<code>require</code>するように変更します。</p>
 <p>開発環境ではRack::Lockを無効にしないとエラーになるので以下のようにしておきます。</p>
 <pre lang="rb:config/environments/development.rb"><code>TwitterStreamingSample::Application.configure do
@@ -44,14 +45,14 @@ end
 <p>WebSocket接続したクライアントに対して任意のタイミングでメッセージを送りたい場合、channelというものを使うと簡単に実装できます。</p>
 <pre lang="ruby:streamings_controller.rb"><code>def create
   # ...
-  WebsocketRails[:streaming].trigger &quot;create&quot;, tweet
+  WebsocketRails[:streaming].trigger "create", tweet
   head :ok
 end
 </code></pre>
-<p>これで、&quot;streaming&quot;というチャネルに&quot;create&quot;というメッセージをtweetのデータとともに送信します。<code>WebSocketRails</code>という定数はどこからでもアクセス可能なので、任意のタイミングでチャネルにメッセージを送ることが可能です。</p>
-<pre lang="coffee:streamings.js.coffee"><code>dispatcher = new WebSocketRails(&quot;ws://#{localhost.host}/websocket&quot;)
-channel = dispatcher.subscribe(&quot;streaming&quot;)
-channel.bind &quot;create&quot;, (tweet) -&gt;
+<p>これで、"streaming"というチャネルに"create"というメッセージをtweetのデータとともに送信します。<code>WebSocketRails</code>という定数はどこからでもアクセス可能なので、任意のタイミングでチャネルにメッセージを送ることが可能です。</p>
+<pre lang="coffee:streamings.js.coffee"><code>dispatcher = new WebSocketRails("ws://#{localhost.host}/websocket")
+channel = dispatcher.subscribe("streaming")
+channel.bind "create", (tweet) -&gt;
   # something
 </code></pre>
 <p>次にクライアント側では、まずWebSocket接続を行います。WebSocket接続はwebsocket-railsが追加する<code>/websocket</code>というパスに対してリクエストを送ります。</p>
@@ -64,15 +65,15 @@ channel.bind &quot;create&quot;, (tweet) -&gt;
 	proxy_pass http://backend;
 	proxy_http_version 1.1;
 	proxy_set_header Upgrade $http_upgrade;
-	proxy_set_header Connection &quot;Upgrade&quot;;
+	proxy_set_header Connection "Upgrade";
 }
 </code></pre>
-<p>&quot;Upgrade&quot;というヘッダーはプロトコルをHTTPからWebSocketに変更するために必要な情報で、<a href="http://tools.ietf.org/html/rfc6455#section-1.3">RFC</a>で定められています。</p>
+<p>"Upgrade"というヘッダーはプロトコルをHTTPからWebSocketに変更するために必要な情報で、<a href="http://tools.ietf.org/html/rfc6455#section-1.3">RFC</a>で定められています。</p>
 <h2>Heroku</h2>
 <p>最近、HerokuがWebSocketのサポートを開始しました。ただし、まだβ版での開始なので、デフォルトのままではWebSocketを利用できません。以下のコマンドを実行するとWebSocketの機能がオンになります。</p>
-<pre lang="bash"><code>$ heroku labs:enable websockets
-</code></pre>
-<hr />
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>heroku labs:enable websockets
+</pre>
+<hr>
 <h3>参考</h3>
 <ul>
 <li><a href="https://github.com/websocket-rails/websocket-rails">websocket-rails/websocket-rails</a></li>

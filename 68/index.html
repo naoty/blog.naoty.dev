@@ -6,6 +6,7 @@
     <title>MongoDBを使う際のRspecの設定メモ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="MongoDBを使う際のRspecの設定メモ">
     <meta property="og:type" content="website">
@@ -75,7 +76,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  #config.fixture_path = &quot;#{::Rails.root}/spec/fixtures&quot; # コメントアウト
+  #config.fixture_path = "#{::Rails.root}/spec/fixtures" # コメントアウト
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

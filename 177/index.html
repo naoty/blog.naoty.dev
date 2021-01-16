@@ -6,6 +6,7 @@
     <title>bundle execを使わずに済む方法（rbenv編）</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="bundle execを使わずに済む方法（rbenv編）">
     <meta property="og:type" content="website">
@@ -26,31 +27,32 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="sh"><code>$ cd
-$ mkdir .rbenv/plugins
-$ cd .rbenv/plugins
-$ git clone git://github.com/ianheggie/rbenv-binstubs.git
-</code></pre>
+          <pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span><span class="nb">mkdir</span> .rbenv/plugins
+<span class="nv">$ </span><span class="nb">cd</span> .rbenv/plugins
+<span class="nv">$ </span>git clone git://github.com/ianheggie/rbenv-binstubs.git
+</pre>
 <ul>
 <li>rbenvにはpluginsという仕組みがあってrbenvに機能を追加できる。ruby-buildもその一つ。「ひとつのことをうまくやる」思想っぽい。</li>
 <li>そのpluginのひとつにbundlerとの連携をうまくやってくれる<a href="https://github.com/carsomyr/rbenv-bundler">rbenv-bundler</a>というのがあるんだけど、rbenvはこれを<a href="https://github.com/sstephenson/rbenv/wiki/Plugins#bundler-integration">非推奨</a>といってる。パフォーマンスが悪くなったり、バグが多いみたい。</li>
 <li>同じようなpluginを探したところ、<a href="https://github.com/ianheggie/rbenv-binstubs">rbenv-binstubs</a>というものを見つけた。<a href="http://robots.thoughtbot.com/post/47273164981/using-rbenv-to-manage-rubies-and-gems">thoughtbotのブログ</a>で紹介されていた。</li>
 </ul>
 <h3>Rails 3</h3>
-<pre lang="sh"><code>$ cd path/to/project
-$ bundle install --binstubs
-$ rbenv rehash
-$ rails s
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd </span>path/to/project
+<span class="nv">$ </span>bundle <span class="nb">install</span> <span class="nt">--binstubs</span>
+<span class="nv">$ </span>rbenv rehash
+<span class="nv">$ </span>rails s
+</pre>
 <ul>
-<li><code>--path=vendor/bundle</code>を指定するとうまくいかなかった。</li>
+<li>
+<code>--path=vendor/bundle</code>を指定するとうまくいかなかった。</li>
 </ul>
 <h3>Rails 4</h3>
-<pre lang="sh"><code>$ cd path/to/project
-$ bundle install --binstubs=bundle_bin
-$ rbenv rehash
-$ rails s
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span><span class="nb">cd </span>path/to/project
+<span class="nv">$ </span>bundle <span class="nb">install</span> <span class="nt">--binstubs</span><span class="o">=</span>bundle_bin
+<span class="nv">$ </span>rbenv rehash
+<span class="nv">$ </span>rails s
+</pre>
 <ul>
 <li>Rails 4からはbinディレクトリの扱いが若干変わるので要注意。詳しくは<a href="http://qiita.com/items/01c41578e611b038da6e">こちら</a>。</li>
 <li>binstubsが実行ファイルを生成するディレクトリを指定する。指定してもちゃんと動く。</li>

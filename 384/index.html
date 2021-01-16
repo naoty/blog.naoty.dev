@@ -6,6 +6,7 @@
     <title>ホームページをNuxtで作り直した</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ホームページをNuxtで作り直した">
     <meta property="og:type" content="website">
@@ -42,23 +43,38 @@
 <p>以前から耳にしたことはあったけど触ったことがなかったので初挑戦してみた。感想としては、GitHub pagesでのホスティングに比べて非常によかった。</p>
 <p>以前は、<a href="https://github.com/naoty/homepage">naoty/homepage</a>というホームページを生成するリポジトリと、<a href="https://github.com/naoty/naoty.github.io">naoty/naoty.github.io</a>というホームページそのもののリポジトリが分かれていた。そして、Circle CIでホームページを生成してnaoty/naoty.github.ioのリポジトリにpushするような設定を書いていた。</p>
 <p>Netlifyにした結果、そういったデプロイの設定がこれだけになり、Circle CIは使わなくなった。</p>
-<pre lang="toml"><code># netlify.toml
-[build]
-command = &quot;npm run build&quot;
-publish = &quot;dist/&quot;
-environment = { NUXT_BASE_URL = &quot;https://naoty.dev&quot;, TZ = &quot;Asia/Tokyo&quot; }
-</code></pre>
+<pre lang="toml" class="highlight highlight-toml"><span class="c"># netlify.toml</span>
+<span class="nn">[build]</span>
+<span class="py">command</span> <span class="p">=</span> <span class="s">"npm run build"</span>
+<span class="py">publish</span> <span class="p">=</span> <span class="s">"dist/"</span>
+<span class="nn">environment</span> <span class="o">=</span> <span class="p">{</span> <span class="py">NUXT_BASE_URL</span> <span class="p">=</span> <span class="s">"https://naoty.dev"</span><span class="p">,</span> <span class="py">TZ</span> <span class="p">=</span> <span class="s">"Asia/Tokyo"</span> <span class="p">}</span>
+</pre>
 <h1>CHANGELOG</h1>
 <p>せっかくの機会なので、これまでのホームページの経緯を振り返ってみたい。</p>
 <ul>
-<li><strong>2017-11-29</strong>：v1を公開した。当時は<a href="https://dev.to">dev.to</a>が話題になっていた頃で、爆速なブログにあこがれて始めた気がする。このときはまだ静的サイトジェネレータすら使わず、Markdownファイルからホームページを生成するパイプラインをGulpで作っていた。<a href="/304/">#304</a></li>
-<li><strong>2017-12-08</strong>：Circle CIでGitHub pagesへのアップロードを自動化した。<a href="/308/">#308</a></li>
-<li><strong>2018-01-12</strong>：Atom形式のフィードを配信するようになった。これでRSSリーダーで購読できるようになった。だけど、v2でGatsby.jsを導入したあと、フィードを配信する機能を実装する方法がよくわからなかったりして廃止されている。v3で今後復活させたい。<a href="/316/">#316</a></li>
-<li><strong>2018-09-01</strong>：v2を公開した。このときにGatsby.jsを導入してまともなホームページ作成環境になった。この頃からモダンなWebフロントエンド開発をたしなむようになった。<a href="/342/">#342</a></li>
-<li><strong>2018-12-12</strong>：ライブラリのアップデートをdependabotで自動化した。これによって面倒なアップデート作業が非常にラクになり、仕事でもアップデートの自動化を試みるようになった。<a href="/353/">#353</a></li>
-<li><strong>2019-03-02</strong>：ドメインを<code>naoty.github.io</code>から<code>naoty.dev</code>に変更した。<code>dev</code>ドメインが公開される日に急いでGoogle Domainsで取得した記憶がある。<a href="/363/">#363</a></li>
-<li><strong>2019-05-01</strong>：タグごとの記事一覧ページを実装した。Gatsby.jsだと簡単にできたんだけど、Nuxt.jsだとルーティングの関係でなんかうまくいってない。<a href="/369/">#369</a></li>
-<li><strong>2019-09-28</strong>：v3を公開した。</li>
+<li>
+<strong>2017-11-29</strong>：v1を公開した。当時は<a href="https://dev.to">dev.to</a>が話題になっていた頃で、爆速なブログにあこがれて始めた気がする。このときはまだ静的サイトジェネレータすら使わず、Markdownファイルからホームページを生成するパイプラインをGulpで作っていた。<a href="/304/">#304</a>
+</li>
+<li>
+<strong>2017-12-08</strong>：Circle CIでGitHub pagesへのアップロードを自動化した。<a href="/308/">#308</a>
+</li>
+<li>
+<strong>2018-01-12</strong>：Atom形式のフィードを配信するようになった。これでRSSリーダーで購読できるようになった。だけど、v2でGatsby.jsを導入したあと、フィードを配信する機能を実装する方法がよくわからなかったりして廃止されている。v3で今後復活させたい。<a href="/316/">#316</a>
+</li>
+<li>
+<strong>2018-09-01</strong>：v2を公開した。このときにGatsby.jsを導入してまともなホームページ作成環境になった。この頃からモダンなWebフロントエンド開発をたしなむようになった。<a href="/342/">#342</a>
+</li>
+<li>
+<strong>2018-12-12</strong>：ライブラリのアップデートをdependabotで自動化した。これによって面倒なアップデート作業が非常にラクになり、仕事でもアップデートの自動化を試みるようになった。<a href="/353/">#353</a>
+</li>
+<li>
+<strong>2019-03-02</strong>：ドメインを<code>naoty.github.io</code>から<code>naoty.dev</code>に変更した。<code>dev</code>ドメインが公開される日に急いでGoogle Domainsで取得した記憶がある。<a href="/363/">#363</a>
+</li>
+<li>
+<strong>2019-05-01</strong>：タグごとの記事一覧ページを実装した。Gatsby.jsだと簡単にできたんだけど、Nuxt.jsだとルーティングの関係でなんかうまくいってない。<a href="/369/">#369</a>
+</li>
+<li>
+<strong>2019-09-28</strong>：v3を公開した。</li>
 </ul>
         </section>
         <footer>

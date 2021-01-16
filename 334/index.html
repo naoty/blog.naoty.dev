@@ -6,6 +6,7 @@
     <title>docker-composeでwebpack-dev-serverを使う</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="docker-composeでwebpack-dev-serverを使う">
     <meta property="og:type" content="website">
@@ -28,22 +29,22 @@
         <section class="body">
           <p>docker-composeを使って開発をしているとき、webpack-dev-serverを別サービスとして起動させたくなる。Rails + webpackerの環境でうまく実現できたのでメモを残しておく。</p>
 <p><code>docker-compose.yml</code>のうちポイントとなる箇所だけ抽出した。</p>
-<pre lang="yaml"><code>services:
-  rails:
-    environment:
-      WEBPACKER_DEV_SERVER_HOST: webpack-dev-server
-    volumes:
-      - ./public/packs:/myapp/public/packs
-    depends_on:
-      - webpack-dev-server
-  webpack-dev-server:
-    environment:
-      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
-    ports:
-      - 3035:3035
-    volumes:
-      - ./public/packs:/myapp/public/packs
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">services</span><span class="pi">:</span>
+  <span class="na">rails</span><span class="pi">:</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">WEBPACKER_DEV_SERVER_HOST</span><span class="pi">:</span> <span class="s">webpack-dev-server</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./public/packs:/myapp/public/packs</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">webpack-dev-server</span>
+  <span class="na">webpack-dev-server</span><span class="pi">:</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">WEBPACKER_DEV_SERVER_HOST</span><span class="pi">:</span> <span class="s">0.0.0.0</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">3035:3035</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./public/packs:/myapp/public/packs</span>
+</pre>
 <h1>webpackerとwebpack-dev-server</h1>
 <p>webpackerをセットアップするとwebpack-dev-serverもついてくる。そして、<code>config/webpacker.yml</code>にはwebpack-dev-serverの設定も含まれている。</p>
 <p>開発環境において、webpackerはアセットへのリクエスト受信時にwebpackを実行してアセットをコンパイルするが、webpack-dev-serverの起動が確認できればアセットへのリクエストをwebpack-dev-serverに転送するようになっている。</p>

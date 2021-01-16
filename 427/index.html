@@ -6,6 +6,7 @@
     <title>cp-kafkaでKafkaの動作環境を用意する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="cp-kafkaでKafkaの動作環境を用意する">
     <meta property="og:type" content="website">
@@ -28,33 +29,33 @@
         </header>
         <section class="body">
           <p>以前書いた<a href="/421/">記事</a>でKafka用のDockerイメージを自作していたけど、Kafkaのマネージドサービスを提供しているConfluent社が公開している<a href="https://hub.docker.com/r/confluentinc/cp-kafka/">confluentinc/cp-kafka</a>というDockerイメージを使うのが手っ取り早いことに気づいた。</p>
-<pre lang="yaml"><code># docker-compose.yml
-version: &quot;3&quot;
-services:
-  kafka:
-    image: confluentinc/cp-kafka
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-    ports:
-      - 9092:9092
-    depends_on:
-      - zookeeper
-  zookeeper:
-    image: confluentinc/cp-zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 32181
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="c1"># docker-compose.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">kafka</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">confluentinc/cp-kafka</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">KAFKA_ZOOKEEPER_CONNECT</span><span class="pi">:</span> <span class="s">zookeeper:32181</span>
+      <span class="na">KAFKA_ADVERTISED_LISTENERS</span><span class="pi">:</span> <span class="s">PLAINTEXT://localhost:9092</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">9092:9092</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">zookeeper</span>
+  <span class="na">zookeeper</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">confluentinc/cp-zookeeper</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">ZOOKEEPER_CLIENT_PORT</span><span class="pi">:</span> <span class="m">32181</span>
+</pre>
 <p>Kafkaと一緒に使うzookeeperもConfluent社が用意しているものがあるのでそれを使う。各イメージの設定は環境変数から変更できるようになっている。Confluent社の<a href="https://docs.confluent.io/current/installation/docker/config-reference.html">ドキュメント</a>を参考にするといい。</p>
-<pre lang="bash"><code>% docker-compose up -d
-% kafkacat -L -b localhost:9092
-Metadata for all topics (from broker 1001: localhost:9092/1001):
+<pre lang="bash" class="highlight highlight-bash">% docker-compose up <span class="nt">-d</span>
+% kafkacat <span class="nt">-L</span> <span class="nt">-b</span> localhost:9092
+Metadata <span class="k">for </span>all topics <span class="o">(</span>from broker 1001: localhost:9092/1001<span class="o">)</span>:
  1 brokers:
-  broker 1001 at localhost:9092 (controller)
+  broker 1001 at localhost:9092 <span class="o">(</span>controller<span class="o">)</span>
  1 topics:
-  topic &quot;__confluent.support.metrics&quot; with 1 partitions:
+  topic <span class="s2">"__confluent.support.metrics"</span> with 1 partitions:
     partition 0, leader 1001, replicas: 1001, isrs: 1001
-</code></pre>
+</pre>
 <p>ホストから<a href="https://github.com/edenhill/kafkacat">kafkacat</a>でコンテナ上のKafkaと疎通確認ができた。</p>
         </section>
         <footer>

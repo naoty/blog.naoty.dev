@@ -6,6 +6,7 @@
     <title>rake/testtask</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="rake/testtask">
     <meta property="og:type" content="website">
@@ -27,26 +28,28 @@
         </header>
         <section class="body">
           <p>minitestでテストを書いたことがなかったので、まずはテストの実行方法を調べてみた。すると、<a href="https://docs.ruby-lang.org/ja/latest/class/Rake=3a=3aTestTask.html"><code>rake/testtask</code></a>というライブラリを使うと簡単にテストのためのrakeタスクを定義できることがわかった。</p>
-<pre lang="ruby"><code># Rakefile
-require &quot;rake/testtask&quot;
+<pre lang="ruby" class="highlight highlight-ruby"><span class="c1"># Rakefile</span>
+<span class="nb">require</span> <span class="s2">"rake/testtask"</span>
 
-Rake::TestTask.new do |task|
-  task.libs = [&quot;lib&quot;, &quot;test&quot;]
-  task.test_files = FileList[&quot;test/**/*.rb&quot;]
-end
-</code></pre>
+<span class="no">Rake</span><span class="o">::</span><span class="no">TestTask</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">task</span><span class="o">|</span>
+  <span class="n">task</span><span class="p">.</span><span class="nf">libs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"lib"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]</span>
+  <span class="n">task</span><span class="p">.</span><span class="nf">test_files</span> <span class="o">=</span> <span class="no">FileList</span><span class="p">[</span><span class="s2">"test/**/*.rb"</span><span class="p">]</span>
+<span class="k">end</span>
+</pre>
 <ul>
-<li><code>#libs=</code>でテスト実行前に<code>$LOAD_PATH</code>に指定したパスを追加できる。<code>require &quot;test_helper&quot;</code>みたいに書けるのはこれのおかげ。</li>
-<li><code>#test_files=</code>でテスト対象を指定できる。</li>
+<li>
+<code>#libs=</code>でテスト実行前に<code>$LOAD_PATH</code>に指定したパスを追加できる。<code>require "test_helper"</code>みたいに書けるのはこれのおかげ。</li>
+<li>
+<code>#test_files=</code>でテスト対象を指定できる。</li>
 </ul>
 <p>テストの実行はこんな感じ。</p>
-<pre lang="bash"><code># 全テストを実行
-% rake test
-# ファイルを指定して実行
-% rake test TEST=test/foo_test.rb
-# メソッドを指定して実行
-% rake test TESTOPTS=&quot;--name=test_foo&quot;
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># 全テストを実行</span>
+% rake <span class="nb">test</span>
+<span class="c"># ファイルを指定して実行</span>
+% rake <span class="nb">test </span><span class="nv">TEST</span><span class="o">=</span><span class="nb">test</span>/foo_test.rb
+<span class="c"># メソッドを指定して実行</span>
+% rake <span class="nb">test </span><span class="nv">TESTOPTS</span><span class="o">=</span><span class="s2">"--name=test_foo"</span>
+</pre>
         </section>
         <footer>
           <nav>

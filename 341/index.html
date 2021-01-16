@@ -6,6 +6,7 @@
     <title>multi-stage buildでのfreshの運用</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="multi-stage buildでのfreshの運用">
     <meta property="og:type" content="website">
@@ -28,36 +29,36 @@
         </header>
         <section class="body">
           <p>Goで書いているWebアプリケーションをDockerイメージにするとき、multi-stage buildを使ってビルド用のイメージと実行用のイメージを分けると思う。実行用のイメージをalpine linuxベースにするとイメージのサイズが異常に小さくなる。</p>
-<pre lang="docker"><code>FROM golang as builder
-ENV CGO_ENABLED 0
-WORKDIR /go/src/github.com/naoty/hello
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> golang as builder</span>
+<span class="k">ENV</span><span class="s"> CGO_ENABLED 0</span>
+<span class="k">WORKDIR</span><span class="s"> /go/src/github.com/naoty/hello</span>
 
-RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh \
-  &amp;&amp; go get github.com/pilu/fresh
+<span class="k">RUN </span>curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh <span class="se">\
+</span>  <span class="o">&amp;&amp;</span> go get github.com/pilu/fresh
 
-# dep
-COPY Gopkg.toml Gopkg.lock /go/src/github.com/naoty/hello/
-RUN dep ensure -v --vendor-only=true
+<span class="c"># dep</span>
+<span class="k">COPY</span><span class="s"> Gopkg.toml Gopkg.lock /go/src/github.com/naoty/hello/</span>
+<span class="k">RUN </span>dep ensure <span class="nt">-v</span> <span class="nt">--vendor-only</span><span class="o">=</span><span class="nb">true</span>
 
-COPY . /go/src/github.com/naoty/hello/
-RUN make install
+<span class="k">COPY</span><span class="s"> . /go/src/github.com/naoty/hello/</span>
+<span class="k">RUN </span>make <span class="nb">install</span>
 
-FROM alpine
-RUN apk --no-cache add ca-certificates 
-WORKDIR /root/
-COPY --from=builder /go/bin/hello /root/
-CMD [&quot;./hello&quot;]
-</code></pre>
+<span class="k">FROM</span><span class="s"> alpine</span>
+<span class="k">RUN </span>apk <span class="nt">--no-cache</span> add ca-certificates 
+<span class="k">WORKDIR</span><span class="s"> /root/</span>
+<span class="k">COPY</span><span class="s"> --from=builder /go/bin/hello /root/</span>
+<span class="k">CMD</span><span class="s"> ["./hello"]</span>
+</pre>
 <p>一方で、Goの開発では<a href="https://github.com/pilu/fresh">pilu/fresh</a>を使ってファイルの更新時に自動的にビルドと実行をし直したい。だけど、multi-stage buildを使っていると、実行用のイメージにはGoのビルド環境がないため、少し工夫が必要になる。</p>
 <p>docker-composeを使うとき、<code>target</code>オプションを使うとビルド用のコンテナまででビルドを中断できる。ただし、3.4からの機能なので<code>version</code>を3.4以上にする必要がある。</p>
-<pre lang="yaml"><code>version: &quot;3.4&quot;
-services:
-  app:
-    build:
-      context: .
-      target: builder
-    command: [&quot;fresh&quot;]
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.4"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span>
+      <span class="na">context</span><span class="pi">:</span> <span class="s">.</span>
+      <span class="na">target</span><span class="pi">:</span> <span class="s">builder</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">fresh"</span><span class="pi">]</span>
+</pre>
         </section>
         <footer>
           <nav>

@@ -6,6 +6,7 @@
     <title>webpackerにjestを導入する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="webpackerにjestを導入する">
     <meta property="og:type" content="website">
@@ -27,40 +28,40 @@
         </header>
         <section class="body">
           <p>webpackerを使ったRailsプロジェクトにjestを導入してみた。jestをインストールしてテストを実行してみると、以下のようなエラーがおきた。</p>
-<pre><code>({&quot;Object.&quot;:function(module,exports,require,__dirname,__filename,global,jest){import xxx from './xxx';
+<pre><code>({"Object.":function(module,exports,require,__dirname,__filename,global,jest){import xxx from './xxx';
                                                                                          ^^^^^^
 
 SyntaxError: Unexpected token import
   at ScriptTransformer._transformAndBuildScript (node_modules/jest-runtime/build/script_transformer.js:316:17)
 </code></pre>
 <p>importがコンパイルできていないようだ。webpackerが生成する<code>.babelrc</code>では、以下のように設定されている。</p>
-<pre lang="json"><code>{
-  &quot;presets&quot;: [
-    [&quot;env&quot;, {
-      &quot;modules&quot;: false,
-      &quot;targets&quot;: {
-        &quot;browsers&quot;: &quot;&gt; 1%&quot;,
-        &quot;uglify&quot;: true
-      },
-      &quot;useBuiltIns&quot;: true
-    }],
-    &quot;react&quot;
-  ]
-}
-</code></pre>
-<p><code>&quot;modules&quot;: false</code>と設定されているため、<code>import</code>の変換が行われないようになっている。これはwebpackによって<code>import</code>文を処理するためにbabelでは<code>import</code>の変換を行わないようにしているんだと思う。</p>
+<pre lang="json" class="highlight highlight-json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"presets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">[</span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"modules"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"targets"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"browsers"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&gt; 1%"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"uglify"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"useBuiltIns"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}],</span><span class="w">
+    </span><span class="s2">"react"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p><code>"modules": false</code>と設定されているため、<code>import</code>の変換が行われないようになっている。これはwebpackによって<code>import</code>文を処理するためにbabelでは<code>import</code>の変換を行わないようにしているんだと思う。</p>
 <p>しかし、jestを実行する場合はwebpackによる処理は行われないため、<code>import</code>が変換されずエラーになっていたと考えられそう。</p>
 <p>そこで、以下の設定を<code>.babelrc</code>に追加したところ直った。</p>
-<pre lang="json"><code>{
-  &quot;env&quot;: {
-    &quot;test&quot;: {
-      &quot;presets&quot;: [
-        [&quot;env&quot;, { &quot;modules&quot;: &quot;commonjs&quot; }]
-      ]
-    }
-  }
-}
-</code></pre>
+<pre lang="json" class="highlight highlight-json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"presets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">[</span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"modules"</span><span class="p">:</span><span class="w"> </span><span class="s2">"commonjs"</span><span class="w"> </span><span class="p">}]</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
 <p>jestは実行時に自動的に<code>NODE_ENV</code>を<code>test</code>に設定するため、これでうまくいく。</p>
         </section>
         <footer>

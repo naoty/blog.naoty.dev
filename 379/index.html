@@ -6,6 +6,7 @@
     <title>bundle lockが便利</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="bundle lockが便利">
     <meta property="og:type" content="website">
@@ -27,14 +28,14 @@
         </header>
         <section class="body">
           <p><code>bundle lock</code>というコマンドがあることに気づいた。これはgemをインストールせずに<code>Gemfile.lock</code>だけを更新する。</p>
-<pre lang="bash"><code>% bundle lock
+<pre lang="bash" class="highlight highlight-bash">% bundle lock
 Fetching gem metadata from https://rubygems.org/.
 Resolving dependencies...
 Writing lockfile to Gemfile.lock
-</code></pre>
+</pre>
 <p>普段、MySQLのDockerイメージを使っているので、<code>mysql2</code>をインストールしようとすると以下のようなエラーになる。</p>
-<pre lang="bash"><code>mysql client is missing. You may need to 'brew install mysql' or 'port install mysql', and try again.
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">mysql client is missing. You may need to <span class="s1">'brew install mysql'</span> or <span class="s1">'port install mysql'</span>, and try again.
+</pre>
 <p>このままだと<code>Gemfile.lock</code>を更新できないので、Dockerイメージ内で<code>bundle install</code>して<code>Gemfile.lock</code>の同期によってホスト側を更新していた。</p>
 <p><code>bundle lock</code>を使うともっと簡単にできることがわかった。インストールせずに<code>Gemfile.lock</code>を更新するので、ホストにMySQLがなくてもいい。便利。</p>
         </section>

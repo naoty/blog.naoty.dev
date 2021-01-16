@@ -6,6 +6,7 @@
     <title>Androidの標準カメラで撮った画像をPOSTで送信する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Androidの標準カメラで撮った画像をPOSTで送信する">
     <meta property="og:type" content="website">
@@ -59,12 +60,12 @@ public void onClick(View v) {
     }
 
     ContentValues values = new ContentValues();
-    values.put(MediaStore.Images.Media.TITLE, System.currentTimeMillis() + &quot;.jpg&quot;);
-    values.put(MediaStore.Images.Media.MIME_TYPE, &quot;image/jpeg&quot;);
+    values.put(MediaStore.Images.Media.TITLE, System.currentTimeMillis() + ".jpg");
+    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
     pictureUri = getContentResolver().insert(MediaStore.Images.Media.EXTRA_CONTENT_URI, values); // (2)
 
     Intent intent = new Intent();
-    intent.setAction(&quot;android.media.action.IMAGE_CAPTURE&quot;);
+    intent.setAction("android.media.action.IMAGE_CAPTURE");
     intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri); // (3)
     startActivityForResult(intent, CAMERA_ACTIVITY_REQUEST_CODE);
 }
@@ -139,12 +140,12 @@ private static Bitmap resize(Bitmap picture, int targetWidth, int targetHeight) 
 
     ByteArrayBody bab = PictureUtil.toByteArrayBody(picture); // (2)
     MultipartEntity requestEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-    requestEntity.addPart(&quot;picture&quot;, bab); // (3)
-    requestEntity.addPart(&quot;string&quot;, new StringEntity(&quot;文字列&quot;));
+    requestEntity.addPart("picture", bab); // (3)
+    requestEntity.addPart("string", new StringEntity("文字列"));
     // その他、送信したいデータを追加
 
     HttpClient client = new DefaultHttpClient();
-    HttpPost request = new HttpPost(&quot;http://example.com&quot;);
+    HttpPost request = new HttpPost("http://example.com");
     request.setEntity(requestEntity);
 
     // 以下、POSTリクエスト送信処理
@@ -167,7 +168,7 @@ public static ByteArrayBody toByteArrayBody(Bitmap picture) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     picture.compress(CompressFormat.JPEG, QUALITY, bos); // (4)
     byte[] data = bos.toByteArray();
-    return new ByteArrayBody(data, System.currentTimeMillis() + &quot;.jpg&quot;);
+    return new ByteArrayBody(data, System.currentTimeMillis() + ".jpg");
 }
 </code></pre>
 <ul>

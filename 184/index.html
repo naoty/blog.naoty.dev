@@ -6,6 +6,7 @@
     <title>mrubyで定義したクラスとメソッドをCから呼び出す</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="mrubyで定義したクラスとメソッドをCから呼び出す">
     <meta property="og:type" content="website">
@@ -42,7 +43,7 @@ class Person
   end
 
   def greeting
-    &quot;Hello, my name is #{name}, #{age} years old.&quot;
+    "Hello, my name is #{name}, #{age} years old."
   end
 end
 </code></pre>
@@ -67,26 +68,26 @@ int main()
     mrb_state* mrb = mrb_open();
 
     // mrubyファイルをロードする
-    FILE *fd = fopen(&quot;person.mrb&quot;, &quot;r&quot;);
+    FILE *fd = fopen("person.mrb", "r");
     mrb_load_irep_file(mrb, fd);
 
     // クラスオブジェクトを取得する
-    struct RClass *person = mrb_class_obj_get(mrb, &quot;Person&quot;);
+    struct RClass *person = mrb_class_obj_get(mrb, "Person");
 
     // 引数をmrb_valueに変換する
     mrb_value person_value = mrb_obj_value(person);
-    mrb_value name_value = mrb_str_new(mrb, &quot;naoty&quot;, 5);
+    mrb_value name_value = mrb_str_new(mrb, "naoty", 5);
     mrb_value age_value = mrb_fixnum_value(25);
 
     // Person#newを呼び出す
-    mrb_value naoty = mrb_funcall(mrb, person_value, &quot;new&quot;, 2, name_value, age_value);
+    mrb_value naoty = mrb_funcall(mrb, person_value, "new", 2, name_value, age_value);
 
     // Person#greetingを呼び出す
-    mrb_value greeting_value = mrb_funcall(mrb, naoty, &quot;greeting&quot;, 0);
+    mrb_value greeting_value = mrb_funcall(mrb, naoty, "greeting", 0);
 
     // 返り値をchar*に変換して出力する
     char *greeting = mrb_string_value_ptr(mrb, greeting_value);
-    printf(&quot;%s\n&quot;, greeting);
+    printf("%s\n", greeting);
 
     mrb_close(mrb);
     return 0;
@@ -95,8 +96,10 @@ int main()
 <ul>
 <li>*.mrb形式のファイルをロードするには<code>mrb_load_irep_file()</code>を実行する。</li>
 <li>次にクラスを取得するには<code>mrb_class_obj_get()</code>を実行し、メソッドを呼び出すには<code>mrb_funcall()</code>を実行する。</li>
-<li><code>mrb_funcall()</code>には、第2引数にメソッドのレシーバ、第3引数にメソッド名、第4引数にメソッドの引数の数、第5引数以降にはメソッドの引数を渡す。第2引数と第5引数以降は<code>int</code>や<code>char*</code>などをそのまま渡すことはできなくて、<code>mrb_value</code>という構造体に変換する必要がある。変換するための関数については長くなりそうなので、別の記事にしようと思う。</li>
-<li><code>mrb_funcall()</code>の返り値も<code>mrb_value</code>構造体なので、標準出力をするために<code>char*</code>に変換する。</li>
+<li>
+<code>mrb_funcall()</code>には、第2引数にメソッドのレシーバ、第3引数にメソッド名、第4引数にメソッドの引数の数、第5引数以降にはメソッドの引数を渡す。第2引数と第5引数以降は<code>int</code>や<code>char*</code>などをそのまま渡すことはできなくて、<code>mrb_value</code>という構造体に変換する必要がある。変換するための関数については長くなりそうなので、別の記事にしようと思う。</li>
+<li>
+<code>mrb_funcall()</code>の返り値も<code>mrb_value</code>構造体なので、標準出力をするために<code>char*</code>に変換する。</li>
 </ul>
 <h2>Cをコンパイルして実行</h2>
 <p>Cのソースコードをmrubyのヘッダーファイルやスタティックライブラリと一緒にコンパイルする。僕の環境だと以下のコマンドでコンパイルできた。</p>
@@ -107,28 +110,28 @@ Hello, my name is naoty, 25 years old.
 <p>greeting.cはperson.mrbに依存し、person.mrbはperson.rbに依存しているので、一連のビルドはMakefileかRakefileで自動化したほうがいいと思う。</p>
 <pre><code>// Rakefile
 
-require &quot;rake/clean&quot;
+require "rake/clean"
 
-CC = &quot;gcc&quot;
-MRBC = &quot;mrbc&quot;
+CC = "gcc"
+MRBC = "mrbc"
 
-CLEAN.include(&quot;person.mrb&quot;)
-CLOBBER.include(&quot;greeting&quot;)
+CLEAN.include("person.mrb")
+CLOBBER.include("greeting")
 
-task default: &quot;greeting&quot;
+task default: "greeting"
 
-file &quot;greeting&quot; =&gt; [&quot;greeting.c&quot;, &quot;person.mrb&quot;] do |t|
-  sh &quot;#{CC} -I ~/mruby/include #{t.prerequisites[0]} ~/mruby/build/host/lib/libmruby.a -lm -o #{t.name}&quot;
+file "greeting" =&gt; ["greeting.c", "person.mrb"] do |t|
+  sh "#{CC} -I ~/mruby/include #{t.prerequisites[0]} ~/mruby/build/host/lib/libmruby.a -lm -o #{t.name}"
 end
 
-file &quot;person.mrb&quot; =&gt; [&quot;person.rb&quot;] do |t|
-  sh &quot;#{MRBC} #{t.prerequisites[0]}&quot;
+file "person.mrb" =&gt; ["person.rb"] do |t|
+  sh "#{MRBC} #{t.prerequisites[0]}"
 end
 </code></pre>
 <pre><code>$ rake
 $ ./greeting
 </code></pre>
-<hr />
+<hr>
 <h3>参考</h3>
 <ul>
 <li><a href="http://www.kumikomi.net/archives/2012/12/ep17mrb3.php">組み込みC言語プログラマのためのmruby入門（後編）</a></li>

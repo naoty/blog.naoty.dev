@@ -6,6 +6,7 @@
     <title>Xcodeのカラーパレットを作るコマンドをSwiftで書いた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Xcodeのカラーパレットを作るコマンドをSwiftで書いた">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
           </p>
         </header>
         <section class="body">
-          <p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160317/20160317020138.gif" alt="f:id:naoty_k:20160317020138g:plain" title="f:id:naoty_k:20160317020138g:plain" /></p>
+          <p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160317/20160317020138.gif" alt="f:id:naoty_k:20160317020138g:plain" title="f:id:naoty_k:20160317020138g:plain"></p>
 <p><a href="https://github.com/naoty/clr">naoty/clr</a></p>
 <p><code>clr</code>というコマンドラインツールをSwiftで書いた。上のスクリーンキャストにあるようにXcodeで使うカラーパレットをターミナルから作成できる。</p>
 <p>近年ではStoryboard（かつてはXib）がどんどん進化しているので、見た目に関する設定はコードじゃなくてStoryboardに任せたいなという気持ちがある。特に色については、コードでやろうと思うと<code>UIColor</code>のextensionをひとつひとつ書いていく感じになると思うけど、カラーパレットを自作する手もあるなということに最近気づいた。カラーパレットを使うと2、3回クリックするだけで色を指定できるから簡単だと思う。</p>

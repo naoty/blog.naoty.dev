@@ -6,6 +6,7 @@
     <title>iOS 6とiOS 5でFacebook SDK使おうとしたらハマった</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="iOS 6とiOS 5でFacebook SDK使おうとしたらハマった">
     <meta property="og:type" content="website">
@@ -33,28 +34,30 @@
 </ul>
 <h2>SDKインストール</h2>
 <ul>
-<li><a href="https://developers.facebook.com/ios/">ここ</a>からインストーラをダウンロードしてインストール。<code>~/Documents</code>にSDKが入る。</li>
-<li><a href="http://developers.facebook.com/docs/getting-started/getting-started-with-the-ios-sdk/jp/">チュートリアル</a>に沿って進める。</li>
+<li>
+<a href="https://developers.facebook.com/ios/">ここ</a>からインストーラをダウンロードしてインストール。<code>~/Documents</code>にSDKが入る。</li>
+<li>
+<a href="http://developers.facebook.com/docs/getting-started/getting-started-with-the-ios-sdk/jp/">チュートリアル</a>に沿って進める。</li>
 </ul>
 <h2>チュートリアル通りにやったのにエラる</h2>
 <pre><code>Undefined symbols for architecture armv7:
-  &quot;_OBJC_CLASS_$_ACAccountStore&quot;, referenced from:
+  "_OBJC_CLASS_$_ACAccountStore", referenced from:
       objc-class-ref in FacebookSDK(FBSession.o)
-  &quot;_ACFacebookAudienceFriends&quot;, referenced from:
+  "_ACFacebookAudienceFriends", referenced from:
       -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
-  &quot;_ACFacebookAppIdKey&quot;, referenced from:
+  "_ACFacebookAppIdKey", referenced from:
       -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
-  &quot;_ACAccountTypeIdentifierFacebook&quot;, referenced from:
+  "_ACAccountTypeIdentifierFacebook", referenced from:
       +[FBSession renewSystemAuthorization] in FacebookSDK(FBSession.o)
-  &quot;_ACFacebookAudienceKey&quot;, referenced from:
+  "_ACFacebookAudienceKey", referenced from:
       -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
-  &quot;_ACFacebookAudienceOnlyMe&quot;, referenced from:
+  "_ACFacebookAudienceOnlyMe", referenced from:
       -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
-  &quot;_ACFacebookPermissionsKey&quot;, referenced from:
+  "_ACFacebookPermissionsKey", referenced from:
       -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
-  &quot;_OBJC_CLASS_$_ASIdentifierManager&quot;, referenced from:
+  "_OBJC_CLASS_$_ASIdentifierManager", referenced from:
       objc-class-ref in FacebookSDK(FBSettings.o)
-  &quot;_ACFacebookAudienceEveryone&quot;, referenced from:
+  "_ACFacebookAudienceEveryone", referenced from:
       -[FBSession authorizeUsingSystemAccountStore:accountType:permissions:defaultAudience:isReauthorize:] in FacebookSDK(FBSession.o)
 ld: symbol(s) not found for architecture armv7
 clang: error: linker command failed with exit code 1 (use -v to see invocation)

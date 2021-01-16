@@ -6,6 +6,7 @@
     <title>node.js環境構築</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="node.js環境構築">
     <meta property="og:type" content="website">
@@ -52,7 +53,8 @@ $ npm -v
 <pre><code>$ npm install bower -g
 </code></pre>
 <ul>
-<li><a href="http://twitter.github.com/bower/">bower</a>はTwitter謹製のクライアントサイドのライブラリに特化したパッケージマネージャー。</li>
+<li>
+<a href="http://twitter.github.com/bower/">bower</a>はTwitter謹製のクライアントサイドのライブラリに特化したパッケージマネージャー。</li>
 <li>jQuery, underscore.js, bootstrapなどのリソースをpackage.jsonと同じようにプロジェクト毎にインストールできるのが便利。</li>
 <li>Railsだとjquery-railsなどgemのなかにそれらのリソースが含まれることもあるけど、node.jsはそういうのなさそうなので、重宝しそう。</li>
 </ul>
@@ -61,15 +63,15 @@ $ npm -v
 <pre><code>// component.json
 
 {
-  &quot;name&quot;: &quot;fileupload&quot;,
-  &quot;version&quot;: &quot;0.0.1&quot;,
-  &quot;main&quot;: &quot;./public/stylesheets/style.css&quot;,
-  &quot;dependencies&quot;: {
-    &quot;jquery&quot;: &quot;*&quot;,
-    &quot;jquery-ui&quot;: &quot;*&quot;,
-    &quot;jquery-file-upload&quot;: &quot;*&quot;,
-    &quot;jquery-masonry&quot;: &quot;*&quot;,
-    &quot;fancybox&quot;: &quot;*&quot;
+  "name": "fileupload",
+  "version": "0.0.1",
+  "main": "./public/stylesheets/style.css",
+  "dependencies": {
+    "jquery": "*",
+    "jquery-ui": "*",
+    "jquery-file-upload": "*",
+    "jquery-masonry": "*",
+    "fancybox": "*"
   }
 }
 </code></pre>
@@ -84,7 +86,7 @@ $ launchctl load -w ~/Library/LaunchAgents/org.apache.couchdb.plist
 <li>MongoDB, Redis, CouchDBなどのNoSQLはbrewでインストールするだけ。</li>
 <li>インストール後に表示されるメッセージに従って、自動起動ファイルをロードしておくことも忘れずに。</li>
 </ul>
-<hr />
+<hr>
 <h3>追記（2012/12/22）</h3>
 <h3>node.jsでbowerを使うには</h3>
 <pre><code>$ tree -I node_modules

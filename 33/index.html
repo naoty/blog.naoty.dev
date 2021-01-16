@@ -6,6 +6,7 @@
     <title>プラグイン読み込みの設定</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="プラグイン読み込みの設定">
     <meta property="og:type" content="website">
@@ -32,7 +33,7 @@
 end
 </code></pre>
 <pre><code>class FugafugaController &lt; ApplicationController
-  include hogehoge #=&gt; &quot;uninitialized constant ...&quot;というエラー
+  include hogehoge #=&gt; "uninitialized constant ..."というエラー
 end
 </code></pre>
 <p>environment.rbに以下のように記述することが必要らしい。</p>

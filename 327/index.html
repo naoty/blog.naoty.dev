@@ -6,6 +6,7 @@
     <title>bin/webpackに必要最小限のファイル</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="bin/webpackに必要最小限のファイル">
     <meta property="og:type" content="website">
@@ -28,21 +29,22 @@
         </header>
         <section class="body">
           <p><a href="https://naoty.github.io/posts/23.html">前回</a>と同様にwebpackerによるbundleに必要最小限なファイルの<code>COPY</code>を試してみた。</p>
-<pre lang="docker"><code>FROM starefossen/ruby-node:2-8-alpine
-WORKDIR /myapp
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> starefossen/ruby-node:2-8-alpine</span>
+<span class="k">WORKDIR</span><span class="s"> /myapp</span>
 
-COPY app/javascript /myapp/app/javascript/
-COPY bin/webpack /myapp/bin/
-COPY config/webpack /myapp/config/webpack/
-COPY config/webpacker.yml /myapp/config/webpacker.yml
-COPY .babelrc .postcssrc.yml /myapp/
-COPY Gemfile Gemfile.lock /myapp/
-COPY --from=bundler /usr/local/bundle /usr/local/bundle
-RUN bin/webpack
-</code></pre>
+<span class="k">COPY</span><span class="s"> app/javascript /myapp/app/javascript/</span>
+<span class="k">COPY</span><span class="s"> bin/webpack /myapp/bin/</span>
+<span class="k">COPY</span><span class="s"> config/webpack /myapp/config/webpack/</span>
+<span class="k">COPY</span><span class="s"> config/webpacker.yml /myapp/config/webpacker.yml</span>
+<span class="k">COPY</span><span class="s"> .babelrc .postcssrc.yml /myapp/</span>
+<span class="k">COPY</span><span class="s"> Gemfile Gemfile.lock /myapp/</span>
+<span class="k">COPY</span><span class="s"> --from=bundler /usr/local/bundle /usr/local/bundle</span>
+<span class="k">RUN </span>bin/webpack
+</pre>
 <ul>
 <li>webpackerを使うにはRubyとNodeの両方が必要になるため両方が入ったベースイメージを探したところ、<a href="https://hub.docker.com/r/starefossen/ruby-node/">starefossen/ruby-node</a>がよさそうだった。</li>
-<li><code>COPY --from=bundler</code>としているところは、<a href="https://docs.docker.com/develop/develop-images/multistage-build/">multi-stage build</a>を使っている。前段のビルドで<code>bundle install</code>しておいたものを<code>COPY</code>している。こうすることで実行時には不要なものを除くことができる。このビルド自体もRailsを起動するために必要なファイルを生成するビルドにすぎない。</li>
+<li>
+<code>COPY --from=bundler</code>としているところは、<a href="https://docs.docker.com/develop/develop-images/multistage-build/">multi-stage build</a>を使っている。前段のビルドで<code>bundle install</code>しておいたものを<code>COPY</code>している。こうすることで実行時には不要なものを除くことができる。このビルド自体もRailsを起動するために必要なファイルを生成するビルドにすぎない。</li>
 </ul>
         </section>
         <footer>

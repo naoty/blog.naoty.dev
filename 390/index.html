@@ -6,6 +6,7 @@
     <title>セキュアなDockerfileを書く</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="セキュアなDockerfileを書く">
     <meta property="og:type" content="website">
@@ -30,34 +31,34 @@
           <p>最近コンテナのセキュリティへの意識が高まっているので、まずはセキュアなイメージのためのDockerfileを書く方法を調べる。</p>
 <h1>Before</h1>
 <p>Rails 6.0.1を動かすためのDockerfileを書いてみた。webpackerを動かすためにNode.jsやYarnも入れている。</p>
-<pre lang="dockerfile"><code>FROM node:12.13.1 AS node
-FROM ruby:2.6.5
+<pre lang="dockerfile" class="highlight highlight-dockerfile"><span class="k">FROM</span><span class="s"> node:12.13.1 AS node</span>
+<span class="k">FROM</span><span class="s"> ruby:2.6.5</span>
 
-RUN apt-get update
+<span class="k">RUN </span>apt-get update
 
-# node
-COPY --from=node /usr/local/bin/node /usr/local/bin/
+<span class="c"># node</span>
+<span class="k">COPY</span><span class="s"> --from=node /usr/local/bin/node /usr/local/bin/</span>
 
-# yarn
-COPY --from=node /opt/yarn-v1.19.1 /opt/yarn-v1.19.1/
-RUN ln -s /opt/yarn-v1.19.1/bin/yarn /usr/local/bin/yarn &amp;&amp; \
-  ln -s /opt/yarn-v1.19.1/bin/yarnpkg /usr/local/bin/yarnpkg
+<span class="c"># yarn</span>
+<span class="k">COPY</span><span class="s"> --from=node /opt/yarn-v1.19.1 /opt/yarn-v1.19.1/</span>
+<span class="k">RUN </span><span class="nb">ln</span> <span class="nt">-s</span> /opt/yarn-v1.19.1/bin/yarn /usr/local/bin/yarn <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  <span class="nb">ln</span> <span class="nt">-s</span> /opt/yarn-v1.19.1/bin/yarnpkg /usr/local/bin/yarnpkg
 
-WORKDIR /hello-rails
+<span class="k">WORKDIR</span><span class="s"> /hello-rails</span>
 
-# npm packages
-COPY package.json yarn.lock /hello-rails/
-RUN yarn install
+<span class="c"># npm packages</span>
+<span class="k">COPY</span><span class="s"> package.json yarn.lock /hello-rails/</span>
+<span class="k">RUN </span>yarn <span class="nb">install</span>
 
-# rubygems
-COPY Gemfile Gemfile.lock /hello-rails/
-RUN bundle install
+<span class="c"># rubygems</span>
+<span class="k">COPY</span><span class="s"> Gemfile Gemfile.lock /hello-rails/</span>
+<span class="k">RUN </span>bundle <span class="nb">install</span>
 
-COPY . /hello-rails/
+<span class="k">COPY</span><span class="s"> . /hello-rails/</span>
 
-ENTRYPOINT [&quot;bin/rails&quot;]
-CMD [&quot;s&quot;]
-</code></pre>
+<span class="k">ENTRYPOINT</span><span class="s"> ["bin/rails"]</span>
+<span class="k">CMD</span><span class="s"> ["s"]</span>
+</pre>
 <p><a href="https://github.com/aquasecurity/trivy">trivy</a>を使って脆弱性を調べてみると、思っていた以上に脆弱性が見つかった。</p>
 <pre><code>$ trivy naoty/rails
 naoty/rails:latest (debian 10.2)
@@ -66,15 +67,15 @@ Total: 1399 (UNKNOWN: 16, LOW: 92, MEDIUM: 1137, HIGH: 143, CRITICAL: 11)
 </code></pre>
 <h1>ベースイメージを最小限にする</h1>
 <p>必要最小限のツールだけを含めて攻撃の対象になる脆弱性を減らしたい。そこで、alpineベースのベースイメージに変更する。</p>
-<pre lang="diff"><code>-FROM node:12.13.1 AS node
+<pre lang="diff" class="highlight highlight-diff"><span class="gd">-FROM node:12.13.1 AS node
 -FROM ruby:2.6.5
-+FROM node:12.13.1-alpine AS node
+</span><span class="gi">+FROM node:12.13.1-alpine AS node
 +FROM ruby:2.6.5-alpine
-
+</span>
 -RUN apt-get update
-+RUN apk update &amp;&amp; \
+<span class="gi">+RUN apk update &amp;&amp; \
 +  apk add --no-cache build-base sqlite-dev
-</code></pre>
+</span></pre>
 <p>trivyでもう一度脆弱性を調べてみると、脆弱性はほとんどなくなった。</p>
 <pre><code>$ trivy naoty/rails:alpine
 naoty/rails:alpine (alpine 3.10.3)
@@ -83,19 +84,20 @@ Total: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
 </code></pre>
 <h1>rootをなるべく使わない</h1>
 <p><code>root</code>ユーザーではなく最小限の権限しかもたないユーザーを使う。コンテナに侵入された場合の被害を最小限に抑えられる。</p>
-<pre lang="diff"><code> COPY . /hello-rails/
+<pre lang="diff" class="highlight highlight-diff"> COPY . /hello-rails/
 
 +RUN addgroup -S ruby &amp;&amp; \
-+  adduser -S ruby ruby &amp;&amp; \
+<span class="gi">+  adduser -S ruby ruby &amp;&amp; \
 +  chown -R ruby:ruby /hello-rails
 +USER ruby
-
- ENTRYPOINT [&quot;bin/rails&quot;]
- CMD [&quot;s&quot;]
-</code></pre>
+</span>
+ ENTRYPOINT ["bin/rails"]
+ CMD ["s"]
+</pre>
 <ul>
 <li>Alpineでは<code>groupadd</code>, <code>useradd</code>ではなく<code>addgroup</code>, <code>adduser</code>を使う。</li>
-<li><code>-S</code>オプションを使ってシステムユーザーを作成する。システムユーザーはパスワードをもたずログインシェルもないので、より安全なユーザーとして使える。</li>
+<li>
+<code>-S</code>オプションを使ってシステムユーザーを作成する。システムユーザーはパスワードをもたずログインシェルもないので、より安全なユーザーとして使える。</li>
 <li>作成したユーザーを<code>USER</code>で指定してrailsを起動するようにしている。</li>
 </ul>
 <h1>参考</h1>

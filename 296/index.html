@@ -6,6 +6,7 @@
     <title>vim も zsh も捨てた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="vim も zsh も捨てた">
     <meta property="og:type" content="website">
@@ -36,12 +37,15 @@
 <p>fish 自体にはプラガブルな機構がないので、<a href="https://github.com/fisherman/fisherman">fisherman</a> というツールを併用している。fisherman によってプラグインのインストール・アンインストール、依存関係の管理が可能になった。</p>
 <p>自分でいくつかプラグインをつくった。</p>
 <ul>
-<li><a href="https://github.com/naoty/fish-my_prompt">naoty/fish-my_prompt</a> : 自分好みのプロンプトが見当たらなかったので自作した。</li>
-<li><a href="https://github.com/naoty/fish-my_key_bindings">naoty/fish-my_key_bindings</a> : キーバインディングも関数として定義できるためプラグイン化した。これによって、インストール・アンインストールだけで設定を変更できる。</li>
-<li><a href="https://github.com/naoty/fish-my_peco_functions">naoty/fish-my_peco_functions</a> : 以前から peco を使っていたため、peco と組み合わせて使う関数群をプラグイン化した。</li>
+<li>
+<a href="https://github.com/naoty/fish-my_prompt">naoty/fish-my_prompt</a> : 自分好みのプロンプトが見当たらなかったので自作した。</li>
+<li>
+<a href="https://github.com/naoty/fish-my_key_bindings">naoty/fish-my_key_bindings</a> : キーバインディングも関数として定義できるためプラグイン化した。これによって、インストール・アンインストールだけで設定を変更できる。</li>
+<li>
+<a href="https://github.com/naoty/fish-my_peco_functions">naoty/fish-my_peco_functions</a> : 以前から peco を使っていたため、peco と組み合わせて使う関数群をプラグイン化した。</li>
 </ul>
 <p>結局、設定ファイルがプラグインという形に変わっただけではとも思ったが、一度壊れたプラグインはおそらくもう修正することはないだろう。アンインストールして、新たに必要なプラグインを見繕うことになる。ダメになったら捨てればいい、みたいな気軽さがある。</p>
-<hr />
+<hr>
 <h2>追記（2017-04-20）</h2>
 <p>思っていた以上に反響があって驚いた。修正点と反響へのコメントを載せます。</p>
 <ul>

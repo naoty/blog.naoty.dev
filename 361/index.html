@@ -6,6 +6,7 @@
     <title>自分のコンテナインスタンスIDを確認する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="自分のコンテナインスタンスIDを確認する">
     <meta property="og:type" content="website">
@@ -27,8 +28,8 @@
         </header>
         <section class="body">
           <p>コンテナインスタンス内で自分自身のコンテナインスタンスIDをたまに取得したいときがあって、そういうときはコンテナインスタンスにログインして、こんな感じのコマンドを実行する。</p>
-<pre lang="bash"><code>curl -s http://localhost:51678/v1/metadata | jq -r .ContainerInstanceArn | cut -d '/' -f 2
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">curl <span class="nt">-s</span> http://localhost:51678/v1/metadata | jq <span class="nt">-r</span> .ContainerInstanceArn | <span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">'/'</span> <span class="nt">-f</span> 2
+</pre>
 <p><code>http://localhost:51678/v1/metadata</code>はコンテナインスタンス内で動くecs-agentが公開しているエンドポイントで、メタデータを返してくれる。コンテナインスタンスIDを返してくれるわけではないので、ARNから強引に抽出していく。</p>
 <p>参考: <a href="https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ecs-agent-introspection.html">https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ecs-agent-introspection.html</a></p>
         </section>

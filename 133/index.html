@@ -6,6 +6,7 @@
     <title>見やすいgit-tag</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="見やすいgit-tag">
     <meta property="og:type" content="website">
@@ -26,15 +27,20 @@
           </p>
         </header>
         <section class="body">
-          <pre lang=".zshrc"><code>alias gt=&quot;git for-each-ref --sort=-taggerdate --format='%(taggerdate:short) %(tag) %(taggername) %(subject)' refs/tags&quot;
+          <pre lang=".zshrc"><code>alias gt="git for-each-ref --sort=-taggerdate --format='%(taggerdate:short) %(tag) %(taggername) %(subject)' refs/tags"
 </code></pre>
-<p><img src="http://gyazo.com/e6fd03bfaea9f3b44f9c60d8b539dd3c.png?1341920431" alt="git-tag" /></p>
+<p><img src="http://gyazo.com/e6fd03bfaea9f3b44f9c60d8b539dd3c.png?1341920431" alt="git-tag"></p>
 <ul>
-<li><code>git tag</code>でタグ名を一覧で表示できる。<code>git tag -n</code>でコメントもいっしょに表示できる。だけど、タグをつけた日付とかタグをつけた人も表示するには<code>git tag</code>では無理みたい。</li>
-<li><code>git for-each-ref</code>はcommitとかtagとかのrefがバーっとみれる（まだよく理解してない）</li>
-<li><code>--sort=</code>で表示されるソート順。<code>-taggerdate</code>でタグをつけた日付の降順。<code>-</code>をつけないと昇順。</li>
-<li><code>--format=</code>で出力されるフォーマットを指定できる。細かいところはmanをみてください。けっこう細かいので説明するのが大変。。。</li>
-<li><code>refs/tags</code>は表示する条件。これでタグだけを表示できる。</li>
+<li>
+<code>git tag</code>でタグ名を一覧で表示できる。<code>git tag -n</code>でコメントもいっしょに表示できる。だけど、タグをつけた日付とかタグをつけた人も表示するには<code>git tag</code>では無理みたい。</li>
+<li>
+<code>git for-each-ref</code>はcommitとかtagとかのrefがバーっとみれる（まだよく理解してない）</li>
+<li>
+<code>--sort=</code>で表示されるソート順。<code>-taggerdate</code>でタグをつけた日付の降順。<code>-</code>をつけないと昇順。</li>
+<li>
+<code>--format=</code>で出力されるフォーマットを指定できる。細かいところはmanをみてください。けっこう細かいので説明するのが大変。。。</li>
+<li>
+<code>refs/tags</code>は表示する条件。これでタグだけを表示できる。</li>
 </ul>
         </section>
         <footer>

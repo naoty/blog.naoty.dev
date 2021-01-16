@@ -6,6 +6,7 @@
     <title>RubyのWebSocketサーバー「pingpong」を作った</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="RubyのWebSocketサーバー「pingpong」を作った">
     <meta property="og:type" content="website">
@@ -30,28 +31,28 @@
         <section class="body">
           <p>最近、「<a href="http://www.jstorimer.com/products/working-with-tcp-sockets">Working with TCP Sockets</a>」って本を読んだ。Rubyでソケットと戯れつつ、7つくらいのWebサーバーのアーキテクチャを概観できるいい本だった。で、その中にイベント駆動モデルの実装とかノンブロッキングIOの実装について紹介されてて面白かったので、練習がてらWebSocketサーバーを作ることにした。</p>
 <h2>PingPong</h2>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20131011/20131011013521.gif" alt="f:id:naoty_k:20131011013521g:plain" title="f:id:naoty_k:20131011013521g:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20131011/20131011013521.gif" alt="f:id:naoty_k:20131011013521g:plain" title="f:id:naoty_k:20131011013521g:plain"></p>
 <p><a href="https://github.com/naoty/pingpong">https://github.com/naoty/pingpong</a></p>
 <p>卓球ハウスっぽい名前にした。数日で作ったので、他のクライアントへpush通知を行うことしかできない。たぶん大きいデータも送れない気がする。</p>
 <h2>WebSocketサーバーの実装とは</h2>
 <p>まずは<a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a>のサーバーに関する部分を読んだ。最低限必要な部分をRubyで実装していった。例えば、以下のコードはHandshake（websocket接続の確立）の際にサーバーがクライアントに返すレスポンスヘッダーを作っている。</p>
 <pre><code>def response_headers
   [
-    [&quot;Upgrade&quot;, &quot;websocket&quot;],
-    [&quot;Connection&quot;, &quot;Upgrade&quot;],
-    [&quot;Sec-WebSocket-Accept&quot;, signature]
+    ["Upgrade", "websocket"],
+    ["Connection", "Upgrade"],
+    ["Sec-WebSocket-Accept", signature]
   ]
 end
 
 def signature
-  value = @header[&quot;Sec-WebSocket-Key&quot;] + &quot;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&quot;
+  value = @header["Sec-WebSocket-Key"] + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
   hash = Digest::SHA1.digest(value)
   Base64.strict_encode64(hash)
 end
 </code></pre>
 <p>ご覧のとおりハードコーディングがたくさん出てくる。RFCを読むと、このヘッダーにはこの値を入れなさいって書いてあることが多い。なので、それぞれの値の意味はわからないけどとりあえずRFCに従ってハードコーディングしている。<code>signature</code>というメソッドはあるヘッダーの値をRFCで以下のように定められた形式で生成している。（余談だけど、ここで<code>Base64.encode64</code>を使って小1時間ハマった。これは改行コードを入れるためここでは使えない。）</p>
 <blockquote>
-<p>A |Sec-WebSocket-Accept| header field. The value of this header field is constructed by concatenating /key/, defined above in step 4 in Section 4.2.2, with the string &quot;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&quot;, taking the SHA-1 hash of this concatenated value to obtain a 20-byte value and base64-encoding (see Section 4 of [RFC4648]) this 20-byte hash.</p>
+<p>A |Sec-WebSocket-Accept| header field. The value of this header field is constructed by concatenating /key/, defined above in step 4 in Section 4.2.2, with the string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", taking the SHA-1 hash of this concatenated value to obtain a 20-byte value and base64-encoding (see Section 4 of [RFC4648]) this 20-byte hash.</p>
 </blockquote>
 <h2>イベント駆動モデルとノンブロッキングIO</h2>
 <p>push通知はイベント駆動モデルというアーキテクチャを使って実装した。イベント駆動モデルはマルチプロセスやマルチスレッドとは違ってシングルスレッドで多数のリクエストを並行処理する。具体的には、websocket接続の確立に成功したソケットを配列に入れておき、ループ内でそれらのソケットにread/writeしていく。このとき、read/writeがブロッキングしてしまうとすべての処理がそこで止まってしまうので、read/writeの前に<code>select(2)</code>等を使ってread/write可能なソケットだけ選択してread/writeを行う。これがノンブロッキングIOだと思う（だよね…？）。</p>

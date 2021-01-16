@@ -6,6 +6,7 @@
     <title>UIViewの位置取得・操作のための便利カテゴリー</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="UIViewの位置取得・操作のための便利カテゴリー">
     <meta property="og:type" content="website">
@@ -27,10 +28,10 @@
         </header>
         <section class="body">
           <p>UIViewの位置を操作するとき</p>
-<pre lang="objc"><code>CGRect frame = view.frame;
-frame.origin.x = 10;
-view.frame = frame;
-</code></pre>
+<pre lang="objc" class="highlight highlight-objc"><span class="n">CGRect</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+<span class="n">frame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="p">;</span>
+</pre>
 <p>みたいにすると思うのですが、いちいちめんどくさいので、カテゴリーにしてみました。</p>
 <pre lang="objc:UIView+Origin.h"><code>@interface UIView (Origin)
 
@@ -94,12 +95,12 @@ view.frame = frame;
 @end
 </code></pre>
 <p>これを使うと、例えば縦にならぶviewの位置を操作するとき、</p>
-<pre lang="objc"><code>#import &quot;UIView+Origin.h&quot;
-
-viewA.top = 10;
-viewB.top = viewA.bottom + 10;
-viewC.top = viewB.bottom + 10;
-</code></pre>
+<pre lang="objc" class="highlight highlight-objc"><span class="cp">#import "UIView+Origin.h"
+</span>
+<span class="n">viewA</span><span class="p">.</span><span class="n">top</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">viewB</span><span class="p">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">viewA</span><span class="p">.</span><span class="n">bottom</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">viewC</span><span class="p">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">viewB</span><span class="p">.</span><span class="n">bottom</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+</pre>
 <p>なんて書けます。このカテゴリーを使わないとかなりめんどくさいです。</p>
         </section>
         <footer>

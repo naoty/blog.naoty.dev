@@ -6,6 +6,7 @@
     <title>goroutineの実行パターン</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="goroutineの実行パターン">
     <meta property="og:type" content="website">
@@ -28,14 +29,14 @@
         <section class="body">
           <p>最近、<a href="https://www.oreilly.co.jp/books/9784873118468/">Go言語による並行処理</a>を読んでいる。その中で明示的には紹介されていないものの、頻繁に登場するコードを整理して理解したい。</p>
 <p>以下のコード例では、goroutineを実行してその結果を受信するchannelを取得できる関数を定義している。</p>
-<pre lang="go"><code>// goroutineの結果を表す型
-type result struct {
-  value int
-  err   error
-}
+<pre lang="go" class="highlight highlight-go"><span class="c">// goroutineの結果を表す型</span>
+<span class="k">type</span> <span class="n">result</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">value</span> <span class="kt">int</span>
+  <span class="n">err</span>   <span class="kt">error</span>
+<span class="p">}</span>
 
-generate := func() 
-</code></pre>
+<span class="n">generate</span> <span class="o">:=</span> <span class="k">func</span><span class="p">()</span> 
+</pre>
         </section>
         <footer>
           <nav>

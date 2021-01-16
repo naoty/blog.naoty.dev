@@ -6,6 +6,7 @@
     <title>clapカスタマイズメモ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="clapカスタマイズメモ">
     <meta property="og:type" content="website">
@@ -27,42 +28,45 @@
         </header>
         <section class="body">
           <p>rustでCLIツールを作るときにフレームワークを調べるとclapしか出てこない。これがデファクトスタンダードなのだろうということで使ってみるが、微妙にカスタマイズしたかったのでメモ。</p>
-<pre lang="rust"><code>let matches = App::new(&quot;mycli&quot;)
-    .version(crate_version!())
-    .author(&quot;Naoto Kaneko &quot;)
-    .about(DESCRIPTION)
-    .template(USAGE_TEMPLATE.trim())
-    .version_short(&quot;v&quot;)
-    .get_matches();
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">matches</span> <span class="o">=</span> <span class="nn">App</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"mycli"</span><span class="p">)</span>
+    <span class="nf">.version</span><span class="p">(</span><span class="nd">crate_version!</span><span class="p">())</span>
+    <span class="nf">.author</span><span class="p">(</span><span class="s">"Naoto Kaneko "</span><span class="p">)</span>
+    <span class="nf">.about</span><span class="p">(</span><span class="n">DESCRIPTION</span><span class="p">)</span>
+    <span class="nf">.template</span><span class="p">(</span><span class="n">USAGE_TEMPLATE</span><span class="nf">.trim</span><span class="p">())</span>
+    <span class="nf">.version_short</span><span class="p">(</span><span class="s">"v"</span><span class="p">)</span>
+    <span class="nf">.get_matches</span><span class="p">();</span>
+</pre>
 <p>ポイントは3つ。</p>
 <ul>
-<li><code>crate_version!()</code>マクロを使うと、Cargo.tomlで定義しているパッケージのバージョンを取得してくれるのでCLIが返すバージョンに設定できて便利。</li>
-<li><code>template()</code>を使うと、デフォルトのヘルプメッセージが気に食わない、でもサブコマンドや各フラグの定義時に渡したヘルプメッセージも使いたいみたいなときにテンプレートを指定することでいい感じにカスタマイズができて便利。</li>
-<li><code>version_short()</code>を使うと、バージョンの短縮形のフラグがデフォルトで<code>-V</code>だったのが<code>-v</code>など自由に変更できる。これがclapを使って最初に感じた違和感だったのでカスタマイズできてよかった。</li>
+<li>
+<code>crate_version!()</code>マクロを使うと、Cargo.tomlで定義しているパッケージのバージョンを取得してくれるのでCLIが返すバージョンに設定できて便利。</li>
+<li>
+<code>template()</code>を使うと、デフォルトのヘルプメッセージが気に食わない、でもサブコマンドや各フラグの定義時に渡したヘルプメッセージも使いたいみたいなときにテンプレートを指定することでいい感じにカスタマイズができて便利。</li>
+<li>
+<code>version_short()</code>を使うと、バージョンの短縮形のフラグがデフォルトで<code>-V</code>だったのが<code>-v</code>など自由に変更できる。これがclapを使って最初に感じた違和感だったのでカスタマイズできてよかった。</li>
 </ul>
 <h1>補足</h1>
 <p>僕はいつもCLIを作るときはdocopt形式のヘルプメッセージを使っているので、こんな感じのテンプレートを指定してclapでもdocopt風のヘルプメッセージを表示している。</p>
-<pre lang="rust"><code>const USAGE_TEMPLATE: &amp;str = r#&quot;
+<pre lang="rust" class="highlight highlight-rust"><span class="k">const</span> <span class="n">USAGE_TEMPLATE</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span> <span class="o">=</span> <span class="s">r#"
 Usage:
     {usage}
 
 Flags:
 {flags}
-&quot;#;
-</code></pre>
+"#</span><span class="p">;</span>
+</pre>
 <p><code>{usage}</code>, <code>{flags}</code>の部分がそれぞれclapによって置換される。</p>
 <h1>追記（2020-08-10）</h1>
 <p>ドキュメントを読むと、<code>crate_version!</code>以外にもCargo.tomlの情報を取得するマクロがあった。</p>
-<pre lang="rust"><code>let matches = App::new(crate_name!())
-    .version(crate_version!())
-    .author(crate_authors!())
-    .about(crate_description!())
-    .template(USAGE_TEMPLATE.trim())
-    .version_short(&quot;v&quot;)
-    .get_matches();
-    .get_matches();
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">let</span> <span class="n">matches</span> <span class="o">=</span> <span class="nn">App</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nd">crate_name!</span><span class="p">())</span>
+    <span class="nf">.version</span><span class="p">(</span><span class="nd">crate_version!</span><span class="p">())</span>
+    <span class="nf">.author</span><span class="p">(</span><span class="nd">crate_authors!</span><span class="p">())</span>
+    <span class="nf">.about</span><span class="p">(</span><span class="nd">crate_description!</span><span class="p">())</span>
+    <span class="nf">.template</span><span class="p">(</span><span class="n">USAGE_TEMPLATE</span><span class="nf">.trim</span><span class="p">())</span>
+    <span class="nf">.version_short</span><span class="p">(</span><span class="s">"v"</span><span class="p">)</span>
+    <span class="nf">.get_matches</span><span class="p">();</span>
+    <span class="nf">.get_matches</span><span class="p">();</span>
+</pre>
         </section>
         <footer>
           <nav>

@@ -6,6 +6,7 @@
     <title>capistranoでtail -f</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="capistranoでtail -f">
     <meta property="og:type" content="website">
@@ -28,9 +29,9 @@
         <section class="body">
           <pre lang="ruby:config/deploy.rb"><code>namespace :logging do
   task :tail_unicorn do
-    run &quot;tail -f #{shared_path}/log/unicorn.log&quot; do |channel, stream, data|
-      trap(&quot;INT&quot;) { puts &quot;Interupted!&quot;; exit 0; }
-      puts &quot;=== #{channel[:host]} ===&quot;
+    run "tail -f #{shared_path}/log/unicorn.log" do |channel, stream, data|
+      trap("INT") { puts "Interupted!"; exit 0; }
+      puts "=== #{channel[:host]} ==="
       puts data
       break if stream == :err
     end

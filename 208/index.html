@@ -6,6 +6,7 @@
     <title>RSpecでmoduleをテストする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="RSpecでmoduleをテストする">
     <meta property="og:type" content="website">
@@ -27,16 +28,16 @@
         </header>
         <section class="body">
           <p>モジュールをテストするとき、適当なクラスを作ってそこにincludeした状態をletで使い回したい。というのをこんな感じで書いています。何か他にいい方法があれば教えてください。</p>
-<pre lang="rb"><code>describe HogeModule do
-  let(:klass) do
-    klass = Class.new
-    klass.send(:include, HogeModule)
-    klass
-  end
+<pre lang="rb" class="highlight highlight-rb"><span class="n">describe</span> <span class="no">HogeModule</span> <span class="k">do</span>
+  <span class="n">let</span><span class="p">(</span><span class="ss">:klass</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">klass</span> <span class="o">=</span> <span class="no">Class</span><span class="p">.</span><span class="nf">new</span>
+    <span class="n">klass</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">HogeModule</span><span class="p">)</span>
+    <span class="n">klass</span>
+  <span class="k">end</span>
 
-  # ...
-end
-</code></pre>
+  <span class="c1"># ...</span>
+<span class="k">end</span>
+</pre>
 <p><code>Class.new</code>を使うのはこれが初めてかもしれない。</p>
         </section>
         <footer>

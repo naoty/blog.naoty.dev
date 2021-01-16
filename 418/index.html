@@ -6,6 +6,7 @@
     <title>あるカラムをもつテーブルを探すには</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="あるカラムをもつテーブルを探すには">
     <meta property="og:type" content="website">
@@ -29,53 +30,53 @@
           <p>とある調査であるカラムを含むテーブルをリストアップしなくてはいけなくて、途中までschema.rbなどを眺めていたんだけど、途中から効率的なやり方があったのでメモをしておく。</p>
 <p>以下、<code>email</code>または<code>address</code>というカラムをもつテーブルをリストアップしたいとする。</p>
 <h1>MySQL</h1>
-<pre lang="sql"><code>SELECT
-  *
-FROM
-  information_schemas.COLUMNS
-WHERE
-  COLUMN_NAME IN ('email', 'address')
-;
-</code></pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">SELECT</span>
+  <span class="o">*</span>
+<span class="k">FROM</span>
+  <span class="n">information_schemas</span><span class="p">.</span><span class="n">COLUMNS</span>
+<span class="k">WHERE</span>
+  <span class="k">COLUMN_NAME</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="s1">'address'</span><span class="p">)</span>
+<span class="p">;</span>
+</pre>
 <p><code>information_schemas</code>データベースにメタデータがある。</p>
 <h1>BigQuery</h1>
-<pre lang="sql"><code>SELECT
-  *
-FROM
-  my_project.INFORMATION_SCHEMA.COLUMNS
-WHERE
-  column_name IN ('email', 'address')
-;
-</code></pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">SELECT</span>
+  <span class="o">*</span>
+<span class="k">FROM</span>
+  <span class="n">my_project</span><span class="p">.</span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">COLUMNS</span>
+<span class="k">WHERE</span>
+  <span class="k">column_name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="s1">'address'</span><span class="p">)</span>
+<span class="p">;</span>
+</pre>
 <p>beta版だけどBigQueryにもメタデータを含むデータセットがある。</p>
 <h1>Hive</h1>
 <p>おそらくこれがブログに残したかった最大の理由。</p>
-<pre lang="sql"><code>SELECT
-  SDS.SD_ID,
-  TBLS.TBL_NAME,
-  COLUMNS_V2.`COLUMN_NAME`
-FROM
-  SDS
-  JOIN TBLS USING (SD_ID)
-  JOIN COLUMNS_V2 USING (CD_ID)
-WHERE
-  COLUMNS_V2.`COLUMN_NAME` IN ('email', 'address')
-;
-</code></pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">SELECT</span>
+  <span class="n">SDS</span><span class="p">.</span><span class="n">SD_ID</span><span class="p">,</span>
+  <span class="n">TBLS</span><span class="p">.</span><span class="n">TBL_NAME</span><span class="p">,</span>
+  <span class="n">COLUMNS_V2</span><span class="p">.</span><span class="nv">`COLUMN_NAME`</span>
+<span class="k">FROM</span>
+  <span class="n">SDS</span>
+  <span class="k">JOIN</span> <span class="n">TBLS</span> <span class="k">USING</span> <span class="p">(</span><span class="n">SD_ID</span><span class="p">)</span>
+  <span class="k">JOIN</span> <span class="n">COLUMNS_V2</span> <span class="k">USING</span> <span class="p">(</span><span class="n">CD_ID</span><span class="p">)</span>
+<span class="k">WHERE</span>
+  <span class="n">COLUMNS_V2</span><span class="p">.</span><span class="nv">`COLUMN_NAME`</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="s1">'address'</span><span class="p">)</span>
+<span class="p">;</span>
+</pre>
 <p>Hive metastoreへのクエリでHiveテーブルのメタデータを取得できる。<code>COLUMNS_V2</code>テーブルにはどのテーブルのカラムかという情報が（なぜか）ない。</p>
 <p>いろいろ調べた結果、<code>SDS</code>という謎テーブルにjoinすることでテーブル名も取得できることがわかった。</p>
 <h1>Cassandra</h1>
-<pre lang="sql"><code>SELECT
-  *
-FROM
-  system.system_schema.&quot;columns&quot;
-WHERE
-  keyspace_name = 'my_keyspace'
-  AND column_name IN ('email', 'address')
-;
-</code></pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">SELECT</span>
+  <span class="o">*</span>
+<span class="k">FROM</span>
+  <span class="k">system</span><span class="p">.</span><span class="n">system_schema</span><span class="p">.</span><span class="nv">"columns"</span>
+<span class="k">WHERE</span>
+  <span class="n">keyspace_name</span> <span class="o">=</span> <span class="s1">'my_keyspace'</span>
+  <span class="k">AND</span> <span class="k">column_name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="s1">'address'</span><span class="p">)</span>
+<span class="p">;</span>
+</pre>
 <p><code>system.system_schema</code>にメタデータがあったけど、このクエリは失敗する。</p>
-<pre><code>Query 1 ERROR: PRIMARY KEY column &quot;column_name&quot; cannot be restricted as preceding column &quot;table_name&quot; is not restricted
+<pre><code>Query 1 ERROR: PRIMARY KEY column "column_name" cannot be restricted as preceding column "table_name" is not restricted
 </code></pre>
 <p>CQLがSQLと似ているからと言って、RDSのようにはうまくいかなくてまだやり方はよくわかってない。Casssandraは難しい。</p>
         </section>

@@ -6,6 +6,7 @@
     <title>JSONをASCIIテーブルで表示する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="JSONをASCIIテーブルで表示する">
     <meta property="og:type" content="website">
@@ -28,53 +29,53 @@
         <section class="body">
           <p>もともとTSV形式の文字列をASCIIやMarkdown形式のテーブルに変換するコマンドだった<a href="https://github.com/naoty/table">naoty/table</a>を改善して、JSON形式の文字列を受け取れるようにした。</p>
 <p>例えば、以下のようなJSONファイルがあったとする。</p>
-<pre lang="json"><code>// pokemons.json
-[
-  {
-    &quot;id&quot;: 1,
-    &quot;name&quot;: &quot;bulbasaur&quot;
-  },
-  {
-    &quot;id&quot;: 2,
-    &quot;name&quot;: &quot;ivysaur&quot;
-  },
-  {
-    &quot;id&quot;: 3,
-    &quot;name&quot;: &quot;venusaur&quot;
-  }
-]
-</code></pre>
+<pre lang="json" class="highlight highlight-json"><span class="err">//</span><span class="w"> </span><span class="err">pokemons.json</span><span class="w">
+</span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bulbasaur"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ivysaur"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"venusaur"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></pre>
 <p>このとき、以下のようにパイプで<code>table</code>コマンドに渡すとASCII形式に変換できる。</p>
-<pre lang="shell"><code>$ cat pokemons.json | table -f json:ascii
+<pre lang="shell" class="highlight highlight-shell"><span class="nv">$ </span><span class="nb">cat </span>pokemons.json | table <span class="nt">-f</span> json:ascii
 +----+-----------+
-| id | name      |
+| <span class="nb">id</span> | name      |
 +----+-----------+
 | 1  | bulbasaur |
 | 2  | ivysaur   |
 | 3  | venusaur  |
 +----+-----------+
-</code></pre>
+</pre>
 <p><code>table</code>コマンドは出力フォーマットとしてMarkdown形式のテーブルも選べるので、以下のように出力できる。</p>
-<pre lang="shell"><code>$ cat pokemons.json | table -f json:markdown
-| id | name      |
-| -- | --------- |
+<pre lang="shell" class="highlight highlight-shell"><span class="nv">$ </span><span class="nb">cat </span>pokemons.json | table <span class="nt">-f</span> json:markdown
+| <span class="nb">id</span> | name      |
+| <span class="nt">--</span> | <span class="nt">---------</span> |
 | 1  | bulbasaur |
 | 2  | ivysaur   |
 | 3  | venusaur  |
-</code></pre>
+</pre>
 <h1>モチベーション</h1>
 <p>最近、AWSの作業をすることが増えてAWS CLIから返ってくるJSONを扱うことが増えた。返ってきたJSONを<code>jq</code>コマンドで整形して表示するのだけど、件数が増えるとかなり見にくかった。そこで、このような機能を追加してASCIIテーブルとして見やすくしたかったので追加してみた。</p>
 <p>例えば、ECSのあるタスク定義に含まれるイメージを知りたいとき、こんな感じでやることになりそう。</p>
-<pre lang="shell"><code>$ aws ecs describe-task-definition --task-definition hello_world:8 | \
-  jq &quot;.taskDefinition.containerDefinitions | map({name: .name, image: .image})&quot; | \
-  table -f json:ascii
+<pre lang="shell" class="highlight highlight-shell"><span class="nv">$ </span>aws ecs describe-task-definition <span class="nt">--task-definition</span> hello_world:8 | <span class="se">\</span>
+  jq <span class="s2">".taskDefinition.containerDefinitions | map({name: .name, image: .image})"</span> | <span class="se">\</span>
+  table <span class="nt">-f</span> json:ascii
 +-----------+-----------+
 | name      | image     |
 +-----------+-----------+
 | wordpress | wordpress |
 | mysql     | mysql     |
 +-----------+-----------+
-</code></pre>
+</pre>
         </section>
         <footer>
           <nav>

@@ -6,6 +6,7 @@
     <title>dry-validationで設定ファイルを検証する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="dry-validationで設定ファイルを検証する">
     <meta property="og:type" content="website">
@@ -28,34 +29,34 @@
         <section class="body">
           <p>Rubyでちょっとしたツールを作ったとき、設定ファイルの検証に<a href="https://github.com/dry-rb/dry-validation">dry-validation</a>を使ってたら便利だった。</p>
 <p>こんな感じのYAML形式の設定ファイルがあったとする。</p>
-<pre lang="yaml"><code>database:
-  host: localhost
-  port: 80
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">database</span><span class="pi">:</span>
+  <span class="na">host</span><span class="pi">:</span> <span class="s">localhost</span>
+  <span class="na">port</span><span class="pi">:</span> <span class="m">80</span>
+</pre>
 <p>この設定ファイルのスキーマをDSLを使って定義できる。</p>
-<pre lang="ruby"><code>class ConfigContract &lt; Dry::Validation::Contract
-  json do
-    required(:database).hash do
-      required(:host).value(:string)
-      required(:port).value(:integer)
-    end
-  end
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">ConfigContract</span> <span class="o">&lt;</span> <span class="no">Dry</span><span class="o">::</span><span class="no">Validation</span><span class="o">::</span><span class="no">Contract</span>
+  <span class="n">json</span> <span class="k">do</span>
+    <span class="n">required</span><span class="p">(</span><span class="ss">:database</span><span class="p">).</span><span class="nf">hash</span> <span class="k">do</span>
+      <span class="n">required</span><span class="p">(</span><span class="ss">:host</span><span class="p">).</span><span class="nf">value</span><span class="p">(</span><span class="ss">:string</span><span class="p">)</span>
+      <span class="n">required</span><span class="p">(</span><span class="ss">:port</span><span class="p">).</span><span class="nf">value</span><span class="p">(</span><span class="ss">:integer</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
 
-  rule(database: :host) do
-    key.failure(&quot;must not be localhost&quot;) if value == &quot;localhost&quot;
-  end
+  <span class="n">rule</span><span class="p">(</span><span class="ss">database: :host</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">key</span><span class="p">.</span><span class="nf">failure</span><span class="p">(</span><span class="s2">"must not be localhost"</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">"localhost"</span>
+  <span class="k">end</span>
 
-  rule(database: :port) do
-    key.failure(&quot;must not use well-known port&quot;) if value &lt; 1024
-  end
-end
-</code></pre>
+  <span class="n">rule</span><span class="p">(</span><span class="ss">database: :port</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">key</span><span class="p">.</span><span class="nf">failure</span><span class="p">(</span><span class="s2">"must not use well-known port"</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">1024</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <p>このスキーマを使って設定ファイルを検証してみる。</p>
-<pre lang="ruby"><code>config = YAML.load_file(&quot;./config.yml&quot;)
-result = ConfigContract.new.call(config)
-puts result.errors.to_h
-#=&gt; {:database=&gt;{:host=&gt;[&quot;must not be localhost&quot;], :port=&gt;[&quot;must not use well-known port&quot;]}}
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">config</span> <span class="o">=</span> <span class="no">YAML</span><span class="p">.</span><span class="nf">load_file</span><span class="p">(</span><span class="s2">"./config.yml"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="no">ConfigContract</span><span class="p">.</span><span class="nf">new</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">result</span><span class="p">.</span><span class="nf">errors</span><span class="p">.</span><span class="nf">to_h</span>
+<span class="c1">#=&gt; {:database=&gt;{:host=&gt;["must not be localhost"], :port=&gt;["must not use well-known port"]}}</span>
+</pre>
 <p>DSLについてはdry-validationやdry-schemaのドキュメントを眺めたり、ドキュメントにないDSLはソースコードを眺めてみるといい。</p>
         </section>
         <footer>

@@ -6,6 +6,7 @@
     <title>Result型のメソッドをまとめる</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Result型のメソッドをまとめる">
     <meta property="og:type" content="website">
@@ -32,8 +33,10 @@
 <thead>
 <tr>
 <th>メソッド</th>
-<th><code>Ok</code>の場合</th>
-<th><code>Err</code>の場合</th>
+<th>
+<code>Ok</code>の場合</th>
+<th>
+<code>Err</code>の場合</th>
 </tr>
 </thead>
 <tbody>
@@ -60,23 +63,28 @@
 </tbody>
 </table>
 <ul>
-<li><code>and_then</code>と似たメソッドとして<code>map</code>がある。<code>map</code>は<code>and_then</code>とは違って、引数に渡すクロージャが値を返す。</li>
-<li><code>and_then</code>の引数に渡すクロージャが返す<code>Result</code>はエラーの型<code>E</code>が元のエラーの型と一致する必要がある。まったく違う<code>Result</code>型を返すことはできないということに注意する。</li>
+<li>
+<code>and_then</code>と似たメソッドとして<code>map</code>がある。<code>map</code>は<code>and_then</code>とは違って、引数に渡すクロージャが値を返す。</li>
+<li>
+<code>and_then</code>の引数に渡すクロージャが返す<code>Result</code>はエラーの型<code>E</code>が元のエラーの型と一致する必要がある。まったく違う<code>Result</code>型を返すことはできないということに注意する。</li>
 </ul>
 <h1>unwrap</h1>
 <table>
 <thead>
 <tr>
 <th>メソッド</th>
-<th><code>Ok</code>の場合</th>
-<th><code>Err</code>の場合</th>
+<th>
+<code>Ok</code>の場合</th>
+<th>
+<code>Err</code>の場合</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>unwrap</code></td>
 <td>値を返す</td>
-<td><code>Err</code>に含まれるメッセージと共にpanicを起こす</td>
+<td>
+<code>Err</code>に含まれるメッセージと共にpanicを起こす</td>
 </tr>
 <tr>
 <td><code>expect</code></td>
@@ -85,7 +93,8 @@
 </tr>
 <tr>
 <td><code>unwrap_err</code></td>
-<td><code>Ok</code>の値を含むメッセージと共にpanicを起こす</td>
+<td>
+<code>Ok</code>の値を含むメッセージと共にpanicを起こす</td>
 <td>値を返す</td>
 </tr>
 <tr>

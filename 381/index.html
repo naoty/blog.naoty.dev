@@ -6,6 +6,7 @@
     <title>ステータスコードをログに出力するhttp.Handler</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ステータスコードをログに出力するhttp.Handler">
     <meta property="og:type" content="website">
@@ -28,34 +29,37 @@
         <section class="body">
           <p><code>http</code>パッケージだけでWebアプリケーションを書くとき、アクセスログの出力も<code>http.Handler</code>で実装しようとするけど、ステータスコードを取得する手段がないことに気づく。</p>
 <p>そこで<code>http.ResponseWriter</code>を独自に実装することで解決できたのでメモに残す。</p>
-<pre lang="go"><code>type logger struct {
-  logger *log.Logger
-  handler *http.Handler
-}
+<pre lang="go" class="highlight highlight-go"><span class="k">type</span> <span class="n">logger</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">logger</span> <span class="o">*</span><span class="n">log</span><span class="o">.</span><span class="n">Logger</span>
+  <span class="n">handler</span> <span class="o">*</span><span class="n">http</span><span class="o">.</span><span class="n">Handler</span>
+<span class="p">}</span>
 
-func (l *logger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-  lw := &amp;loggingResponseWriter{
-    ResponseWriter: w,
-    statusCode: http.StatusOK,
-  }
-  l.handler.ServeHTTP(lw, r)
-  log.Printf(&quot;status:%d path:%s\n&quot;, lw.statusCode, r.URL.Path)
-}
+<span class="k">func</span> <span class="p">(</span><span class="n">l</span> <span class="o">*</span><span class="n">logger</span><span class="p">)</span> <span class="n">ServeHTTP</span><span class="p">(</span><span class="n">w</span> <span class="n">http</span><span class="o">.</span><span class="n">ResponseWriter</span><span class="p">,</span> <span class="n">r</span> <span class="o">*</span><span class="n">http</span><span class="o">.</span><span class="n">Request</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">lw</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">loggingResponseWriter</span><span class="p">{</span>
+    <span class="n">ResponseWriter</span><span class="o">:</span> <span class="n">w</span><span class="p">,</span>
+    <span class="n">statusCode</span><span class="o">:</span> <span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">l</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">ServeHTTP</span><span class="p">(</span><span class="n">lw</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+  <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"status:%d path:%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">lw</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">URL</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span>
+<span class="p">}</span>
 
-type loggingResponseWriter struct {
-  http.ResponseWriter
-  statusCode int
-}
+<span class="k">type</span> <span class="n">loggingResponseWriter</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">http</span><span class="o">.</span><span class="n">ResponseWriter</span>
+  <span class="n">statusCode</span> <span class="kt">int</span>
+<span class="p">}</span>
 
-func (w *loggingResponseWriter) WriteHeader(statusCode int) {
-  w.statusCode = statusCode
-  w.ResponseWriter.WriteHeader(statusCode)
-}
-</code></pre>
+<span class="k">func</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span><span class="n">loggingResponseWriter</span><span class="p">)</span> <span class="n">WriteHeader</span><span class="p">(</span><span class="n">statusCode</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">w</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">=</span> <span class="n">statusCode</span>
+  <span class="n">w</span><span class="o">.</span><span class="n">ResponseWriter</span><span class="o">.</span><span class="n">WriteHeader</span><span class="p">(</span><span class="n">statusCode</span><span class="p">)</span>
+<span class="p">}</span>
+</pre>
 <ul>
-<li><code>logger</code>という<code>http.Handler</code>は他の<code>http.Handler</code>をラップするミドルウェアになっている。<code>ServeHTTP</code>でラップした<code>http.Handler</code>の<code>ServeHTTP</code>を呼んだ後で、ログを出力している。</li>
-<li><code>loggingResponseWriter</code>という独自の<code>http.ResponseWriter</code>を用意する。埋め込みによってinterfaceを実装している。</li>
-<li><code>loggingResponseWriter</code>は<code>WriteHeader</code>だけ独自に実装し、受け取ったステータスコードを保持するようにしている。こうすることで後でログに出力できる。それ以外のメソッドは埋め込んだ<code>http.ResponseWriter</code>に委譲される。</li>
+<li>
+<code>logger</code>という<code>http.Handler</code>は他の<code>http.Handler</code>をラップするミドルウェアになっている。<code>ServeHTTP</code>でラップした<code>http.Handler</code>の<code>ServeHTTP</code>を呼んだ後で、ログを出力している。</li>
+<li>
+<code>loggingResponseWriter</code>という独自の<code>http.ResponseWriter</code>を用意する。埋め込みによってinterfaceを実装している。</li>
+<li>
+<code>loggingResponseWriter</code>は<code>WriteHeader</code>だけ独自に実装し、受け取ったステータスコードを保持するようにしている。こうすることで後でログに出力できる。それ以外のメソッドは埋め込んだ<code>http.ResponseWriter</code>に委譲される。</li>
 </ul>
         </section>
         <footer>

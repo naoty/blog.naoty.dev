@@ -6,6 +6,7 @@
     <title>todoリストをwebに公開した話</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="todoリストをwebに公開した話">
     <meta property="og:type" content="website">
@@ -32,7 +33,7 @@
 <p>公開の仕組みは単純で、todo.mdというファイルをguardで監視して保存されたら自動的にあるスクリプト（下記リンク）とscpが実行されるようにした。このスクリプトはtodo.mdをパースし用意しておいたテンプレートとくっつけてHTML化する。そして、そのHTMLがscpでサーバーにアップロードされる。</p>
 <p><a href="https://github.com/naoty/md2html">naoty/md2html · GitHub</a></p>
 <p>あとRedcarpetをちょっと拡張して<code>- []</code>, <code>- [x]</code>をチェックボックスに変換するようにした。これはGithub Flavored Markdownで実装されているTask Listの形式を<a href="https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments">参考</a>にした。</p>
-<hr />
+<hr>
 <h3>余談</h3>
 <p>最初はこの仕組みをSinatra、Heroku、Dropbox APIで作ろうとしたのだけど、いろいろ問題があって今の仕組みにいたった。結局「markdownの変換」「scpによるアップロード」の2つを自動化しただけのシンプルな形になった。最近これ以外にも、仕組みを選択する段階で失敗する経験があった。単純な仕組みであるほど問題は少ないし、起きたときに解決しやすいと思った。</p>
 <p>「todoリストをテキストファイルとして扱う」というアイデアは、vimを十二分にカスタマイズ可能なtodoアプリとして扱えるようになっただけでなく、今回のようにtodoリストをwebに公開するというところまで行き着いた。なんかで読んだけど、データをテキストとして保存した方が扱いやすいというのが身にしみて理解できたのでよかった。</p>

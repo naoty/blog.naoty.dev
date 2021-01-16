@@ -6,6 +6,7 @@
     <title>非効率なメモ化の改善</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="非効率なメモ化の改善">
     <meta property="og:type" content="website">
@@ -26,20 +27,20 @@
         </header>
         <section class="body">
           <p>Railsでは、よく以下のようなコードを書いたり見たりする。メモ化って言うらしい。</p>
-<pre lang="ruby"><code>def current_user
-  @current_user ||= User.find_by(cookies.signed[:user_id])
-end
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">def</span> <span class="nf">current_user</span>
+  <span class="vi">@current_user</span> <span class="o">||=</span> <span class="no">User</span><span class="p">.</span><span class="nf">find_by</span><span class="p">(</span><span class="n">cookies</span><span class="p">.</span><span class="nf">signed</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">])</span>
+<span class="k">end</span>
+</pre>
 <p><code>#current_user</code>が呼ばれるまではDBへのアクセスは発生しない。そして、アクセスした結果を<code>@current_user</code>に代入しておくことで、2回目以降の呼び出しではDBへのアクセスが発生しないようになっている。</p>
 <p>割とよく書きがちなこのコードだけど、非効率なケースがある。DBから取得した結果が<code>nil</code>のケースだ。このケースだと、<code>@current_user</code>は<code>nil</code>のままなので<code>#current_user</code>が呼び出されるたびにDBに再度アクセスすることになる。</p>
 <p>DBにアクセスした結果<code>nil</code>だとわかっているなら、2回目以降はDBにアクセスしなくていいだろう。というわけで、こんな感じで直す。</p>
-<pre lang="ruby"><code>def current_user
-  return nil if @current_user_exists == false
-  @current_user ||= User.find_by(cookies.signed[:user_id])
-  @current_user_exists ||= !@current_user.nil?
-  @current_user
-end
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">def</span> <span class="nf">current_user</span>
+  <span class="k">return</span> <span class="kp">nil</span> <span class="k">if</span> <span class="vi">@current_user_exists</span> <span class="o">==</span> <span class="kp">false</span>
+  <span class="vi">@current_user</span> <span class="o">||=</span> <span class="no">User</span><span class="p">.</span><span class="nf">find_by</span><span class="p">(</span><span class="n">cookies</span><span class="p">.</span><span class="nf">signed</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">])</span>
+  <span class="vi">@current_user_exists</span> <span class="o">||=</span> <span class="o">!</span><span class="vi">@current_user</span><span class="p">.</span><span class="nf">nil?</span>
+  <span class="vi">@current_user</span>
+<span class="k">end</span>
+</pre>
 <p>以前のものとは見栄えが悪くなったけど、より効率的になった。もっとシンプルに書けそうな気はしている。</p>
         </section>
         <footer>

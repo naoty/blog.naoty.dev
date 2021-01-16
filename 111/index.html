@@ -6,6 +6,7 @@
     <title>Titaniumでdate.jsを使う</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Titaniumでdate.jsを使う">
     <meta property="og:type" content="website">
@@ -26,13 +27,13 @@
           </p>
         </header>
         <section class="body">
-          <p>標準のDateライブラリが使いにくいので便利なdate.jsをTitaniumで使う。<br />
+          <p>標準のDateライブラリが使いにくいので便利なdate.jsをTitaniumで使う。<br>
 date.jsをダウンロードしてResourcesディレクトリ以下に配置して以下のとおり。</p>
 <pre lang="javascript:app.js"><code>require('date');
 </code></pre>
-<pre lang="javascript"><code>Date.today(); //=&gt; 2012-04-07 15:00:00 +0000
-Date.tomorrow(); //=&gt; 2012-04-08 15:00:00 +0000
-</code></pre>
+<pre lang="javascript" class="highlight highlight-javascript"><span class="nb">Date</span><span class="p">.</span><span class="nx">today</span><span class="p">();</span> <span class="c1">//=&gt; 2012-04-07 15:00:00 +0000</span>
+<span class="nb">Date</span><span class="p">.</span><span class="nx">tomorrow</span><span class="p">();</span> <span class="c1">//=&gt; 2012-04-08 15:00:00 +0000</span>
+</pre>
         </section>
         <footer>
           <nav>

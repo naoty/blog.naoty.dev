@@ -6,6 +6,7 @@
     <title>quickrun.vimでC++11をコンパイルする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="quickrun.vimでC++11をコンパイルする">
     <meta property="og:type" content="website">
@@ -26,11 +27,11 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="vim"><code>let g:quickrun_config.cpp = {
-\   'command': 'g++',
-\   'cmdopt': '-std=c++11'
-\ }
-</code></pre>
+          <pre lang="vim" class="highlight highlight-vim"><span class="k">let</span> <span class="nv">g:quickrun_config</span><span class="p">.</span><span class="nb">cpp</span> <span class="p">=</span> <span class="p">{</span>
+<span class="se">\</span>   <span class="s1">'command'</span><span class="p">:</span> <span class="s1">'g++'</span><span class="p">,</span>
+<span class="se">\</span>   <span class="s1">'cmdopt'</span><span class="p">:</span> <span class="s1">'-std=c++11'</span>
+<span class="se">\</span> <span class="p">}</span>
+</pre>
 <ul>
 <li>Mac OS X 10.8</li>
 <li>gcc 4.9（Homebrewで最新版をインストールした）</li>

@@ -6,6 +6,7 @@
     <title>CSRFトークンの検証プロセス</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="CSRFトークンの検証プロセス">
     <meta property="og:type" content="website">
@@ -34,13 +35,15 @@
 end
 </code></pre>
 <ul>
-<li><code>protect_from_forgery</code>はデフォルトで<code>ApplicationController</code>で宣言されている。</li>
-<li><code>verify_authenticity_token</code>をすべてのアクションの前に実行するようになる。</li>
+<li>
+<code>protect_from_forgery</code>はデフォルトで<code>ApplicationController</code>で宣言されている。</li>
+<li>
+<code>verify_authenticity_token</code>をすべてのアクションの前に実行するようになる。</li>
 </ul>
 <h2>line:72</h2>
 <pre><code>def verify_authenticity_token
   unless verified_request?
-    logger.warn &quot;WARNING: Can't verify CSRF token authenticity&quot; if logger
+    logger.warn "WARNING: Can't verify CSRF token authenticity" if logger
     handle_unverified_request
   end
 end
@@ -51,7 +54,8 @@ end
 end
 </code></pre>
 <ul>
-<li><code>verified_request?</code>が<code>false</code>の場合はセッションがリセットされる。</li>
+<li>
+<code>verified_request?</code>が<code>false</code>の場合はセッションがリセットされる。</li>
 </ul>
 <h2>line:93</h2>
 <pre><code>def verified_request?
@@ -61,9 +65,12 @@ end
 end
 </code></pre>
 <ul>
-<li><code>params[request_forgery_protection_token]</code>は<code>protect_from_forgery</code>の中で定義されている通り<code>params[:authenticity_token]</code>になる。</li>
-<li><code>params[:authenticity_token]</code>はformヘルパーが自動生成するhiddenフィールドから送信される。</li>
-<li><code>params[:authenticity_token]</code>がない場合でも、HTTPヘッダーの<code>X-CSRF-Token</code>を設定すればいい。</li>
+<li>
+<code>params[request_forgery_protection_token]</code>は<code>protect_from_forgery</code>の中で定義されている通り<code>params[:authenticity_token]</code>になる。</li>
+<li>
+<code>params[:authenticity_token]</code>はformヘルパーが自動生成するhiddenフィールドから送信される。</li>
+<li>
+<code>params[:authenticity_token]</code>がない場合でも、HTTPヘッダーの<code>X-CSRF-Token</code>を設定すればいい。</li>
 </ul>
 <h2>line:100</h2>
 <pre><code>def form_authenticity_token
@@ -71,7 +78,8 @@ end
 end
 </code></pre>
 <ul>
-<li><code>params[:authenticity_token]</code>または<code>request.headers['X-CSRF-Token']</code>が<code>session[:_csrf_token]</code>と一致しているかどうかが、CSRFトークンの検証の本体である。</li>
+<li>
+<code>params[:authenticity_token]</code>または<code>request.headers['X-CSRF-Token']</code>が<code>session[:_csrf_token]</code>と一致しているかどうかが、CSRFトークンの検証の本体である。</li>
 </ul>
         </section>
         <footer>

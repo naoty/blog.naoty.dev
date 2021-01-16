@@ -6,6 +6,7 @@
     <title>CoreDataに簡単に初期データを追加する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="CoreDataに簡単に初期データを追加する">
     <meta property="og:type" content="website">
@@ -27,10 +28,10 @@
         </header>
         <section class="body">
           <p><a href="https://github.com/naoty/NTYPopulator">NTYPopulator</a>というライブラリで簡単に初期データを追加できる。CocoaPodsからインストールできる。</p>
-<pre lang="rb:Podfile"><code>pod &quot;NTYPopulator&quot;
+<pre lang="rb:Podfile"><code>pod "NTYPopulator"
 </code></pre>
-<pre lang="sh"><code>$ pod install
-</code></pre>
+<pre lang="sh" class="highlight highlight-sh"><span class="nv">$ </span>pod <span class="nb">install</span>
+</pre>
 <p>使い方は<code>AppDelegate.m</code>に一行加えるだけ。</p>
 <pre lang="objective-c:AppDelegate.m"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -42,9 +43,9 @@
 <p>デフォルトではモデルファイルとして<code>Model.momd</code>が参照され、SQLiteファイルとして<code>$(CFBundleName).sqlite</code>が参照される。これを変更することも可能。</p>
 <pre lang="objective-c:AppDelegate.m"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@&quot;MyModel&quot; withExtension:@&quot;momd&quot;];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MyModel" withExtension:@"momd"];
     NSURL *documentDirectoryURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    NSURL *sqliteURL = [documentDirectoryURL URLByAppendingPathComponent:@&quot;MySQLite.sqlite&quot;];
+    NSURL *sqliteURL = [documentDirectoryURL URLByAppendingPathComponent:@"MySQLite.sqlite"];
     
     NTYPopulator *populator = [[NTYPopulator alloc] initWithModelURL:modelURL sqliteURL:sqliteURL];
     [populator run];
@@ -52,9 +53,9 @@
     return YES;
 }
 </code></pre>
-<hr />
+<hr>
 <p>以上、ステマでした。</p>
-<hr />
+<hr>
 <h3>追記</h3>
 <p>NTYPopulatorで想定していたユースケースは開発時に初期データをさくっと入れたいというものなので、リリース時には作成済みのSQLiteファイルを使った方がいいと思う。</p>
         </section>

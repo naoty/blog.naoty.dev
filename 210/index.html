@@ -6,6 +6,7 @@
     <title>安全なrmコマンド</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="安全なrmコマンド">
     <meta property="og:type" content="website">
@@ -26,9 +27,9 @@
         </header>
         <section class="body">
           <p>rmで大事なファイルを消さないようにゴミ箱フォルダに移動させる設定です。</p>
-<pre lang="zsh"><code>$ brew install trash
-</code></pre>
-<pre lang="zsh:.zshrc"><code>alias rm=&quot;trash&quot;
+<pre lang="zsh" class="highlight highlight-zsh"><span class="nv">$ </span>brew <span class="nb">install </span>trash
+</pre>
+<pre lang="zsh:.zshrc"><code>alias rm="trash"
 </code></pre>
         </section>
         <footer>

@@ -6,6 +6,7 @@
     <title>ホームページのパッケージ更新をrenovateに移した</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ホームページのパッケージ更新をrenovateに移した">
     <meta property="og:type" content="website">
@@ -30,27 +31,28 @@
 <h1>Netlifyで無料分を使い切った</h1>
 <p>あるとき、Netlifyから数ドルほど請求されていることに気づいた。このホームページはNetlifyでホスティングしているのだけど、どうやらビルド時間の上限を超えた分が請求されたらしい。</p>
 <p>Build minutesのページを見てみた。</p>
-<p><img src="build-minutes.png" alt="build minutes" /></p>
+<p><img src="build-minutes.png" alt="build minutes"></p>
 <p>確かに、極端にビルド時間がかかっている日がある。</p>
 <p>原因はdependabotからのパッケージ更新のPull requestごとにNetlifyでビルドをおこなっていることだった。dependabotは更新があったパッケージごとにPull requestを作るため、大量のPull requestが作られてしまう。Pull requestのグループ化を要望する<a href="https://github.com/dependabot/feedback/issues/5">声</a>はたくさんあるが、まだ実現されてなさそうだ。</p>
 <h1>renovateへの移行</h1>
 <p>そこで、<a href="https://renovate.whitesourcesoftware.com/">renovate</a>という別のパッケージ更新サービスを使ってみることにした。</p>
 <p>dependabotと同様にGitHubで簡単に連携できた。設定ファイルは、<code>config:base</code> presetを使うような雰囲気だったけど、どういった設定なのか不透明なのが気持ち悪かったので中身を調べて自分にとって必要な設定にした。</p>
-<pre lang="json"><code>{
-  &quot;schedule&quot;: [&quot;on friday&quot;],
-  &quot;ignorePaths&quot;: [&quot;**/node_modules/**&quot;],
-  &quot;packageRules&quot;: [
-    {
-      &quot;updateTypes&quot;: [&quot;minor&quot;, &quot;patch&quot;],
-      &quot;groupName&quot;: &quot;all minor dependencies&quot;,
-      &quot;automerge&quot;: true
-    }
-  ]
-}
-</code></pre>
+<pre lang="json" class="highlight highlight-json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"on friday"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"ignorePaths"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"**/node_modules/**"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"packageRules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"updateTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"minor"</span><span class="p">,</span><span class="w"> </span><span class="s2">"patch"</span><span class="p">],</span><span class="w">
+      </span><span class="nl">"groupName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"all minor dependencies"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"automerge"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
 <ul>
 <li>週末にPull requestをチェックしたいので、更新は金曜日だけにする。</li>
-<li><code>node_modules</code>以下のpackage.jsonは無視する。</li>
+<li>
+<code>node_modules</code>以下のpackage.jsonは無視する。</li>
 <li>メジャーアップデートはパッケージごとにPull requestを作ってmergeは手動で行う。</li>
 <li>マイナー以下のアップデートはすべてひとつにまとめて、自動的にmergeする。</li>
 </ul>

@@ -6,6 +6,7 @@
     <title>naoty/todoを書き直した</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="naoty/todoを書き直した">
     <meta property="og:type" content="website">
@@ -31,61 +32,61 @@
 <p>大きい変更点として、それぞれのTODOをテキストファイルとして保存するようにした。作業メモをTODOごとに残したかったから、今回ゼロから作り直すことになった。作業メモは<a href="/330/">作業メモという習慣</a>という以前の記事で書いたもので、いまも続けている。</p>
 <h1>使い方</h1>
 <p>仕事をするときはこのnaoty/todoをこんな感じでつかっている。</p>
-<pre lang="bash"><code># タスクを追加
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># タスクを追加</span>
 % todo add 新しいタスク
 
-# タスクを表示
+<span class="c"># タスクを表示</span>
 % todo list
-[ ] 001: 新しいタスク
+<span class="o">[</span> <span class="o">]</span> 001: 新しいタスク
 
-# サブタスクを追加
-% todo add -p 1 新しいサブタスク1
-% todo add -p 1 新しいサブタスク2
+<span class="c"># サブタスクを追加</span>
+% todo add <span class="nt">-p</span> 1 新しいサブタスク1
+% todo add <span class="nt">-p</span> 1 新しいサブタスク2
 % todo list
-[ ] 001: 新しいタスク
-  [ ] 002: 新しいサブタスク1
-  [ ] 003: 新しいサブタスク2
+<span class="o">[</span> <span class="o">]</span> 001: 新しいタスク
+  <span class="o">[</span> <span class="o">]</span> 002: 新しいサブタスク1
+  <span class="o">[</span> <span class="o">]</span> 003: 新しいサブタスク2
 
-# エディタを開いて作業メモをとる
+<span class="c"># エディタを開いて作業メモをとる</span>
 % todo open 2
 
-# 完了したらdoneにする
-% todo done 2
+<span class="c"># 完了したらdoneにする</span>
+% todo <span class="k">done </span>2
 % todo list
-[ ] 001: 新しいタスク
-  [x] 002: 新しいサブタスク1
-  [ ] 003: 新しいサブタスク2
+<span class="o">[</span> <span class="o">]</span> 001: 新しいタスク
+  <span class="o">[</span>x] 002: 新しいサブタスク1
+  <span class="o">[</span> <span class="o">]</span> 003: 新しいサブタスク2
 
-# サブタスクは無限にネストできる
-% todo add -p 3 新しいサブタスク3
+<span class="c"># サブタスクは無限にネストできる</span>
+% todo add <span class="nt">-p</span> 3 新しいサブタスク3
 % todo list
 % todo list
-[ ] 001: 新しいタスク
-  [x] 002: 新しいサブタスク1
-  [ ] 003: 新しいサブタスク2
-    [ ] 004: 新しいサブタスク3
+<span class="o">[</span> <span class="o">]</span> 001: 新しいタスク
+  <span class="o">[</span>x] 002: 新しいサブタスク1
+  <span class="o">[</span> <span class="o">]</span> 003: 新しいサブタスク2
+    <span class="o">[</span> <span class="o">]</span> 004: 新しいサブタスク3
 
-# タスクが待ち状態になったらwaitする
-% todo wait 4
+<span class="c"># タスクが待ち状態になったらwaitする</span>
+% todo <span class="nb">wait </span>4
 % todo list
-[ ] 001: 新しいタスク
-  [x] 002: 新しいサブタスク1
-  [ ] 003: 新しいサブタスク2
-    [w] 004: 新しいサブタスク3
+<span class="o">[</span> <span class="o">]</span> 001: 新しいタスク
+  <span class="o">[</span>x] 002: 新しいサブタスク1
+  <span class="o">[</span> <span class="o">]</span> 003: 新しいサブタスク2
+    <span class="o">[</span>w] 004: 新しいサブタスク3
 
-# 完了したタスクを消したいときはarchiveする
-# archiveはファイルを削除せずに一覧から消すだけなので、作業メモは残せる
+<span class="c"># 完了したタスクを消したいときはarchiveする</span>
+<span class="c"># archiveはファイルを削除せずに一覧から消すだけなので、作業メモは残せる</span>
 % todo archive
 % todo list
-[ ] 001: 新しいタスク
-  [ ] 003: 新しいサブタスク2
-    [w] 004: 新しいサブタスク3
-</code></pre>
+<span class="o">[</span> <span class="o">]</span> 001: 新しいタスク
+  <span class="o">[</span> <span class="o">]</span> 003: 新しいサブタスク2
+    <span class="o">[</span>w] 004: 新しいサブタスク3
+</pre>
 <h1>インストール</h1>
 <p>Goで書いているので<code>go get</code>からインストールもできるし、Homebrewでインストールできるようにもしているので、こんな感じでインストールできる。</p>
-<pre lang="bash"><code>% brew tap naoty/misc
-% brew install todo
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% brew tap naoty/misc
+% brew <span class="nb">install </span>todo
+</pre>
         </section>
         <footer>
           <nav>

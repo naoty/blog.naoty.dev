@@ -6,6 +6,7 @@
     <title>__FILE__と$0の違い</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="__FILE__と$0の違い">
     <meta property="og:type" content="website">
@@ -27,27 +28,29 @@
         </header>
         <section class="body">
           <p>ググればいろんなところで解説されているけど、実際にコード書いて確かめてみた。</p>
-<pre lang="ruby:filename.rb"><code>puts &quot;__FILE__: #{__FILE__}&quot;
-puts &quot;$0: #{$0}&quot;
+<pre lang="ruby:filename.rb"><code>puts "__FILE__: #{__FILE__}"
+puts "$0: #{$0}"
 </code></pre>
 <pre lang="ruby:require_filename.rb"><code>require_relative filename
 </code></pre>
-<pre lang="shell"><code>% ruby filename.rb
+<pre lang="shell" class="highlight highlight-shell">% ruby filename.rb
 __FILE__: filename.rb
-$0: filename.rb
+<span class="nv">$0</span>: filename.rb
 % ruby require_filename.rb
 __FILE__: /Users/naoty/workspace/ruby/filename.rb
-$0: require_filename.rb
-</code></pre>
+<span class="nv">$0</span>: require_filename.rb
+</pre>
 <ul>
-<li><code>__FILE__</code>は実行中のプログラムのファイル名（<a href="http://miyamae.github.com/rubydoc-ja/1.9.3/#!/doc/spec=2fvariables.html?pseudo">リファレンス</a>によると、フルパスとは限らないみたい）</li>
-<li><code>$0</code>は実行時に指定されたファイル名（相対パス）</li>
+<li>
+<code>__FILE__</code>は実行中のプログラムのファイル名（<a href="http://miyamae.github.com/rubydoc-ja/1.9.3/#!/doc/spec=2fvariables.html?pseudo">リファレンス</a>によると、フルパスとは限らないみたい）</li>
+<li>
+<code>$0</code>は実行時に指定されたファイル名（相対パス）</li>
 <li>以下のようなコードを見かけるのだけど、相対パスと絶対パスで一致しない場合は考慮されていないような気がする。。。</li>
 </ul>
-<pre lang="ruby"><code>if __FILE__ == $0
-  # hogehoge
-end
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">if</span> <span class="kp">__FILE__</span> <span class="o">==</span> <span class="vg">$0</span>
+  <span class="c1"># hogehoge</span>
+<span class="k">end</span>
+</pre>
         </section>
         <footer>
           <nav>

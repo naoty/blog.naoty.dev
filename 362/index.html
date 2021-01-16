@@ -6,6 +6,7 @@
     <title>terraformとapex infraの依存関係</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="terraformとapex infraの依存関係">
     <meta property="og:type" content="website">
@@ -35,22 +36,22 @@
 <p>こういうときの考え方として、依存関係の方向性を単方向にすると良かったりする。<code>apex infra</code>で管理するリソースはterraformで管理するリソースを参照することができるけど、逆にterraformで管理するリソースは<code>apex infra</code>で管理するリソースを参照できない、というルールを作る。</p>
 <h1>実装</h1>
 <p><code>apex infra</code>からterraformのリソースを参照するために<code>terraform_remote_state</code>を使う。ここでは例として、apexで管理するLambda関数をterraformで管理するSNSトピックにsubscribeしたいとする。</p>
-<pre lang="hcl"><code>data &quot;terraform_remote_state&quot; &quot;global&quot; {
-  backend = &quot;s3&quot;
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">data</span> <span class="s2">"terraform_remote_state"</span> <span class="s2">"global"</span> <span class="p">{</span>
+  <span class="nx">backend</span> <span class="p">=</span> <span class="s2">"s3"</span>
 
-  config {
-    region = &quot;ap-northeast-1&quot;
-    bucket = &quot;my-terraform&quot;
-    key    = &quot;global&quot;
-  }
-}
-</code></pre>
-<pre lang="hcl"><code>resource &quot;aws_sns_topic_subscription&quot; &quot;lambda&quot; {
-  topic_arn = &quot;${data.terraform_remote_state.global.my_topic}&quot;
-  protocol  = &quot;lambda&quot;
-  endpoint  = &quot;${var.apex_function_arns[&quot;my_function&quot;]}&quot;
-}
-</code></pre>
+  <span class="nx">config</span> <span class="p">{</span>
+    <span class="nx">region</span> <span class="p">=</span> <span class="s2">"ap-northeast-1"</span>
+    <span class="nx">bucket</span> <span class="p">=</span> <span class="s2">"my-terraform"</span>
+    <span class="nx">key</span>    <span class="p">=</span> <span class="s2">"global"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<pre lang="hcl" class="highlight highlight-hcl"><span class="nx">resource</span> <span class="s2">"aws_sns_topic_subscription"</span> <span class="s2">"lambda"</span> <span class="p">{</span>
+  <span class="nx">topic_arn</span> <span class="p">=</span> <span class="s2">"${data.terraform_remote_state.global.my_topic}"</span>
+  <span class="nx">protocol</span>  <span class="p">=</span> <span class="s2">"lambda"</span>
+  <span class="nx">endpoint</span>  <span class="p">=</span> <span class="s2">"${var.apex_function_arns["</span><span class="nx">my_function</span><span class="s2">"]}"</span>
+<span class="p">}</span>
+</pre>
 <p>SNSトピックのARNは事前に<code>output</code>でremote stateとして公開しておく必要がある。</p>
 <p>こうすることで、terraform側からapexで管理するLambda関数を参照せずに済んでいる。Lambda関数を参照するリソースは<code>apex infra</code>で管理し、そうでないリソースはterraformで管理するという方針でうまく整理できそうだ。</p>
         </section>

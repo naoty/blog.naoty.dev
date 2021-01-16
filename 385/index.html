@@ -6,6 +6,7 @@
     <title>Nuxtで明示的にルーティングを定義する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Nuxtで明示的にルーティングを定義する">
     <meta property="og:type" content="website">
@@ -46,45 +47,45 @@
 <p>Nuxt.jsは暗黙的にルーティングを生成するので、ルーティングの優先度やルートの細かい制約が設定できない。</p>
 <h1>解決策</h1>
 <p><a href="https://github.com/nuxt-community/router-module">@nuxtjs/router</a>を使って明示的にルーティングを設定する。</p>
-<pre lang="javascript"><code>// nuxt.config.js
-export default {
-  modules: [&quot;@nuxtjs/router&quot;]
-}
-</code></pre>
+<pre lang="javascript" class="highlight highlight-javascript"><span class="c1">// nuxt.config.js</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="na">modules</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">@nuxtjs/router</span><span class="dl">"</span><span class="p">]</span>
+<span class="p">}</span>
+</pre>
 <p>デフォルトの設定では、<code>pages/</code>ディレクトリに基づいた暗黙的なルーティングの生成は無効化してくれる。そして<code>./router.js</code>で明示的にルーティングを定義する。</p>
-<pre lang="javascript"><code>// router.js
-import Vue from &quot;vue&quot;;
-import Router from &quot;vue-router&quot;;
+<pre lang="javascript" class="highlight highlight-javascript"><span class="c1">// router.js</span>
+<span class="k">import</span> <span class="nx">Vue</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">vue</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">Router</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">vue-router</span><span class="dl">"</span><span class="p">;</span>
 
-import Index from &quot;./pages/index&quot;;
-import PostsIndex from &quot;./pages/posts/index&quot;;
-import PostId from &quot;./pages/posts/_id&quot;;
-import PostsTagIndex from &quot;./pages/posts/_tag/index&quot;;
+<span class="k">import</span> <span class="nx">Index</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./pages/index</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">PostsIndex</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./pages/posts/index</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">PostId</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./pages/posts/_id</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">PostsTagIndex</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./pages/posts/_tag/index</span><span class="dl">"</span><span class="p">;</span>
 
-export function createRouter() {
-  return new Router({
-    mode: &quot;history&quot;,
-    routes: [
-      {
-        path: &quot;/&quot;,
-        component: Index
-      },
-      {
-        path: &quot;/posts/&quot;,
-        component: PostsIndex
-      },
-      {
-        path: &quot;/posts/:id(\\d+)\\.html&quot;,
-        component: PostId
-      },
-      {
-        path: &quot;/posts/:tag/&quot;,
-        component: PostsTagIndex
-      }
-    ]
-  });
-}
-</code></pre>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">createRouter</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
+    <span class="na">mode</span><span class="p">:</span> <span class="dl">"</span><span class="s2">history</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">routes</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">component</span><span class="p">:</span> <span class="nx">Index</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/posts/</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">component</span><span class="p">:</span> <span class="nx">PostsIndex</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/posts/:id(</span><span class="se">\\</span><span class="s2">d+)</span><span class="se">\\</span><span class="s2">.html</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">component</span><span class="p">:</span> <span class="nx">PostId</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/posts/:tag/</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">component</span><span class="p">:</span> <span class="nx">PostsTagIndex</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre>
 <p>必要なのは、vue-routerのインスタンスを返す<code>createRouter()</code>という関数を<code>export</code>するだけ。あとは、vue-routerでルーティングを定義するだけなので、正規表現を使ったルーティングもできる。</p>
         </section>
         <footer>

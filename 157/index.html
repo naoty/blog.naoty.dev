@@ -6,6 +6,7 @@
     <title>ちょっとしたiPadアプリを作った話</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ちょっとしたiPadアプリを作った話">
     <meta property="og:type" content="website">
@@ -35,9 +36,9 @@
 <p>— なおてぃーさん (@naoty_k) <a href="https://twitter.com/naoty_k/status/271989962881265664">11月 23, 2012</a></p>
 </blockquote>
 <p>↑というのを思いつき、2日間でプロトタイプを作ってみた。</p>
-<p><img src="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg" alt="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg" /></p>
+<p><img src="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg" alt="http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg"></p>
 <p>ジョジョOPでテンション上げながら。</p>
-<p><img src="http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg" alt="http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg" /></p>
+<p><img src="http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg" alt="http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg"></p>
 <p>サーバー側をRails on Herokuで作って、そっからデータを取得までできた。</p>
 <p>アプリとサーバーのコードはこちらで公開してます。</p>
 <ul>
@@ -69,7 +70,7 @@ pod 'AFNetworking'
 <p>YouTubeのiFrameプレイヤーをJavaScriptで制御する<a href="https://developers.google.com/youtube/iframe_api_reference?hl=ja">YouTube Player API</a>というものがあるので、これを使ってプレイヤーのロード時、動画再生終了時のイベントを受け取る。詳しい実装方法はリンク先のとおりだけど、ポイントは以下のところ。</p>
 <pre><code>function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
-        document.location = &quot;api://didEndedMovie&quot;;
+        document.location = "api://didEndedMovie";
     }
 }
 </code></pre>
@@ -79,7 +80,7 @@ pod 'AFNetworking'
 {
     NSString *requestString = [[request URL] absoluteString];
 
-    if ([requestString isEqualToString:@&quot;api:didEndedMovie&quot;]) {
+    if ([requestString isEqualToString:@"api:didEndedMovie"]) {
         // 再生終了時の処理をここに実装する
 
         return NO;
@@ -92,7 +93,7 @@ pod 'AFNetworking'
 <p>これで再生終了時に次の動画に自動的に移すことが可能</p>
 <p>…かと思いきや、なぜかうまくいかないorz</p>
 <p>デバッグをしてみると、どうやらJSの<code>onPlayerStateChange</code>が呼ばれていないっぽい。ブラウザではうまくいっていたので、<code>UIWebView</code>のみで起きる現象のようだけど、原因がよくわからない…。というところで、今週の土日が終わりました。</p>
-<hr />
+<hr>
 <p>以下のページを参考にさせていただきました。ありがとうございました。</p>
 <ul>
 <li><a href="http://qiita.com/items/66457a0d5fe55877dea1">http://qiita.com/items/66457a0d5fe55877dea1</a></li>

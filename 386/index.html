@@ -6,6 +6,7 @@
     <title>ダークモードのサポート</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ダークモードのサポート">
     <meta property="og:type" content="website">
@@ -28,14 +29,14 @@
         </header>
         <section class="body">
           <p>このホームページがOSのダークモードをサポートした。macOSとAndroidで動作確認した。</p>
-<p><img src="dark-theme.gif" alt="ダークテーマ" /></p>
+<p><img src="dark-theme.gif" alt="ダークテーマ"></p>
 <p>ダークモードをサポートするには、以下のようにメディアクエリを使ってダークモードで適用するスタイルを指定する。</p>
-<pre lang="css"><code>@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #2e3440;
-  }
-}
-</code></pre>
+<pre lang="css" class="highlight highlight-css"><span class="k">@media</span> <span class="p">(</span><span class="n">prefers-color-scheme</span><span class="p">:</span> <span class="n">dark</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nt">body</span> <span class="p">{</span>
+    <span class="nl">background-color</span><span class="p">:</span> <span class="m">#2e3440</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>ダークモード用のカラースキーマには、VSCodeでも使っている<a href="https://www.nordtheme.com">Nord</a>を参考にしている。</p>
 <h1>参考</h1>
 <ul>

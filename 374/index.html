@@ -6,6 +6,7 @@
     <title>bit全探索</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="bit全探索">
     <meta property="og:type" content="website">
@@ -27,46 +28,46 @@
         </header>
         <section class="body">
           <p>ある集合のすべての組み合わせを列挙したいときに、bit全探索と呼ばれるアルゴリズムを使うといいことを学んだ。</p>
-<pre lang="cpp"><code>int main() {
-  int n = 3;
+<pre lang="cpp" class="highlight highlight-cpp"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 
-  // 組み合わせの数だけループする
-  for (int bit = 0; bit &lt; (1 &lt;&lt; n); bit++) {
-    // 組み合わせに含まれる要素
-    vector numbers;
+  <span class="c1">// 組み合わせの数だけループする</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">bit</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="n">bit</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 組み合わせに含まれる要素</span>
+    <span class="n">vector</span> <span class="n">numbers</span><span class="p">;</span>
 
-    // 全要素についてループする
-    for (int i = 0; i &lt; n; i++) {
-      // 要素が組み合わせに含まれるかチェックする
-      if (bit &amp; (1 &lt;&lt; i)) {
-        // 組み合わせに要素を追加する
-        numbers.push_back(i);
-      }
-    }
+    <span class="c1">// 全要素についてループする</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// 要素が組み合わせに含まれるかチェックする</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">bit</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// 組み合わせに要素を追加する</span>
+        <span class="n">numbers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
 
-    printf(&quot;{&quot;);
-    for (int i = 0; i &lt; numbers.size(); i++) {
-      printf((i == 0) ? &quot;%d&quot; : &quot; %d&quot;, numbers[i]); 
-    }
-    printf(&quot;} &quot;);
-  }
-  printf(&quot;\n&quot;);
-}
-</code></pre>
-<pre lang="bash"><code>$ ./a.out
-{} {0} {1} {0 1} {2} {0 2} {1 2} {0 1 2}
-</code></pre>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"{"</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numbers</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">((</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s">"%d"</span> <span class="o">:</span> <span class="s">" %d"</span><span class="p">,</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> 
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"} "</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="nv">$ </span>./a.out
+<span class="o">{}</span> <span class="o">{</span>0<span class="o">}</span> <span class="o">{</span>1<span class="o">}</span> <span class="o">{</span>0 1<span class="o">}</span> <span class="o">{</span>2<span class="o">}</span> <span class="o">{</span>0 2<span class="o">}</span> <span class="o">{</span>1 2<span class="o">}</span> <span class="o">{</span>0 1 2<span class="o">}</span>
+</pre>
 <h1>組み合わせの数</h1>
-<pre lang="cpp"><code>for (int bit = 0; bit &lt; (1 &lt;&lt; n); bit++) {
-}
-</code></pre>
+<pre lang="cpp" class="highlight highlight-cpp"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">bit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">bit</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span> <span class="n">bit</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">}</span>
+</pre>
 <p>ある集合のすべての組み合わせは、各要素について含めるか含めないかの2択によって生まれるので、<code>2^</code>になる。<code>1 &lt;&lt; n</code>は<code>2^n</code>と同じなので、組み合わせの数だけループしていることになる。</p>
 <h1>組み合わせの作り方</h1>
-<pre lang="cpp"><code>for (int i = 0; i &lt; n; i++) {
-  if (bit &amp; (1 &lt;&lt; i)) {
-  }
-}
-</code></pre>
+<pre lang="cpp" class="highlight highlight-cpp"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">bit</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p><code>bit &amp; (1 &lt;&lt; i)</code>は要素<code>i</code>が組み合わせに含まれるかをチェックしている。<code>&amp;</code>はAND演算なので、<code>bit</code>と<code>(1 &lt;&lt; i)</code>をそれぞれ2進数として考える。</p>
 <p><code>bit</code>は上のコードだと<code>0</code>から<code>7</code>までの数になるので、2進数では<code>000</code>から<code>111</code>までということになる。</p>
 <p>一方、<code>i</code>は上のコードだと<code>0</code>, <code>1</code>, <code>2</code>なので、<code>(1 &lt;&lt; i)</code>はそれぞれ<code>001</code>, <code>010</code>, <code>100</code>になる。</p>

@@ -6,6 +6,7 @@
     <title>HTMLやCSSの変更を自動でブラウザに反映させる</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="HTMLやCSSの変更を自動でブラウザに反映させる">
     <meta property="og:type" content="website">
@@ -30,14 +31,18 @@
 <ul>
 <li>LiveReloadをguardで起動する。</li>
 <li>すると、guardがHTMLやCSSの変更をキャッチしてLiveReloadでブラウザが自動でリロードされる。</li>
-<li><a href="http://youtu.be/EZ8vy_cNMVQ">これ</a>を見た方がはやい。</li>
+<li>
+<a href="http://youtu.be/EZ8vy_cNMVQ">これ</a>を見た方がはやい。</li>
 <li>サブディスプレイに複数のブラウザを立ちあげてLiveReloadをオンにして、ファイルの変更がいっぺんにそれらのブラウザに反映されるのが感動。鳥肌もの。</li>
 </ul>
 <h2>手順</h2>
 <ol>
-<li><code>guard-livereload</code>をbundleでいれる</li>
-<li><code>guard init livereload</code>で<code>Guardfile</code>を設定する。</li>
-<li><code>guard</code>でファイルの変更のウォッチをスタート。</li>
+<li>
+<code>guard-livereload</code>をbundleでいれる</li>
+<li>
+<code>guard init livereload</code>で<code>Guardfile</code>を設定する。</li>
+<li>
+<code>guard</code>でファイルの変更のウォッチをスタート。</li>
 <li>ブラウザのアドオンでLiveReloadをオンにする</li>
 </ol>
 <h2>Rails</h2>
@@ -53,7 +58,8 @@ $ guard
 <h2>アドオンたち</h2>
 <ul>
 <li>Firefox：<a href="https://addons.mozilla.org/ja/firefox/addon/livereload/">https://addons.mozilla.org/ja/firefox/addon/livereload/</a>、最新版（v12）ではうまく動かなかったので、これのためだけにv5までダウングレードしてる。</li>
-<li>Chrome：<a href="https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei">https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei</a></li>
+<li>Chrome：<a href="https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei">https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei</a>
+</li>
 <li>Safariもあるらしい。</li>
 <li>IEにもほしいけど、どうなんだろう。</li>
 </ul>

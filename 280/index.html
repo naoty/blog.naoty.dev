@@ -6,6 +6,7 @@
     <title>型消去を用いたSwiftによるリポジトリパターンの実装</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="型消去を用いたSwiftによるリポジトリパターンの実装">
     <meta property="og:type" content="website">
@@ -50,7 +51,7 @@
 <pre><code>struct RealmPokemonRepository: PokemonRepository {
     func find(ID: UInt) -&gt; Pokemon? {
         let realm = try! Realm()
-        return realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first
+        return realm.objects(Pokemon).filter("ID == %d", ID).first
     }
 
     func findAll() -&gt; [Pokemon] {
@@ -62,9 +63,9 @@
 <p>同様にメモリ内の<code>[Pokemon]</code>から<code>Pokemon</code>を取得するリポジトリは以下のように書けると思う。</p>
 <pre><code>struct MemoryPokemonRepository: PokemonRepository {
     let pokemons = [
-        Pokemon(ID: 1, name: &quot;フシギダネ&quot;),
-        Pokemon(ID: 2, name: &quot;フシギソウ&quot;),
-        Pokemon(ID: 3, name: &quot;フシギバナ&quot;)
+        Pokemon(ID: 1, name: "フシギダネ"),
+        Pokemon(ID: 2, name: "フシギソウ"),
+        Pokemon(ID: 3, name: "フシギバナ")
     ]
 
     func find(ID: UInt) -&gt; Pokemon? {
@@ -114,7 +115,7 @@
 
     func find(ID: UInt) -&gt; Pokemon? {
         let realm = try! Realm()
-        return realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first
+        return realm.objects(Pokemon).filter("ID == %d", ID).first
     }
 
     func findAll() -&gt; [Pokemon] {
@@ -174,7 +175,7 @@
 </code></pre>
 <p><code>AnyRepository</code>があることで、<code>PokemonRepository</code>や<code>HumanRepository</code>のようなドメインモデルごとのprotocolは不要になり、それぞれ<code>AnyRepository</code>、<code>AnyRepository</code>のような型を使うことで対処できる。これでボイラープレートのようなコードを書く必要はなくなった。</p>
 <p><strong>型消去とは、この例で言うと<code>PokemonRepository</code>型であった<code>repository</code>が<code>AnyRepository</code>という型にしてしまうことを指しているようだ</strong> 。型消去というのは、より柔軟な設計のための結果として考えることができそう。</p>
-<hr />
+<hr>
 <p>以降は型消去とは無関係だけど、リポジトリパターンを実装するにあたって必要となった技術要素を紹介していきたいと思う。</p>
 <h1>クエリのインターフェイス</h1>
 <p>上で紹介した<code>Repository</code>は意図的に不十分なインターフェイスだった。というのは、<code>findAll()</code>というメソッドはその名の通りすべてのオブジェクトを取得してしまうので、現実的には検索条件やソートなどのパラメータを指定できる必要があると思う。</p>
@@ -201,7 +202,7 @@ extension Repository {
 
     func find(ID: UInt) -&gt; Pokemon? {
         let realm = try! Realm()
-        return realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first
+        return realm.objects(Pokemon).filter("ID == %d", ID).first
     }
 
     func findAll(query query: AnyQuery?, sort: AnySort?) -&gt; [Pokemon] {
@@ -233,15 +234,15 @@ extension Repository {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let query = AnyQuery.In(key: &quot;ID&quot;, values: [1, 2, 3, 4, 5])
-        let sort = AnySort.Ascending(key: &quot;name&quot;)
+        let query = AnyQuery.In(key: "ID", values: [1, 2, 3, 4, 5])
+        let sort = AnySort.Ascending(key: "name")
         pokedex = repository.findAll(query: query, sort: sort)
     }
 }
 </code></pre>
 <p>詳細は<a href="https://github.com/naoty/AnyQuery/blob/master/README.md">README</a>に書いてあるが、例えば、こんな風に複雑な条件も表現できる。</p>
-<pre><code>let query = AnyQuery.Between(key: &quot;ID&quot;, lhs: 1, rhs: 100) &amp;&amp; AnyQuery.NotEqual(key: &quot;type&quot;, PokemonType.Fire.rawValue)
-let sort = AnySort.Descending(key: &quot;weight&quot;) &gt; AnySort.Descending(key: &quot;height&quot;)
+<pre><code>let query = AnyQuery.Between(key: "ID", lhs: 1, rhs: 100) &amp;&amp; AnyQuery.NotEqual(key: "type", PokemonType.Fire.rawValue)
+let sort = AnySort.Descending(key: "weight") &gt; AnySort.Descending(key: "height")
 </code></pre>
 <h1>非同期処理の取り扱い</h1>
 <p>たいていの取得処理は非同期に行われるため、リポジトリのインターフェイスも非同期処理を前提にしなくてはならないと思う。しかし、取得完了時の処理をクロージャとして渡すインターフェイスはコールバック・ヘルにつながるため、Promiseライクなライブラリを使ってオブジェクトの代わりにPromiseオブジェクトを返すような形がいいと思った。</p>
@@ -260,7 +261,7 @@ let sort = AnySort.Descending(key: &quot;weight&quot;) &gt; AnySort.Descending(k
     func find(ID: UInt) -&gt; Task {
         return Task { fulfill, reject in
             let realm = try! Realm()
-            if let pokemon = realm.objects(Pokemon).filter(&quot;ID == %d&quot;, ID).first {
+            if let pokemon = realm.objects(Pokemon).filter("ID == %d", ID).first {
                 fulfill(pokemon.pokemon)
             } else {
                 reject(RepositoryError.NotFound)
@@ -300,7 +301,8 @@ let sort = AnySort.Descending(key: &quot;weight&quot;) &gt; AnySort.Descending(k
 <p>Swiftでリポジトリパターンを実装するにあたってのポイントは3つあった。</p>
 <ul>
 <li>型消去によってリポジトリのための汎用的なインターフェイスを定義する。</li>
-<li><a href="https://github.com/naoty/AnyQuery">AnyQuery</a>を使ってクエリのインターフェイスを統一する。</li>
+<li>
+<a href="https://github.com/naoty/AnyQuery">AnyQuery</a>を使ってクエリのインターフェイスを統一する。</li>
 <li>Promiseライクなライブラリを使って非同期処理も考慮したリポジトリを設計する。</li>
 </ul>
 <p>以上で説明したことはすべてこちらのサンプルプロジェクトで詳細を見ることができるので、参考にしてほしい。</p>

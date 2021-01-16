@@ -6,6 +6,7 @@
     <title>Terraformの実行環境</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Terraformの実行環境">
     <meta property="og:type" content="website">
@@ -31,12 +32,12 @@
 <h1>Dockerイメージ</h1>
 <p>Dockerイメージを使うことで実行するTerraformのバージョンをチームで統一することができる。また、CIでTerraformを簡単に実行できるようになるので、Dockerイメージを使うようにしている。</p>
 <p><a href="https://hub.docker.com/r/hashicorp/terraform/">hashicorp/terraform</a>を使うときにはベースイメージとして使い、ソースコードを<code>ADD</code>したDockerイメージを作っている。<code>ENTRYPOINT</code>が<code>terraform</code>に設定されているため、以下のようにしてデフォルトでシェルにログインできるようにしている。</p>
-<pre lang="docker"><code>FROM hashicorp/terraform:0.11.10
-WORKDIR /terraform
-ADD . /terraform/
-ENTRYPOINT [&quot;&quot;]
-CMD [&quot;/bin/sh&quot;]
-</code></pre>
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> hashicorp/terraform:0.11.10</span>
+<span class="k">WORKDIR</span><span class="s"> /terraform</span>
+<span class="k">ADD</span><span class="s"> . /terraform/</span>
+<span class="k">ENTRYPOINT</span><span class="s"> [""]</span>
+<span class="k">CMD</span><span class="s"> ["/bin/sh"]</span>
+</pre>
 <p><code>CMD</code>では<code>/bin/sh</code>の前に<code>terraform init</code>をしておくようなスクリプトを使うとより便利になると思う。</p>
 <h1>複数環境</h1>
 <p>本番環境やステージング環境といった環境ごとにtfstateを管理し環境間で共用するモジュールがある場合、以下のようなディレクトリ構成になると思う。</p>
@@ -51,39 +52,39 @@ CMD [&quot;/bin/sh&quot;]
     └── terraform.tfstate
 </code></pre>
 <p>こういった場合、環境ごとにDockerfileを用意するようにしている。</p>
-<pre lang="docker"><code>FROM hashicorp/terraform:0.11.10
-WORKDIR /terraform/production
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> hashicorp/terraform:0.11.10</span>
+<span class="k">WORKDIR</span><span class="s"> /terraform/production</span>
 
-ADD ./production /terraform/production
-ADD ./modules /terraform/modules
-RUN terraform get
+<span class="k">ADD</span><span class="s"> ./production /terraform/production</span>
+<span class="k">ADD</span><span class="s"> ./modules /terraform/modules</span>
+<span class="k">RUN </span>terraform get
 
-ENTRYPOINT [&quot;&quot;]
-CMD [&quot;/bin/sh&quot;]
-</code></pre>
+<span class="k">ENTRYPOINT</span><span class="s"> [""]</span>
+<span class="k">CMD</span><span class="s"> ["/bin/sh"]</span>
+</pre>
 <p>モジュールを利用するため<code>terraform get</code>でモジュールを初期化した状態でDockerイメージをビルドする。ビルドする際には以下のようにDockerfileの場所とコンテキストを分けて指定する。</p>
 <pre><code>$ docker build -t my-terraform:production -f ./production/Dockerfile .
 </code></pre>
 <p>環境ごとにDockerfileを用意する場合、docker-composeを使うとより簡単に管理できる。</p>
-<pre lang="yaml"><code>version: &quot;3&quot;
-services:
-  production:
-    build:
-      context: .
-      dockerfile: ./production/Dockerfile
-    image: my-terraform:production
-    volumes:
-      - ./production:/terraform/production
-      - ./modules:/terraform/modules
-  staging:
-    build:
-      context: .
-      dockerfile: ./staging/Dockerfile
-    image: my-terraform:staging
-    volumes:
-      - ./staging:/terraform/staging
-      - ./modules:/terraform/modules
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">production</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span>
+      <span class="na">context</span><span class="pi">:</span> <span class="s">.</span>
+      <span class="na">dockerfile</span><span class="pi">:</span> <span class="s">./production/Dockerfile</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">my-terraform:production</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./production:/terraform/production</span>
+      <span class="pi">-</span> <span class="s">./modules:/terraform/modules</span>
+  <span class="na">staging</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span>
+      <span class="na">context</span><span class="pi">:</span> <span class="s">.</span>
+      <span class="na">dockerfile</span><span class="pi">:</span> <span class="s">./staging/Dockerfile</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">my-terraform:staging</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./staging:/terraform/staging</span>
+      <span class="pi">-</span> <span class="s">./modules:/terraform/modules</span>
+</pre>
 <p>これですべての環境のDockerイメージを簡単にビルドできる。</p>
 <pre><code>$ docker-compose build
 </code></pre>

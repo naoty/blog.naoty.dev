@@ -6,6 +6,7 @@
     <title>モバイルからのリクエストのCSRF検証をスキップする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="モバイルからのリクエストのCSRF検証をスキップする">
     <meta property="og:type" content="website">
@@ -41,11 +42,12 @@
 end
 </code></pre>
 <ul>
-<li><code>protect_from_forgery</code>内ではCSRF検証を行うアクション<code>verify_authenticity_token</code>をfilterにはさんでる。</li>
+<li>
+<code>protect_from_forgery</code>内ではCSRF検証を行うアクション<code>verify_authenticity_token</code>をfilterにはさんでる。</li>
 <li>そのアクションの中で実際にCSRF検証を行う条件として使われているメソッドが<code>verified_request?</code>。</li>
 <li>というわけで、こいつをオーバーライドしてあげればCSRF検証の条件を追加することができる。</li>
 </ul>
-<hr />
+<hr>
 <h3>追記</h3>
 <p>which_browserをフォークしてtitaniumのiOSシミュレータからのリクエストにも対応させた。</p>
 <pre lang="ruby:Gemfile"><code>gem 'which_browser', :git =&gt; 'git://github.com/naoty/which_browser.git', :branch =&gt; 'titanium_prototype'

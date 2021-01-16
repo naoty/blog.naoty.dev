@@ -6,6 +6,7 @@
     <title>ルーティングヘルパーにパラメーターを付加する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ルーティングヘルパーにパラメーターを付加する">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
           </p>
         </header>
         <section class="body">
-          <pre><code>link_to &quot;メール送信&quot;, mail_user_path(:article_id =&gt; @article)
+          <pre><code>link_to "メール送信", mail_user_path(:article_id =&gt; @article)
 </code></pre>
 <p>ハードコーディングはなるべく回避するため、ルーティングヘルパーの使い方をマスターしたい。こっちの方がカッコイイし。</p>
         </section>

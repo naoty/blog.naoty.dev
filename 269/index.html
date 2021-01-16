@@ -6,6 +6,7 @@
     <title>gomobileでiOS用のライブラリをビルドするまで</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="gomobileでiOS用のライブラリをビルドするまで">
     <meta property="og:type" content="website">
@@ -27,14 +28,14 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="zsh"><code>$ cd
-$ brew uninstall go
-$ bash &lt; 
+          <pre lang="zsh" class="highlight highlight-zsh"><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span>brew uninstall go
+<span class="nv">$ </span>bash &lt; 
 
-FOUNDATION_EXPORT NSString* GoHelloWorld();
+FOUNDATION_EXPORT NSString<span class="k">*</span> GoHelloWorld<span class="o">()</span><span class="p">;</span>
 
-#endif
-</code></pre>
+<span class="c">#endif</span>
+</pre>
 <ul>
 <li>ヘッダーファイルを見てみると、確かに文字列を返す関数が定義されているようだ。</li>
 </ul>

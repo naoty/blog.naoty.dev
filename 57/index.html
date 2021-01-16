@@ -6,6 +6,7 @@
     <title>Tweetボタンのカスタマイズ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Tweetボタンのカスタマイズ">
     <meta property="og:type" content="website">
@@ -28,13 +29,13 @@
           <p>railsで動的なページにTweetボタンを埋め込みたいので、公式ドキュメント<a href="#f1" title="http://dev.twitter.com/pages/tweet_button">*1</a>を見ながら、カスタマイズしてみました。</p>
 <pre><code>script&gt;
 &lt;div&gt;
-  &lt;a href=&quot;http://twitter.com/share&quot; class=&quot;twitter-share-button&quot;
-       data-count=&quot;horizontal&quot;
-       data-lang=&quot;ja&quot;
-       data-related=&quot;naoty_k&quot;
-       data-text=&quot;RT #{@article.title}&quot;
-       data-url=&quot;#{article_url(@article)}&quot;
-       data-via=&quot;naoty_k&quot;&gt;Tweeta&gt;
+  &lt;a href="http://twitter.com/share" class="twitter-share-button"
+       data-count="horizontal"
+       data-lang="ja"
+       data-related="naoty_k"
+       data-text="RT #{@article.title}"
+       data-url="#{article_url(@article)}"
+       data-via="naoty_k"&gt;Tweeta&gt;
 div&gt;
 </code></pre>
 <table>

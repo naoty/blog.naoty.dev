@@ -6,6 +6,7 @@
     <title>gemをすべてアンインストールするワンライナー</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="gemをすべてアンインストールするワンライナー">
     <meta property="og:type" content="website">
@@ -32,7 +33,7 @@
 gem_list = `gem list --no-version`
 gem_list.each_line do |line|
   next if line.empty? || /LOCAL GEMS/ =~ line
-  system &quot;gem uninstall -axI #{line}&quot;
+  system "gem uninstall -axI #{line}"
 end
 </code></pre>
         </section>

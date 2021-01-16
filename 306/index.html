@@ -6,6 +6,7 @@
     <title>モデルに記述する順番</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="モデルに記述する順番">
     <meta property="og:type" content="website">
@@ -40,38 +41,38 @@
 <li>プライベートメソッド</li>
 </ol>
 <p>以下のコードは例のために書いてみたけど、動くかわからない。</p>
-<pre lang="ruby"><code>class Pokemon &lt; ApplicationRecord
-  include Tradable
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">Pokemon</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+  <span class="kp">include</span> <span class="no">Tradable</span>
 
-  INITIAL_HP_RANGE = 10..20
+  <span class="no">INITIAL_HP_RANGE</span> <span class="o">=</span> <span class="mi">10</span><span class="o">..</span><span class="mi">20</span>
 
-  belongs_to :master
-  has_many :skills
+  <span class="n">belongs_to</span> <span class="ss">:master</span>
+  <span class="n">has_many</span> <span class="ss">:skills</span>
 
-  enum gender: %i[male female]
+  <span class="n">enum</span> <span class="ss">gender: </span><span class="sx">%i[male female]</span>
 
-  before_validation :set_initial_hp, on: :create
+  <span class="n">before_validation</span> <span class="ss">:set_initial_hp</span><span class="p">,</span> <span class="ss">on: :create</span>
 
-  validates :name, presence: true
-  validates :hp, numericality: { greater_than_or_equal_to: 0 }
+  <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">presence: </span><span class="kp">true</span>
+  <span class="n">validates</span> <span class="ss">:hp</span><span class="p">,</span> <span class="ss">numericality: </span><span class="p">{</span> <span class="ss">greater_than_or_equal_to: </span><span class="mi">0</span> <span class="p">}</span>
 
-  scope :first_generation, -&gt; { where(id: (1..151).to_a) }
+  <span class="n">scope</span> <span class="ss">:first_generation</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="ss">id: </span><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">151</span><span class="p">).</span><span class="nf">to_a</span><span class="p">)</span> <span class="p">}</span>
 
-  def self.capture
-    # ...
-  end
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">capture</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
 
-  def attack
-    # ...
-  end
+  <span class="k">def</span> <span class="nf">attack</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
 
-  private
+  <span class="kp">private</span>
 
-  def set_initial_hp
-    self.hp = rand(INITIAL_HP_RANGE)
-  end
-end
-</code></pre>
+  <span class="k">def</span> <span class="nf">set_initial_hp</span>
+    <span class="nb">self</span><span class="p">.</span><span class="nf">hp</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">(</span><span class="no">INITIAL_HP_RANGE</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
         </section>
         <footer>
           <nav>

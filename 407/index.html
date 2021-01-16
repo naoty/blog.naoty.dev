@@ -6,6 +6,7 @@
     <title>Rubyの型に入門する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Rubyの型に入門する">
     <meta property="og:type" content="website">
@@ -29,27 +30,27 @@
           <p>最近、Rubyを書いてなかったので前から興味があった型に入門してみた。</p>
 <h1>型シグネチャを書く</h1>
 <p>型シグネチャファイルの拡張子は<code>*.rbs</code>とのこと。型シグネチャの書き方は<a href="https://github.com/ruby/ruby-signature/blob/master/docs/syntax.md">ここ</a>を見たり、<a href="https://github.com/ruby/ruby-signature/tree/master/stdlib/builtin">実際の例</a>を見るとわかってくる。</p>
-<pre lang="rb"><code>class Pokemon
-  @id: Integer
-  @name: String
+<pre lang="rb" class="highlight highlight-rb"><span class="k">class</span> <span class="nc">Pokemon</span>
+  <span class="vi">@id</span><span class="p">:</span> <span class="no">Integer</span>
+  <span class="vi">@name</span><span class="p">:</span> <span class="no">String</span>
 
-  def initialize: (String name) -&gt; void
-end
-</code></pre>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">:</span> <span class="p">(</span><span class="no">String</span> <span class="nb">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">void</span>
+<span class="k">end</span>
+</pre>
 <h1>型検査器をつかう</h1>
 <p>適当に空のクラスを用意して試してみる。</p>
-<pre lang="rb"><code>class Pokemon
-end
-</code></pre>
+<pre lang="rb" class="highlight highlight-rb"><span class="k">class</span> <span class="nc">Pokemon</span>
+<span class="k">end</span>
+</pre>
 <p><code>Steepfile</code>というファイルに検査したいコードのディレクトリと型シグネチャが入っているディレクトリを指定する。</p>
-<pre lang="rb"><code>target :lib do
-  check &quot;lib&quot;
-  signature &quot;sig&quot;
-end
-</code></pre>
+<pre lang="rb" class="highlight highlight-rb"><span class="n">target</span> <span class="ss">:lib</span> <span class="k">do</span>
+  <span class="n">check</span> <span class="s2">"lib"</span>
+  <span class="n">signature</span> <span class="s2">"sig"</span>
+<span class="k">end</span>
+</pre>
 <p>ディレクトリ構成はこんな感じ。</p>
-<pre lang="bash"><code>% tree .
-.
+<pre lang="bash" class="highlight highlight-bash">% tree <span class="nb">.</span>
+<span class="nb">.</span>
 ├── Gemfile
 ├── Gemfile.lock
 ├── Steepfile
@@ -57,11 +58,11 @@ end
 │   └── pokemon.rb
 └── sig
     └── pokemon.rbs
-</code></pre>
+</pre>
 <p><code>steep check</code>で型検査を実行できる。ちゃんとメソッドがないことと怒られるようになった。</p>
-<pre lang="bash"><code>% bundle exec steep check
-lib/pokemon.rb:1:0: MethodDefinitionMissing: module=::Pokemon, method=initialize (class Pokemon)
-</code></pre>
+<pre lang="bash" class="highlight highlight-bash">% bundle <span class="nb">exec </span>steep check
+lib/pokemon.rb:1:0: MethodDefinitionMissing: <span class="nv">module</span><span class="o">=</span>::Pokemon, <span class="nv">method</span><span class="o">=</span>initialize <span class="o">(</span>class Pokemon<span class="o">)</span>
+</pre>
         </section>
         <footer>
           <nav>

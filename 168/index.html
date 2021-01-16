@@ -6,6 +6,7 @@
     <title>Object#freezeについて</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Object#freezeについて">
     <meta property="og:type" content="website">
@@ -26,22 +27,23 @@
           </p>
         </header>
         <section class="body">
-          <pre lang="ruby"><code>DAYS = ['日', '月', '火', '水', '木', '金', '土']
-DAYS &lt;&lt; '日'
-p DAYS
-#=&gt; [&quot;日&quot;, &quot;月&quot;, &quot;火&quot;, &quot;水&quot;, &quot;木&quot;, &quot;金&quot;, &quot;土&quot;, &quot;日&quot;]
-</code></pre>
+          <pre lang="ruby" class="highlight highlight-ruby"><span class="no">DAYS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'日'</span><span class="p">,</span> <span class="s1">'月'</span><span class="p">,</span> <span class="s1">'火'</span><span class="p">,</span> <span class="s1">'水'</span><span class="p">,</span> <span class="s1">'木'</span><span class="p">,</span> <span class="s1">'金'</span><span class="p">,</span> <span class="s1">'土'</span><span class="p">]</span>
+<span class="no">DAYS</span> <span class="o">&lt;&lt;</span> <span class="s1">'日'</span>
+<span class="nb">p</span> <span class="no">DAYS</span>
+<span class="c1">#=&gt; ["日", "月", "火", "水", "木", "金", "土", "日"]</span>
+</pre>
 <ul>
 <li>定数のArrayやHashでも中身を簡単に書きかえられてしまう。ゆるふわな感じがする。</li>
 <li>こんな定数はイヤだ。</li>
 </ul>
-<pre lang="ruby"><code>DAYS = ['日', '月', '火', '水', '木', '金', '土'].freeze
-DAYS &lt;&lt; '日'
-p DAYS
-#=&gt; /Users/naoty/workspace/misc/freeze_sample.rb:3:in `': can't modify frozen Array (RuntimeError)
-</code></pre>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="no">DAYS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'日'</span><span class="p">,</span> <span class="s1">'月'</span><span class="p">,</span> <span class="s1">'火'</span><span class="p">,</span> <span class="s1">'水'</span><span class="p">,</span> <span class="s1">'木'</span><span class="p">,</span> <span class="s1">'金'</span><span class="p">,</span> <span class="s1">'土'</span><span class="p">].</span><span class="nf">freeze</span>
+<span class="no">DAYS</span> <span class="o">&lt;&lt;</span> <span class="s1">'日'</span>
+<span class="nb">p</span> <span class="no">DAYS</span>
+<span class="c1">#=&gt; /Users/naoty/workspace/misc/freeze_sample.rb:3:in `': can't modify frozen Array (RuntimeError)</span>
+</pre>
 <ul>
-<li><code>Object#freeze</code>を使うと、オブジェクトの中身を変更できなくなる（ただし、オブジェクトそのものを再代入することは可能）。</li>
+<li>
+<code>Object#freeze</code>を使うと、オブジェクトの中身を変更できなくなる（ただし、オブジェクトそのものを再代入することは可能）。</li>
 <li>こっちの方が定数っぽい感じがする。</li>
 </ul>
         </section>

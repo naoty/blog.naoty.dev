@@ -6,6 +6,7 @@
     <title>PrestoをDockerで試してみる</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="PrestoをDockerで試してみる">
     <meta property="og:type" content="website">
@@ -30,35 +31,36 @@
           <p>Prestoを学ぶ必要が出てきたので、気軽に試せる環境をDockerで作ってみた。</p>
 <p><a href="https://hub.docker.com/r/prestosql/presto">prestosql/presto</a>というDockerイメージを使う。データソースも同じくDockerコンテナとして起動してDocker Composeで接続させる。</p>
 <h1>設定</h1>
-<pre lang="yaml"><code># docker-compose.yml
-version: &quot;3.7&quot;
-services:
-  presto:
-    image: prestosql/presto:latest
-    ports:
-      - 8080:8080
-    volumes:
-      - ./config/presto:/etc/presto
-    depends_on:
-      - mysql
-  mysql:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - ./config/mysql/conf.d:/etc/mysql/conf.d
-      - ./config/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./config/mysql/seed:/seed
-</code></pre>
-<pre lang="properties"><code># /etc/presto/catalog/mysql.properties
-connector.name=mysql
-connection-url=jdbc:mysql://mysql:3306
-connection-user=root
-connection-password=password
-</code></pre>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="c1"># docker-compose.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.7"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">presto</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">prestosql/presto:latest</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">8080:8080</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./config/presto:/etc/presto</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">mysql</span>
+  <span class="na">mysql</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">mysql:5.7</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">MYSQL_ROOT_PASSWORD</span><span class="pi">:</span> <span class="s">password</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./config/mysql/conf.d:/etc/mysql/conf.d</span>
+      <span class="pi">-</span> <span class="s">./config/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d</span>
+      <span class="pi">-</span> <span class="s">./config/mysql/seed:/seed</span>
+</pre>
+<pre lang="properties" class="highlight highlight-properties"><span class="c"># /etc/presto/catalog/mysql.properties
+</span><span class="py">connector.name</span><span class="p">=</span><span class="s">mysql</span>
+<span class="py">connection-url</span><span class="p">=</span><span class="s">jdbc:mysql://mysql:3306</span>
+<span class="py">connection-user</span><span class="p">=</span><span class="s">root</span>
+<span class="py">connection-password</span><span class="p">=</span><span class="s">password</span>
+</pre>
 <ul>
 <li>Prestoコンテナは<code>/etc/presto</code>にある設定ファイルを使うので、ローカルからマウントしておく。ただし、すべての設定ファイルが必要なので、コンテナ内にあるデフォルトの設定ファイルもコピーしておく。</li>
-<li><a href="/368/">#368</a>で書いた、MySQLコンテナの起動時にスキーマやシードデータを初期化するテクニックを使っている。</li>
+<li>
+<a href="/368/">#368</a>で書いた、MySQLコンテナの起動時にスキーマやシードデータを初期化するテクニックを使っている。</li>
 <li>MySQLの接続情報はカタログの設定ファイルで指定する。</li>
 </ul>
 <h1>試してみる</h1>

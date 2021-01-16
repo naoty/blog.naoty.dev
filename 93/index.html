@@ -6,6 +6,7 @@
     <title>Rails3.1でTwitter認証しTwitter APIを呼び出す</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Rails3.1でTwitter認証しTwitter APIを呼び出す">
     <meta property="og:type" content="website">
@@ -64,7 +65,7 @@ end
 <ul>
 <li>
 <ul>
-<li></li>
+<li>
 </ul>
 </li>
 </ul>
@@ -84,7 +85,7 @@ end
 <pre><code>class UsersController &lt; ApplicationController
 
   def index
-    follower_ids = Rails.cache.fetch(&quot;#{current_user.name}_follower_ids&quot;) { current_user.follower_ids }
+    follower_ids = Rails.cache.fetch("#{current_user.name}_follower_ids") { current_user.follower_ids }
     # ...
   end
 

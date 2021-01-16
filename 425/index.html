@@ -6,6 +6,7 @@
     <title>モジュールをディレクトリで構成する</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="モジュールをディレクトリで構成する">
     <meta property="og:type" content="website">
@@ -38,36 +39,36 @@
 </code></pre>
 <p><code>csv_reader.rs</code>, <code>jsonl_reader.rs</code>, <code>ltsv_reader.rs</code>にはそれぞれ<code>CsvReader</code>, <code>JsonlReader</code>, <code>LtsvReader</code>がある。</p>
 <h1>ファイルごとにモジュールを公開する</h1>
-<pre lang="rust"><code>// lib.rs
-pub mod reader;
-</code></pre>
-<pre lang="rust"><code>// reader.rs
-pub mod csv_reader;
-pub mod jsonl_reader;
-pub mod ltsv_reader;
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="c">// lib.rs</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">reader</span><span class="p">;</span>
+</pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="c">// reader.rs</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">csv_reader</span><span class="p">;</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">jsonl_reader</span><span class="p">;</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">ltsv_reader</span><span class="p">;</span>
+</pre>
 <p>こうすると、<code>main.rs</code>からはこうなる。</p>
-<pre lang="rust"><code>use mycrate::reader::csv_reader::CsvReader;
-use mycrate::reader::jsonl_reader::JsonlReader;
-use mycrate::reader::ltsv_reader::LtsvReader;
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">use</span> <span class="nn">mycrate</span><span class="p">::</span><span class="nn">reader</span><span class="p">::</span><span class="nn">csv_reader</span><span class="p">::</span><span class="n">CsvReader</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">mycrate</span><span class="p">::</span><span class="nn">reader</span><span class="p">::</span><span class="nn">jsonl_reader</span><span class="p">::</span><span class="n">JsonlReader</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">mycrate</span><span class="p">::</span><span class="nn">reader</span><span class="p">::</span><span class="nn">ltsv_reader</span><span class="p">::</span><span class="n">LtsvReader</span><span class="p">;</span>
+</pre>
 <p>各ファイルがモジュールとして公開されているため、冗長な感じになる。</p>
 <h1>モジュールをまとめて公開し直す</h1>
-<pre lang="rust"><code>// lib.rs
-pub mod reader;
-</code></pre>
-<pre lang="rust"><code>// reader.rs
-mod csv_reader;
-mod jsonl_reader;
-mod ltsv_reader;
+<pre lang="rust" class="highlight highlight-rust"><span class="c">// lib.rs</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">reader</span><span class="p">;</span>
+</pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="c">// reader.rs</span>
+<span class="k">mod</span> <span class="n">csv_reader</span><span class="p">;</span>
+<span class="k">mod</span> <span class="n">jsonl_reader</span><span class="p">;</span>
+<span class="k">mod</span> <span class="n">ltsv_reader</span><span class="p">;</span>
 
-pub use csv_reader::CsvReader;
-pub use json_reader::JsonlReader;
-pub use ltsv_reader::LtsvReader;
-</code></pre>
+<span class="k">pub</span> <span class="k">use</span> <span class="nn">csv_reader</span><span class="p">::</span><span class="n">CsvReader</span><span class="p">;</span>
+<span class="k">pub</span> <span class="k">use</span> <span class="nn">json_reader</span><span class="p">::</span><span class="n">JsonlReader</span><span class="p">;</span>
+<span class="k">pub</span> <span class="k">use</span> <span class="nn">ltsv_reader</span><span class="p">::</span><span class="n">LtsvReader</span><span class="p">;</span>
+</pre>
 <p><code>pub use</code>を使い、各モジュールに含まれるstructを<code>reader</code>モジュールとして公開している。こうすると、<code>main.rs</code>からはこうなる。</p>
-<pre lang="rust"><code>use mycrate::reader::{CsvReader, JsonlReader, LtsvReader};
-</code></pre>
+<pre lang="rust" class="highlight highlight-rust"><span class="k">use</span> <span class="nn">mycrate</span><span class="p">::</span><span class="nn">reader</span><span class="p">::{</span><span class="n">CsvReader</span><span class="p">,</span> <span class="n">JsonlReader</span><span class="p">,</span> <span class="n">LtsvReader</span><span class="p">};</span>
+</pre>
         </section>
         <footer>
           <nav>

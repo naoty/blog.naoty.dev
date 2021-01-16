@@ -6,6 +6,7 @@
     <title>Homebrewで自作Formulaを作るときの落とし穴</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Homebrewで自作Formulaを作るときの落とし穴">
     <meta property="og:type" content="website">
@@ -28,26 +29,26 @@
           <p><a href="https://github.com/naoty/todo">naoty/todo</a> という CLI ツールを Homebrew で配布しようとしたときにハマったことを書く。</p>
 <p>naoty/todo は Go で書かれており、コンパイル済みのバイナリを GitHub Releases にアップロードしてそこから配信したいと思っていた。ドキュメント等を調べると以下のように formula を書くことでインストールが完了するものと思っていた。</p>
 <pre><code>class Todo &lt; Formula
-  desc &quot;A todo management tool just for myself&quot;
-  homepage &quot;https://github.com/naoty/todo&quot;
-  url &quot;https://github.com/naoty/todo/releases/download/0.2.0/todo.tar.gz&quot;
-  sha256 &quot;be20e4069c0ae49998dfc00a010ca8f5d49d26193bd0c3e8611a4bf53cac469d&quot;
+  desc "A todo management tool just for myself"
+  homepage "https://github.com/naoty/todo"
+  url "https://github.com/naoty/todo/releases/download/0.2.0/todo.tar.gz"
+  sha256 "be20e4069c0ae49998dfc00a010ca8f5d49d26193bd0c3e8611a4bf53cac469d"
 
   def install
-    bin.install &quot;todo&quot;
+    bin.install "todo"
   end
 end
 </code></pre>
 <p>しかし、実際には <code>Empty installation</code> というエラーが発生してインストールができない現象に遭遇した。ドキュメントを調べてみるも、なぜこれが失敗するのか突き止めることはできなかった。そこで、エラーメッセージを頼りに Homebrew のソースコードを読むことにした。</p>
 <p>まず、 Homebrew のソースコードは <code>/usr/local/Homebrew/Library/Homebrew</code> にある。そこで ag で <code>Empty installation</code> というエラーメッセージを検索してみると、以下のようなコードを見つけることができた。</p>
 <pre><code>if !formula.prefix.directory? || Keg.new(formula.prefix).empty_installation?
-  raise &quot;Empty installation&quot;
+  raise "Empty installation"
 end
 </code></pre>
 <p>ここからは <code>pry</code> を使ってブレークポイントを貼りながら進めようと思った。 Homebrew はシステムの Ruby を使っているようなので、 システムの rubygems で pry をインストールし調査を続けた。</p>
 <p><code>binding.pry</code> で調べたところ、 <code>empty_installation?</code> が <code>true</code> を返しているようだった。このメソッドの中身は以下のようになっていた。</p>
 <pre><code>def empty_installation?
-  Pathname.glob(&quot;#{path}/**/*&quot;) do |file|
+  Pathname.glob("#{path}/**/*") do |file|
     next if file.directory?
     basename = file.basename.to_s
     next if Metafiles.copy?(basename)
@@ -66,11 +67,11 @@ end
 </code></pre>
 <p>ということは、メタファイルではないものがひとつでも存在すれば <code>true</code> が返るということなので、以下のような formula を定義して適当なファイルを置くことで、この問題を回避することができた。</p>
 <pre><code>def install
-  bin.install &quot;todo&quot;
+  bin.install "todo"
 
-  # Avoid &quot;Empty installation&quot; error which will be caused when the only
-  # &quot;todo&quot; file is installed.
-  bin.install &quot;empty&quot;
+  # Avoid "Empty installation" error which will be caused when the only
+  # "todo" file is installed.
+  bin.install "empty"
 end
 </code></pre>
 <p>この問題は <code>license</code> や <code>changelog</code> といった名前のパッケージを配布する場合でも起こる。ソースコードを読まないと原因が分からないので、同じ問題に直面した人は不運という感じがする。</p>

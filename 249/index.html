@@ -6,6 +6,7 @@
     <title>Faraday middlewareの作り方</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Faraday middlewareの作り方">
     <meta property="og:type" content="website">
@@ -28,79 +29,87 @@
         <section class="body">
           <p>Faraday middlewareの要件としては、Rack middleware同様に</p>
 <ul>
-<li><code>#initialize(app)</code>で他のmiddlewareを引数にとる</li>
-<li><code>#call(env)</code>でリクエストの前処理を実装する。</li>
+<li>
+<code>#initialize(app)</code>で他のmiddlewareを引数にとる</li>
+<li>
+<code>#call(env)</code>でリクエストの前処理を実装する。</li>
 </ul>
 <p>の2点だけを満たせばいい。ただし、レスポンスを処理する場合は<code>#on_complete</code>内のブロックで実装する必要がある。</p>
-<pre lang="rb"><code>def call(request_env)
-  @app.call(request_env).on_complete do |response_env|
-    # パースなどレスポンスの処理
-  end
-end
-</code></pre>
+<pre lang="rb" class="highlight highlight-rb"><span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">request_env</span><span class="p">)</span>
+  <span class="vi">@app</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">request_env</span><span class="p">).</span><span class="nf">on_complete</span> <span class="k">do</span> <span class="o">|</span><span class="n">response_env</span><span class="o">|</span>
+    <span class="c1"># パースなどレスポンスの処理</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <p>ここまではREADME.mdにも書いてあるのだけど、レスポンスの処理を効率的に実装するための方法が用意されている。それは<code>Faraday::Response::Middleware</code>だ。使い方は以下の通り。</p>
-<pre lang="rb"><code>require &quot;faraday&quot;
+<pre lang="rb" class="highlight highlight-rb"><span class="nb">require</span> <span class="s2">"faraday"</span>
 
-module Faraday
-  class Response
-    class JSON &lt; Middleware
-      def parse(body)
-        body.to_json
-      end
-    end
+<span class="k">module</span> <span class="nn">Faraday</span>
+  <span class="k">class</span> <span class="nc">Response</span>
+    <span class="k">class</span> <span class="nc">JSON</span> <span class="o">&lt;</span> <span class="no">Middleware</span>
+      <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">body</span><span class="p">.</span><span class="nf">to_json</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
 
-    register_middleware json: JSON
-  end
-end
-</code></pre>
+    <span class="n">register_middleware</span> <span class="ss">json: </span><span class="no">JSON</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <ul>
-<li><code>#initialize(app)</code>で<code>@app = app</code>のようなことをしているため、特に書く必要はない。特別になにか必要であればoverrideする。</li>
-<li><code>#parse(body)</code>でレスポンスをパースの処理を書くと、上述した<code>#on_complete</code>のブロックの中でこのメソッドが呼ばれ、<code>env.body</code>を<code>#parse(body)</code>の結果によって更新する。</li>
+<li>
+<code>#initialize(app)</code>で<code>@app = app</code>のようなことをしているため、特に書く必要はない。特別になにか必要であればoverrideする。</li>
+<li>
+<code>#parse(body)</code>でレスポンスをパースの処理を書くと、上述した<code>#on_complete</code>のブロックの中でこのメソッドが呼ばれ、<code>env.body</code>を<code>#parse(body)</code>の結果によって更新する。</li>
 <li>パース以外にレスポンス時の処理を記述したい場合、<code>#on_complete</code>を実装する。このメソッドは上述の<code>#on_complete</code>のブロック内で呼ばれるのだけど、これを実装すると<code>#parse</code>が呼ばれないので注意。</li>
-<li><code>Faraday::Response.register_middleware</code>でキーとミドルウェアを登録できる。このキーを使って以下のように<code>:json</code>とミドルウェアを指定できる。</li>
+<li>
+<code>Faraday::Response.register_middleware</code>でキーとミドルウェアを登録できる。このキーを使って以下のように<code>:json</code>とミドルウェアを指定できる。</li>
 </ul>
-<pre lang="rb"><code>connection = Faraday.new do |connection|
-  connection.response :json
-  connection.adapter Faraday.default_adapter
-end
-</code></pre>
-<hr />
+<pre lang="rb" class="highlight highlight-rb"><span class="n">connection</span> <span class="o">=</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">connection</span><span class="o">|</span>
+  <span class="n">connection</span><span class="p">.</span><span class="nf">response</span> <span class="ss">:json</span>
+  <span class="n">connection</span><span class="p">.</span><span class="nf">adapter</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">default_adapter</span>
+<span class="k">end</span>
+</pre>
+<hr>
 <p>簡単なので<code>Faraday::Response::Middleware</code>のソースコードを見てみる。</p>
-<pre lang="rb"><code>module Faraday
-  class Response
-    class Middleware &lt; Faraday::Middleware
-      def call(env)
-        @app.call(env).on_complete do |environment|
-          on_complete(enrivonment)
-        end
-      end
+<pre lang="rb" class="highlight highlight-rb"><span class="k">module</span> <span class="nn">Faraday</span>
+  <span class="k">class</span> <span class="nc">Response</span>
+    <span class="k">class</span> <span class="nc">Middleware</span> <span class="o">&lt;</span> <span class="no">Faraday</span><span class="o">::</span><span class="no">Middleware</span>
+      <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="vi">@app</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">).</span><span class="nf">on_complete</span> <span class="k">do</span> <span class="o">|</span><span class="n">environment</span><span class="o">|</span>
+          <span class="n">on_complete</span><span class="p">(</span><span class="n">enrivonment</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
 
-      def on_complete(env)
-        env.body = parse(env.body) if respond_to?(:parse) &amp;&amp; env.parse_body?
-      end
-    end
-  end
-end
-</code></pre>
+      <span class="k">def</span> <span class="nf">on_complete</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">env</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">env</span><span class="p">.</span><span class="nf">body</span><span class="p">)</span> <span class="k">if</span> <span class="nb">respond_to?</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">env</span><span class="p">.</span><span class="nf">parse_body?</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <ul>
-<li><code>#on_complete</code>ブロック内で<code>Middleware#on_complete</code>が呼ばれていることがわかる。</li>
+<li>
+<code>#on_complete</code>ブロック内で<code>Middleware#on_complete</code>が呼ばれていることがわかる。</li>
 <li>さらにその中で<code>#parse</code>が実装されていれば呼ぶようになっている。</li>
 </ul>
-<pre lang="rb"><code>module Faraday
-  class Middleware
-    extend MiddlwareRegistry
+<pre lang="rb" class="highlight highlight-rb"><span class="k">module</span> <span class="nn">Faraday</span>
+  <span class="k">class</span> <span class="nc">Middleware</span>
+    <span class="kp">extend</span> <span class="no">MiddlwareRegistry</span>
 
-    # ...
+    <span class="c1"># ...</span>
 
-    def initialize(app = nil)
-      @app = app
-    end
-  end
-end
-</code></pre>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <ul>
-<li><code>#initialize</code>であとに続くmiddlewareを取り込んでいる。</li>
-<li><code>Faraday::MiddlewareRegistry</code>というモジュールで<code>.register_middleware</code>が定義されており、このメソッドでFaraday middlewareを指定する際のキーを登録できる。</li>
+<li>
+<code>#initialize</code>であとに続くmiddlewareを取り込んでいる。</li>
+<li>
+<code>Faraday::MiddlewareRegistry</code>というモジュールで<code>.register_middleware</code>が定義されており、このメソッドでFaraday middlewareを指定する際のキーを登録できる。</li>
 </ul>
         </section>
         <footer>

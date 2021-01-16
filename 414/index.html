@@ -6,6 +6,7 @@
     <title>ErrorとFatalの使い方</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="ErrorとFatalの使い方">
     <meta property="og:type" content="website">
@@ -29,14 +30,19 @@
           <p>testingパッケージの使い方を時間をとって調べたことがなかったので、あらためてちゃんと調べてみる。testingパッケージの中にもいろいろあるけど特に<code>testing.T</code>型について調べてみた。</p>
 <p><a href="https://golang.org/pkg/testing/#T">Godoc</a>を読んでみると、あることがわかった。</p>
 <ul>
-<li><code>Error</code>/<code>Errorf</code>: <code>Fail</code>してから<code>Log</code>/<code>Logf</code>する</li>
-<li><code>Fatal</code>/<code>Fatalf</code>: <code>FailNow</code>してから<code>Log</code>/<code>Logf</code>する</li>
+<li>
+<code>Error</code>/<code>Errorf</code>: <code>Fail</code>してから<code>Log</code>/<code>Logf</code>する</li>
+<li>
+<code>Fatal</code>/<code>Fatalf</code>: <code>FailNow</code>してから<code>Log</code>/<code>Logf</code>する</li>
 </ul>
 <p>なので、<code>Fail</code>と<code>FailNow</code>と<code>Log</code>がわかっていれば基本的なことを理解できそう。</p>
 <ul>
-<li><code>Fail</code>は実行中の関数を失敗とマークするけど、停止させずに継続する。</li>
-<li><code>FailNow</code>は実行中の関数を失敗とマークして、<code>runtime.Goexit</code>関数で停止させる。ちなみに、<code>runtime.Goexit</code>は<code>os.Exit</code>と違って<code>defer</code>関数を呼び出してから現在のgoroutineを終了させる。</li>
-<li><code>Log</code>はテストが失敗したときだけテキストを出力する。</li>
+<li>
+<code>Fail</code>は実行中の関数を失敗とマークするけど、停止させずに継続する。</li>
+<li>
+<code>FailNow</code>は実行中の関数を失敗とマークして、<code>runtime.Goexit</code>関数で停止させる。ちなみに、<code>runtime.Goexit</code>は<code>os.Exit</code>と違って<code>defer</code>関数を呼び出してから現在のgoroutineを終了させる。</li>
+<li>
+<code>Log</code>はテストが失敗したときだけテキストを出力する。</li>
 </ul>
 <p>ということで、テストが失敗して即座に終了したい場合（エラーが出たときなど）は<code>Fatal</code>、テストが失敗したけど後続するテストも行いたい場合は<code>Error</code>を使えばいいことがわかった。</p>
         </section>

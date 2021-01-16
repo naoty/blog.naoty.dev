@@ -6,6 +6,7 @@
     <title>バックエンドAPI用のテンプレートを作り始めた</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="バックエンドAPI用のテンプレートを作り始めた">
     <meta property="og:type" content="website">
@@ -33,9 +34,12 @@
 <p>iOSアプリのバックエンドをサクッと作りたい、でも単なるデータストアとしてではなくて少しロジックを実装したい、ってときにMBaaSを使うよりも自分でサーバーサイドを実装したくなる。そのとき、RailsかSinatraかを選ぶことになる。Railsでももちろん問題ないのだけど、必要十分な処理さえしてくれればいいという思いからSinatraを選びたくなる。だけど、Sinatra単独でバックエンドを実装するのにはかなり時間がかかる。例えば、データベースとの接続やマイグレーションの管理、JSONのパースと出力などなど、地味に大変な実装をこなさないといけない。そこで、SinatraベースでバックエンドAPIを実装するためのテンプレートを作ることにした。</p>
 <h1>現時点での機能</h1>
 <ul>
-<li><code>metallic new APPLICATION_NAME</code>: テンプレートからプロジェクト作成する。</li>
-<li><code>metallic generate controller RESOURCE_NAME</code>: テンプレートからコントローラーを作成する。コントローラーはSinatra::Baseを継承したRESTful APIを持つクラス。作成されたコントローラーは自動的にRackミドルウェアとしてuseされる。</li>
-<li><code>metallic generate model RESOURCE_NAME</code>: テンプレートからモデルとマイグレーションを作成する。今のところORMはActiveRecord固定で、DBもSQLite3固定になってる。ここはRailsみたいにオプションで切り替えられるようにしたい。Rakefileもテンプレートについてくるので、そのまま<code>rake db:migrate</code>できる。</li>
+<li>
+<code>metallic new APPLICATION_NAME</code>: テンプレートからプロジェクト作成する。</li>
+<li>
+<code>metallic generate controller RESOURCE_NAME</code>: テンプレートからコントローラーを作成する。コントローラーはSinatra::Baseを継承したRESTful APIを持つクラス。作成されたコントローラーは自動的にRackミドルウェアとしてuseされる。</li>
+<li>
+<code>metallic generate model RESOURCE_NAME</code>: テンプレートからモデルとマイグレーションを作成する。今のところORMはActiveRecord固定で、DBもSQLite3固定になってる。ここはRailsみたいにオプションで切り替えられるようにしたい。Rakefileもテンプレートについてくるので、そのまま<code>rake db:migrate</code>できる。</li>
 </ul>
 <h2>使用例</h2>
 <pre><code>$ metallic new todo

@@ -6,6 +6,7 @@
     <title>Echoで環境変数を使い回す</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="Echoで環境変数を使い回す">
     <meta property="og:type" content="website">
@@ -33,100 +34,104 @@
 <p>また、環境変数が設定されていないときのデフォルト値を設定したい場合や<code>string</code>以外の型に変換したい場合、さらにコード量が増えてしまう。</p>
 <h1>解決</h1>
 <p><a href="https://github.com/kelseyhightower/envconfig">kelseyhightower/envconfig</a>を使って環境変数を簡単に扱えるようにし、すべてのハンドラーからカスタムコンテキストを通して環境変数にアクセスできるようにした。</p>
-<pre lang="go"><code>// config.go
-type Config struct {
-  DatabaseHost     string `split_words:&quot;true&quot;`
-  DatabaseName     string `split_words:&quot;true&quot;`
-  DatabasePassword string `split_words:&quot;true&quot;`
-  DatabasePort     int    `split_words:&quot;true&quot;`
-  DatabaseUser     string `split_words:&quot;true&quot;`
-}
-</code></pre>
-<pre lang="go"><code>// server.go
-func main() {
-  var config Config
-  err := envconfig.Process(&quot;&quot;, &amp;config)
-  if err != nil {
-    log.Fatal(err.Error())
-  }
+<pre lang="go" class="highlight highlight-go"><span class="c">// config.go</span>
+<span class="k">type</span> <span class="n">Config</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">DatabaseHost</span>     <span class="kt">string</span> <span class="s">`split_words:"true"`</span>
+  <span class="n">DatabaseName</span>     <span class="kt">string</span> <span class="s">`split_words:"true"`</span>
+  <span class="n">DatabasePassword</span> <span class="kt">string</span> <span class="s">`split_words:"true"`</span>
+  <span class="n">DatabasePort</span>     <span class="kt">int</span>    <span class="s">`split_words:"true"`</span>
+  <span class="n">DatabaseUser</span>     <span class="kt">string</span> <span class="s">`split_words:"true"`</span>
+<span class="p">}</span>
+</pre>
+<pre lang="go" class="highlight highlight-go"><span class="c">// server.go</span>
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="n">config</span> <span class="n">Config</span>
+  <span class="n">err</span> <span class="o">:=</span> <span class="n">envconfig</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">config</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+  <span class="p">}</span>
 
-  // ...
-}
-</code></pre>
+  <span class="c">// ...</span>
+<span class="p">}</span>
+</pre>
 <ul>
-<li><code>DATABASE_HOST</code>のような環境変数に<code>Config</code>という構造体からアクセスできるようにしている。<code>config.DatabaseHost</code>のようにアクセスできるようになる。<code>string</code>型であれば<code>os.Getenv</code>でも問題ないけど、<code>int</code>型や<code>bool</code>型の場合は変換処理が面倒なのでenvconfigを使っている。</li>
-<li><code>split_words=&quot;true&quot;</code>というアノテーションをつけることで、スネークケースからキャメルケースに変換している。</li>
-<li><code>envconfig.Process</code>の第1引数は環境変数のプレフィックスになっている。<code>envconfig.Processs(&quot;database&quot;, &amp;config)</code>とすると、<code>config.Host</code>で環境変数<code>DATABASE_HOST</code>にアクセスできるようになる。必要なければ空文字でいい。</li>
+<li>
+<code>DATABASE_HOST</code>のような環境変数に<code>Config</code>という構造体からアクセスできるようにしている。<code>config.DatabaseHost</code>のようにアクセスできるようになる。<code>string</code>型であれば<code>os.Getenv</code>でも問題ないけど、<code>int</code>型や<code>bool</code>型の場合は変換処理が面倒なのでenvconfigを使っている。</li>
+<li>
+<code>split_words="true"</code>というアノテーションをつけることで、スネークケースからキャメルケースに変換している。</li>
+<li>
+<code>envconfig.Process</code>の第1引数は環境変数のプレフィックスになっている。<code>envconfig.Processs("database", &amp;config)</code>とすると、<code>config.Host</code>で環境変数<code>DATABASE_HOST</code>にアクセスできるようになる。必要なければ空文字でいい。</li>
 </ul>
-<pre lang="go"><code>// custom_context.go
-type CustomContext struct {
-  echo.Context
-  Config
-}
+<pre lang="go" class="highlight highlight-go"><span class="c">// custom_context.go</span>
+<span class="k">type</span> <span class="n">CustomContext</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="n">echo</span><span class="o">.</span><span class="n">Context</span>
+  <span class="n">Config</span>
+<span class="p">}</span>
 
-func CustomContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-  return func(c echo.Context) error {
-    cc := &amp;CustomContext{c}
-    return next(cc)
-  }
-}
+<span class="k">func</span> <span class="n">CustomContextMiddleware</span><span class="p">(</span><span class="n">next</span> <span class="n">echo</span><span class="o">.</span><span class="n">HandlerFunc</span><span class="p">)</span> <span class="n">echo</span><span class="o">.</span><span class="n">HandlerFunc</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">func</span><span class="p">(</span><span class="n">c</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="n">cc</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">CustomContext</span><span class="p">{</span><span class="n">c</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">next</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-func ConfigMiddleware(config Config) echo.MiddlewareFunc {
-  return func(next echo.HandlerFunc) echo.HandlerFunc {
-    return func(c echo.Context) error {
-      cc := c.(*CustomContext)
-      cc.Config = config
-      return next(cc)
-    }
-  }
-}
-</code></pre>
-<pre lang="go"><code>// server.go
-func main() {
-  // ...
+<span class="k">func</span> <span class="n">ConfigMiddleware</span><span class="p">(</span><span class="n">config</span> <span class="n">Config</span><span class="p">)</span> <span class="n">echo</span><span class="o">.</span><span class="n">MiddlewareFunc</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">func</span><span class="p">(</span><span class="n">next</span> <span class="n">echo</span><span class="o">.</span><span class="n">HandlerFunc</span><span class="p">)</span> <span class="n">echo</span><span class="o">.</span><span class="n">HandlerFunc</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">func</span><span class="p">(</span><span class="n">c</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+      <span class="n">cc</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">CustomContext</span><span class="p">)</span>
+      <span class="n">cc</span><span class="o">.</span><span class="n">Config</span> <span class="o">=</span> <span class="n">config</span>
+      <span class="k">return</span> <span class="n">next</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<pre lang="go" class="highlight highlight-go"><span class="c">// server.go</span>
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c">// ...</span>
 
-  e := echo.New()
-  e.Use(CustomContextMiddleware)
-  e.Use(ConfigMiddleware(config))
+  <span class="n">e</span> <span class="o">:=</span> <span class="n">echo</span><span class="o">.</span><span class="n">New</span><span class="p">()</span>
+  <span class="n">e</span><span class="o">.</span><span class="n">Use</span><span class="p">(</span><span class="n">CustomContextMiddleware</span><span class="p">)</span>
+  <span class="n">e</span><span class="o">.</span><span class="n">Use</span><span class="p">(</span><span class="n">ConfigMiddleware</span><span class="p">(</span><span class="n">config</span><span class="p">))</span>
 
-  // ...
-}
-</code></pre>
+  <span class="c">// ...</span>
+<span class="p">}</span>
+</pre>
 <ul>
 <li>すべてのハンドラーから<code>Config</code>にアクセスできるようにカスタムコンテキストを用意し、そのフィールドに<code>Config</code>を追加する。</li>
 <li>カスタムコンテキストをデフォルトのコンテキストで拡張するため、middlewareを設定している。さらに、上で初期化した<code>Config</code>をカスタムコンテキストのフィールドに追加するためのmiddlewareも設定している。</li>
 </ul>
 <p>このように実装することで、以下のように簡単に環境変数にアクセスできるようになる。</p>
-<pre lang="go"><code>// server.go
-func main() {
-  // ...
+<pre lang="go" class="highlight highlight-go"><span class="c">// server.go</span>
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c">// ...</span>
 
-  e.GET(&quot;/tasks&quot;, getTasks)
+  <span class="n">e</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/tasks"</span><span class="p">,</span> <span class="n">getTasks</span><span class="p">)</span>
 
-  // ...
-}
+  <span class="c">// ...</span>
+<span class="p">}</span>
 
-func getTasks(c echo.Context) error {
-  cc := c.(*CustomContext)
-  dsn := cc.GetDSN()
+<span class="k">func</span> <span class="n">getTasks</span><span class="p">(</span><span class="n">c</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+  <span class="n">cc</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">CustomContext</span><span class="p">)</span>
+  <span class="n">dsn</span> <span class="o">:=</span> <span class="n">cc</span><span class="o">.</span><span class="n">GetDSN</span><span class="p">()</span>
 
-  // ...
-}
-</code></pre>
-<pre lang="go"><code>// config.go
-func (c Config) GetDSN() string {
-  return fmt.Sprintf(
-    &quot;%s:%s@tcp(%s:%i)/%s&quot;,
-    c.DatabaseUser,
-    c.DatabasePassword,
-    c.DatabaseHost,
-    c.DatabasePort,
-    c.DatabaseName,
-  )
-}
-</code></pre>
+  <span class="c">// ...</span>
+<span class="p">}</span>
+</pre>
+<pre lang="go" class="highlight highlight-go"><span class="c">// config.go</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">c</span> <span class="n">Config</span><span class="p">)</span> <span class="n">GetDSN</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span>
+    <span class="s">"%s:%s@tcp(%s:%i)/%s"</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">DatabaseUser</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">DatabasePassword</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">DatabaseHost</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">DatabasePort</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">DatabaseName</span><span class="p">,</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre>
 <ul>
-<li><code>Config</code>は<code>CustomContext</code>の匿名フィールドなので、<code>CustomContext</code>から直接<code>Config</code>のメソッドである<code>GetDSN</code>を呼ぶことができる。</li>
+<li>
+<code>Config</code>は<code>CustomContext</code>の匿名フィールドなので、<code>CustomContext</code>から直接<code>Config</code>のメソッドである<code>GetDSN</code>を呼ぶことができる。</li>
 <li>上で説明したとおり、<code>c.DatabaseUser</code>などは環境変数<code>DATABASE_USER</code>などから値を取得している。</li>
 </ul>
         </section>

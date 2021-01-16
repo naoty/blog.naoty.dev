@@ -6,6 +6,7 @@
     <title>「UMLモデリングの本質」を読んだ</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="「UMLモデリングの本質」を読んだ">
     <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
           </p>
         </header>
         <section class="body">
-          <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4822284646/naotoknk-22/"><img src="http://ecx.images-amazon.com/images/I/41LkPJiQcNL._SL160_.jpg" alt="UMLモデリングの本質 第2版" title="UMLモデリングの本質 第2版" /></a></p>
+          <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4822284646/naotoknk-22/"><img src="http://ecx.images-amazon.com/images/I/41LkPJiQcNL._SL160_.jpg" alt="UMLモデリングの本質 第2版" title="UMLモデリングの本質 第2版"></a></p>
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4822284646/naotoknk-22/">UMLモデリングの本質 第2版</a></p>
 <ul>
 <li>作者: 児玉公信</li>
@@ -39,7 +40,7 @@
 <p>「UMLモデリングの本質」という本を読んだ。最近、ソフトウェアの設計について興味があって、いろいろ調べてみたところ各所でこの本がオススメされていたので手にとってみた。以前のエントリー（<a href="http://naoty.hatenablog.com/entry/2015/02/02/012733">「達人に学ぶDB設計徹底指南書」を読んだ - naoty.to_s</a>）でデータベースの設計について理解できたんだけど、結局のところ、そのシステムが扱う業務内容をいかにして実装可能なモデルに落とし込むか（=モデリング）が重要になってくると思う。この本で理解したかったのはそこだった。タイトルからUMLの書き方についての本のようにも思えるが、そうではなく、むしろまったくUMLの書き方は書いてない。UMLを使って、複雑な業務用件をいかにモデリングするかを説いている。本書は300ページに満たないものの、密度が非常にあり2, 3週間でゆっくり読んでも第3章までしか読めていない。それでも、十分に学びがあったので忘れてしまう前にエントリーとして残しておきたいと思う。</p>
 <h1>モデリングとは</h1>
 <p>モデリングとは「仕組みや概念を理解するために概念的な要素とそれらの関係を記述すること」とあった。これは普段の業務で多かれ少なかれ必ず行っていると思う。ただ、それをモデリングという工程として認識してはいなかった。そして、モデリングの手法についても特に考えることはなかった。いつも漫然とノートに四角形と線を書いて整理してた（以下、イメージ）。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150228/20150228013509.jpg" alt="f:id:naoty_k:20150228013509j:plain:h400" title="f:id:naoty_k:20150228013509j:plain:h400" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150228/20150228013509.jpg" alt="f:id:naoty_k:20150228013509j:plain:h400" title="f:id:naoty_k:20150228013509j:plain:h400"></p>
 <p>こういう自己流ではなくて、標準的な概念の表記法がある。その1つがUMLだ。UMLを習得することで、他人とのコミュニケーションの手段として使えるようになるし、UMLを通して標準的なモデリングの手法も学べるようになる。</p>
 <p>本書によると、モデリングは大まかに以下の順番に行っていくようだ。</p>
 <ol>

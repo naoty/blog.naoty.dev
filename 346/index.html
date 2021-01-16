@@ -6,6 +6,7 @@
     <title>AWSのリソースのネーミング</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="AWSのリソースのネーミング">
     <meta property="og:type" content="website">
@@ -47,10 +48,14 @@
 <h1>まとめ</h1>
 <p>これまでの話をまとめると、たいていのケースでは<code>-</code>というネーミングにするのがよさそう。例えば</p>
 <ul>
-<li>EC2インスタンス：<code>production</code></li>
-<li>ECSサービス：<code>api-production</code>, <code>sidekiq-production</code></li>
-<li>S3バケット：<code>assets-production</code>, <code>uploads-production</code></li>
-<li>IAMロール：<code>developer</code>, <code>ecs-task</code></li>
+<li>EC2インスタンス：<code>production</code>
+</li>
+<li>ECSサービス：<code>api-production</code>, <code>sidekiq-production</code>
+</li>
+<li>S3バケット：<code>assets-production</code>, <code>uploads-production</code>
+</li>
+<li>IAMロール：<code>developer</code>, <code>ecs-task</code>
+</li>
 </ul>
 <p>というようなネーミングになりそう。まだ考慮できていないケースがありそうなので、随時アップデートしていきたい。</p>
         </section>

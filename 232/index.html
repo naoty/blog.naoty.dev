@@ -6,6 +6,7 @@
     <title>SwiftでNSDateを直感的に扱う</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="SwiftでNSDateを直感的に扱う">
     <meta property="og:type" content="website">
@@ -27,34 +28,34 @@
         </header>
         <section class="body">
           <p><a href="https://github.com/naoty/Timepiece">Timepiece</a>というライブラリを使うとNSDateを直感的に扱うことができる。</p>
-<pre lang="swift"><code>import Timepiece
+<pre lang="swift" class="highlight highlight-swift"><span class="kd">import</span> <span class="kt">Timepiece</span>
 
-// 3時間前
-var date = 3.hours.ago
+<span class="c1">// 3時間前</span>
+<span class="k">var</span> <span class="nv">date</span> <span class="o">=</span> <span class="mi">3</span><span class="o">.</span><span class="n">hours</span><span class="o">.</span><span class="n">ago</span>
 
-// 4年後
-date = 4.years.later
+<span class="c1">// 4年後</span>
+<span class="n">date</span> <span class="o">=</span> <span class="mi">4</span><span class="o">.</span><span class="n">years</span><span class="o">.</span><span class="n">later</span>
 
-// 今日（0:00）
-date = NSDate.today()
+<span class="c1">// 今日（0:00）</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="o">.</span><span class="nf">today</span><span class="p">()</span>
 
-// 明日（0:00）
-date = NSDate.tomorrow()
+<span class="c1">// 明日（0:00）</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="o">.</span><span class="nf">tomorrow</span><span class="p">()</span>
 
-// 昨日（0:00）
-date = NSDate.yesterday()
+<span class="c1">// 昨日（0:00）</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="o">.</span><span class="nf">yesterday</span><span class="p">()</span>
 
-// 足し算・引き算
-date = NSDate() + 1.month
-date = NSDate() - 5.minutes
+<span class="c1">// 足し算・引き算</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="p">()</span> <span class="o">-</span> <span class="mi">5</span><span class="o">.</span><span class="n">minutes</span>
 
-// 正月
-date = NSDate().beginningOfYear
+<span class="c1">// 正月</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="p">()</span><span class="o">.</span><span class="n">beginningOfYear</span>
 
-// 特定の日時
-date = NSDate.date(year: 2014, month: 8, day: 15, hour: 15, minute: 1, second: 43)
-date = date.change(month: 2, day: 10)
-</code></pre>
+<span class="c1">// 特定の日時</span>
+<span class="n">date</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="o">.</span><span class="nf">date</span><span class="p">(</span><span class="nv">year</span><span class="p">:</span> <span class="mi">2014</span><span class="p">,</span> <span class="nv">month</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="nv">day</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="nv">hour</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="nv">minute</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">second</span><span class="p">:</span> <span class="mi">43</span><span class="p">)</span>
+<span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="nf">change</span><span class="p">(</span><span class="nv">month</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nv">day</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
+</pre>
 <p>以上、自分で作ったライブラリの宣伝でした。issueやPull requestお待ちしてます。</p>
         </section>
         <footer>

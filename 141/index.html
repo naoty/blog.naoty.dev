@@ -6,6 +6,7 @@
     <title>FactoryGirlでコールバックをスキップする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="FactoryGirlでコールバックをスキップする">
     <meta property="og:type" content="website">
@@ -27,29 +28,31 @@
         </header>
         <section class="body">
           <p>FactoryGirlでテストデータを作るとき、<code>before_create</code>などのコールバックも実行されて、いろいろめんどくさいときがある。</p>
-<pre lang="ruby"><code>FactoryGirl.define do
-  factory :user do
-    name 'naoty'
-    age  18
+<pre lang="ruby" class="highlight highlight-ruby"><span class="no">FactoryGirl</span><span class="p">.</span><span class="nf">define</span> <span class="k">do</span>
+  <span class="n">factory</span> <span class="ss">:user</span> <span class="k">do</span>
+    <span class="nb">name</span> <span class="s1">'naoty'</span>
+    <span class="n">age</span>  <span class="mi">18</span>
 
-    after(:build) do
-      User.skip_callback(:create, :before, :hoge_method, :fuga_method)
-    end
-  end
-end
-</code></pre>
+    <span class="n">after</span><span class="p">(</span><span class="ss">:build</span><span class="p">)</span> <span class="k">do</span>
+      <span class="no">User</span><span class="p">.</span><span class="nf">skip_callback</span><span class="p">(</span><span class="ss">:create</span><span class="p">,</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:hoge_method</span><span class="p">,</span> <span class="ss">:fuga_method</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 <ul>
-<li><code>skip_callback</code>はメソッドごとにスキップするか設定できる。</li>
+<li>
+<code>skip_callback</code>はメソッドごとにスキップするか設定できる。</li>
 <li>似たようなものに<code>reset_callbacks</code>があるけど、これはイベントに設定されてるコールバックメソッドの<strong>すべて</strong>をスキップする。</li>
-<li><code>after(:build)</code>のところはスキップしたいコールバックのタイミングによって、調整する必要あると思う。</li>
+<li>
+<code>after(:build)</code>のところはスキップしたいコールバックのタイミングによって、調整する必要あると思う。</li>
 </ul>
-<hr />
+<hr>
 <h3>バージョン</h3>
 <ul>
 <li>factory_girl (3.3.0)</li>
 <li>factory_girl_rails (3.3.0)</li>
 </ul>
-<hr />
+<hr>
 <h3>参考</h3>
 <ul>
 <li><a href="http://apidock.com/rails/ActiveSupport/Callbacks/ClassMethods/skip_callback">skip_callback</a></li>

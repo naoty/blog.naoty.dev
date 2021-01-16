@@ -6,6 +6,7 @@
     <title>マシなiOSアプリのフォームを実装・デザインする</title>
     <link href="/normalize.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
     <link href="/favicon.png" rel="shortcut icon" type="image/png">
     <meta property="og:title" content="マシなiOSアプリのフォームを実装・デザインする">
     <meta property="og:type" content="website">
@@ -28,14 +29,16 @@
         <section class="body">
           <p>普段iOSのフロント寄りの実装やデザインについて手が着けられていなかったけど、Xcode6の新機能のおかげでそっちも興味がでてきたので、ログインフォームを想定してiOSアプリのフォームの設計について本気出して考えてみた。</p>
 <h1>最もシンプルなフォーム</h1>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png" alt="f:id:naoty_k:20140918011114p:plain" title="f:id:naoty_k:20140918011114p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png" alt="f:id:naoty_k:20140918011114p:plain" title="f:id:naoty_k:20140918011114p:plain"></p>
 <ul>
 <li>メールアドレス用の<code>UITextField</code>（以下<code>emailField</code>）、パスワード用の<code>UITextField</code>（以下<code>passwordField</code>）、そしてログインボタン用の<code>UIButton</code>（以下<code>loginButton</code>）の3つをStoryboardで配置した。</li>
-<li><code>emailField</code>はKeyboard TypeをE-mail Addressに、Return KeyをNextに設定した。<code>passwordField</code>はSecure Text EntryのチェックをオンにしReturn KeyをGoに設定した。</li>
+<li>
+<code>emailField</code>はKeyboard TypeをE-mail Addressに、Return KeyをNextに設定した。<code>passwordField</code>はSecure Text EntryのチェックをオンにしReturn KeyをGoに設定した。</li>
 </ul>
 <h2>問題点</h2>
 <ul>
-<li><code>emailField</code>でReturn Keyを押しても<code>passwordField</code>が選択されないし、<code>passwordField</code>でReturn Keyを押してもsubmitされない。</li>
+<li>
+<code>emailField</code>でReturn Keyを押しても<code>passwordField</code>が選択されないし、<code>passwordField</code>でReturn Keyを押してもsubmitされない。</li>
 <li>コントロール部品以外をタップしたとき、キーボードが閉じない。端末サイズが小さい場合、キーボードによって他のコントロールや表示すべきViewが隠れたままになる可能性がある。</li>
 <li>追加した3つのViewが指の大きさに対して小さい。ユーザーは正確にタップするために注意を向ける必要があり、間違ったViewをタップしてしまう可能性がある。</li>
 </ul>
@@ -47,7 +50,7 @@
 @IBOutlet var loginButton: UIButton?
 
 @IBAction func login() {
-    println(&quot;Login&quot;)
+    println("Login")
 }
 
 // MARK: - UITextFieldDelegate
@@ -63,14 +66,17 @@ func textFieldShouldReturn(textField: UITextField) -&gt; Bool {
 }
 </code></pre>
 <ul>
-<li><code>login()</code>は<code>loginButton</code>が押された場合、または<code>passwordField</code>でReturn Keyが押された場合に実行される。今後、このメソッドにログイン処理を実装していく予定。</li>
-<li><code>emailField</code>と<code>passwordField</code>の<code>delegate</code>をこのViewControllerに設定し<code>textFieldShouldReturn(textField:)</code>を実装することで、2つのUITextFieldでReturn Keyが押されたときの処理を実装できる。</li>
-<li><code>becomeFirstResponder()</code>はレシーバーのViewを最初に応答するオブジェクトとして設定する。キーボードはこのFirst Responderに合わせてキーボードタイプや入力先を替える。</li>
+<li>
+<code>login()</code>は<code>loginButton</code>が押された場合、または<code>passwordField</code>でReturn Keyが押された場合に実行される。今後、このメソッドにログイン処理を実装していく予定。</li>
+<li>
+<code>emailField</code>と<code>passwordField</code>の<code>delegate</code>をこのViewControllerに設定し<code>textFieldShouldReturn(textField:)</code>を実装することで、2つのUITextFieldでReturn Keyが押されたときの処理を実装できる。</li>
+<li>
+<code>becomeFirstResponder()</code>はレシーバーのViewを最初に応答するオブジェクトとして設定する。キーボードはこのFirst Responderに合わせてキーボードタイプや入力先を替える。</li>
 </ul>
 <h1>改善2: キーボードを閉じる</h1>
 <pre><code>@IBAction func login() {
     resignFirstResponderAtControls()
-    println(&quot;Login&quot;)
+    println("Login")
 }
 
 override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -85,7 +91,8 @@ private func resignFirstResponderAtControls() {
 <ul>
 <li>非公開メソッドとして<code>resignFirstResponderAtControls()</code>を定義した。これによって2つのUITextFieldの選択状態を外しキーボードを閉じることができる。<code>resignFirstResponder()</code>メソッドはレシーバーのViewをFirst Responderでなくす。これによってキーボードが閉じる。</li>
 <li>これを<code>login()</code>と<code>touchesBegan(touches:withEvent:)</code>で呼び出す。</li>
-<li><code>UIViewController</code>は<code>UIResponder</code>を継承しており<code>self.view</code>のイベントハンドリングを扱うことができる。そのため、<code>touchesBegan(touches:withEvent:)</code>で<code>resignFirstResponderAtControls()</code>を呼ぶことで、追加した3つのView以外を選択されたときにキーボードを閉じることができる。</li>
+<li>
+<code>UIViewController</code>は<code>UIResponder</code>を継承しており<code>self.view</code>のイベントハンドリングを扱うことができる。そのため、<code>touchesBegan(touches:withEvent:)</code>で<code>resignFirstResponderAtControls()</code>を呼ぶことで、追加した3つのView以外を選択されたときにキーボードを閉じることができる。</li>
 </ul>
 <h1>改善3: タップしやすくする</h1>
 <p>「ヒューマンユーザーインターフェイスガイドライン」（以下HIG）にはこのような指針が載っている。</p>
@@ -112,10 +119,12 @@ class TextFieldContainer: UIView {
 </code></pre>
 <p>Xcode 6からの新機能であるLive Viewsを利用し、カスタムViewも可能な限りStoryboard上でそのプロパティを変更できるようにする。</p>
 <ul>
-<li><code>@IBDesignable</code>によってカスタムViewをStoryboard上でレンダリングして、その見た目をStoryboardからも確認できるようになる。</li>
-<li><code>@IBInspectable</code>によって下のスクリーンショットのようにカスタムViewの<code>borderWidth</code>というプロパティをStoryboardから変更できるようになる。</li>
+<li>
+<code>@IBDesignable</code>によってカスタムViewをStoryboard上でレンダリングして、その見た目をStoryboardからも確認できるようになる。</li>
+<li>
+<code>@IBInspectable</code>によって下のスクリーンショットのようにカスタムViewの<code>borderWidth</code>というプロパティをStoryboardから変更できるようになる。</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png" alt="f:id:naoty_k:20140918011350p:plain" title="f:id:naoty_k:20140918011350p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png" alt="f:id:naoty_k:20140918011350p:plain" title="f:id:naoty_k:20140918011350p:plain"></p>
 <p>次に、<code>UIButton</code>もHIGの方針に従って修正する。<code>UIButton</code>はサイズを自由に変更できるので、とりあえず44x44ポイントに変更した。ボタンの大きさは変更したものの、ボタンの「Login」というテキストはまだ小さいため、ユーザーの目からはサイズが大きくなったようには見えていない。そこで、ボタンにもボーダーをつけてみる。</p>
 <pre><code>// BorderedButton.swift
 
@@ -132,7 +141,7 @@ class BorderedButton: UIButton {
 <p><code>TextFieldContainer</code>と同じようにstoryboardから枠線の幅を変えられるようにした。</p>
 <h1>マシなフォーム</h1>
 <p>以上の変更を行った結果このようになった。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png" alt="f:id:naoty_k:20140918011412p:plain" title="f:id:naoty_k:20140918011412p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png" alt="f:id:naoty_k:20140918011412p:plain" title="f:id:naoty_k:20140918011412p:plain"></p>
 <p>間違いなくタップはしやすくなった。</p>
 <h2>問題点</h2>
 <ul>
@@ -154,8 +163,8 @@ class BorderedButton: UIButton {
 <li>余白を十分にとる</li>
 </ul>
 <p>を意識してStoryboardを編集した。Auto Layoutで各Viewの余白を固定したり、枠線の太さを0ポイントにした。その結果、以下のようになった。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png" alt="f:id:naoty_k:20140918011429p:plain" title="f:id:naoty_k:20140918011429p:plain" /></p>
-<p>フラットデザインに対するよくある批判として「ボタンがどこにあるのか認識しにくい」というものがある。&quot;Email&quot;や&quot;Login&quot;といった文字がある部分にしかViewがないように見えてしまうため、Viewの領域を表す枠線や背景色を控えめに加えた方がもっとよくなると考えた。そこで、2つの<code>UITextField</code>の領域を控えめに表すため、領域の下辺だけ枠線を表示してみる。</p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png" alt="f:id:naoty_k:20140918011429p:plain" title="f:id:naoty_k:20140918011429p:plain"></p>
+<p>フラットデザインに対するよくある批判として「ボタンがどこにあるのか認識しにくい」というものがある。"Email"や"Login"といった文字がある部分にしかViewがないように見えてしまうため、Viewの領域を表す枠線や背景色を控えめに加えた方がもっとよくなると考えた。そこで、2つの<code>UITextField</code>の領域を控えめに表すため、領域の下辺だけ枠線を表示してみる。</p>
 <pre><code>// TextFieldContainer.swift
 
 @IBDesignable
@@ -200,7 +209,7 @@ class TextFieldContainer: UIView {
 <li>ショートカットのため<code>width</code>と<code>height</code>というcomputed propertyを用意した。</li>
 </ul>
 <p>そして、Storyboardから枠線の色と幅を設定し余白を調整すると以下のようになった。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png" alt="f:id:naoty_k:20140918011441p:plain" title="f:id:naoty_k:20140918011441p:plain" /></p>
+<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png" alt="f:id:naoty_k:20140918011441p:plain" title="f:id:naoty_k:20140918011441p:plain"></p>
 <h1>まとめ</h1>
 <p>最初と最後を比べると少しはマシなフォームになったと思う。改善したポイントをまとめると以下のようになる。</p>
 <ul>
