@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブロック引数の分割代入</title>
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <meta property="og:title" content="ブロック引数の分割代入">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/436/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ブロック引数の分割代入</h1>
+          <p class="metadata">
+            <time datetime="2021-01-23T13:40:00.000+0000">2021-01-23 13:40</time>
+            <a href="/ruby/">#ruby</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>まったく知らなくて驚いたので、以下のデータを例に試してみた。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">pokedex</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'Bulbasaur'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'Grass'</span><span class="p">,</span> <span class="s1">'Poisson'</span><span class="p">]],</span>
+  <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Ivysaur'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'Grass'</span><span class="p">,</span> <span class="s1">'Poisson'</span><span class="p">]],</span>
+<span class="p">]</span>
+</pre>
+<h1>配列内の配列を分割代入</h1>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">pokedex</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">types</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"id:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> name:</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2"> types:</span><span class="si">#{</span><span class="n">types</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; id:1 name:Bulbasaur types:["Grass", "Poisson"]</span>
+<span class="c1">#=&gt; id:2 name:Ivysaur types:["Grass", "Poisson"]</span>
+</pre>
+<h1>ネストした配列を分割代入</h1>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">pokedex</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="p">(</span><span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="p">)</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"id:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> name:</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2"> type1:</span><span class="si">#{</span><span class="n">type1</span><span class="si">}</span><span class="s2"> type2:</span><span class="si">#{</span><span class="n">type2</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; id:1 name:Bulbasaur type1:Grass type2:Poisson</span>
+<span class="c1">#=&gt; id:2 name:Ivysaur type1:Grass type2:Poisson</span>
+</pre>
+<p><code>Enumerable#with_index</code>を使うときは特に便利。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">pokedex</span><span class="p">.</span><span class="nf">each</span><span class="p">.</span><span class="nf">with_index</span> <span class="k">do</span> <span class="o">|</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="p">(</span><span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="p">)),</span> <span class="n">index</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"index:</span><span class="si">#{</span><span class="n">index</span><span class="si">}</span><span class="s2"> id:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> name:</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2"> type1:</span><span class="si">#{</span><span class="n">type1</span><span class="si">}</span><span class="s2"> type2:</span><span class="si">#{</span><span class="n">type2</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; index:0 id:1 name:Bulbasaur type1:Grass type2:Poisson</span>
+<span class="c1">#=&gt; index:1 id:2 name:Ivysaur type1:Grass type2:Poisson</span>
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
