@@ -10,6 +10,17 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/438/</id>
+    <link href="https://blog.naoty.dev/438/"/>
+    <summary>&lt;p&gt;令和2年度の確定申告が終わった。今年は医療費控除を受けるために2年ぶり2度目の確定申告だった。前回は2,3時間ほど待たされた上に用意した資料が間違っていて最悪の体験だったし、このコロナ禍の中で同じような体験は絶対にしたくなかったので、e-Taxで行うことにした。&lt;/p&gt;
+&lt;p&gt;マイナンバーカードは持っているので、カードリーダーで読み取る方式にしてみた。I-O DATAの&lt;a href=&quot;https://www.amazon.co.jp/dp/B089SRDDYN&quot;&gt;USB-NFC3&lt;/a&gt;というカードリーダーを買った。Windows、macOSともに対応しているのがよかった。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;USB-NFC3.jpg&quot; alt=&quot;USB-NFC3&quot;&gt;&lt;/p&gt;
+&lt;p&gt;カードリーダーでのログイン方式のセットアップに多少手間取ったものの、e-Taxでの確定申告は思っていた以上に簡単で、領収書を集計する作業を除くと15分程度で終わったと思う。半角で入力した文字列が全角に変換されていたりして、役所にありがちなストレスフルなフォームではなかった。これなら毎年確定申告することになってもそこまで苦痛には感じずに済む。&lt;/p&gt;</summary>
+    <title>令和2年度確定申告</title>
+    <updated>2021-02-07T23:52:00+00:00</updated>
+    <dc:date>2021-02-07T23:52:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/437/</id>
     <link href="https://blog.naoty.dev/437/"/>
     <summary>&lt;p&gt;一戸建てを建てるため都内某所に土地を買った。&lt;/p&gt;
