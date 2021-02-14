@@ -32,7 +32,7 @@
         <section class="body">
           <p>普段iOSのフロント寄りの実装やデザインについて手が着けられていなかったけど、Xcode6の新機能のおかげでそっちも興味がでてきたので、ログインフォームを想定してiOSアプリのフォームの設計について本気出して考えてみた。</p>
 <h1>最もシンプルなフォーム</h1>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png" alt="f:id:naoty_k:20140918011114p:plain" title="f:id:naoty_k:20140918011114p:plain"></p>
+<p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png" alt="f:id:naoty_k:20140918011114p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20140918011114p:plain</figcaption></figure></p>
 <ul>
 <li>メールアドレス用の<code>UITextField</code>（以下<code>emailField</code>）、パスワード用の<code>UITextField</code>（以下<code>passwordField</code>）、そしてログインボタン用の<code>UIButton</code>（以下<code>loginButton</code>）の3つをStoryboardで配置した。</li>
 <li>
@@ -127,7 +127,7 @@ class TextFieldContainer: UIView {
 <li>
 <code>@IBInspectable</code>によって下のスクリーンショットのようにカスタムViewの<code>borderWidth</code>というプロパティをStoryboardから変更できるようになる。</li>
 </ul>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png" alt="f:id:naoty_k:20140918011350p:plain" title="f:id:naoty_k:20140918011350p:plain"></p>
+<p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png" alt="f:id:naoty_k:20140918011350p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20140918011350p:plain</figcaption></figure></p>
 <p>次に、<code>UIButton</code>もHIGの方針に従って修正する。<code>UIButton</code>はサイズを自由に変更できるので、とりあえず44x44ポイントに変更した。ボタンの大きさは変更したものの、ボタンの「Login」というテキストはまだ小さいため、ユーザーの目からはサイズが大きくなったようには見えていない。そこで、ボタンにもボーダーをつけてみる。</p>
 <pre><code>// BorderedButton.swift
 
@@ -144,7 +144,7 @@ class BorderedButton: UIButton {
 <p><code>TextFieldContainer</code>と同じようにstoryboardから枠線の幅を変えられるようにした。</p>
 <h1>マシなフォーム</h1>
 <p>以上の変更を行った結果このようになった。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png" alt="f:id:naoty_k:20140918011412p:plain" title="f:id:naoty_k:20140918011412p:plain"></p>
+<p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png" alt="f:id:naoty_k:20140918011412p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20140918011412p:plain</figcaption></figure></p>
 <p>間違いなくタップはしやすくなった。</p>
 <h2>問題点</h2>
 <ul>
@@ -166,7 +166,7 @@ class BorderedButton: UIButton {
 <li>余白を十分にとる</li>
 </ul>
 <p>を意識してStoryboardを編集した。Auto Layoutで各Viewの余白を固定したり、枠線の太さを0ポイントにした。その結果、以下のようになった。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png" alt="f:id:naoty_k:20140918011429p:plain" title="f:id:naoty_k:20140918011429p:plain"></p>
+<p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png" alt="f:id:naoty_k:20140918011429p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20140918011429p:plain</figcaption></figure></p>
 <p>フラットデザインに対するよくある批判として「ボタンがどこにあるのか認識しにくい」というものがある。"Email"や"Login"といった文字がある部分にしかViewがないように見えてしまうため、Viewの領域を表す枠線や背景色を控えめに加えた方がもっとよくなると考えた。そこで、2つの<code>UITextField</code>の領域を控えめに表すため、領域の下辺だけ枠線を表示してみる。</p>
 <pre><code>// TextFieldContainer.swift
 
@@ -212,7 +212,7 @@ class TextFieldContainer: UIView {
 <li>ショートカットのため<code>width</code>と<code>height</code>というcomputed propertyを用意した。</li>
 </ul>
 <p>そして、Storyboardから枠線の色と幅を設定し余白を調整すると以下のようになった。</p>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png" alt="f:id:naoty_k:20140918011441p:plain" title="f:id:naoty_k:20140918011441p:plain"></p>
+<p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png" alt="f:id:naoty_k:20140918011441p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20140918011441p:plain</figcaption></figure></p>
 <h1>まとめ</h1>
 <p>最初と最後を比べると少しはマシなフォームになったと思う。改善したポイントをまとめると以下のようになる。</p>
 <ul>

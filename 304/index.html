@@ -43,13 +43,13 @@
 <li>CSSを書く際に、モバイルファーストを念頭にまずスマホ表示を前提に書き始めた。そして、画面を広げながら、余白が気になる部分でメディアクエリを使って広い画面向けのスタイルを追加している。</li>
 <li>最終的なHTMLは圧縮している。ここらへん、できる限りファイルサイズを抑えてパフォーマンスを最適化しようとしている。結果的に、PageSpeed Insightsでほぼ100点をとれるようになった。</li>
 </ul>
-<p><img src="pagespeed-insights.png" alt="pagespeed-insights"></p>
+<p><a href="pagespeed-insights.png" target="_blank"><img src="pagespeed-insights.png" alt="pagespeed-insights" style="max-width:100%;"></a></p>
 <ul>
 <li>ファイル名をURLに使おうとすると、濁点や半濁点を含むファイル名が表示できなくなることがある。これは、macOSのファイル名はUTF-8-MACと呼ばれるエンコーディングが使われているためで、濁点や半濁点が通常のUTF-8と異なるために起きているらしい。</li>
 <li>ファイル名には自然数を使うようにし、タイトルはfront matterで指定するようにした。front matterでは、タイトルの他に<code>description</code>や<code>og:image</code>を設定できるようにした。</li>
 <li>Lighthouseを参考にmanifest.jsonを書くなどPWAの要件を満たすようにした。</li>
 </ul>
-<p><img src="lighthouse.png" alt="lighthouse"></p>
+<p><a href="lighthouse.png" target="_blank"><img src="lighthouse.png" alt="lighthouse" style="max-width:100%;"></a></p>
 <ul>
 <li>
 <a href="https://github.com/naoty/homepage">naoty/homepage</a>のpublicディレクトリをgitサブモジュールにして<a href="https://github.com/naoty/naoty.github.io">naoty/naoty.github.io</a>にpushするようにしている。</li>

@@ -32,7 +32,7 @@
           </p>
         </header>
         <section class="body">
-          <p><img src="todo.gif" alt="次のtodoをtmuxのstatus lineに表示する"></p>
+          <p><a href="todo.gif" target="_blank"><img src="todo.gif" alt="次のtodoをtmuxのstatus lineに表示する" style="max-width:100%;"></a></p>
 <p><a href="https://github.com/naoty/todo">naoty/todo</a>に改良して、上のスクリーンキャストのようにtmuxのstatus lineに次のtodoを表示できるようにしてみた。</p>
 <p><code>next</code>というコマンドを追加し、最も優先順位の高いtodoを表示できるようにした。また、<code>done</code>コマンドに引数を指定しない場合に<code>next</code>で表示されるtodoを完了できるようにした。<code>done</code>コマンドなどで次のtodoが変わっても、tmuxが自動的に更新してくれるのですぐに切り替わる。</p>
 <p>iTerm2の画面分割を使っていたためtmuxは使ってこなかったが、status lineに次のtodoを表示するアイデアを思いついたため使い始めた。この使い方によって、次にやることを<code>list</code>コマンドで何度も確認する必要がなくなったし、次にやるべきことのみに集中できるため、とてもいい。</p>

@@ -47,7 +47,7 @@
 <li>ビルドしたイメージを<code>docker run -P -d</code>して、コンテナを起動する。</li>
 <li>コンテナのホスト側ポート（例: <code>49154</code>）を調べて、oasisへのアクセスを<code>--container-host</code>で指定されたホスト上のコンテナ（例: <code>192.168.99.100:49154</code>）にリダイレクトする。</li>
 </ol>
-<p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150409/20150409225939.png" alt="f:id:naoty_k:20150409225939p:plain" title="f:id:naoty_k:20150409225939p:plain"></p>
+<p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150409/20150409225939.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150409/20150409225939.png" alt="f:id:naoty_k:20150409225939p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20150409225939p:plain</figcaption></figure></p>
 <p>実際にOSXで試す場合は、<code>--proxy 127.0.0.1:8080</code>のようなオプションで起動して、サブドメインの解決を<a href="http://pow.cx/manual.html">Pow</a>に任せるといいと思う。</p>
 <pre><code>% cd ~/.pow
 % echo 8080 &gt; oasis

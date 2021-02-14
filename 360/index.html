@@ -31,7 +31,7 @@
         </header>
         <section class="body">
           <p>相変わらずUnityでVRゲームを作っている。自分を前後左右に移動させるスクリプトの書き方を学んだ。</p>
-<p><img src="walk.gif" alt="walk"></p>
+<p><figure><a href="walk.gif" target="_blank"><img src="walk.gif" alt="" style="max-width:100%;"></a><figcaption>VR空間を歩いている様子</figcaption></figure></p>
 <p>まず、一人称のプレイヤーを制御するには<code>CharacterController</code>というコンポーネントを使う。これは<code>RigidBody</code>のような物理特性を持たない、つまり重力のような力の影響を受けないけど、衝突判定を持ち、段差や斜面を移動できるような特性を持つ。</p>
 <p><code>CharacterController</code>コンポーネントを持つGame Objectに以下のようなスクリプトを追加する。</p>
 <pre lang="csharp" class="highlight highlight-csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">Walk</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>

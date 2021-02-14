@@ -36,7 +36,7 @@
 <h1>Netlifyで無料分を使い切った</h1>
 <p>あるとき、Netlifyから数ドルほど請求されていることに気づいた。このホームページはNetlifyでホスティングしているのだけど、どうやらビルド時間の上限を超えた分が請求されたらしい。</p>
 <p>Build minutesのページを見てみた。</p>
-<p><img src="build-minutes.png" alt="build minutes"></p>
+<p><figure><a href="build-minutes.png" target="_blank"><img src="build-minutes.png" alt="" style="max-width:100%;"></a><figcaption>ビルド時間</figcaption></figure></p>
 <p>確かに、極端にビルド時間がかかっている日がある。</p>
 <p>原因はdependabotからのパッケージ更新のPull requestごとにNetlifyでビルドをおこなっていることだった。dependabotは更新があったパッケージごとにPull requestを作るため、大量のPull requestが作られてしまう。Pull requestのグループ化を要望する<a href="https://github.com/dependabot/feedback/issues/5">声</a>はたくさんあるが、まだ実現されてなさそうだ。</p>
 <h1>renovateへの移行</h1>

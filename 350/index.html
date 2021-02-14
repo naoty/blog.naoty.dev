@@ -31,7 +31,7 @@
         </header>
         <section class="body">
           <p><a href="https://github.com/naoty/batch_rollback">naoty/batch_rollback</a>というrubygemを書いた。</p>
-<p><img src="screencast.gif" alt="screencast"></p>
+<p><figure><a href="screencast.gif" target="_blank"><img src="screencast.gif" alt="" style="max-width:100%;"></a><figcaption>様子</figcaption></figure></p>
 <p>これは<code>db:migrate</code>でmigrateしたversionやステップ数を記録しておいて、<code>db:rollback</code>でまとめてrollbackできるようにする。</p>
 <h1>モチベーション</h1>
 <p>このrubygemを書いた動機としては、ロールバックを安全に自動化したかった。Railsアプリケーションをロールバックするには<code>rails db:rollback</code>を行うことになるが、そのとき問題になるのは<code>STEP</code>をいくつにするかということがある。リリース時に<code>db:migrate</code>したmigrationファイルがいくつあったかはリリースごとに異なるため、ロールバックを自動化する上で問題になる。</p>

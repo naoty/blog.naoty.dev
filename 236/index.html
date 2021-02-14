@@ -30,7 +30,7 @@
           </p>
         </header>
         <section class="body">
-          <p><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140930/20140930233211.png" alt="f:id:naoty_k:20140930233211p:plain" title="f:id:naoty_k:20140930233211p:plain"></p>
+          <p><figure><a href="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140930/20140930233211.png" target="_blank"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140930/20140930233211.png" alt="f:id:naoty_k:20140930233211p:plain" style="max-width:100%;"></a><figcaption>f:id:naoty_k:20140930233211p:plain</figcaption></figure></p>
 <p>このスクリーンショットに映された2つの線は共にiPhoneの加速度センサーの値を表しており、下の緑が加工していない生データ、上の青い線がローパスフィルタという仕組みで揺れを除去したデータだ。</p>
 <p><a href="http://naoty.hatenablog.com/entry/2014/08/31/000115">以前の記事</a>でSwiftを使ったストリームの実装をしてみたのだけど、その使いどころを考えてみたところセンサーデータの加工にストリームという概念が適しているのではないかと思いついた。センサーから送られてくるデータは連続的で、その加工には複雑な計算を要するためだ。</p>
 <p>そこで、加速度センサーをグラフに表示する簡単なアプリを作ってみて、生データとストリームを使って加工したデータを視覚的に表現してみることにした。その結果が上のスクリーンショットとなる。今回はローパスフィルタと呼ばれる手法を用いて生データを加工した。そちらの方面にはまるっきり分からないのだけど、以下のようなとてもシンプルなアルゴリズムでデータを加工できるとのことだったので利用した。</p>

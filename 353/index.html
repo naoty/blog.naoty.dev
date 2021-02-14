@@ -9,7 +9,7 @@
     <meta property="og:description" content="dependabotを使ってGitHub Pageのビルドに使うライブラリのアップデートを自動化した話">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://blog.naoty.dev/353/">
-    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta property="og:image" content="https://blog.naoty.dev/353/pull_requests.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:creator" content="@naoty_k">
     <meta name="theme-color" content="#fff">
@@ -34,7 +34,7 @@
         <section class="body">
           <p>このブログはGatsby.jsでビルドしてGitHub Pagesにホスティングしているんだけど、ビルドするために必要なライブラリを<a href="https://dependabot.com/">dependabot</a>を使って自動的にアップデートするようにしたところ、とても快適になった。</p>
 <p>dependabotはOSSであれば無料で使うことができる。設定したスケジュールに従ってライブラリのアップデートが存在すれば以下のような感じでPull requestを自動的に送ってくれる。</p>
-<p>![pull requestspull_requests.png)</p>
+<p><figure><a href="pull_requests.png" target="_blank"><img src="pull_requests.png" alt="" style="max-width:100%;"></a><figcaption>dependabotが送ってきたPull Request</figcaption></figure></p>
 <p>さらにとてもよかったのが、マイナーアップデートであれば自動的にPull requestをmergeするといった、auto mergeの条件を細かく設定できたことだ。これによって大幅に運用の手間が抑えられる。</p>
 <p>このブログでは、<code>package.json</code>で指定したversion specifierに従ったアップデートは自動的にmergeするようにし、そうでないメジャーアップデートなどは手動でmergeするようにしている。ちょうどさきほど<a href="https://emotion.sh/">emotion</a>のメジャーアップデートを手動でmergeしていたところだった。breaking changeを含んでいたため、auto mergeにしないで正解だった。</p>
 <p>ライブラリのアップデートは忘れがちで、気づいたときにアップデートしようとすると大幅な変更を余儀なくなってしまう。GitHub Pagesで自分のページを運用している開発者にはdependabotのようなサービスをオススメしたい。</p>

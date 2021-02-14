@@ -30,7 +30,7 @@
           </p>
         </header>
         <section class="body">
-          <p><img src="thread.png" alt=""></p>
+          <p><figure><a href="thread.png" target="_blank"><img src="thread.png" alt="" style="max-width:100%;"></a><figcaption>スレッド</figcaption></figure></p>
 <p>Slackへの通知をスレッド化するため、<a href="https://github.com/naoty/slack-thread-webhook">naoty/slack-thread-webhook</a>という簡単なプロキシをGoで作った。</p>
 <h1>作った理由</h1>
 <p>CIからの通知をSlackに送るようにしていると、CIからの通知でchannelが埋まってしまうようなことがよくあると思う。しかも、複雑な処理をCI上で行うと、細かく分解されたジョブから大量の通知が来るようになる。そこで、こういった簡単なプロキシを作って同じworkflowの通知をスレッドにまとめようと考えた。</p>
@@ -64,7 +64,7 @@ EOS
 </code></pre>
 <h1>どうやって始めるのか</h1>
 <p>Herokuで簡単に動かせるようにHeroku buttonを作った（ブログのCSSででかくなっちゃったけど面倒だからこのまま）。</p>
-<p><a href="https://heroku.com/deploy"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy"></a></p>
+<p><a href="https://heroku.com/deploy"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" style="max-width:100%;"></a></p>
 <p>また、Docker HubにDockerイメージを公開しているので、ECS等で動かす場合にはこちらを使うとセットアップしやすいと思う。</p>
 <p><a href="https://hub.docker.com/r/naoty/slack-thread-webhook">https://hub.docker.com/r/naoty/slack-thread-webhook</a></p>
         </section>

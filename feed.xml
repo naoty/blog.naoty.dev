@@ -12,7 +12,7 @@
   <entry>
     <id>https://blog.naoty.dev/439/</id>
     <link href="https://blog.naoty.dev/439/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;%E5%BB%BA%E7%AF%89%E7%9F%A5%E8%AD%982017%E5%B9%B49%E6%9C%88%E5%8F%B7.jpg&quot; alt=&quot;建築知識2017年9月号&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;%E5%BB%BA%E7%AF%89%E7%9F%A5%E8%AD%982017%E5%B9%B49%E6%9C%88%E5%8F%B7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;%E5%BB%BA%E7%AF%89%E7%9F%A5%E8%AD%982017%E5%B9%B49%E6%9C%88%E5%8F%B7.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;建築知識2017年9月号&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://www.amazon.co.jp/dp/B072KPNKYS&quot;&gt;https://www.amazon.co.jp/dp/B072KPNKYS&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;家を建てるにあたって情報収集していると、建築知識という雑誌の2017年9月号がとても良かったという話を見つけたのでさっそく買って読んだ。&lt;/p&gt;
 &lt;p&gt;内容は、さまざまなパターンの動線を網羅した間取り、各場所で収納すべきものと収納設計、造作家具の部材資料集、家の中のあらゆるものの寸法集といった構成になっていた。&lt;/p&gt;
@@ -28,7 +28,7 @@
     <link href="https://blog.naoty.dev/438/"/>
     <summary>&lt;p&gt;令和2年度の確定申告が終わった。今年は医療費控除を受けるために2年ぶり2度目の確定申告だった。前回は2,3時間ほど待たされた上に用意した資料が間違っていて最悪の体験だったし、このコロナ禍の中で同じような体験は絶対にしたくなかったので、e-Taxで行うことにした。&lt;/p&gt;
 &lt;p&gt;マイナンバーカードは持っているので、カードリーダーで読み取る方式にしてみた。I-O DATAの&lt;a href=&quot;https://www.amazon.co.jp/dp/B089SRDDYN&quot;&gt;USB-NFC3&lt;/a&gt;というカードリーダーを買った。Windows、macOSともに対応しているのがよかった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;USB-NFC3.jpg&quot; alt=&quot;USB-NFC3&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;USB-NFC3.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;USB-NFC3.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;USB-NFC3&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;カードリーダーでのログイン方式のセットアップに多少手間取ったものの、e-Taxでの確定申告は思っていた以上に簡単で、領収書を集計する作業を除くと15分程度で終わったと思う。半角で入力した文字列が全角に変換されていたりして、役所にありがちなストレスフルなフォームではなかった。これなら毎年確定申告することになってもそこまで苦痛には感じずに済む。&lt;/p&gt;</summary>
     <title>令和2年度確定申告</title>
     <updated>2021-02-07T23:52:00+00:00</updated>
@@ -338,7 +338,7 @@
 &lt;h1&gt;解決策&lt;/h1&gt;
 &lt;p&gt;Next.js + TypeScriptの練習がてら、フォームから上のようなデータフロー図とmermaid.jsの記法のテキストを生成するアプリケーションを作った。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/dfd-editor&quot;&gt;naoty/dfd-editor&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;dfd-editor.png&quot; alt=&quot;dfd-editor&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;dfd-editor.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;dfd-editor.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;dfd-editor&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;左側のテーブルでポチポチに入力していくと、右側にデータフロー図がリアルタイムに生成される。また、別タブでmermaid.jsのテキストも生成されるので、データフロー図の作成だけこれでやって結果をesaにコピペするみたいな使い方ができる。&lt;/p&gt;
 &lt;p&gt;最低限必要な機能を作っただけでまだどこかにデプロイもしていないけど、とりあえずこれで解決したい問題は解決できそうだ。&lt;/p&gt;</summary>
     <title>データフロー図を簡単に書くやつを作った</title>
@@ -721,7 +721,7 @@ Flags:
     <id>https://blog.naoty.dev/420/</id>
     <link href="https://blog.naoty.dev/420/"/>
     <summary>&lt;p&gt;ロジクールのC270nというWebカメラを買った。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;c270n.jpg&quot; alt=&quot;ロジクールのC270n&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;c270n.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;c270n.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;ロジクールのc270n&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;普段からMacbookをクラムシェルモードにして外付けのでかいディスプレイで作業しているため、今まではデスクの上のキーボードをどかしてそこにMacbookを開いて置き、内臓カメラを使ってHangoutをやっていた。&lt;/p&gt;
 &lt;p&gt;そういったことが面倒なので、品薄状態が落ちついてきた頃合いを見計ってWebカメラを買うことにした。&lt;/p&gt;
 &lt;p&gt;WebカメラはUSB Type-Aの出力端子を外付けディスプレイに接続して、ディスプレイからUSB Type-CでMacbookにつなげている。この方がType-A to Type-Cのアダプタを余計に買う必要がなくなってスッキリする。&lt;/p&gt;</summary>
@@ -947,7 +947,7 @@ Flags:
 &lt;h1&gt;Netlifyで無料分を使い切った&lt;/h1&gt;
 &lt;p&gt;あるとき、Netlifyから数ドルほど請求されていることに気づいた。このホームページはNetlifyでホスティングしているのだけど、どうやらビルド時間の上限を超えた分が請求されたらしい。&lt;/p&gt;
 &lt;p&gt;Build minutesのページを見てみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;build-minutes.png&quot; alt=&quot;build minutes&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;build-minutes.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;build-minutes.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;ビルド時間&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;確かに、極端にビルド時間がかかっている日がある。&lt;/p&gt;
 &lt;p&gt;原因はdependabotからのパッケージ更新のPull requestごとにNetlifyでビルドをおこなっていることだった。dependabotは更新があったパッケージごとにPull requestを作るため、大量のPull requestが作られてしまう。Pull requestのグループ化を要望する&lt;a href=&quot;https://github.com/dependabot/feedback/issues/5&quot;&gt;声&lt;/a&gt;はたくさんあるが、まだ実現されてなさそうだ。&lt;/p&gt;
 &lt;h1&gt;renovateへの移行&lt;/h1&gt;
@@ -1592,7 +1592,7 @@ start-dfs.sh
 % docker run &lt;span class=&quot;nt&quot;&gt;--rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 9870:9870 naoty/hello-hadoop
 &lt;/pre&gt;
 &lt;p&gt;NameNodeは9870番ポートでUIを提供しているのでポートフォワーディングを設定して&lt;code&gt;localhost:9870&lt;/code&gt;から確認できるようになった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;hadoop-ui.png&quot; alt=&quot;localhost:9870&quot;&gt;&lt;/p&gt;</summary>
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;hadoop-ui.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;hadoop-ui.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;localhost:9870&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;</summary>
     <title>HadoopをDockerコンテナで動かす</title>
     <updated>2020-03-04T10:50:00+00:00</updated>
     <dc:date>2020-03-04T10:50:00+00:00</dc:date>
@@ -1715,7 +1715,7 @@ graph TD
     <id>https://blog.naoty.dev/403/</id>
     <link href="https://blog.naoty.dev/403/"/>
     <summary>&lt;p&gt;新型コロナウィルスの影響でリモートワークが推奨されるようになった。そこで、解像度が低すぎてつらかったディスプレイを買い替えることにした。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;before.jpg&quot; alt=&quot;before&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;before.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;before.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;before&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;条件としては&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1726,7 +1726,7 @@ graph TD
 &lt;strong&gt;曲面ディスプレイ&lt;/strong&gt;: 横に長いと端の方が見にくくなりそう。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;を満たしているディスプレイを探したところ、Dellの&lt;a href=&quot;https://www.dell.com/ja-jp/shop/accessories/apd/210-aqwn&quot;&gt;U3419W&lt;/a&gt;がよさそうなので、これにした。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;after.jpg&quot; alt=&quot;エディタ、ターミナル、ブラウザで3分割&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;after.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;after.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;エディタ、ターミナル、ブラウザで3分割&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;まだ買って1日しか経ってないけど第1印象としては、かなり満足感が高い。ディスプレイ2枚で作業するのと比べて、真正面にエディタを置けるというのがかなり良くて、視線の移動が減った感じがする。&lt;/p&gt;</summary>
     <title>曲面ディスプレイを買った</title>
     <updated>2020-02-27T09:14:00+00:00</updated>
@@ -1736,7 +1736,7 @@ graph TD
     <id>https://blog.naoty.dev/402/</id>
     <link href="https://blog.naoty.dev/402/"/>
     <summary>&lt;p&gt;英語でドキュメントを書いていく機運が高まってきたので、英作文の本を買ってみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;book.jpg&quot; alt=&quot;究極の英語ライティング&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;book.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;book.jpg&quot; alt=&quot;究極の英語ライティング&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;とてもいい本だった。基本的な英文法はわかっているけど、いまいちこなれた文章が書けない人にはオススメできそう。&lt;/p&gt;
 &lt;h1&gt;メモ&lt;/h1&gt;
 &lt;ul&gt;
@@ -1882,8 +1882,8 @@ if [plan] = &quot;free&quot; then [payment] = &quot;-&quot;;
     <id>https://blog.naoty.dev/398/</id>
     <link href="https://blog.naoty.dev/398/"/>
     <summary>&lt;p&gt;Mistel社の&lt;a href=&quot;https://www.archisite.co.jp/products/mistel/barocco-md770/&quot;&gt;BAROCCO MD770&lt;/a&gt;という左右分離式のキーボードを買った。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;box.jpg&quot; alt=&quot;箱&quot;&gt;&lt;br&gt;
-&lt;img src=&quot;keyboard.png&quot; alt=&quot;MD770&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;box.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;box.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;箱&lt;/figcaption&gt;&lt;/figure&gt;&lt;br&gt;
+&lt;figure&gt;&lt;a href=&quot;keyboard.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;keyboard.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;MD770&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;写真が雑すぎる。&lt;/p&gt;
 &lt;p&gt;1/30に発売されて急いで買いに行ったけど、すでに静音赤軸や茶軸は売り切れていたので、赤軸を買った。家で使っているHHKB professional BTに近い打ち心地で音も気にならないので不満はない。新卒の頃から使っていたHHKB Lite2とはここでお別れだ。&lt;/p&gt;
 &lt;h1&gt;気になったこと&lt;/h1&gt;
@@ -1903,10 +1903,10 @@ if [plan] = &quot;free&quot; then [payment] = &quot;-&quot;;
     <id>https://blog.naoty.dev/397/</id>
     <link href="https://blog.naoty.dev/397/"/>
     <summary>&lt;p&gt;HHKBのキーキャップが売っているとのことで、はじめて遊舎工房に行ってみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;yushakobo.jpg&quot; alt=&quot;遊舎工房&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;yushakobo.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;yushakobo.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;はじめての遊舎工房&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;6000円くらいしたけど、せっかくなので買い替えてみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;before.jpg&quot; alt=&quot;before&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;after.jpg&quot; alt=&quot;after&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;before.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;before.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;before&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;after.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;after.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;after&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;space、enter、escキーが橙色になった。それ以外のキーはほとんど色味は変わってない。&lt;/li&gt;
 &lt;li&gt;キーが見やすくなった。丸みのあるフォントで太字になった。&lt;/li&gt;
@@ -2051,7 +2051,7 @@ Splits: 17 total, 17 done (100.00%)
 &lt;p&gt;これまでは日報ファイルの中に各作業のメモを残していたけど、今後は逆に作業ファイルの中に日報を書くスタイルにした。この方が後で見返しやすかった。&lt;/p&gt;
 &lt;h1&gt;新しいTODO管理ツール&lt;/h1&gt;
 &lt;p&gt;作業ファイルを読み取って表示するTUIベースのツールを開発している。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;task.gif&quot; alt=&quot;task&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;task.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;task.gif&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;TUIの様子&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;まだ機能は不足しているけど、ファイルの変更を自動的に反映する機能をがんばって作り込んだ結果、使えないこともないくらいのレベルにはなった。&lt;/p&gt;</summary>
     <title>作業ファイルという習慣</title>
     <updated>2019-12-27T21:08:00+00:00</updated>
@@ -2294,7 +2294,7 @@ Total: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
 &lt;strong&gt;通知しない&lt;/strong&gt;：知る必要のない情報の通知&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;設定アプリから通知頻度の多い順にアプリを並べて、通知頻度が高い項目を上のような方針で設定を更新したところ、無意味な通知に煩わされることがまったくなくなった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;notifications.png&quot; alt=&quot;頻度が高い通知一覧&quot;&gt;&lt;/p&gt;</summary>
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;notifications.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;notifications.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;頻度が高い通知一覧&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;</summary>
     <title>inboxと通知の整理</title>
     <updated>2019-10-19T20:01:00+00:00</updated>
     <dc:date>2019-10-19T20:01:00+00:00</dc:date>
@@ -2303,7 +2303,7 @@ Total: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
     <id>https://blog.naoty.dev/386/</id>
     <link href="https://blog.naoty.dev/386/"/>
     <summary>&lt;p&gt;このホームページがOSのダークモードをサポートした。macOSとAndroidで動作確認した。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;dark-theme.gif&quot; alt=&quot;ダークテーマ&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;dark-theme.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;dark-theme.gif&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;ダークテーマが切り替わる様子&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;ダークモードをサポートするには、以下のようにメディアクエリを使ってダークモードで適用するスタイルを指定する。&lt;/p&gt;
 &lt;pre lang=&quot;css&quot; class=&quot;highlight highlight-css&quot;&gt;&lt;span class=&quot;k&quot;&gt;@media&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefers-color-scheme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dark&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -2576,7 +2576,7 @@ $ node dist/bundle.js
 &lt;code&gt;Fn + q&lt;/code&gt;を押す。そうすると、HHKB-BTは接続が切れてペアリングモードになる。&lt;/li&gt;
 &lt;li&gt;接続したいMacのbluetoothの設定からHHKB-BTをクリックすると接続される。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&quot;bluetooth.png&quot; alt=&quot;bluetooth&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;bluetooth.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;bluetooth.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;bluetoothの設定&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;毎回PCをシャットダウンしてたのはなんだったんだろう。もっと早く知っておくべきだった。&lt;/p&gt;</summary>
     <title>HHKB-BTの接続先切り替え</title>
     <updated>2019-09-07T23:33:00+09:00</updated>
@@ -3624,7 +3624,7 @@ Default Collection
 &lt;ul&gt;
 &lt;li&gt;GitHubの&lt;a href=&quot;https://help.github.com/en/articles/setting-up-an-apex-domain#configuring-a-records-with-your-dns-provider&quot;&gt;ヘルプ&lt;/a&gt;に書いてある通りにやる。Google Domainsで設定する場合は、Aレコードを設定すればいい。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;google-domains.png&quot; alt=&quot;google domains&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;google-domains.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;google-domains.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;google domains&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;気長に待つ。&lt;/li&gt;
 &lt;/ul&gt;
@@ -3685,7 +3685,7 @@ Default Collection
     <id>https://blog.naoty.dev/360/</id>
     <link href="https://blog.naoty.dev/360/"/>
     <summary>&lt;p&gt;相変わらずUnityでVRゲームを作っている。自分を前後左右に移動させるスクリプトの書き方を学んだ。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;walk.gif&quot; alt=&quot;walk&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;walk.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;walk.gif&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;VR空間を歩いている様子&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;まず、一人称のプレイヤーを制御するには&lt;code&gt;CharacterController&lt;/code&gt;というコンポーネントを使う。これは&lt;code&gt;RigidBody&lt;/code&gt;のような物理特性を持たない、つまり重力のような力の影響を受けないけど、衝突判定を持ち、段差や斜面を移動できるような特性を持つ。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;CharacterController&lt;/code&gt;コンポーネントを持つGame Objectに以下のようなスクリプトを追加する。&lt;/p&gt;
 &lt;pre lang=&quot;csharp&quot; class=&quot;highlight highlight-csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Walk&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MonoBehaviour&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -3717,7 +3717,7 @@ Default Collection
     <id>https://blog.naoty.dev/359/</id>
     <link href="https://blog.naoty.dev/359/"/>
     <summary>&lt;p&gt;昨年末にOculus Goを買ってからVRゲームをいくつかやっているんだけど、自分でも作ってみたくなってきたので、UnityでVRゲームを作る勉強を始めた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;hello_unity.jpg&quot; alt=&quot;hello unity&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;hello_unity.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;hello_unity.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;Hello, Unity!&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;いまのところ&lt;a href=&quot;https://www.oreilly.co.jp/books/9784873117577/&quot;&gt;UnityによるVRアプリケーション開発&lt;/a&gt;という本を写経している。この本はOculus Goがまだなかった2016年の本だけど、ちゃんと動作している。&lt;/p&gt;
 &lt;p&gt;Oculus GoはAndroid端末なので、ビルドのための準備はそこまで苦労しなかった。ビルドのセットアップの具体的な手順はググると出てくるので、それでうまくいった。&lt;/p&gt;
 &lt;p&gt;スクリーンショットやスクリーンキャストは&lt;code&gt;/storage/self/primary/oculus/Screenshots/&lt;/code&gt;や&lt;code&gt;/storage/self/primary/oculus/VideoShots/&lt;/code&gt;にあって&lt;code&gt;adb pull&lt;/code&gt;コマンドで取得できる。&lt;/p&gt;</summary>
@@ -3889,7 +3889,7 @@ Default Collection
   <entry>
     <id>https://blog.naoty.dev/355/</id>
     <link href="https://blog.naoty.dev/355/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;thread.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;thread.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;thread.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;スレッド&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Slackへの通知をスレッド化するため、&lt;a href=&quot;https://github.com/naoty/slack-thread-webhook&quot;&gt;naoty/slack-thread-webhook&lt;/a&gt;という簡単なプロキシをGoで作った。&lt;/p&gt;
 &lt;h1&gt;作った理由&lt;/h1&gt;
 &lt;p&gt;CIからの通知をSlackに送るようにしていると、CIからの通知でchannelが埋まってしまうようなことがよくあると思う。しかも、複雑な処理をCI上で行うと、細かく分解されたジョブから大量の通知が来るようになる。そこで、こういった簡単なプロキシを作って同じworkflowの通知をスレッドにまとめようと考えた。&lt;/p&gt;
@@ -3923,7 +3923,7 @@ EOS
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;どうやって始めるのか&lt;/h1&gt;
 &lt;p&gt;Herokuで簡単に動かせるようにHeroku buttonを作った（ブログのCSSででかくなっちゃったけど面倒だからこのまま）。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://heroku.com/deploy&quot;&gt;&lt;img src=&quot;https://www.herokucdn.com/deploy/button.svg&quot; alt=&quot;Deploy&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://heroku.com/deploy&quot;&gt;&lt;img src=&quot;https://www.herokucdn.com/deploy/button.svg&quot; alt=&quot;Deploy&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;また、Docker HubにDockerイメージを公開しているので、ECS等で動かす場合にはこちらを使うとセットアップしやすいと思う。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://hub.docker.com/r/naoty/slack-thread-webhook&quot;&gt;https://hub.docker.com/r/naoty/slack-thread-webhook&lt;/a&gt;&lt;/p&gt;</summary>
     <title>スレッド化できるSlack webhookを作った</title>
@@ -3957,7 +3957,7 @@ EOS
     <link href="https://blog.naoty.dev/353/"/>
     <summary>&lt;p&gt;このブログはGatsby.jsでビルドしてGitHub Pagesにホスティングしているんだけど、ビルドするために必要なライブラリを&lt;a href=&quot;https://dependabot.com/&quot;&gt;dependabot&lt;/a&gt;を使って自動的にアップデートするようにしたところ、とても快適になった。&lt;/p&gt;
 &lt;p&gt;dependabotはOSSであれば無料で使うことができる。設定したスケジュールに従ってライブラリのアップデートが存在すれば以下のような感じでPull requestを自動的に送ってくれる。&lt;/p&gt;
-&lt;p&gt;![pull requestspull_requests.png)&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;pull_requests.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;pull_requests.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;dependabotが送ってきたPull Request&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;さらにとてもよかったのが、マイナーアップデートであれば自動的にPull requestをmergeするといった、auto mergeの条件を細かく設定できたことだ。これによって大幅に運用の手間が抑えられる。&lt;/p&gt;
 &lt;p&gt;このブログでは、&lt;code&gt;package.json&lt;/code&gt;で指定したversion specifierに従ったアップデートは自動的にmergeするようにし、そうでないメジャーアップデートなどは手動でmergeするようにしている。ちょうどさきほど&lt;a href=&quot;https://emotion.sh/&quot;&gt;emotion&lt;/a&gt;のメジャーアップデートを手動でmergeしていたところだった。breaking changeを含んでいたため、auto mergeにしないで正解だった。&lt;/p&gt;
 &lt;p&gt;ライブラリのアップデートは忘れがちで、気づいたときにアップデートしようとすると大幅な変更を余儀なくなってしまう。GitHub Pagesで自分のページを運用している開発者にはdependabotのようなサービスをオススメしたい。&lt;/p&gt;</summary>
@@ -4040,7 +4040,7 @@ EOS
     <link href="https://blog.naoty.dev/351/"/>
     <summary>&lt;p&gt;3年ほど使っていたiPhone 6からPixel 3に乗り換えた。&lt;/p&gt;
 &lt;p&gt;ずっと小型のiPhoneが出るのを待っていたけどまったく出なかったので、iPhone 3GS以来ずっと使っていたiOSからAndroidに移行した。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;pixel3.jpg&quot; alt=&quot;pixel3&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;pixel3.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;pixel3.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;Pixel 3&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;また、これを機に7年ほど契約していたauからLINE mobileに移った。公式には動作確認済み端末には載っていなかったけど、ちゃんと動作した。&lt;/p&gt;
 &lt;p&gt;LINE mobileを選んだ理由としては、回線速度に対してネットの評判がそこまで悪くなかったのと、料金体系がシンプルで分かりやすくて好印象だったのがある。&lt;/p&gt;</summary>
     <title>Pixel 3に乗り換えた</title>
@@ -4051,7 +4051,7 @@ EOS
     <id>https://blog.naoty.dev/350/</id>
     <link href="https://blog.naoty.dev/350/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;https://github.com/naoty/batch_rollback&quot;&gt;naoty/batch_rollback&lt;/a&gt;というrubygemを書いた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;screencast.gif&quot; alt=&quot;screencast&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;screencast.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;screencast.gif&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;様子&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;これは&lt;code&gt;db:migrate&lt;/code&gt;でmigrateしたversionやステップ数を記録しておいて、&lt;code&gt;db:rollback&lt;/code&gt;でまとめてrollbackできるようにする。&lt;/p&gt;
 &lt;h1&gt;モチベーション&lt;/h1&gt;
 &lt;p&gt;このrubygemを書いた動機としては、ロールバックを安全に自動化したかった。Railsアプリケーションをロールバックするには&lt;code&gt;rails db:rollback&lt;/code&gt;を行うことになるが、そのとき問題になるのは&lt;code&gt;STEP&lt;/code&gt;をいくつにするかということがある。リリース時に&lt;code&gt;db:migrate&lt;/code&gt;したmigrationファイルがいくつあったかはリリースごとに異なるため、ロールバックを自動化する上で問題になる。&lt;/p&gt;
@@ -4458,7 +4458,7 @@ EOS
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylimit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;meshgrid.png&quot; alt=&quot;meshgrid&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;meshgrid.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;meshgrid.png&quot; alt=&quot;meshgrid&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;上のように&lt;code&gt;np.meshgrid()&lt;/code&gt;を使うと、2つの配列&lt;code&gt;x1&lt;/code&gt;と&lt;code&gt;x2&lt;/code&gt;からなる平面上にある格子点を取得できる。&lt;/p&gt;
 &lt;p&gt;この格子点の間隔を小さくすると、&lt;code&gt;x1&lt;/code&gt;と&lt;code&gt;x2&lt;/code&gt;からなる平面上の「すべての点」を擬似的に再現できる。&lt;/p&gt;
 &lt;pre lang=&quot;python&quot; class=&quot;highlight highlight-python&quot;&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -4466,7 +4466,7 @@ EOS
 
 &lt;span class=&quot;c1&quot;&gt;# 以下同じ
 &lt;/span&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;dense_meshgrid.png&quot; alt=&quot;dense meshgrid&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;dense_meshgrid.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;dense_meshgrid.png&quot; alt=&quot;dense meshgrid&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;格子点の変換&lt;/h2&gt;
 &lt;p&gt;ある平面上の「すべての点」を分類器に適用すると、平面上に分類した結果をマッピングできるようになる。&lt;/p&gt;
 &lt;p&gt;そのために格子点をトレーニングデータの形状に変換する。つまり、$(x_1, x_2)$のようにする。&lt;/p&gt;
@@ -4495,7 +4495,7 @@ EOS
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'x2'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;decision_regions.png&quot; alt=&quot;decision regions&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;decision_regions.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;decision_regions.png&quot; alt=&quot;decision regions&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;（上図は適当な関数を適用しただけです）&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;plt.contourf()&lt;/code&gt;は等高線図を引きつつ、領域を塗りつぶしてくれるので決定境界をプロットするのに便利。&lt;/p&gt;</summary>
     <title>決定境界のプロット</title>
@@ -4516,9 +4516,9 @@ EOS
     <id>https://blog.naoty.dev/337/</id>
     <link href="https://blog.naoty.dev/337/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;https://naoty.github.io/posts/29.html&quot;&gt;CourseraのMachine Learningを受講しはじめた&lt;/a&gt;で書いた通り、5月からCourseraでMachine Learningのコースを受講していたけど、今日無事に11週間にわたるレッスンを終え修了することができた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;thank_you_from_andrew_ng.png&quot; alt=&quot;thank you from Andrew Ng&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;thank_you_from_andrew_ng.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;thank_you_from_andrew_ng.png&quot; alt=&quot;thank you from Andrew Ng&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;1週間で1 week分のレクチャーと課題をこなしていったけど、無理のないペースでなんとか続けることができた。Togglを使って勉強時間を計測した結果、合計で55時間かけていた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;toggl.png&quot; alt=&quot;toggl&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;toggl.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;toggl.png&quot; alt=&quot;toggl&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;勉強中はJupyter NotebookにMarkdownとLaTeXでメモをとったり、計算が必要なときはノート（物理）に数式や行列を書いてみたりしていた。ほぼ毎週あるQuizやプログラミングの課題はちゃんと理解していないと合格できないレベルになっていてかなり苦しめられた。でも、手を動かすことで着実に理解を深めることができた。&lt;/p&gt;
 &lt;p&gt;それぞれの機械学習のアルゴリズム（線形回帰、ロジスティック回帰、ニューラルネットワーク、SVM等）は本などで学習することは可能だけど、このコースではそれだけに留まらず、実務の現場で必要となるタスク全般を理解できたのが特によかった。例えば、教授がよく言っていたけど、貴重なエンジニアのリソースをムダにしないために何に時間を使うべきかを把握することが重要だと言っていて、そのために学習曲線をプロットしたり、シーリング分析を行ったりするような話は学習できて本当によかったと思う。&lt;/p&gt;
 &lt;p&gt;今後はPythonを使って機械学習のアルゴリズムを実装できるようになりたいので、よさげな技術書で勉強したりKaggleに挑戦してみたりしたいと思う。&lt;/p&gt;</summary>
@@ -4683,7 +4683,7 @@ aws ecs &lt;span class=&quot;nb&quot;&gt;wait &lt;/span&gt;tasks-stopped &lt;spa
     <id>https://blog.naoty.dev/330/</id>
     <link href="https://blog.naoty.dev/330/"/>
     <summary>&lt;p&gt;数ヶ月前から開発するときに作業メモをとりながら開発をするようにしている。スクショのようにエディタを上下に分割して上で作業しながら下でメモをとっている。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;atom.png&quot; alt=&quot;atom.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;atom.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;atom.png&quot; alt=&quot;atom.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;作業メモという習慣を数ヶ月続けてみていいことが多かった。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;デバッグするときは、どこにバグがあるか仮説を作業メモにとりながら進める。頭の中だけでこれを行うのはけっこう大変で、脳のメモリが食いつぶされるのを感じる。&lt;/li&gt;
@@ -5172,12 +5172,12 @@ SyntaxError: Unexpected token import
 &lt;/ol&gt;
 &lt;p&gt;以下では、画像のアップロード先としてS3を想定する。また、画像のリサイズについては、画像リクエスト時にリサイズする方法などを考慮に加えると論点が発散しそうなので、いったん保留する。&lt;/p&gt;
 &lt;h1&gt;同期アップロード&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;synchronous-upload.png&quot; alt=&quot;同期アップロードのシーケンス図&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;synchronous-upload.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;synchronous-upload.png&quot; alt=&quot;同期アップロードのシーケンス図&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;同期アップロードは、リクエストを受け取ったサーバーがS3に画像をアップロードするまでクライアントを待たせる。&lt;/p&gt;
 &lt;p&gt;そのため、非常に大きい画像や複数の画像をアップロードした場合、レスポンスタイムが非常に長くなることが予想できる。通常、Webサーバーはリクエストボディのサイズに上限を設定したり、リクエストのタイムアウト時間を設定しているため、そのようなリクエストはタイムアウトになってしまうだろう。&lt;/p&gt;
 &lt;p&gt;同期アップロードの実装は非同期アップロードに比べると簡単だし、非同期処理に伴う問題もない。だから、社内システムのようにユーザーを待たせても問題がない場合は同期アップロードを採用してもいいと思う。だけど、UI/UXが非常に悪いため、ユーザーが使う機能の実装としては採用できないと思う。&lt;/p&gt;
 &lt;h1&gt;非同期アップロード&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;asynchronous-upload.png&quot; alt=&quot;非同期アップロードのシーケンス図&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;asynchronous-upload.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;asynchronous-upload.png&quot; alt=&quot;非同期アップロードのシーケンス図&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;非同期アップロードは、リクエストを受け取ったサーバーとは別のワーカープロセスがバックグラウンドで画像をアップロードする。そのため、クライアントがレスポンスを受け取った時点ではアップロードが完了していない可能性がある。&lt;/p&gt;
 &lt;p&gt;同期アップロードと比べると、レスポンスタイムが改善され、複数の画像をアップロードすることも可能になる。しかし、非同期アップロードを実装するにあたり、考えなくてはいけないことがいくつかある。&lt;/p&gt;
 &lt;ul&gt;
@@ -5187,7 +5187,7 @@ SyntaxError: Unexpected token import
 &lt;/ul&gt;
 &lt;p&gt;それぞれの論点は、それだけで十分に1つの記事になりうるため、ここでは論点を挙げるだけに留めておきたい。&lt;/p&gt;
 &lt;h1&gt;ダイレクトアップロード&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;direct-upload.png&quot; alt=&quot;ダイレクトアップロードのシーケンス図&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;direct-upload.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;direct-upload.png&quot; alt=&quot;ダイレクトアップロードのシーケンス図&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;ダイレクトアップロードは、クライアントからサーバーを介さずに直接S3にアップロードし、完了後にファイルパスなどの情報のみサーバーに送る。&lt;/p&gt;
 &lt;p&gt;この方法でも、同期アップロードのようにクライアントを待たせるようなことはなく、複数の画像をアップロードできる。さらに、非同期アップロードのような複雑なアーキテクチャも必要がないため、スマートな方法のように思える。&lt;/p&gt;
 &lt;p&gt;この場合、画像をサーバーで処理できないため、画像のファイル形式の検証やウイルススキャンなどをクライアントで行う必要がある。アプリであればiOSとAndroid両方で実装が必要になるため、全体の実装工数は3つの実装パターンの中で最も大きいかもしれない。&lt;/p&gt;</summary>
@@ -5198,7 +5198,7 @@ SyntaxError: Unexpected token import
   <entry>
     <id>https://blog.naoty.dev/312/</id>
     <link href="https://blog.naoty.dev/312/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;todo.gif&quot; alt=&quot;次のtodoをtmuxのstatus lineに表示する&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;todo.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;todo.gif&quot; alt=&quot;次のtodoをtmuxのstatus lineに表示する&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/todo&quot;&gt;naoty/todo&lt;/a&gt;に改良して、上のスクリーンキャストのようにtmuxのstatus lineに次のtodoを表示できるようにしてみた。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;next&lt;/code&gt;というコマンドを追加し、最も優先順位の高いtodoを表示できるようにした。また、&lt;code&gt;done&lt;/code&gt;コマンドに引数を指定しない場合に&lt;code&gt;next&lt;/code&gt;で表示されるtodoを完了できるようにした。&lt;code&gt;done&lt;/code&gt;コマンドなどで次のtodoが変わっても、tmuxが自動的に更新してくれるのですぐに切り替わる。&lt;/p&gt;
 &lt;p&gt;iTerm2の画面分割を使っていたためtmuxは使ってこなかったが、status lineに次のtodoを表示するアイデアを思いついたため使い始めた。この使い方によって、次にやることを&lt;code&gt;list&lt;/code&gt;コマンドで何度も確認する必要がなくなったし、次にやるべきことのみに集中できるため、とてもいい。&lt;/p&gt;
@@ -5562,13 +5562,13 @@ if-shell 'which todo' 'set-option -g status-right &quot;next: #(todo next)&quot;
 &lt;li&gt;CSSを書く際に、モバイルファーストを念頭にまずスマホ表示を前提に書き始めた。そして、画面を広げながら、余白が気になる部分でメディアクエリを使って広い画面向けのスタイルを追加している。&lt;/li&gt;
 &lt;li&gt;最終的なHTMLは圧縮している。ここらへん、できる限りファイルサイズを抑えてパフォーマンスを最適化しようとしている。結果的に、PageSpeed Insightsでほぼ100点をとれるようになった。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;pagespeed-insights.png&quot; alt=&quot;pagespeed-insights&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;pagespeed-insights.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;pagespeed-insights.png&quot; alt=&quot;pagespeed-insights&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;ファイル名をURLに使おうとすると、濁点や半濁点を含むファイル名が表示できなくなることがある。これは、macOSのファイル名はUTF-8-MACと呼ばれるエンコーディングが使われているためで、濁点や半濁点が通常のUTF-8と異なるために起きているらしい。&lt;/li&gt;
 &lt;li&gt;ファイル名には自然数を使うようにし、タイトルはfront matterで指定するようにした。front matterでは、タイトルの他に&lt;code&gt;description&lt;/code&gt;や&lt;code&gt;og:image&lt;/code&gt;を設定できるようにした。&lt;/li&gt;
 &lt;li&gt;Lighthouseを参考にmanifest.jsonを書くなどPWAの要件を満たすようにした。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;lighthouse.png&quot; alt=&quot;lighthouse&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;lighthouse.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;lighthouse.png&quot; alt=&quot;lighthouse&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;a href=&quot;https://github.com/naoty/homepage&quot;&gt;naoty/homepage&lt;/a&gt;のpublicディレクトリをgitサブモジュールにして&lt;a href=&quot;https://github.com/naoty/naoty.github.io&quot;&gt;naoty/naoty.github.io&lt;/a&gt;にpushするようにしている。&lt;/li&gt;
@@ -6370,9 +6370,9 @@ $ brew install flock
 &lt;pre&gt;&lt;code&gt;$ flock &amp;lt;directory&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;試しに &lt;a href=&quot;https://github.com/Alamofire/Alamofire&quot;&gt;Alamofire&lt;/a&gt; で flock を試してみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313230437.png&quot; alt=&quot;f:id:naoty_k:20170313230437p:plain&quot; title=&quot;f:id:naoty_k:20170313230437p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313230437.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313230437.png&quot; alt=&quot;f:id:naoty_k:20170313230437p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20170313230437p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;横長になってしまうので、一部を切り取った。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313231019.png&quot; alt=&quot;f:id:naoty_k:20170313231019p:plain&quot; title=&quot;f:id:naoty_k:20170313231019p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313231019.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20170313/20170313231019.png&quot; alt=&quot;f:id:naoty_k:20170313231019p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20170313231019p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;コードの依存関係がハッキリと把握できるようになった。&lt;/p&gt;
 &lt;h1&gt;How it works&lt;/h1&gt;
 &lt;p&gt;Objective-C では &lt;a href=&quot;https://github.com/nst/objc_dep&quot;&gt;nst/objc_dep&lt;/a&gt; というツールがあった。これはシンプルな Python によるスクリプトでありながら、コードベースを把握する上で強力なツールだった。しかし、 Swift は Objective-C よりも文法がはるかに複雑なため、正規表現で依存関係を抽出するのは困難だ。&lt;/p&gt;
@@ -6512,7 +6512,7 @@ Released on 2016-12-20.
     <link href="https://blog.naoty.dev/288/"/>
     <summary>&lt;p&gt;iOS開発で頭を悩ます問題のひとつに、コード署名や証明書の問題がある。&lt;code&gt;Code Signing Error&lt;/code&gt;などのような単語で検索すると、どのように問題を解決するのか、どのような手順で証明書を発行しXcodeに設定するのか、といった情報がたくさん返ってくる。しかし、コード署名とは何か、証明書とは何か、といった根本的な疑問に答えているサイトは少ないように思える。コード署名や証明書はチーム開発において致命的な問題につながることもあり、十分な理解の上で慎重に運用すべきものであると思う。&lt;/p&gt;
 &lt;p&gt;そこで、僕はこちらの本を読み、署名や証明書といったものを理解した。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797382228/naotoknk-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51V6l3panVL._SL160_.jpg&quot; alt=&quot;暗号技術入門 第3版 秘密の国のアリス&quot; title=&quot;暗号技術入門 第3版 秘密の国のアリス&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797382228/naotoknk-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51V6l3panVL._SL160_.jpg&quot; alt=&quot;暗号技術入門 第3版 秘密の国のアリス&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;暗号技術入門 第3版 秘密の国のアリス&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797382228/naotoknk-22/&quot;&gt;暗号技術入門 第3版 秘密の国のアリス&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 結城浩&lt;/li&gt;
@@ -6712,7 +6712,7 @@ Date() + (3.hours - 30.minutes)
   <entry>
     <id>https://blog.naoty.dev/282/</id>
     <link href="https://blog.naoty.dev/282/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160317/20160317020138.gif&quot; alt=&quot;f:id:naoty_k:20160317020138g:plain&quot; title=&quot;f:id:naoty_k:20160317020138g:plain&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160317/20160317020138.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160317/20160317020138.gif&quot; alt=&quot;f:id:naoty_k:20160317020138g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20160317020138g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/clr&quot;&gt;naoty/clr&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;clr&lt;/code&gt;というコマンドラインツールをSwiftで書いた。上のスクリーンキャストにあるようにXcodeで使うカラーパレットをターミナルから作成できる。&lt;/p&gt;
 &lt;p&gt;近年ではStoryboard（かつてはXib）がどんどん進化しているので、見た目に関する設定はコードじゃなくてStoryboardに任せたいなという気持ちがある。特に色については、コードでやろうと思うと&lt;code&gt;UIColor&lt;/code&gt;のextensionをひとつひとつ書いていく感じになると思うけど、カラーパレットを自作する手もあるなということに最近気づいた。カラーパレットを使うと2、3回クリックするだけで色を指定できるから簡単だと思う。&lt;/p&gt;
@@ -7036,7 +7036,7 @@ let sort = AnySort.Descending(key: &quot;weight&quot;) &amp;gt; AnySort.Descendi
 &lt;/ul&gt;
 &lt;p&gt;ちょうどいま直面していた課題に関わるようなトピックもあり、セッション後のQ&amp;amp;Aコーナーでスピーカーに話しかけて、ペアプロまでしてもらった。おかげでその課題はすっきり解決できた。&lt;/p&gt;
 &lt;p&gt;今回のtry! Swiftで最大の収穫は、英語を本格的に学ぼうと思うきっかけがあったことだった。それは、try! Swift公式アプリで&lt;a href=&quot;https://github.com/naoty/Timepiece&quot;&gt;自分のライブラリ&lt;/a&gt;が使われていたことだった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160307/20160307003947.png&quot; alt=&quot;f:id:naoty_k:20160307003947p:plain&quot; title=&quot;f:id:naoty_k:20160307003947p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160307/20160307003947.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160307/20160307003947.png&quot; alt=&quot;f:id:naoty_k:20160307003947p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20160307003947p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;公式アプリの開発者の方と直接お話しする機会があった。本当はもっと伝えたいことがあったのだけど、あまりに英語ができなくて、ほとんど伝えられなかった。このライブラリのように海外の開発者に伝えられるコンテンツをもてるようになったものの、肝心の英語ができないばかりに非常にもったいないなーと強く感じた。それがきっかけで先月から英語を勉強しはじめている。&lt;/p&gt;</summary>
     <title>try! Swiftに参加してきた</title>
     <updated>2016-03-07T00:49:00+00:00</updated>
@@ -7188,21 +7188,21 @@ struct HeaderSequence: SequenceType {
 &lt;pre&gt;&lt;code&gt;let alert = Alert.Confirmation(error)
 presentViewController(alert.viewController, animated: true, completion: nil)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000628.png&quot; alt=&quot;f:id:naoty_k:20160216000628p:plain&quot; title=&quot;f:id:naoty_k:20160216000628p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000628.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000628.png&quot; alt=&quot;f:id:naoty_k:20160216000628p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20160216000628p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;let recovery = Alert.Recovery(name: &quot;Recover&quot;, style: .Nondestructive) { action in
     print(&quot;Recover!!&quot;)
 }
 let alert = Alert.Suggestion(error, recovery)
 presentViewController(alert.viewController, animated: true, completion: nil)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216001159.png&quot; alt=&quot;f:id:naoty_k:20160216001159p:plain&quot; title=&quot;f:id:naoty_k:20160216001159p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216001159.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216001159.png&quot; alt=&quot;f:id:naoty_k:20160216001159p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20160216001159p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;let recovery = Alert.Recovery(name: &quot;Recover&quot;, style: .Destructive) { action in
     print(&quot;Recover!!&quot;)
 }
 let alert = Alert.Suggestion(error, recovery)
 presentViewController(alert.viewController, animated: true, completion: nil)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000952.png&quot; alt=&quot;f:id:naoty_k:20160216000952p:plain&quot; title=&quot;f:id:naoty_k:20160216000952p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000952.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20160216/20160216000952.png&quot; alt=&quot;f:id:naoty_k:20160216000952p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20160216000952p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h1&gt;まとめ&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;HIGに沿って実装するとユーザーフレンドリーなアラートになる（はず）。&lt;/li&gt;
@@ -7535,7 +7535,7 @@ end
   <entry>
     <id>https://blog.naoty.dev/271/</id>
     <link href="https://blog.naoty.dev/271/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113075/naotoknk-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51jWtxU0sAL._SL160_.jpg&quot; alt=&quot;エンジニアのための時間管理術&quot; title=&quot;エンジニアのための時間管理術&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113075/naotoknk-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51jWtxU0sAL._SL160_.jpg&quot; alt=&quot;エンジニアのための時間管理術&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;エンジニアのための時間管理術&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113075/naotoknk-22/&quot;&gt;エンジニアのための時間管理術&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Thomas A. Limoncelli,株式会社クイープ&lt;/li&gt;
@@ -7847,7 +7847,7 @@ Hello, world!
 &lt;p&gt;Heroku schedulerのダッシュボードで&lt;code&gt;sweep&lt;/code&gt;を実行するタイミングを設定する。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;a href=&quot;https://heroku.com/deploy?template=https://github.com/naoty/sweep&quot;&gt;&lt;img src=&quot;https://www.herokucdn.com/deploy/button.png&quot; alt=&quot;Deploy&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://heroku.com/deploy?template=https://github.com/naoty/sweep&quot;&gt;&lt;img src=&quot;https://www.herokucdn.com/deploy/button.png&quot; alt=&quot;Deploy&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h1&gt;所感&lt;/h1&gt;
 &lt;p&gt;先日、Herokuが公式にGoをサポートしたので、さっそくテストを兼ねてこういうものをGoで書いてみた。&lt;a href=&quot;https://github.com/tools/godep&quot;&gt;tools/godep&lt;/a&gt;の使い方を覚えなくてはいけないことを除けば、いつもどおりにHerokuにアプリケーションをデプロイできた。&lt;/p&gt;
 &lt;p&gt;個人的にちょっとしたCLIツールをGoで書くことが増えたが、ちょっとしたジョブを定期実行させるときにGoでちょっとしたツールを書いてHeroku schedulerにやらせるという手法は非常にお手軽なので今後も機会がありそうだなと思った。&lt;/p&gt;</summary>
@@ -7914,7 +7914,7 @@ $ hot
   <entry>
     <id>https://blog.naoty.dev/263/</id>
     <link href="https://blog.naoty.dev/263/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B009RO80XY/naotoknk-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51pYSdnkuNL._SL160_.jpg&quot; alt=&quot;すごいHaskellたのしく学ぼう！&quot; title=&quot;すごいHaskellたのしく学ぼう！&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B009RO80XY/naotoknk-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51pYSdnkuNL._SL160_.jpg&quot; alt=&quot;すごいHaskellたのしく学ぼう！&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;すごいHaskellたのしく学ぼう！&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B009RO80XY/naotoknk-22/&quot;&gt;すごいHaskellたのしく学ぼう！&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Miran Lipovaca&lt;/li&gt;
@@ -8052,7 +8052,7 @@ $ todo list
   <entry>
     <id>https://blog.naoty.dev/259/</id>
     <link href="https://blog.naoty.dev/259/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/2f5da814-dcc9-3fde-7c10-a4cb379174e5.png&quot; alt=&quot;スクリーンショット 2015-04-17 11.55.02.png&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/2f5da814-dcc9-3fde-7c10-a4cb379174e5.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/2f5da814-dcc9-3fde-7c10-a4cb379174e5.png&quot; alt=&quot;スクリーンショット 2015-04-17 11.55.02.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;Preferences &amp;gt; Vim Emulation&lt;/code&gt;から上のキャプチャのような画面にVimとIDEで衝突しているキーマップを表示してくれる。右の&lt;code&gt;Handler&lt;/code&gt;の列でVimとIDEどちらに割り当てるか設定できる。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;Ctrl-r&lt;/code&gt;, &lt;code&gt;Ctrl-d&lt;/code&gt;でアプリケーションを実行したかったのにVimのキーマップが実行されるのがちょっとストレスだったので修正した。&lt;/p&gt;</summary>
     <title>IdeaVimでキーマップが衝突した場合の対応</title>
@@ -8079,7 +8079,7 @@ $ todo list
 &lt;li&gt;ビルドしたイメージを&lt;code&gt;docker run -P -d&lt;/code&gt;して、コンテナを起動する。&lt;/li&gt;
 &lt;li&gt;コンテナのホスト側ポート（例: &lt;code&gt;49154&lt;/code&gt;）を調べて、oasisへのアクセスを&lt;code&gt;--container-host&lt;/code&gt;で指定されたホスト上のコンテナ（例: &lt;code&gt;192.168.99.100:49154&lt;/code&gt;）にリダイレクトする。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150409/20150409225939.png&quot; alt=&quot;f:id:naoty_k:20150409225939p:plain&quot; title=&quot;f:id:naoty_k:20150409225939p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150409/20150409225939.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150409/20150409225939.png&quot; alt=&quot;f:id:naoty_k:20150409225939p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20150409225939p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;実際にOSXで試す場合は、&lt;code&gt;--proxy 127.0.0.1:8080&lt;/code&gt;のようなオプションで起動して、サブドメインの解決を&lt;a href=&quot;http://pow.cx/manual.html&quot;&gt;Pow&lt;/a&gt;に任せるといいと思う。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;% cd ~/.pow
 % echo 8080 &amp;gt; oasis
@@ -8481,7 +8481,7 @@ disable_dependency_loading
     <id>https://blog.naoty.dev/255/</id>
     <link href="https://blog.naoty.dev/255/"/>
     <summary>&lt;p&gt;リモートワークのときでも勤務時間を自動的に記録するため、botに発言時間を監視させ、だいたいの勤務時間を記録させるようにした。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150313/20150313220454.png&quot; alt=&quot;f:id:naoty_k:20150313220454p:plain&quot; title=&quot;f:id:naoty_k:20150313220454p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150313/20150313220454.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150313/20150313220454.png&quot; alt=&quot;f:id:naoty_k:20150313220454p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20150313220454p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;いま使っているbotは&lt;a href=&quot;https://github.com/r7kamura/ruboty&quot;&gt;r7kamura/ruboty&lt;/a&gt;製で、これに機能を追加するプラグインを書いた。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/ruboty-timecard&quot;&gt;naoty/ruboty-timecard&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;このプラグインは発言者ごとに発言時間を記録する。&lt;/p&gt;
@@ -8511,8 +8511,8 @@ if let birthday = &quot;1987-06-02&quot;.dateFromFormat(&quot;yyyy-MM-dd&quot;) 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;code&gt;NSDateFormatter&lt;/code&gt;をいちいち初期化するのが面倒だったので、これを内部的に呼び出す直感的なメソッドを追加した。フォーマット文字列は同じ。&lt;/p&gt;
 &lt;h1&gt;オーバーロードの追加&lt;/h1&gt;
-&lt;p&gt;Before: &lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301145950.png&quot; alt=&quot;f:id:naoty_k:20150301145950p:plain&quot; title=&quot;f:id:naoty_k:20150301145950p:plain&quot;&gt;&lt;/p&gt;
-&lt;p&gt;After: &lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301150005.png&quot; alt=&quot;f:id:naoty_k:20150301150005p:plain&quot; title=&quot;f:id:naoty_k:20150301150005p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Before: &lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301145950.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301145950.png&quot; alt=&quot;f:id:naoty_k:20150301145950p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20150301145950p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;After: &lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301150005.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150301/20150301150005.png&quot; alt=&quot;f:id:naoty_k:20150301150005p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20150301150005p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;これまでは&lt;code&gt;NSDate.date(year:month:day:hour:minute:second:)&lt;/code&gt;は&lt;code&gt;hour&lt;/code&gt;, &lt;code&gt;minute&lt;/code&gt;, &lt;code&gt;second&lt;/code&gt;のデフォルト引数を&lt;code&gt;0&lt;/code&gt;にセットしていたが、これではBeforeのスクショの通り補完候補に&lt;code&gt;hour&lt;/code&gt;, &lt;code&gt;minute&lt;/code&gt;, &lt;code&gt;second&lt;/code&gt;も含まれてしまう。デフォルト引数を使うよりも引数を省略したオーバーロードを提供した方が、補完候補に省略版のメソッドが現れるため使いやすいと思う。&lt;/p&gt;
 &lt;h1&gt;今後の予定&lt;/h1&gt;
 &lt;ul&gt;
@@ -8528,7 +8528,7 @@ if let birthday = &quot;1987-06-02&quot;.dateFromFormat(&quot;yyyy-MM-dd&quot;) 
   <entry>
     <id>https://blog.naoty.dev/253/</id>
     <link href="https://blog.naoty.dev/253/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4822284646/naotoknk-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41LkPJiQcNL._SL160_.jpg&quot; alt=&quot;UMLモデリングの本質 第2版&quot; title=&quot;UMLモデリングの本質 第2版&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4822284646/naotoknk-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41LkPJiQcNL._SL160_.jpg&quot; alt=&quot;UMLモデリングの本質 第2版&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;UMLモデリングの本質 第2版&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4822284646/naotoknk-22/&quot;&gt;UMLモデリングの本質 第2版&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 児玉公信&lt;/li&gt;
@@ -8541,7 +8541,7 @@ if let birthday = &quot;1987-06-02&quot;.dateFromFormat(&quot;yyyy-MM-dd&quot;) 
 &lt;p&gt;「UMLモデリングの本質」という本を読んだ。最近、ソフトウェアの設計について興味があって、いろいろ調べてみたところ各所でこの本がオススメされていたので手にとってみた。以前のエントリー（&lt;a href=&quot;http://naoty.hatenablog.com/entry/2015/02/02/012733&quot;&gt;「達人に学ぶDB設計徹底指南書」を読んだ - naoty.to_s&lt;/a&gt;）でデータベースの設計について理解できたんだけど、結局のところ、そのシステムが扱う業務内容をいかにして実装可能なモデルに落とし込むか（=モデリング）が重要になってくると思う。この本で理解したかったのはそこだった。タイトルからUMLの書き方についての本のようにも思えるが、そうではなく、むしろまったくUMLの書き方は書いてない。UMLを使って、複雑な業務用件をいかにモデリングするかを説いている。本書は300ページに満たないものの、密度が非常にあり2, 3週間でゆっくり読んでも第3章までしか読めていない。それでも、十分に学びがあったので忘れてしまう前にエントリーとして残しておきたいと思う。&lt;/p&gt;
 &lt;h1&gt;モデリングとは&lt;/h1&gt;
 &lt;p&gt;モデリングとは「仕組みや概念を理解するために概念的な要素とそれらの関係を記述すること」とあった。これは普段の業務で多かれ少なかれ必ず行っていると思う。ただ、それをモデリングという工程として認識してはいなかった。そして、モデリングの手法についても特に考えることはなかった。いつも漫然とノートに四角形と線を書いて整理してた（以下、イメージ）。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150228/20150228013509.jpg&quot; alt=&quot;f:id:naoty_k:20150228013509j:plain:h400&quot; title=&quot;f:id:naoty_k:20150228013509j:plain:h400&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150228/20150228013509.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20150228/20150228013509.jpg&quot; alt=&quot;f:id:naoty_k:20150228013509j:plain:h400&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20150228013509j:plain:h400&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;こういう自己流ではなくて、標準的な概念の表記法がある。その1つがUMLだ。UMLを習得することで、他人とのコミュニケーションの手段として使えるようになるし、UMLを通して標準的なモデリングの手法も学べるようになる。&lt;/p&gt;
 &lt;p&gt;本書によると、モデリングは大まかに以下の順番に行っていくようだ。&lt;/p&gt;
 &lt;ol&gt;
@@ -8587,7 +8587,7 @@ end
   <entry>
     <id>https://blog.naoty.dev/252/</id>
     <link href="https://blog.naoty.dev/252/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798124702/naotoknk-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51vol70XHoL._SL160_.jpg&quot; alt=&quot;達人に学ぶDB設計 徹底指南書 初級者で終わりたくないあなたへ&quot; title=&quot;達人に学ぶDB設計 徹底指南書 初級者で終わりたくないあなたへ&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798124702/naotoknk-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51vol70XHoL._SL160_.jpg&quot; alt=&quot;達人に学ぶDB設計 徹底指南書 初級者で終わりたくないあなたへ&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;達人に学ぶDB設計 徹底指南書 初級者で終わりたくないあなたへ&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798124702/naotoknk-22/&quot;&gt;達人に学ぶDB設計 徹底指南書 初級者で終わりたくないあなたへ&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: ミック&lt;/li&gt;
@@ -9916,7 +9916,7 @@ client.getItems(parameters: parameters).onComplete({ items in
   <entry>
     <id>https://blog.naoty.dev/243/</id>
     <link href="https://blog.naoty.dev/243/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51GHwTNJgSL._SL160_.jpg&quot; alt=&quot;Web API: The Good Parts&quot; title=&quot;Web API: The Good Parts&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51GHwTNJgSL._SL160_.jpg&quot; alt=&quot;Web API: The Good Parts&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Web API: The Good Parts&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864/hatena-blog-22/&quot;&gt;Web API: The Good Parts&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 水野貴明&lt;/li&gt;
@@ -11030,16 +11030,16 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;h1&gt;コピーbotを作る手順&lt;/h1&gt;
 &lt;p&gt;１. bot用のアカウントを作ります。&lt;/p&gt;
 &lt;p&gt;２. 人間とbotそれぞれのアカウントでTwitterアプリケーションを作ります。&lt;a href=&quot;https://apps.twitter.com/app/new&quot;&gt;ここ&lt;/a&gt;から作れます。そして、人間とbotの両方のアカウント用の「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を取得します（下のスクショのモザイクかかってるところです）。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230321.png&quot; alt=&quot;f:id:naoty_k:20141110230321p:plain&quot; title=&quot;f:id:naoty_k:20141110230321p:plain&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230752.png&quot; alt=&quot;f:id:naoty_k:20141110230752p:plain&quot; title=&quot;f:id:naoty_k:20141110230752p:plain&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230803.png&quot; alt=&quot;f:id:naoty_k:20141110230803p:plain&quot; title=&quot;f:id:naoty_k:20141110230803p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230321.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230321.png&quot; alt=&quot;f:id:naoty_k:20141110230321p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20141110230321p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230752.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230752.png&quot; alt=&quot;f:id:naoty_k:20141110230752p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20141110230752p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230803.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110230803.png&quot; alt=&quot;f:id:naoty_k:20141110230803p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20141110230803p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;追記&lt;/strong&gt; : bot用のアプリケーションを作成する際、権限を &lt;strong&gt;Read and Write&lt;/strong&gt; にする必要があります。一度Read Onlyでアクセストークンを発行している場合は権限を変更した後もう一度発行しなおして、Herokuアプリケーションの環境変数を新しいアクセストークンに替えてください。&lt;/p&gt;
 &lt;p&gt;３. こちらのHerokuボタンを押します（別サイトに飛びます）。もしHerokuのアカウントがなければ作ってください。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://heroku.com/deploy?template=https://github.com/naoty/mirror_bot&quot;&gt;&lt;img src=&quot;https://www.herokucdn.com/deploy/button.png&quot; alt=&quot;Deploy&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://heroku.com/deploy?template=https://github.com/naoty/mirror_bot&quot;&gt;&lt;img src=&quot;https://www.herokucdn.com/deploy/button.png&quot; alt=&quot;Deploy&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;４. 適当なHerokuアプリ名を入れて、「Env」の各項目に2.で取得した「Consumer Key」「Consumer Secret」「Access Token」「Access Token Secret」を入力します。人間のアカウントのものは「HUMAN_*」に、botのアカウントのものは「BOT_*」に入れていきます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232038.png&quot; alt=&quot;f:id:naoty_k:20141110232038p:plain&quot; title=&quot;f:id:naoty_k:20141110232038p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232038.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232038.png&quot; alt=&quot;f:id:naoty_k:20141110232038p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20141110232038p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;５．「Deploy for Free」ボタンを押してしばらく待ちます。Herokuにアプリケーションがデプロイされます。その後、アプリのダッシュボード画面で以下のようにdynosを1xにすると、アプリケーションが起動します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232352.gif&quot; alt=&quot;f:id:naoty_k:20141110232352g:plain&quot; title=&quot;f:id:naoty_k:20141110232352g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232352.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20141110/20141110232352.gif&quot; alt=&quot;f:id:naoty_k:20141110232352g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20141110232352g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;６．終わり。&lt;/p&gt;
 &lt;h1&gt;コピーbotの機能&lt;/h1&gt;
 &lt;ul&gt;
@@ -11078,7 +11078,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;ul&gt;
 &lt;li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg&quot; alt=&quot;集合知プログラミング&quot; title=&quot;集合知プログラミング&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg&quot; alt=&quot;集合知プログラミング&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;集合知プログラミング&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/&quot;&gt;集合知プログラミング&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -11101,7 +11101,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;/li&gt;
 &lt;li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51Al%2BAe8d1L._SL160_.jpg&quot; alt=&quot;はじめてのAIプログラミング―C言語で作る人工知能と人工無能&quot; title=&quot;はじめてのAIプログラミング―C言語で作る人工知能と人工無能&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51Al%2BAe8d1L._SL160_.jpg&quot; alt=&quot;はじめてのAIプログラミング―C言語で作る人工知能と人工無能&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;はじめてのAIプログラミング―C言語で作る人工知能と人工無能&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4274066649/hatena-blog-22/&quot;&gt;はじめてのAIプログラミング―C言語で作る人工知能と人工無能&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -11196,7 +11196,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
 &lt;p&gt;まだ半分も進んでないけど、その中で一番おもしろかったのが最適化アルゴリズムの話だった。ある最適な値を求めたいとき、「となりあう値と比較して良い方を選択する」というのを繰り返していくとどこか最適な値で落ち着くはずというアルゴリズム（ヒルクライム）があるのだけど、これだと局所最適に陥ってしまうということを最近勉強した。つまり、全体を見渡すともっと最適な値があるのだけど、近くの値とだけ比較しているとそれを見逃してしまうということだ。また、別のアルゴリズム（模擬アニーリング）は、試行回数が少ないうちは悪い結果を受け入れ、回数を経るにつれてその悪い結果を受け入れ難くしていくことで局所最適を回避する。&lt;/p&gt;
 &lt;p&gt;これはいろんなところで当てはまりそうな考え方だなと思った。見える範囲、理解できる範囲だけで最適な選択をとろうとするとより適切な解を見落としてしまう。若いうちは結果が悪かろうともそれを受け止めることで局所最適を回避し全体最適に近づくことができるのかもしれない。&lt;/p&gt;
 &lt;p&gt;この本を読もうと思った理由としては、いろんな領域と機械学習を組み合わせるとなんか面白いものが作れそうな気がしたから。これまで自分が作ってきたソフトウェアの中で自分自身気に入っているものの多くは別の領域のアイデアを持ち込むところから生まれている。だから、組み合わせの可能性が大きい領域を何か新しく学びたいと思ったときに機械学習というものが浮かんでてきてこの本から取り組んでみることにした。今は「iOS x 機械学習」みたいな掛け合わせで何か面白いものが作れないか考えている。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg&quot; alt=&quot;集合知プログラミング&quot; title=&quot;集合知プログラミング&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51FgSThMzVL._SL160_.jpg&quot; alt=&quot;集合知プログラミング&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;集合知プログラミング&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873113644/hatena-blog-22/&quot;&gt;集合知プログラミング&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Toby Segaran,當山仁健,鴨澤眞夫&lt;/li&gt;
@@ -11213,7 +11213,7 @@ func view(view: UIView!, wasChoosenWithDirection direction: MDCSwipeDirection) }
   <entry>
     <id>https://blog.naoty.dev/236/</id>
     <link href="https://blog.naoty.dev/236/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140930/20140930233211.png&quot; alt=&quot;f:id:naoty_k:20140930233211p:plain&quot; title=&quot;f:id:naoty_k:20140930233211p:plain&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140930/20140930233211.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140930/20140930233211.png&quot; alt=&quot;f:id:naoty_k:20140930233211p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140930233211p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;このスクリーンショットに映された2つの線は共にiPhoneの加速度センサーの値を表しており、下の緑が加工していない生データ、上の青い線がローパスフィルタという仕組みで揺れを除去したデータだ。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://naoty.hatenablog.com/entry/2014/08/31/000115&quot;&gt;以前の記事&lt;/a&gt;でSwiftを使ったストリームの実装をしてみたのだけど、その使いどころを考えてみたところセンサーデータの加工にストリームという概念が適しているのではないかと思いついた。センサーから送られてくるデータは連続的で、その加工には複雑な計算を要するためだ。&lt;/p&gt;
 &lt;p&gt;そこで、加速度センサーをグラフに表示する簡単なアプリを作ってみて、生データとストリームを使って加工したデータを視覚的に表現してみることにした。その結果が上のスクリーンショットとなる。今回はローパスフィルタと呼ばれる手法を用いて生データを加工した。そちらの方面にはまるっきり分からないのだけど、以下のようなとてもシンプルなアルゴリズムでデータを加工できるとのことだったので利用した。&lt;/p&gt;
@@ -11280,7 +11280,7 @@ private func accelerometerHandler(data: CMAccelerometerData!, error: NSError!) {
     gibo -l | peco | xargs gibo
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/cdd66863-9ebd-a59c-f032-728e2ac5bfb1.gif&quot; alt=&quot;tty.gif&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/cdd66863-9ebd-a59c-f032-728e2ac5bfb1.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/cdd66863-9ebd-a59c-f032-728e2ac5bfb1.gif&quot; alt=&quot;tty.gif&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/simonwhitaker/gibo&quot;&gt;gibo&lt;/a&gt;は &lt;a href=&quot;https://github.com/github/gitignore&quot;&gt;https://github.com/github/gitignore&lt;/a&gt; から.gitignoreのテンプレを取得するコマンドラインツールで、&lt;code&gt;brew install gibo&lt;/code&gt;からインストールできる。&lt;/p&gt;</summary>
     <title>peco+giboで.gitignoreのテンプレを1秒で取得</title>
     <updated>2014-09-30T10:50:00+00:00</updated>
@@ -11291,7 +11291,7 @@ private func accelerometerHandler(data: CMAccelerometerData!, error: NSError!) {
     <link href="https://blog.naoty.dev/234/"/>
     <summary>&lt;p&gt;普段iOSのフロント寄りの実装やデザインについて手が着けられていなかったけど、Xcode6の新機能のおかげでそっちも興味がでてきたので、ログインフォームを想定してiOSアプリのフォームの設計について本気出して考えてみた。&lt;/p&gt;
 &lt;h1&gt;最もシンプルなフォーム&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png&quot; alt=&quot;f:id:naoty_k:20140918011114p:plain&quot; title=&quot;f:id:naoty_k:20140918011114p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011114.png&quot; alt=&quot;f:id:naoty_k:20140918011114p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140918011114p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;メールアドレス用の&lt;code&gt;UITextField&lt;/code&gt;（以下&lt;code&gt;emailField&lt;/code&gt;）、パスワード用の&lt;code&gt;UITextField&lt;/code&gt;（以下&lt;code&gt;passwordField&lt;/code&gt;）、そしてログインボタン用の&lt;code&gt;UIButton&lt;/code&gt;（以下&lt;code&gt;loginButton&lt;/code&gt;）の3つをStoryboardで配置した。&lt;/li&gt;
 &lt;li&gt;
@@ -11386,7 +11386,7 @@ class TextFieldContainer: UIView {
 &lt;li&gt;
 &lt;code&gt;@IBInspectable&lt;/code&gt;によって下のスクリーンショットのようにカスタムViewの&lt;code&gt;borderWidth&lt;/code&gt;というプロパティをStoryboardから変更できるようになる。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png&quot; alt=&quot;f:id:naoty_k:20140918011350p:plain&quot; title=&quot;f:id:naoty_k:20140918011350p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011350.png&quot; alt=&quot;f:id:naoty_k:20140918011350p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140918011350p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;次に、&lt;code&gt;UIButton&lt;/code&gt;もHIGの方針に従って修正する。&lt;code&gt;UIButton&lt;/code&gt;はサイズを自由に変更できるので、とりあえず44x44ポイントに変更した。ボタンの大きさは変更したものの、ボタンの「Login」というテキストはまだ小さいため、ユーザーの目からはサイズが大きくなったようには見えていない。そこで、ボタンにもボーダーをつけてみる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// BorderedButton.swift
 
@@ -11403,7 +11403,7 @@ class BorderedButton: UIButton {
 &lt;p&gt;&lt;code&gt;TextFieldContainer&lt;/code&gt;と同じようにstoryboardから枠線の幅を変えられるようにした。&lt;/p&gt;
 &lt;h1&gt;マシなフォーム&lt;/h1&gt;
 &lt;p&gt;以上の変更を行った結果このようになった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png&quot; alt=&quot;f:id:naoty_k:20140918011412p:plain&quot; title=&quot;f:id:naoty_k:20140918011412p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011412.png&quot; alt=&quot;f:id:naoty_k:20140918011412p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140918011412p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;間違いなくタップはしやすくなった。&lt;/p&gt;
 &lt;h2&gt;問題点&lt;/h2&gt;
 &lt;ul&gt;
@@ -11425,7 +11425,7 @@ class BorderedButton: UIButton {
 &lt;li&gt;余白を十分にとる&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;を意識してStoryboardを編集した。Auto Layoutで各Viewの余白を固定したり、枠線の太さを0ポイントにした。その結果、以下のようになった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png&quot; alt=&quot;f:id:naoty_k:20140918011429p:plain&quot; title=&quot;f:id:naoty_k:20140918011429p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011429.png&quot; alt=&quot;f:id:naoty_k:20140918011429p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140918011429p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;フラットデザインに対するよくある批判として「ボタンがどこにあるのか認識しにくい」というものがある。&quot;Email&quot;や&quot;Login&quot;といった文字がある部分にしかViewがないように見えてしまうため、Viewの領域を表す枠線や背景色を控えめに加えた方がもっとよくなると考えた。そこで、2つの&lt;code&gt;UITextField&lt;/code&gt;の領域を控えめに表すため、領域の下辺だけ枠線を表示してみる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// TextFieldContainer.swift
 
@@ -11471,7 +11471,7 @@ class TextFieldContainer: UIView {
 &lt;li&gt;ショートカットのため&lt;code&gt;width&lt;/code&gt;と&lt;code&gt;height&lt;/code&gt;というcomputed propertyを用意した。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;そして、Storyboardから枠線の色と幅を設定し余白を調整すると以下のようになった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png&quot; alt=&quot;f:id:naoty_k:20140918011441p:plain&quot; title=&quot;f:id:naoty_k:20140918011441p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140918/20140918011441.png&quot; alt=&quot;f:id:naoty_k:20140918011441p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140918011441p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h1&gt;まとめ&lt;/h1&gt;
 &lt;p&gt;最初と最後を比べると少しはマシなフォームになったと思う。改善したポイントをまとめると以下のようになる。&lt;/p&gt;
 &lt;ul&gt;
@@ -12395,13 +12395,13 @@ run YourApplication
     <link href="https://blog.naoty.dev/223/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;http://shields.io&quot;&gt;http://shields.io&lt;/a&gt;というサービスを使うとフラットデザインのバッジをSVG形式で返してくれるので、これを以下のような感じで使うだけです。&lt;/p&gt;
 &lt;h2&gt;Travis&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/naoty/NTYCSVTable&quot;&gt;&lt;img src=&quot;https://travis-ci.org/naoty/NTYCSVTable.svg?branch=master&quot; alt=&quot;Build Status&quot;&gt;&lt;/a&gt; -&amp;gt; &lt;a href=&quot;https://travis-ci.org/naoty/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/naoty/NTYCSVTable/master.svg?style=flat&quot; alt=&quot;Build Status&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/naoty/NTYCSVTable&quot;&gt;&lt;img src=&quot;https://travis-ci.org/naoty/NTYCSVTable.svg?branch=master&quot; alt=&quot;Build Status&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt; -&amp;gt; &lt;a href=&quot;https://travis-ci.org/naoty/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/naoty/NTYCSVTable/master.svg?style=flat&quot; alt=&quot;Build Status&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gd&quot;&gt;-[![Build Status](https://travis-ci.org/naoty/NTYCSVTable.svg?branch=master)](https://travis-ci.org/naoty/NTYCSVTable)
 &lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+[![Build Status](http://img.shields.io/travis/naoty/NTYCSVTable/master.svg?style=flat)](https://travis-ci.org/naoty/NTYCSVTable)
 &lt;/span&gt;&lt;/pre&gt;
 &lt;h2&gt;CocoaPods&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://cocoapod-badges.herokuapp.com/v/NTYCSVTable/badge.png&quot; alt=&quot;Version&quot;&gt;&lt;/a&gt; -&amp;gt; &lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/cocoapods/v/NTYCSVTable.svg?style=flat&quot; alt=&quot;Version&quot;&gt;&lt;/a&gt;&lt;br&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://cocoapod-badges.herokuapp.com/p/NTYCSVTable/badge.png&quot; alt=&quot;Platform&quot;&gt;&lt;/a&gt; -&amp;gt; &lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/cocoapods/p/NTYCSVTable.svg?style=flat&quot; alt=&quot;Platform&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://cocoapod-badges.herokuapp.com/v/NTYCSVTable/badge.png&quot; alt=&quot;Version&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt; -&amp;gt; &lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/cocoapods/v/NTYCSVTable.svg?style=flat&quot; alt=&quot;Version&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;br&gt;
+&lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://cocoapod-badges.herokuapp.com/p/NTYCSVTable/badge.png&quot; alt=&quot;Platform&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt; -&amp;gt; &lt;a href=&quot;http://cocoadocs.org/docsets/NTYCSVTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/cocoapods/p/NTYCSVTable.svg?style=flat&quot; alt=&quot;Platform&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gd&quot;&gt;-[![Version](http://cocoapod-badges.herokuapp.com/v/NTYCSVTable/badge.png)](http://cocoadocs.org/docsets/NTYCSVTable)
 -[![Platform](http://cocoapod-badges.herokuapp.com/p/NTYCSVTable/badge.png)](http://cocoadocs.org/docsets/NTYCSVTable)
 &lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+[![Version](http://img.shields.io/cocoapods/v/NTYCSVTable.svg?style=flat)](http://cocoadocs.org/docsets/NTYCSVTable)
@@ -12469,7 +12469,7 @@ run YourApplication
     <id>https://blog.naoty.dev/221/</id>
     <link href="https://blog.naoty.dev/221/"/>
     <summary>&lt;p&gt;かなり前に&lt;a href=&quot;http://cui-about.me&quot;&gt;cui-about.me&lt;/a&gt;というサービスを作ったんだけど、&lt;a href=&quot;http://peco.github.io/&quot;&gt;peco&lt;/a&gt;と相性がいいことに気づいたので組み合わせてみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140704/20140704175901.gif&quot; alt=&quot;f:id:naoty_k:20140704175901g:plain&quot; title=&quot;f:id:naoty_k:20140704175901g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140704/20140704175901.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20140704/20140704175901.gif&quot; alt=&quot;f:id:naoty_k:20140704175901g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20140704175901g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;about() {
     if [$# -eq 0]; then
         local name=$(curl -s cui-about.me/users | peco)
@@ -12697,7 +12697,7 @@ NSArray *ages = table.columns[@&quot;age&quot;];   //=&amp;gt; @[@18, @19, @20]
     <id>https://blog.naoty.dev/214/</id>
     <link href="https://blog.naoty.dev/214/"/>
     <summary>&lt;p&gt;XcodeでCommand Line Toolを作るときビルドした実行ファイルは、デフォルトでは&lt;code&gt;$HOME/Library/Developer/Xcode/DerivedData/&amp;lt;アプリケーション固有ID&amp;gt;/Build/Products/&amp;lt;Build Configuration&amp;gt;/&lt;/code&gt;以下に保存されます。実行ファイルをGitで管理したい場合など何らかの理由でプロジェクト内に置きたいとき、Build Phasesに設定を追加することで実行ファイルをプロジェクトにコピーする作業を自動化できます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f6e02520-a8b0-295a-bc78-07666f6d79a0.png&quot; alt=&quot;スクリーンショット 2014-04-14 0.59.33.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f6e02520-a8b0-295a-bc78-07666f6d79a0.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f6e02520-a8b0-295a-bc78-07666f6d79a0.png&quot; alt=&quot;スクリーンショット 2014-04-14 0.59.33.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;プロジェクトの設定画面からスクリーンショットのようにBuild PhasesにRun Scriptを追加して以下のようなシェルスクリプトを入力します。&lt;/p&gt;
 &lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$BUILT_PRODUCTS_DIR&lt;/span&gt;/your_executable &lt;span class=&quot;nv&quot;&gt;$SRCROOT&lt;/span&gt;/bin/your_executable
 &lt;/pre&gt;
@@ -12843,9 +12843,9 @@ set :bundle_without, %w(development test darwin).join(&quot; &quot;)
 &lt;/pre&gt;
 &lt;p&gt;これでこんな感じになります。&lt;/p&gt;
 &lt;h3&gt;Before&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/bd35114d-5177-835d-bf5d-77a68f3d410a.png&quot; alt=&quot;picon_before_s.png&quot; title=&quot;picon_before_s.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/bd35114d-5177-835d-bf5d-77a68f3d410a.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/bd35114d-5177-835d-bf5d-77a68f3d410a.png&quot; alt=&quot;picon_before_s.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;picon_before_s.png&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h3&gt;After&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f117fb38-7db7-d1f2-e558-af2c3437d344.png&quot; alt=&quot;picon_after_s.png&quot; title=&quot;picon_after_s.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f117fb38-7db7-d1f2-e558-af2c3437d344.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/f117fb38-7db7-d1f2-e558-af2c3437d344.png&quot; alt=&quot;picon_after_s.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;picon_after_s.png&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;piconはアプリのbundle identifier（com.example.SampleApp的なアレ）のハッシュ値に基づいた&lt;a href=&quot;http://en.wikipedia.org/wiki/Identicon&quot;&gt;identicon&lt;/a&gt;を生成し、デフォルトのアイコンと差し替えます。bundle identifierに基づいているので、アプリ毎にユニークなアイコンが生成されます。もちろんiPadやiOS 7など各解像度に合わせて生成して差し替えてくれます。実装の中身としては、Xcode 5.0から追加されたAsset Catalogという機能を使っています。新しいAsset Catalogを作成し、そこに生成したidenticonを追加して、最後にデフォルトのアイコンのAsset Catalogと入れ替えています。ちょっと強引なやり方をしていますが。&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;デフォルトのアイコンに見飽きたという方は、ぜひお使いください。また、まだまだ完成度は高くないのでpull reqやissueもお待ちしております。&lt;/p&gt;</summary>
@@ -12917,7 +12917,7 @@ channel.bind &quot;create&quot;, (tweet) -&amp;gt;
     <id>https://blog.naoty.dev/204/</id>
     <link href="https://blog.naoty.dev/204/"/>
     <summary>&lt;p&gt;むかし&lt;a href=&quot;http://qiita.com/naoty_k/items/0fce93c683fcb476b2f3&quot;&gt;Kobitoのスタイルをハックするtips&lt;/a&gt;を書いたのですが、先ほどのアップデートでついにカスタムCSSに対応したとのことで、むかし書いたカスタムCSSを若干修正したヤツを共有しておきます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/bb0317de-75a9-45b2-baf6-6f66f237c988.png&quot; alt=&quot;スクリーンショット 2013-11-07 19.30.19.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/bb0317de-75a9-45b2-baf6-6f66f237c988.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/bb0317de-75a9-45b2-baf6-6f66f237c988.png&quot; alt=&quot;スクリーンショット 2013-11-07 19.30.19.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre lang=&quot;css&quot; class=&quot;highlight highlight-css&quot;&gt;&lt;span class=&quot;c&quot;&gt;/* See Kobito.app/Contents/Resources/markdown.css for predefined style. */&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;/*
 Copyright (c) 2011, Yahoo! Inc. All rights reserved.
@@ -13080,7 +13080,7 @@ version: 2.9.0
   <entry>
     <id>https://blog.naoty.dev/203/</id>
     <link href="https://blog.naoty.dev/203/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://instagram.com/p/er08ccqmqe/&quot;&gt;&lt;img src=&quot;http://instagram.com/p/er08ccqmqe/media/?size=l&quot; alt=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://instagram.com/p/er08ccqmqe/&quot;&gt;&lt;img src=&quot;http://instagram.com/p/er08ccqmqe/media/?size=l&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;仕事で複数台のRaspberry Piをセットアップすることになったので、Chefを使ってセットアップを自動化することにした。Chef、Vagrant、Serverspecなどいろいろな周辺ツールの全体像を整理したり、それらを使ったワークフローを体験できてよかったので、ブログとして残しておく。&lt;/p&gt;
 &lt;p&gt;また、セットアップに使ったChefのレポジトリはgithubにホストしてあるので参考にどうぞ。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/chef-repo&quot;&gt;https://github.com/naoty/chef-repo&lt;/a&gt;&lt;/p&gt;
@@ -13135,7 +13135,7 @@ $ knife solo cook raspberry_pi
     <link href="https://blog.naoty.dev/202/"/>
     <summary>&lt;p&gt;最近、「&lt;a href=&quot;http://www.jstorimer.com/products/working-with-tcp-sockets&quot;&gt;Working with TCP Sockets&lt;/a&gt;」って本を読んだ。Rubyでソケットと戯れつつ、7つくらいのWebサーバーのアーキテクチャを概観できるいい本だった。で、その中にイベント駆動モデルの実装とかノンブロッキングIOの実装について紹介されてて面白かったので、練習がてらWebSocketサーバーを作ることにした。&lt;/p&gt;
 &lt;h2&gt;PingPong&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20131011/20131011013521.gif&quot; alt=&quot;f:id:naoty_k:20131011013521g:plain&quot; title=&quot;f:id:naoty_k:20131011013521g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20131011/20131011013521.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20131011/20131011013521.gif&quot; alt=&quot;f:id:naoty_k:20131011013521g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20131011013521g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/pingpong&quot;&gt;https://github.com/naoty/pingpong&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;卓球ハウスっぽい名前にした。数日で作ったので、他のクライアントへpush通知を行うことしかできない。たぶん大きいデータも送れない気がする。&lt;/p&gt;
 &lt;h2&gt;WebSocketサーバーの実装とは&lt;/h2&gt;
@@ -13326,7 +13326,7 @@ endfunction
 &lt;p&gt;iOSでグラフを描画したいとき、まず&lt;a href=&quot;http://code.google.com/p/core-plot/&quot;&gt;CorePlot&lt;/a&gt;を試してみる。だけど、ドキュメントがあんまりないし、見た目がダサい。githubじゃないのもなんかなぁと思ってすぐにやめてしまう。で、CorePlotはやめてwebviewでJSのグラフ描画ライブラリを使うことにする。&lt;a href=&quot;http://www.highcharts.com/&quot;&gt;highcharts&lt;/a&gt;が便利なのでよく使う。でも、やっぱりいちいちHTMLとJSのファイルを用意しなくちゃいけないのがダルいとは思っていた。&lt;/p&gt;
 &lt;p&gt;そこでせっかくだしグラフ描画ライブラリをObj-Cで実装してみることにした。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/NTChartView&quot;&gt;naoty/NTChartView&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130806/20130806230903.png&quot; alt=&quot;f:id:naoty_k:20130806230903p:plain&quot; title=&quot;f:id:naoty_k:20130806230903p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130806/20130806230903.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130806/20130806230903.png&quot; alt=&quot;f:id:naoty_k:20130806230903p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130806230903p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;まだぜんぜんできてない。かろうじて上のような折れ線グラフを表示できるレベル。負値すらうまく表示できない。もちろんテストもない。地味に頭を使う実装が多い気がする。&lt;/p&gt;
 &lt;p&gt;将来的には折れ線グラフだけじゃなくて円グラフと棒グラフも実装したい。けっこう時間かかりそうなので、ヒマなときにゆっくり実装したい。&lt;/p&gt;</summary>
     <title>iOS用グラフ描画ライブラリを書き始めた</title>
@@ -13537,7 +13537,7 @@ end
     <link href="https://blog.naoty.dev/192/"/>
     <summary>&lt;p&gt;6/1と昨日6/22の2日間、konashi make-a-thonに参加してきた。&lt;a href=&quot;http://konashi.ux-xu.com/&quot;&gt;konashi&lt;/a&gt;を使ってiOSと連携するハードウェアをmakeするイベントだった。数人のチームに分かれてアイデアのブレーンストーミングから実際の開発まで行った。&lt;/p&gt;
 &lt;p&gt;一日目はワークショップ形式でたくさんのアイデアを出しまくった。その中から実装するアイデアを決めた。二日目までの3週間、僕はiOSアプリ担当ということで90%くらい完成させた。で、二日目にはハードウェアと筐体とkonashiを結合して、アプリから操作するところまでを確認し、微調整をした。で、できたのがこれ。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130622/20130622160819.jpg&quot; alt=&quot;f:id:naoty_k:20130622160819j:plain&quot; title=&quot;f:id:naoty_k:20130622160819j:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130622/20130622160819.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130622/20130622160819.jpg&quot; alt=&quot;f:id:naoty_k:20130622160819j:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130622160819j:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;なにこの完成度ww&lt;/p&gt;
 &lt;p&gt;このコースターはグラスのビールが空になるとiOSにバイブで通知する。コースターには感圧センサーが入っていて、重さをkonashiを使ってbluetoothでiOSアプリに送信する。で、アプリ側で重さが一定値を超えるとバイブするようになっている。上司のグラスが空になったらアプリが教えてくれるので、飲み会の席でうまく立ち回れる。アプリのソースコードはGithubで公開しているので、konashiのサンプルコードとして参考にしてもらえるとうれしい。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/Konastar&quot;&gt;Github - naoty/Konastar&lt;/a&gt;&lt;/p&gt;
@@ -13652,7 +13652,7 @@ set modelines=3
 &lt;/ul&gt;
 &lt;h2&gt;スクリーンショット&lt;/h2&gt;
 &lt;p&gt;以上の設定をすると、.vimrcはこんな感じで表示されるようになるはず。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/80b00f4c-6c5f-5dc2-912c-4fcc212c5f90.png&quot; alt=&quot;fold.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/80b00f4c-6c5f-5dc2-912c-4fcc212c5f90.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://qiita-image-store.s3.amazonaws.com/0/1044/80b00f4c-6c5f-5dc2-912c-4fcc212c5f90.png&quot; alt=&quot;fold.png&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;参考までに拙者の.vimrcのリンクも載せておく。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/dotfiles/blob/master/.vimrc&quot;&gt;dotfiles/.vimrc at master · naoty/dotfiles · GitHub&lt;/a&gt;&lt;/p&gt;
@@ -13924,7 +13924,7 @@ $ ./greeting
     <id>https://blog.naoty.dev/183/</id>
     <link href="https://blog.naoty.dev/183/"/>
     <summary>&lt;p&gt;以前参加したmrubyの勉強会でC言語でコードを書く機会があってよくわからなかったので、オススメされた「Head First C」を読んでみた。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873116090/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51x05Kg9MFL._SL160_.jpg&quot; alt=&quot;Head First C ―頭とからだで覚えるCの基本&quot; title=&quot;Head First C ―頭とからだで覚えるCの基本&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873116090/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51x05Kg9MFL._SL160_.jpg&quot; alt=&quot;Head First C ―頭とからだで覚えるCの基本&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Head First C ―頭とからだで覚えるCの基本&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873116090/hatena-blog-22/&quot;&gt;Head First C ―頭とからだで覚えるCの基本&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: David Griffiths,Dawn Griffiths,中田秀基(監訳),木下哲也&lt;/li&gt;
@@ -13995,7 +13995,7 @@ endfunction
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;スクリーンショット&lt;/h2&gt;
 &lt;p&gt;普段は下のようにtmuxで画面を分割して小さいウィンドウ（右上）にTodoリストを表示しながら開発している。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130428/20130428002301.png&quot; alt=&quot;f:id:naoty_k:20130428002301p:plain&quot; title=&quot;f:id:naoty_k:20130428002301p:plain&quot;&gt;&lt;/p&gt;</summary>
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130428/20130428002301.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130428/20130428002301.png&quot; alt=&quot;f:id:naoty_k:20130428002301p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130428002301p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;</summary>
     <title>vimでTodoリスト</title>
     <updated>2013-04-28T00:29:00+00:00</updated>
     <dc:date>2013-04-28T00:29:00+00:00</dc:date>
@@ -14010,14 +14010,14 @@ endfunction
 &lt;p&gt;コメントアウトしたソースコードを非表示にするのに役に立ちます。あとは、設定ファイルやライブラリを読むときにも読みやすくなります。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3&gt;C&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom1.png&quot; alt=&quot;sample1&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom2.png&quot; alt=&quot;sample2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom1.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom1.png&quot; alt=&quot;sample1&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom2.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom2.png&quot; alt=&quot;sample2&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h3&gt;Ruby&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom3.png&quot; alt=&quot;sample3&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom4.png&quot; alt=&quot;sample4&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom3.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom3.png&quot; alt=&quot;sample3&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom4.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom4.png&quot; alt=&quot;sample4&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h3&gt;JavaScript&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom5.png&quot; alt=&quot;sample5&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom6.png&quot; alt=&quot;sample6&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom5.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom5.png&quot; alt=&quot;sample5&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom6.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropboxusercontent.com/u/1235413/images/qiita/vim-folcom6.png&quot; alt=&quot;sample6&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;以上、自分で作ったプラグインのステマでした。初めて作ったプラグインです。斧まってま〜す。&lt;/p&gt;</summary>
     <title>vimでコメントを非表示にする</title>
@@ -14267,10 +14267,10 @@ autocmd BufRead,BufNewFile *.ru setfiletype ruby
     <summary>&lt;p&gt;秋葉原の秋月電子に行って、慣れない雰囲気の中、なんとか&lt;a href=&quot;http://akizukidenshi.com/catalog/g/gP-04002/&quot;&gt;この感圧センサー&lt;/a&gt;をゲットしました。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;オライリーの&lt;a href=&quot;http://www.oreilly.co.jp/books/9784873114538/&quot;&gt;Prototyping Lab&lt;/a&gt;という本を見ながら回路を接続して、上のようなプログラムを実行するとこんな感じになりました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130123/20130123235951.gif&quot; alt=&quot;f:id:naoty_k:20130123235951g:plain&quot; title=&quot;f:id:naoty_k:20130123235951g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130123/20130123235951.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130123/20130123235951.gif&quot; alt=&quot;f:id:naoty_k:20130123235951g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130123235951g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;センサーに加わった圧力を0番のアナログピンから受け取り、シリアル通信でそのままモニタに出力しています。&lt;/p&gt;
 &lt;p&gt;この圧力をサーバーに送信するために、以下のものを買いました。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B007YJA4WE/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51U3f1gyqVL._SL160_.jpg&quot; alt=&quot;イーサネットシールド for Arduino (micro SD, Wiznet W5100)&quot; title=&quot;イーサネットシールド for Arduino (micro SD, Wiznet W5100)&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B007YJA4WE/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51U3f1gyqVL._SL160_.jpg&quot; alt=&quot;イーサネットシールド for Arduino (micro SD, Wiznet W5100)&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;イーサネットシールド for Arduino (micro SD, Wiznet W5100)&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B007YJA4WE/hatena-blog-22/&quot;&gt;イーサネットシールド for Arduino (micro SD, Wiznet W5100)&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;出版社/メーカー: OEM&lt;/li&gt;
@@ -14278,7 +14278,7 @@ autocmd BufRead,BufNewFile *.ru setfiletype ruby
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/B007YJA4WE/hatena-blog-22&quot;&gt;この商品を含むブログを見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;ArduinoにぶっさすEthernetシールド。ここにLANケーブルをさしてインターネットに接続できます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B003STEHMW/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/316uVztilYL._SL160_.jpg&quot; alt=&quot;PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N&quot; title=&quot;PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B003STEHMW/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/316uVztilYL._SL160_.jpg&quot; alt=&quot;PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B003STEHMW/hatena-blog-22/&quot;&gt;PLANEX 300Mbps 超小型ハイパワー無線LANマルチファンクションルータ/アクセスポイント/コンバータ MZK-MF300N&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;出版社/メーカー: プラネックス&lt;/li&gt;
@@ -14288,7 +14288,7 @@ autocmd BufRead,BufNewFile *.ru setfiletype ruby
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/B003STEHMW/hatena-blog-22&quot;&gt;この商品を含むブログ (14件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;うちがE-mobileのpocket wifiを使っててLANケーブルをさすところがなかったので、有線を無線で使えるようにするコンバータも買いました。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0040ZO6H4/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41D0lVfgD%2BL._SL160_.jpg&quot; alt=&quot;PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02&quot; title=&quot;PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0040ZO6H4/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41D0lVfgD%2BL._SL160_.jpg&quot; alt=&quot;PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0040ZO6H4/hatena-blog-22/&quot;&gt;PLANEX 無線LANルータ/アクセスポイント/コンバータ「MZK-MF300N」「FFP-PKR01」専用 USB給電ケーブル SSOP-USB02&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;出版社/メーカー: プラネックス&lt;/li&gt;
@@ -14712,7 +14712,7 @@ end
     <id>https://blog.naoty.dev/166/</id>
     <link href="https://blog.naoty.dev/166/"/>
     <summary>&lt;p&gt;昨年末から社内にIRCが導入されてから、クライアントツールにLimechatを使ってる。とりあえずデフォルトの&lt;code&gt;Limelight&lt;/code&gt;というテーマを使ってたけど、ビミョーに違和感があったので、自分でテーマを作ってみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130113/20130113000307.png&quot; alt=&quot;f:id:naoty_k:20130113000307p:plain&quot; title=&quot;f:id:naoty_k:20130113000307p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130113/20130113000307.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130113/20130113000307.png&quot; alt=&quot;f:id:naoty_k:20130113000307p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130113000307p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/Nakameguro&quot;&gt;https://github.com/naoty/Nakameguro&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;1時間くらいであっさりできてしまったので、そのコツをメモしておく。&lt;/p&gt;
 &lt;h3&gt;cssとyamlを使う&lt;/h3&gt;
@@ -14745,26 +14745,26 @@ $ sass --watch Nakameguro.sass:Nakameguro.css
 &lt;li&gt;
 &lt;code&gt;Preferences &amp;gt; Appearance &amp;gt; Theme&lt;/code&gt;をDarculaに変更する。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233050.png&quot; alt=&quot;f:id:naoty_k:20130104233050p:plain&quot; title=&quot;f:id:naoty_k:20130104233050p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233050.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233050.png&quot; alt=&quot;f:id:naoty_k:20130104233050p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130104233050p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h2&gt;IdeaVimを追加&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;キーマップをvim化する。&lt;/li&gt;
 &lt;li&gt;
 &lt;code&gt;Preferences &amp;gt; Plugins &amp;gt; Browse repositories &amp;gt; IdeaVim&lt;/code&gt;でダブルクリックするとインストールできる。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233555.png&quot; alt=&quot;f:id:naoty_k:20130104233555p:plain&quot; title=&quot;f:id:naoty_k:20130104233555p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233555.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233555.png&quot; alt=&quot;f:id:naoty_k:20130104233555p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130104233555p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h2&gt;カーソルがどこまでも右にいける設定をオフにする&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;code&gt;Preferences &amp;gt; Editor &amp;gt; Allow placement of caret after end of line&lt;/code&gt;をオフにする。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233620.png&quot; alt=&quot;f:id:naoty_k:20130104233620p:plain&quot; title=&quot;f:id:naoty_k:20130104233620p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233620.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233620.png&quot; alt=&quot;f:id:naoty_k:20130104233620p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130104233620p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h2&gt;行番号を表示する&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;code&gt;Preferences &amp;gt; Editor &amp;gt; Appearance &amp;gt; Show line numbers&lt;/code&gt;をオンにする。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233646.png&quot; alt=&quot;f:id:naoty_k:20130104233646p:plain&quot; title=&quot;f:id:naoty_k:20130104233646p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233646.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233646.png&quot; alt=&quot;f:id:naoty_k:20130104233646p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130104233646p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;h2&gt;キーマッピングをカスタマイズする&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -14785,7 +14785,7 @@ $ sass --watch Nakameguro.sass:Nakameguro.css
 &lt;li&gt;
 &lt;code&gt;Close&lt;/code&gt;：エディタを閉じる&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233706.png&quot; alt=&quot;f:id:naoty_k:20130104233706p:plain&quot; title=&quot;f:id:naoty_k:20130104233706p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233706.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20130104/20130104233706.png&quot; alt=&quot;f:id:naoty_k:20130104233706p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20130104233706p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Eclipseだとタブの移動とか画面分割をショートカットからできなかった気がするので、これだけでもインテリJ氏に替える価値があると思う。作業効率がだいぶ上がる。&lt;/p&gt;</summary>
     <title>IntelliJ IDEAをvimっぽくする</title>
     <updated>2013-01-04T23:41:00+00:00</updated>
@@ -14809,7 +14809,7 @@ $ sass --watch Nakameguro.sass:Nakameguro.css
     <link href="https://blog.naoty.dev/163/"/>
     <summary>&lt;p&gt;最近、会社でIRCブームが来てるので、僕もhubotを使ってなにかbotを作ってみることにした。&lt;a href=&quot;http://hubot.github.com/&quot;&gt;hubot&lt;/a&gt;はGithubが作ったbotフレームワークで、TwitterのbotとかIRCのbotを簡単に作ることができる。&lt;/p&gt;
 &lt;p&gt;で、できたのがこれ。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121230/20121230030802.png&quot; alt=&quot;f:id:naoty_k:20121230030802p:plain&quot; title=&quot;f:id:naoty_k:20121230030802p:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121230/20121230030802.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121230/20121230030802.png&quot; alt=&quot;f:id:naoty_k:20121230030802p:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20121230030802p:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/naoty/diobot&quot;&gt;https://github.com/naoty/diobot&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;ディオ（DIO）様の名言をランダムに返してくれる、最高に「ハイ！」なbotが出来上がりました。&lt;/p&gt;
 &lt;p&gt;Herokuでhubotをデプロイするときにhubotのwiki&lt;a href=&quot;#f1&quot; title=&quot;https://github.com/github/hubot/wiki/Deploying-Hubot-onto-Heroku&quot;&gt;*1&lt;/a&gt;を参考にしてみたんだけど、Herokuにpushすると、下のようなエラーが出てぜんぜんうまくいかなかった。&lt;/p&gt;
@@ -15004,7 +15004,7 @@ $ node-dev app.js
     <link href="https://blog.naoty.dev/160/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;http://qiitahackathon02.peatix.com/&quot;&gt;Qiita Hackathon&lt;/a&gt;に参加してきました。&lt;/p&gt;
 &lt;p&gt;「&lt;a href=&quot;http://quiita-hackson-heartbeat.herokuapp.com&quot;&gt;HeartBeat&lt;/a&gt;」というアプリを7時間あまりで作りました。Androidの加速度センサーとnode.jsを使ったアプリで、スマホの振動を定期的にサーバーに送信することで、その人の活動状況（生きてんのか、死んでんのか）をリアルタイムに把握できます。毒のあるデザインが味わい深さを際立たせています。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121208/20121208234807.gif&quot; alt=&quot;f:id:naoty_k:20121208234807g:plain&quot; title=&quot;f:id:naoty_k:20121208234807g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121208/20121208234807.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121208/20121208234807.gif&quot; alt=&quot;f:id:naoty_k:20121208234807g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20121208234807g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;↑スマホの振動によって生死を彷徨う様子がリアルタイムで更新される図&lt;/p&gt;
 &lt;p&gt;結果的には入賞を逃しましたが、得ることが多かったのでメモを残しておこうと思います。&lt;/p&gt;
 &lt;h2&gt;技術的なアレコレ&lt;/h2&gt;
@@ -15029,7 +15029,7 @@ $ node-dev app.js
     <id>https://blog.naoty.dev/159/</id>
     <link href="https://blog.naoty.dev/159/"/>
     <summary>&lt;p&gt;Makers Faire行こうと思ってたけど、寒すぎる&amp;amp;人多いっぽい&amp;amp;ネットつながらないっぽいので、行くのやめてAmazonで注文してた「Arduinoをはじめようキット」を「Arduinoをはじめよう」を読みながらいじってた。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0025Y6C5G/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/510LjrBl68L._SL160_.jpg&quot; alt=&quot;Arduinoをはじめようキット&quot; title=&quot;Arduinoをはじめようキット&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0025Y6C5G/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/510LjrBl68L._SL160_.jpg&quot; alt=&quot;Arduinoをはじめようキット&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Arduinoをはじめようキット&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0025Y6C5G/hatena-blog-22/&quot;&gt;Arduinoをはじめようキット&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;出版社/メーカー: スイッチサイエンス&lt;/li&gt;
@@ -15037,7 +15037,7 @@ $ node-dev app.js
 &lt;li&gt;購入: 57人 クリック: 998回&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/B0025Y6C5G/hatena-blog-22&quot;&gt;この商品を含むブログ (49件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/487311537X/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51zFePM-naL._SL160_.jpg&quot; alt=&quot;Arduinoをはじめよう 第2版 (Make:PROJECTS)&quot; title=&quot;Arduinoをはじめよう 第2版 (Make:PROJECTS)&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/487311537X/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51zFePM-naL._SL160_.jpg&quot; alt=&quot;Arduinoをはじめよう 第2版 (Make:PROJECTS)&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Arduinoをはじめよう 第2版 (Make:PROJECTS)&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/487311537X/hatena-blog-22/&quot;&gt;Arduinoをはじめよう 第2版 (Make:PROJECTS)&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Massimo Banzi,船田巧&lt;/li&gt;
@@ -15048,7 +15048,7 @@ $ node-dev app.js
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/487311537X/hatena-blog-22&quot;&gt;この商品を含むブログ (5件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;キットとは別にUSBケーブルが必要だと気づいてビックカメラで買ったんだけど、なんか規格が違かったらしく結局もう一回AmazonでUSBケーブルを注文した。日曜日の半分くらい無駄にした。↓これでちゃんとささった。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0036SGFB6/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/318cBMUMARL._SL160_.jpg&quot; alt=&quot;ELECOM USB2.0ケーブル A-Bタイプ 2m ブラック U2C-B20BK&quot; title=&quot;ELECOM USB2.0ケーブル A-Bタイプ 2m ブラック U2C-B20BK&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0036SGFB6/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/318cBMUMARL._SL160_.jpg&quot; alt=&quot;ELECOM USB2.0ケーブル A-Bタイプ 2m ブラック U2C-B20BK&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;ELECOM USB2.0ケーブル A-Bタイプ 2m ブラック U2C-B20BK&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0036SGFB6/hatena-blog-22/&quot;&gt;ELECOM USB2.0ケーブル A-Bタイプ 2m ブラック U2C-B20BK&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;出版社/メーカー: エレコム&lt;/li&gt;
@@ -15059,9 +15059,9 @@ $ node-dev app.js
 &lt;/ul&gt;
 &lt;p&gt;「Arduinoをはじめよう」って本どおりにいかない部分がさっそくあった。&lt;/p&gt;
 &lt;p&gt;僕のMacだと、&lt;code&gt;/dev/cu.usbserial-&lt;/code&gt;なんていうシリアルポートなかった。代わりに&lt;code&gt;/dev/tty.usbmodemXXXXX&lt;/code&gt;みたいなのを選択したらうまくいった。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121202/20121202223645.gif&quot; alt=&quot;f:id:naoty_k:20121202223645g:plain&quot; title=&quot;f:id:naoty_k:20121202223645g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121202/20121202223645.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121202/20121202223645.gif&quot; alt=&quot;f:id:naoty_k:20121202223645g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20121202223645g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;LEDピカピカ。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121202/20121202223817.gif&quot; alt=&quot;f:id:naoty_k:20121202223817g:plain&quot; title=&quot;f:id:naoty_k:20121202223817g:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121202/20121202223817.gif&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20121202/20121202223817.gif&quot; alt=&quot;f:id:naoty_k:20121202223817g:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20121202223817g:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;工作の授業っぽい。&lt;/p&gt;</summary>
     <title>Hello, Arduino!</title>
     <updated>2012-12-02T22:50:00+00:00</updated>
@@ -15095,9 +15095,9 @@ $ node-dev app.js
 &lt;/blockquote&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;↑というのを思いつき、2日間でプロトタイプを作ってみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot; alt=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot; alt=&quot;http://distilleryimage9.s3.amazonaws.com/25d59dd6361c11e2b3e122000a1f9a4f_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;ジョジョOPでテンション上げながら。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg&quot; alt=&quot;http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg&quot; alt=&quot;http://distilleryimage10.s3.amazonaws.com/5837a310363e11e28ed022000a1fbc58_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;サーバー側をRails on Herokuで作って、そっからデータを取得までできた。&lt;/p&gt;
 &lt;p&gt;アプリとサーバーのコードはこちらで公開してます。&lt;/p&gt;
 &lt;ul&gt;
@@ -15166,7 +15166,7 @@ pod 'AFNetworking'
   <entry>
     <id>https://blog.naoty.dev/156/</id>
     <link href="https://blog.naoty.dev/156/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41KHt9YEIyL._SL160_.jpg&quot; alt=&quot;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&quot; title=&quot;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41KHt9YEIyL._SL160_.jpg&quot; alt=&quot;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-blog-22/&quot;&gt;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 青木峰郎&lt;/li&gt;
@@ -15212,7 +15212,7 @@ pod 'AFNetworking'
 &lt;li&gt;マルチプロセス以外の並列化の実装も知りたい。C10K問題というキーワードも関連してくる気がするし、node.jsもここらへんに関する技術な気がする。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;本書では、次に読むべき本としていくつか紹介されているので、それらを読めば疑問が解決しそう。とてもありがたい。ネットワークに関する本であればこれとか。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4894712059/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/213B9PVJD1L._SL160_.jpg&quot; alt=&quot;UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI&quot; title=&quot;UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4894712059/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/213B9PVJD1L._SL160_.jpg&quot; alt=&quot;UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4894712059/hatena-blog-22/&quot;&gt;UNIXネットワークプログラミング〈Vol.1〉ネットワークAPI:ソケットとXTI&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: W.リチャードスティーヴンス,W.Richard Stevens,篠田陽一&lt;/li&gt;
@@ -15328,7 +15328,7 @@ rvm rubies
 &lt;p&gt;　その目的を達成するために何が必要かちゃんとイメージできるようになるには、大まかな全体像を理解する必要があると思ってる。例えば、OSの仕組みとか、ネットワークの仕組みとか。そういうのが理解できてないと、イメージできる範囲での局所的な解しか思い浮かばなくなると思う。&lt;/p&gt;
 &lt;p&gt;　ここでようやく冒頭に戻れるんだけど、そういうことをぼんやり思うようになり、最近、C言語を勉強しはじめました。LinuxもC言語で開発されていると聞くし、RubyだってC言語で開発されていると聞く。apacheとかそういう普段お世話になってるソフトウェアも（たぶん）C言語で開発されてるんだろう。OSとかネットワークとか、そういう基本的な部分って概念的な説明ばかりでなかなか理解できない。実際にC言語で開発されているのであれば、C言語を勉強することでコードによってより具体的に理解することができるんじゃないかと思った。C言語を勉強しはじめた理由はそこらへんにあって、要するに基本的な概念を概念としてではなく具体的なコードとして理解するためにある。&lt;/p&gt;
 &lt;p&gt;　最近はこの本を読んで、C言語を勉強しつつ、HTTPサーバーを作ったりしてる。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41KHt9YEIyL._SL160_.jpg&quot; alt=&quot;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&quot; title=&quot;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41KHt9YEIyL._SL160_.jpg&quot; alt=&quot;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797328355/hatena-hamazou-22/&quot;&gt;ふつうのLinuxプログラミング Linuxの仕組みから学べるgccプログラミングの王道&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 青木峰郎&lt;/li&gt;
@@ -15339,7 +15339,7 @@ rvm rubies
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/4797328355&quot;&gt;この商品を含むブログ (138件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;　抽象的な概念が実はただの整数にすぎなかったり、単純な仕組みだったということがなんとなく分かってきた。とてもおもしろい。これが終わったら、OSをもっと理解するためにこの本を読んでOS作ってみたいとか思ってる。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4839919844/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41Q4Q20S5PL._SL160_.jpg&quot; alt=&quot;30日でできる! OS自作入門&quot; title=&quot;30日でできる! OS自作入門&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4839919844/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41Q4Q20S5PL._SL160_.jpg&quot; alt=&quot;30日でできる! OS自作入門&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;30日でできる! OS自作入門&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4839919844/hatena-hamazou-22/&quot;&gt;30日でできる! OS自作入門&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 川合秀実&lt;/li&gt;
@@ -15553,15 +15553,15 @@ end
     <id>https://blog.naoty.dev/150/</id>
     <link href="https://blog.naoty.dev/150/"/>
     <summary>&lt;p&gt;Instagram連携のテストも兼ねて。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage5.s3.amazonaws.com/e3f921e209ea11e29e5e22000a1fc323_7.jpg&quot; alt=&quot;http://distilleryimage5.s3.amazonaws.com/e3f921e209ea11e29e5e22000a1fc323_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage5.s3.amazonaws.com/e3f921e209ea11e29e5e22000a1fc323_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage5.s3.amazonaws.com/e3f921e209ea11e29e5e22000a1fc323_7.jpg&quot; alt=&quot;http://distilleryimage5.s3.amazonaws.com/e3f921e209ea11e29e5e22000a1fc323_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;俺流熟成塩ラーメン＠俺流塩ラーメン中目黒店&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage9.s3.amazonaws.com/061ea72a111a11e2bcc122000a9f0a0f_7.jpg&quot; alt=&quot;http://distilleryimage9.s3.amazonaws.com/061ea72a111a11e2bcc122000a9f0a0f_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage9.s3.amazonaws.com/061ea72a111a11e2bcc122000a9f0a0f_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage9.s3.amazonaws.com/061ea72a111a11e2bcc122000a9f0a0f_7.jpg&quot; alt=&quot;http://distilleryimage9.s3.amazonaws.com/061ea72a111a11e2bcc122000a9f0a0f_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;俺流特製つけ麺＠俺流塩ラーメン中目黒店&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage2.s3.amazonaws.com/05f874660abb11e2a95722000a1cf772_7.jpg&quot; alt=&quot;http://distilleryimage2.s3.amazonaws.com/05f874660abb11e2a95722000a1cf772_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage2.s3.amazonaws.com/05f874660abb11e2a95722000a1cf772_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage2.s3.amazonaws.com/05f874660abb11e2a95722000a1cf772_7.jpg&quot; alt=&quot;http://distilleryimage2.s3.amazonaws.com/05f874660abb11e2a95722000a1cf772_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;海老塩＠AFURI中目黒店&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage4.s3.amazonaws.com/e3b6242004a211e2aaa822000a1de2ba_7.jpg&quot; alt=&quot;http://distilleryimage4.s3.amazonaws.com/e3b6242004a211e2aaa822000a1de2ba_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage4.s3.amazonaws.com/e3b6242004a211e2aaa822000a1de2ba_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage4.s3.amazonaws.com/e3b6242004a211e2aaa822000a1de2ba_7.jpg&quot; alt=&quot;http://distilleryimage4.s3.amazonaws.com/e3b6242004a211e2aaa822000a1de2ba_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;マルゲリータ＠Kitchen Troquet&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://distilleryimage3.s3.amazonaws.com/2487c964151e11e2a4d022000a1cdead_7.jpg&quot; alt=&quot;http://distilleryimage3.s3.amazonaws.com/2487c964151e11e2a4d022000a1cdead_7.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://distilleryimage3.s3.amazonaws.com/2487c964151e11e2a4d022000a1cdead_7.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://distilleryimage3.s3.amazonaws.com/2487c964151e11e2a4d022000a1cdead_7.jpg&quot; alt=&quot;http://distilleryimage3.s3.amazonaws.com/2487c964151e11e2a4d022000a1cdead_7.jpg&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;TOMITAスペシャル＠Kitchen Troquet&lt;/p&gt;</summary>
     <title>ラーメン戦記（中目黒・恵比寿エリア）</title>
     <updated>2012-10-18T13:08:00+00:00</updated>
@@ -15820,7 +15820,7 @@ could not connect to server: Connection refused
   <entry>
     <id>https://blog.naoty.dev/147/</id>
     <link href="https://blog.naoty.dev/147/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/1934356948/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41hTzxPy7kL._SL160_.jpg&quot; alt=&quot;iOS SDK Development&quot; title=&quot;iOS SDK Development&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/1934356948/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41hTzxPy7kL._SL160_.jpg&quot; alt=&quot;iOS SDK Development&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;iOS SDK Development&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/1934356948/hatena-hamazou-22/&quot;&gt;iOS SDK Development&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Chris Adamson,Bill Dudney&lt;/li&gt;
@@ -15981,7 +15981,7 @@ end
 &lt;li&gt;rspec-railsで対応できなければ、rspecの便利機能を駆使して試行錯誤する。RSpec bookにお世話になってる。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;参考&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798121932/hatena-blog-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51-3T735zLL._SL160_.jpg&quot; alt=&quot;The RSpec Book (Professional Ruby Series)&quot; title=&quot;The RSpec Book (Professional Ruby Series)&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798121932/hatena-blog-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51-3T735zLL._SL160_.jpg&quot; alt=&quot;The RSpec Book (Professional Ruby Series)&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;The RSpec Book (Professional Ruby Series)&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798121932/hatena-blog-22/&quot;&gt;The RSpec Book (Professional Ruby Series)&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -16100,7 +16100,7 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
 &lt;li&gt;macの場合は&lt;code&gt;~/Library/Application Support/Firefox/Profiles/xxxxxxxx.default/searchplugins/&lt;/code&gt;以下に上のファイルを保存し、firefoxを再起動。（xxxxxxxxの部分はランダム）&lt;/li&gt;
 &lt;li&gt;githubみたいにQiitaもプラグインをブラウザに認識させるとcoolだと思う。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://dl.dropbox.com/u/1235413/add-github-plugin.png&quot; alt=&quot;github-plugin&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dl.dropbox.com/u/1235413/add-github-plugin.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://dl.dropbox.com/u/1235413/add-github-plugin.png&quot; alt=&quot;github-plugin&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;これは以下のような感じでできるらしい（未確認）。&lt;/li&gt;
 &lt;/ul&gt;
@@ -16196,7 +16196,7 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
     <id>https://blog.naoty.dev/140/</id>
     <link href="https://blog.naoty.dev/140/"/>
     <summary>&lt;p&gt;便利な設定があるわけじゃなさそうなので、こんなコマンドを自分で定義してみた。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://gyazo.com/d96e474ae19d51408d908c7ddc569171.png?1344926946&quot; alt=&quot;command&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://gyazo.com/d96e474ae19d51408d908c7ddc569171.png?1344926946&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://gyazo.com/d96e474ae19d51408d908c7ddc569171.png?1344926946&quot; alt=&quot;command&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre lang=&quot;vim:.vimrc&quot;&gt;&lt;code&gt;commands! -nargs=1 -complete=help Vh :vertical belowright help &amp;lt;args&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
@@ -16219,7 +16219,7 @@ __FILE__: /Users/naoty/workspace/ruby/filename.rb
     <id>https://blog.naoty.dev/139/</id>
     <link href="https://blog.naoty.dev/139/"/>
     <summary>&lt;p&gt;xip.ioを使うときにいちいち&lt;code&gt;ifconfig&lt;/code&gt;打つのが面倒くさくなってきたので表示してみました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://gyazo.com/0508093e26dcd9bc69ed2721f179b0ce.png?1344392749&quot; alt=&quot;tmux_statusline&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://gyazo.com/0508093e26dcd9bc69ed2721f179b0ce.png?1344392749&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://gyazo.com/0508093e26dcd9bc69ed2721f179b0ce.png?1344392749&quot; alt=&quot;tmux_statusline&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre lang=&quot;sh:localip&quot;&gt;&lt;code&gt;#!/bin/sh
 
 ifconfig en0 inet | sed -e '1d' -e 's/^.*inet //' -e 's/ netmask.*$//'
@@ -16259,7 +16259,7 @@ $ ln -s ~/workspace/rails/cui-aboutme
 ...
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;ifconfig等で調べた結果、上のようになった場合、&lt;a href=&quot;http://cui-aboutme.192.168.1.4.xip.io&quot;&gt;http://cui-aboutme.192.168.1.4.xip.io&lt;/a&gt;で他のデバイスからもアクセスできます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808013751.jpg&quot; alt=&quot;f:id:naoty_k:20120808013751j:plain&quot; title=&quot;f:id:naoty_k:20120808013751j:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808013751.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808013751.jpg&quot; alt=&quot;f:id:naoty_k:20120808013751j:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20120808013751j:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;注意点としては、Lionでは「システム環境設定」→「共有」→「Web共有」を有効にしておく必要があります。これがオフになっててハマりました…＞＜ちなみに、Mountain Lionでは「Web共有」の項目がなくなっていますが、手元では無事に成功しています。&lt;/p&gt;
 &lt;p&gt;実際にプロジェクトで使っていく中でのTipsをいくつかご紹介します。&lt;/p&gt;
 &lt;h4&gt;powder&lt;/h4&gt;
@@ -16325,7 +16325,7 @@ tabs:
 &lt;p&gt;その他、いろいろな設定ができるようなので詳しくは&lt;a href=&quot;https://github.com/aziz/tmuxinator/&quot;&gt;公式ページ&lt;/a&gt;をご覧ください。&lt;/p&gt;
 &lt;h3&gt;3. ctrlp.vim&lt;/h3&gt;
 &lt;p&gt;ctrlp.vimは、Ctrl-pで起動するファイラーです。unite.vimと近いのかもしれませんが、僕はこっちの方がサクサクしてて操作もわかりやすくて好きです。下はスクリーンショットです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808095402.jpg&quot; alt=&quot;f:id:naoty_k:20120808095402j:plain&quot; title=&quot;f:id:naoty_k:20120808095402j:plain&quot;&gt; &lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808100021.jpg&quot; alt=&quot;f:id:naoty_k:20120808100021j:plain&quot; title=&quot;f:id:naoty_k:20120808100021j:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808095402.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808095402.jpg&quot; alt=&quot;f:id:naoty_k:20120808095402j:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20120808095402j:plain&lt;/figcaption&gt;&lt;/figure&gt; &lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808100021.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120808/20120808100021.jpg&quot; alt=&quot;f:id:naoty_k:20120808100021j:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20120808100021j:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;.vimrcで以下のように設定しました。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&quot; .vimrc
 
@@ -16710,7 +16710,7 @@ twitter = naoty_k
     <link href="https://blog.naoty.dev/133/"/>
     <summary>&lt;pre lang=&quot;.zshrc&quot;&gt;&lt;code&gt;alias gt=&quot;git for-each-ref --sort=-taggerdate --format='%(taggerdate:short) %(tag) %(taggername) %(subject)' refs/tags&quot;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;http://gyazo.com/e6fd03bfaea9f3b44f9c60d8b539dd3c.png?1341920431&quot; alt=&quot;git-tag&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://gyazo.com/e6fd03bfaea9f3b44f9c60d8b539dd3c.png?1341920431&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://gyazo.com/e6fd03bfaea9f3b44f9c60d8b539dd3c.png?1341920431&quot; alt=&quot;git-tag&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;code&gt;git tag&lt;/code&gt;でタグ名を一覧で表示できる。&lt;code&gt;git tag -n&lt;/code&gt;でコメントもいっしょに表示できる。だけど、タグをつけた日付とかタグをつけた人も表示するには&lt;code&gt;git tag&lt;/code&gt;では無理みたい。&lt;/li&gt;
@@ -16757,7 +16757,7 @@ twitter = naoty_k
 &lt;pre lang=&quot;.gitconfig&quot;&gt;&lt;code&gt;[grep]
   lineNumber = true
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;http://gyazo.com/6896ca7dc18ae1ab53e05e6efa3602b9.png?1341209674&quot; alt=&quot;git-grep&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://gyazo.com/6896ca7dc18ae1ab53e05e6efa3602b9.png?1341209674&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://gyazo.com/6896ca7dc18ae1ab53e05e6efa3602b9.png?1341209674&quot; alt=&quot;git-grep&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;code&gt;-H&lt;/code&gt;でファイル名を相対パスにする&lt;/li&gt;
@@ -16824,7 +16824,7 @@ end
     <id>https://blog.naoty.dev/128/</id>
     <link href="https://blog.naoty.dev/128/"/>
     <summary>&lt;p&gt;Gemfileを公開するサイト「&lt;a href=&quot;http://gemfile-freaks.herokuapp.com/&quot;&gt;Gemfile Freaks&lt;/a&gt;」をおととい公開しました。土曜にだいたい作って、日曜にユーザー認証をつけました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120611/20120611091354.jpg&quot; alt=&quot;f:id:naoty_k:20120611091354j:plain&quot; title=&quot;f:id:naoty_k:20120611091354j:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120611/20120611091354.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120611/20120611091354.jpg&quot; alt=&quot;f:id:naoty_k:20120611091354j:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20120611091354j:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;前々からほしいと思っていたので、自分で作ることにしました。gemってどれを使っていいのかわかんないし、あの人のGemfileとか、あのサービスのGemfileに興味があったので。&lt;/p&gt;
 &lt;p&gt;いまのところの機能はこんなところです。&lt;/p&gt;
 &lt;ul&gt;
@@ -17004,7 +17004,7 @@ Your system is raring to brew.
     <id>https://blog.naoty.dev/121/</id>
     <link href="https://blog.naoty.dev/121/"/>
     <summary>&lt;p&gt;Happy Hacking Keyboard Lite2の英語配列を買いました。Androidの参考書のコードを写経してたらだんだん痛くなってきたので。Macbook Airのキーボードは写経に向かないみたい。(´･ω･`)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120520/20120520182450.jpg&quot; alt=&quot;f:id:naoty_k:20120520182450j:plain&quot; title=&quot;f:id:naoty_k:20120520182450j:plain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120520/20120520182450.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20120520/20120520182450.jpg&quot; alt=&quot;f:id:naoty_k:20120520182450j:plain&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;f:id:naoty_k:20120520182450j:plain&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Amazonで4000円くらいでした。Macbook Airにつなげて使ってます。Dellの21インチのディスプレイをメインとして使ってます。買ってからまずしたこと。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -17020,7 +17020,7 @@ Your system is raring to brew.
 &lt;li&gt;いままでサブディスプレイだったDellのディスプレイを正面にして作業できる。Macbook Airのキーボードを使うと、どうしてもMacbook Airを向いて作業せざるを得ませんが、そこから解放されます。まぁこれはHappy Hacking Keyboard Lite2に限った話ではありませんが。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;ともかく、この快適さが4000円程度で手に入ったのは、とてもいい買い物でした。みなさんもぜひ！&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0000U1DJ2/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41NX93T7DZL._SL160_.jpg&quot; alt=&quot;PFU Happy Hacking Keyboard Lite2 英語配列 USBキーボード ブラック PD-KB200B/U&quot; title=&quot;PFU Happy Hacking Keyboard Lite2 英語配列 USBキーボード ブラック PD-KB200B/U&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0000U1DJ2/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41NX93T7DZL._SL160_.jpg&quot; alt=&quot;PFU Happy Hacking Keyboard Lite2 英語配列 USBキーボード ブラック PD-KB200B/U&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;PFU Happy Hacking Keyboard Lite2 英語配列 USBキーボード ブラック PD-KB200B/U&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/B0000U1DJ2/hatena-hamazou-22/&quot;&gt;PFU Happy Hacking Keyboard Lite2 英語配列 USBキーボード ブラック PD-KB200B/U&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;出版社/メーカー: PFU&lt;/li&gt;
@@ -17421,7 +17421,7 @@ $ mv github.min.css github.min.css.orig
 &lt;li&gt;以上のような作業をもう一度行う必要があります。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;スクリーンショット&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;http://cache.gyazo.com/b818fec9dc127ef399d2b7d3715643c5.png&quot; alt=&quot;screenshot&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://cache.gyazo.com/b818fec9dc127ef399d2b7d3715643c5.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://cache.gyazo.com/b818fec9dc127ef399d2b7d3715643c5.png&quot; alt=&quot;screenshot&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;cssサンプル&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;githubで使われているシンタックスハイライトを使ってみましたが効きませんでした。&lt;/li&gt;
@@ -17691,7 +17691,7 @@ date.jsをダウンロードしてResourcesディレクトリ以下に配置し�
   <entry>
     <id>https://blog.naoty.dev/110/</id>
     <link href="https://blog.naoty.dev/110/"/>
-    <summary>&lt;p&gt;&lt;img src=&quot;http://gyazo.com/217c20b5050d4976212506dcd3bdad18.png?1333602421&quot; alt=&quot;chuni&quot;&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://gyazo.com/217c20b5050d4976212506dcd3bdad18.png?1333602421&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://gyazo.com/217c20b5050d4976212506dcd3bdad18.png?1333602421&quot; alt=&quot;chuni&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre lang=&quot;zsh:.zshrc&quot;&gt;&lt;code&gt;autoload colors
 colors
 
@@ -18328,7 +18328,7 @@ naoty@office% git checkout -b office
     <summary>&lt;p&gt;　どうも、naotyです。年末なので、他のエンジニアの方々にならって、僕も一年のまとめをしようと思います。&lt;/p&gt;
 &lt;p&gt;　昨年5月に、就活にあきてエンジニアになろうと思ってから1年7ヶ月後、おかげさまで&lt;a href=&quot;http://himazinz.com&quot;&gt;ひとつのwebサービス&lt;/a&gt;を公開できるまでになりました。お世話になった方々への感謝の意味と、あと昔の自分と同じように、これからエンジニアの道を歩み始めようとしているあなたへのエールの意味を込めて、これまで読んできた技術書のなかでオススメのものを10冊まとめてみました。ぜひ参考にしてください。&lt;/p&gt;
 &lt;p&gt;HTML/CSS&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4883375412/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51kaSqyqOvL._SL160_.jpg&quot; alt=&quot;HTML/XHTML&amp;amp;スタイルシートレッスンブック―ステップバイステップ形式でマスターできる&quot; title=&quot;HTML/XHTML&amp;amp;スタイルシートレッスンブック―ステップバイステップ形式でマスターできる&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4883375412/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51kaSqyqOvL._SL160_.jpg&quot; alt=&quot;HTML/XHTML&amp;amp;スタイルシートレッスンブック―ステップバイステップ形式でマスターできる&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;HTML/XHTML&amp;amp;スタイルシートレッスンブック―ステップバイステップ形式でマスターできる&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4883375412/hatena-hamazou-22/&quot;&gt;HTML/XHTML&amp;amp;スタイルシートレッスンブック―ステップバイステップ形式でマスターできる&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: エビスコム&lt;/li&gt;
@@ -18340,7 +18340,7 @@ naoty@office% git checkout -b office
 &lt;/ul&gt;
 &lt;p&gt;　一番はじめに買った本。なにを買っていいのかわからなかったので、とりあえずAmazonのレビューが高いものを買いました。最初なので、別になんでもいいような気もします。&lt;/p&gt;
 &lt;p&gt;Ruby&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797357401/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41t7GQ3peRL._SL160_.jpg&quot; alt=&quot;たのしいRuby 第3版&quot; title=&quot;たのしいRuby 第3版&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797357401/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41t7GQ3peRL._SL160_.jpg&quot; alt=&quot;たのしいRuby 第3版&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;たのしいRuby 第3版&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797357401/hatena-hamazou-22/&quot;&gt;たのしいRuby 第3版&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 高橋征義,後藤裕蔵,まつもとゆきひろ&lt;/li&gt;
@@ -18352,7 +18352,7 @@ naoty@office% git checkout -b office
 &lt;/ul&gt;
 &lt;p&gt;　たのしいですよ、Ruby。ただ、最初はRubyの環境を整えるまでで挫折する可能性が高いですね、&quot;Windows&quot;の場合は。ええ。&lt;/p&gt;
 &lt;p&gt;Rails&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774146633/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51%2BUj1CI5tL._SL160_.jpg&quot; alt=&quot;Ruby on Rails 3 アプリケーションプログラミング&quot; title=&quot;Ruby on Rails 3 アプリケーションプログラミング&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774146633/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51%2BUj1CI5tL._SL160_.jpg&quot; alt=&quot;Ruby on Rails 3 アプリケーションプログラミング&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Ruby on Rails 3 アプリケーションプログラミング&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774146633/hatena-hamazou-22/&quot;&gt;Ruby on Rails 3 アプリケーションプログラミング&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 山田祥寛&lt;/li&gt;
@@ -18365,7 +18365,7 @@ naoty@office% git checkout -b office
 &lt;p&gt;　僕が最初にRailsと出会った頃は、まだRails2.3.6とかだったと思いますが、Rails3以降では、この本が一番分かりやすいし、初心者でも分かってきた人にも合ってるいい本だと思います。でも、will_paginateを紹介してるところで、「そこはKaminariだろうがぁ！」と言いたいところ。&lt;br&gt;
 Railsについては、いろんなサイトやブログで情報が発信されているし、Rails自体もいろんなことを覚えなくてはいけないため、本だけではとても十分とは言えません。ググりましょう。&lt;/p&gt;
 &lt;p&gt;JavaScript(jQuery)&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4844329618/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51m-3d9s9WL._SL160_.jpg&quot; alt=&quot;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&quot; title=&quot;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4844329618/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51m-3d9s9WL._SL160_.jpg&quot; alt=&quot;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4844329618/hatena-hamazou-22/&quot;&gt;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 西畑一馬,中村享介,徳田和規&lt;/li&gt;
@@ -18377,7 +18377,7 @@ Railsについては、いろんなサイトやブログで情報が発信され
 &lt;/ul&gt;
 &lt;p&gt;　個人的な意見では、なまのJavaScriptの参考書（サイ本など）から勉強しようとすると間違いなく挫折すると思ってます。CSSが分かってきたら、たぶんjQueryもなんとか理解できると思ってます。少なくともサイ本よりは。この本を読む前に、すでにサイ本を挫折するなどして、JavaScriptの雰囲気はわかっていたということもあるので、この本だけではJavaScriptの理解は不十分だと思います。特にTitaniumなんかやる場合は、jQueryじゃなくてサイ本的なのが必要かもしれません。&lt;/p&gt;
 &lt;p&gt;ネットワーク&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/477414522X/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41GW48jUPbL._SL160_.jpg&quot; alt=&quot;小悪魔女子大生のサーバエンジニア日記 ――インターネットやサーバのしくみが楽しくわかる&quot; title=&quot;小悪魔女子大生のサーバエンジニア日記 ――インターネットやサーバのしくみが楽しくわかる&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/477414522X/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41GW48jUPbL._SL160_.jpg&quot; alt=&quot;小悪魔女子大生のサーバエンジニア日記 ――インターネットやサーバのしくみが楽しくわかる&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;小悪魔女子大生のサーバエンジニア日記 ――インターネットやサーバのしくみが楽しくわかる&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/477414522X/hatena-hamazou-22/&quot;&gt;小悪魔女子大生のサーバエンジニア日記 ――インターネットやサーバのしくみが楽しくわかる&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: aico,株式会社ディレクターズ,村井純&lt;/li&gt;
@@ -18389,7 +18389,7 @@ Railsについては、いろんなサイトやブログで情報が発信され
 &lt;/ul&gt;
 &lt;p&gt;　紹介した10冊のなかで一番読みやすいです。インターネットの仕組みの基本的なこと（IPアドレス、MACアドレス、DNSなどなど）をかわいいイラストをふんだんに使って説明している本です。webサービスをリリースするにあたって直接ためになったわけではないんですが、ド素人だった僕には「そもそもインターネットとは？」的な部分の理解ができてよかったです。&lt;/p&gt;
 &lt;p&gt;サーバー全般&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774135666/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51uK4ACymiL._SL160_.jpg&quot; alt=&quot;[24時間365日] サーバ/インフラを支える技術 ?スケーラビリティ、ハイパフォーマンス、省力運用 (WEB+DB PRESS plusシリーズ)&quot; title=&quot;[24時間365日] サーバ/インフラを支える技術 ?スケーラビリティ、ハイパフォーマンス、省力運用 (WEB+DB PRESS plusシリーズ)&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774135666/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51uK4ACymiL._SL160_.jpg&quot; alt=&quot;[24時間365日] サーバ/インフラを支える技術 ?スケーラビリティ、ハイパフォーマンス、省力運用 (WEB+DB PRESS plusシリーズ)&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;[24時間365日] サーバ/インフラを支える技術 ?スケーラビリティ、ハイパフォーマンス、省力運用 (WEB+DB PRESS plusシリーズ)&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774135666/hatena-hamazou-22/&quot;&gt;[24時間365日] サーバ/インフラを支える技術 ?スケーラビリティ、ハイパフォーマンス、省力運用 (WEB+DB PRESS plusシリーズ)&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 安井真伸,横川和哉,ひろせまさあき,伊藤直也,田中慎司,勝見祐己&lt;/li&gt;
@@ -18401,7 +18401,7 @@ Railsについては、いろんなサイトやブログで情報が発信され
 &lt;/ul&gt;
 &lt;p&gt;　「サーバー、サーバーっていうけど、サーバーってなんなの？」っていうときに読んだ本です。上で紹介した本に比べると、いきなり難しくなります。なんとなく負荷分散とか、そもそも負荷って何よ？ってところを理解できました。&lt;/p&gt;
 &lt;p&gt;webサーバー（nginx）&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51xpswg%2BkkL._SL160_.jpg&quot; alt=&quot;ハイパフォーマンスHTTPサーバ Nginx入門&quot; title=&quot;ハイパフォーマンスHTTPサーバ Nginx入門&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51xpswg%2BkkL._SL160_.jpg&quot; alt=&quot;ハイパフォーマンスHTTPサーバ Nginx入門&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;ハイパフォーマンスHTTPサーバ Nginx入門&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/&quot;&gt;ハイパフォーマンスHTTPサーバ Nginx入門&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Clement Nedelcu,長尾高弘&lt;/li&gt;
@@ -18413,7 +18413,7 @@ Railsについては、いろんなサイトやブログで情報が発信され
 &lt;/ul&gt;
 &lt;p&gt;　どうやらApacheよりnginxの方が速いし設定もラクというのを聞いてnginxを使っているんですが、いまのところ日本語で書かれたnginxの本はこれしかないような気がします。インストールから細かい設定まで詳しく説明されています。これと合わせて、nginxのwikiも参考にされるといいかと思います。&lt;/p&gt;
 &lt;p&gt;DB（MySQL）&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798120723/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51fSSetl7gL._SL160_.jpg&quot; alt=&quot;Linux-DB システム構築/運用入門 (DB Magazine SELECTION)&quot; title=&quot;Linux-DB システム構築/運用入門 (DB Magazine SELECTION)&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798120723/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51fSSetl7gL._SL160_.jpg&quot; alt=&quot;Linux-DB システム構築/運用入門 (DB Magazine SELECTION)&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Linux-DB システム構築/運用入門 (DB Magazine SELECTION)&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798120723/hatena-hamazou-22/&quot;&gt;Linux-DB システム構築/運用入門 (DB Magazine SELECTION)&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 松信嘉範&lt;/li&gt;
@@ -18424,7 +18424,7 @@ Railsについては、いろんなサイトやブログで情報が発信され
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/4798120723&quot;&gt;この商品を含むブログ (31件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;　これは最初から読んですぐに挫折したのですが、途中のインデックスに関する説明がとてつもなくわかりやすかったので、ピックアップしました。SQL文の解説とかはのってませんので、まるっきりの初心者にはオススメできません。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41oqE-9dM2L._SL160_.jpg&quot; alt=&quot;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&quot; title=&quot;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41oqE-9dM2L._SL160_.jpg&quot; alt=&quot;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/&quot;&gt;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 奥野幹也&lt;/li&gt;
@@ -18436,7 +18436,7 @@ Railsについては、いろんなサイトやブログで情報が発信され
 &lt;/ul&gt;
 &lt;p&gt;　はじめてのLinuxにMySQLをインストールする際に参考にしました。rpmでのインストールから、my.cnfの書き方を参考にしましたが、まだ1/3も読んでません。おそらくこれからサービスを本格的に運用するにあたって真価を発揮すると思われる一冊です。&lt;/p&gt;
 &lt;p&gt;セキュリティ&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797361190/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41lX6Fg5KpL._SL160_.jpg&quot; alt=&quot;体系的に学ぶ 安全なWebアプリケーションの作り方　脆弱性が生まれる原理と対策の実践&quot; title=&quot;体系的に学ぶ 安全なWebアプリケーションの作り方　脆弱性が生まれる原理と対策の実践&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797361190/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41lX6Fg5KpL._SL160_.jpg&quot; alt=&quot;体系的に学ぶ 安全なWebアプリケーションの作り方　脆弱性が生まれる原理と対策の実践&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;体系的に学ぶ 安全なWebアプリケーションの作り方　脆弱性が生まれる原理と対策の実践&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4797361190/hatena-hamazou-22/&quot;&gt;体系的に学ぶ 安全なWebアプリケーションの作り方　脆弱性が生まれる原理と対策の実践&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 徳丸浩&lt;/li&gt;
@@ -18535,7 +18535,7 @@ end
     <id>https://blog.naoty.dev/92/</id>
     <link href="https://blog.naoty.dev/92/"/>
     <summary>&lt;p&gt;Twitter上のヒマジンをマッチングさせるサービス、himazinzを昨日リリースしました。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://f.hatena.ne.jp/naoty_k/20111127011956&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20111127/20111127011956.png&quot; alt=&quot;f:id:naoty_k:20111127011956p:image:w640&quot; title=&quot;f:id:naoty_k:20111127011956p:image:w640&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://f.hatena.ne.jp/naoty_k/20111127011956&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20111127/20111127011956.png&quot; alt=&quot;f:id:naoty_k:20111127011956p:image:w640&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;f:id:naoty_k:20111127011956p:image:w640&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;まだ試験的なリリースなので、もしかしたらクローズするかもしれません。&lt;/p&gt;
 &lt;p&gt;１．趣旨&lt;br&gt;
 himazinzはtwitter上でヒマジンをマッチングさせるためのサービスです。himazinzを使う人は、自分と同じ時間にヒマな人を一瞬にして探し出すことができます。himazinzは、「なんかヒマだなーだれかヒマなヤツがいれば遊びたいなぁ」とか「だれかランチに付き合ってくれる人いないかな〜？」とか「あこがれのあのひとにtwitterでアポとりたいけど、都合のいいスケジュールっていつだろう？」とか、そんなtwitter上のスケジュール調整にまつわる問題をすべて解決します。&lt;/p&gt;
@@ -18826,7 +18826,7 @@ end
 &lt;li&gt;静的ファイルのプリコンパイルの設定を変更&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;参考図書&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51xpswg%2BkkL._SL160_.jpg&quot; alt=&quot;ハイパフォーマンスHTTPサーバ Nginx入門&quot; title=&quot;ハイパフォーマンスHTTPサーバ Nginx入門&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51xpswg%2BkkL._SL160_.jpg&quot; alt=&quot;ハイパフォーマンスHTTPサーバ Nginx入門&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;ハイパフォーマンスHTTPサーバ Nginx入門&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4048702270/hatena-hamazou-22/&quot;&gt;ハイパフォーマンスHTTPサーバ Nginx入門&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Clement Nedelcu,長尾高弘&lt;/li&gt;
@@ -18836,7 +18836,7 @@ end
 &lt;li&gt;購入: 2人 クリック: 589回&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/4048702270&quot;&gt;この商品を含むブログ (15件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41oqE-9dM2L._SL160_.jpg&quot; alt=&quot;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&quot; title=&quot;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41oqE-9dM2L._SL160_.jpg&quot; alt=&quot;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4774142948/hatena-hamazou-22/&quot;&gt;エキスパートのためのMySQL[運用+管理]トラブルシューティングガイド&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 奥野幹也&lt;/li&gt;
@@ -19951,7 +19951,7 @@ twitterApi.init();
 &lt;ul&gt;
 &lt;li&gt;認証ページでアカウント名とパスワードを入力し「連携アプリを認証」ボタンをおすと、なぜか&lt;a href=&quot;http://mobile.twitter.com/&quot;&gt;http://mobile.twitter.com/&lt;/a&gt;にリダイレクトされる（下画像）。モーダルウィンドウはいっこうに閉じない。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://f.hatena.ne.jp/naoty_k/20110724235009&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20110724/20110724235009.png&quot; alt=&quot;f:id:naoty_k:20110724235009p:image&quot; title=&quot;f:id:naoty_k:20110724235009p:image&quot;&gt;&lt;/a&gt;&lt;/p&gt;</summary>
+&lt;p&gt;&lt;a href=&quot;http://f.hatena.ne.jp/naoty_k/20110724235009&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20110724/20110724235009.png&quot; alt=&quot;f:id:naoty_k:20110724235009p:image&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;f:id:naoty_k:20110724235009p:image&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;</summary>
     <title>tm_twitter_apiでうまく認証できない</title>
     <updated>2011-07-24T23:51:00+00:00</updated>
     <dc:date>2011-07-24T23:51:00+00:00</dc:date>
@@ -20418,7 +20418,7 @@ win.add(button);
   <entry>
     <id>https://blog.naoty.dev/61/</id>
     <link href="https://blog.naoty.dev/61/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://f.hatena.ne.jp/naoty_k/20110616225637&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20110616/20110616225637.png&quot; alt=&quot;f:id:naoty_k:20110616225637p:image&quot; title=&quot;f:id:naoty_k:20110616225637p:image&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://f.hatena.ne.jp/naoty_k/20110616225637&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naoty_k/20110616/20110616225637.png&quot; alt=&quot;f:id:naoty_k:20110616225637p:image&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;f:id:naoty_k:20110616225637p:image&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;var win = Titanium.UI.currentWindow;
 
 var title = Titanium.UI.createLabel({
@@ -21596,7 +21596,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
   <entry>
     <id>https://blog.naoty.dev/36/</id>
     <link href="https://blog.naoty.dev/36/"/>
-    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/487311425X/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/513cHHi%2BkCL._SL160_.jpg&quot; alt=&quot;初めてのJavaScript 第2版&quot; title=&quot;初めてのJavaScript 第2版&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+    <summary>&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/487311425X/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/513cHHi%2BkCL._SL160_.jpg&quot; alt=&quot;初めてのJavaScript 第2版&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;初めてのJavaScript 第2版&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/487311425X/hatena-hamazou-22/&quot;&gt;初めてのJavaScript 第2版&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Shelley Powers,武舎広幸,武舎るみ&lt;/li&gt;
@@ -21614,7 +21614,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 &lt;/ol&gt;
 &lt;p&gt;の3つかな。でも、逆に「勉強した」感はものすごく得られるはず。勉強大好きっこにはオススメかも。&lt;/p&gt;
 &lt;p&gt;　このテキストが終わったら、次はこっちに行きたい！&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873114888/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51ZoMJ%2BrLhL._SL160_.jpg&quot; alt=&quot;JavaScriptパターン ―優れたアプリケーションのための作法&quot; title=&quot;JavaScriptパターン ―優れたアプリケーションのための作法&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873114888/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51ZoMJ%2BrLhL._SL160_.jpg&quot; alt=&quot;JavaScriptパターン ―優れたアプリケーションのための作法&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;JavaScriptパターン ―優れたアプリケーションのための作法&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4873114888/hatena-hamazou-22/&quot;&gt;JavaScriptパターン ―優れたアプリケーションのための作法&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: Stoyan Stefanov,豊福剛&lt;/li&gt;
@@ -21792,7 +21792,7 @@ $(this).find(&quot;tr&quot;).first().remove();
     <id>https://blog.naoty.dev/27/</id>
     <link href="https://blog.naoty.dev/27/"/>
     <summary>&lt;p&gt;　初心者の拙者にとっては、理論的な話より、ハウトゥが具体的に書かれているものの方が役に立ちました。その結果、以下のような逆引きリファレンス的なテキストを重宝してます。（一方で、オライリーの本がホコリをカブってる…）&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4839928266/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41nTPEtVmPL._SL160_.jpg&quot; alt=&quot;Ruby on Rails 逆引きクイックリファレンス Rails 2.0対応&quot; title=&quot;Ruby on Rails 逆引きクイックリファレンス Rails 2.0対応&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4839928266/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/41nTPEtVmPL._SL160_.jpg&quot; alt=&quot;Ruby on Rails 逆引きクイックリファレンス Rails 2.0対応&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;Ruby on Rails 逆引きクイックリファレンス Rails 2.0対応&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4839928266/hatena-hamazou-22/&quot;&gt;Ruby on Rails 逆引きクイックリファレンス Rails 2.0対応&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 大場寧子,大場光一郎,久保優子,株式会社万葉&lt;/li&gt;
@@ -21802,7 +21802,7 @@ $(this).find(&quot;tr&quot;).first().remove();
 &lt;li&gt;購入: 3人 クリック: 165回&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://d.hatena.ne.jp/asin/4839928266&quot;&gt;この商品を含むブログ (19件) を見る&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4844329618/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51m-3d9s9WL._SL160_.jpg&quot; alt=&quot;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&quot; title=&quot;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4844329618/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/51m-3d9s9WL._SL160_.jpg&quot; alt=&quot;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4844329618/hatena-hamazou-22/&quot;&gt;jQuery逆引きマニュアル Webデザインの現場で役立つ基本と実践&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 西畑一馬,中村享介,徳田和規&lt;/li&gt;
@@ -22102,7 +22102,7 @@ end
 &lt;p&gt;&lt;a href=&quot;http://silentpower2.blogspot.com/2009/07/vimrails.html&quot;&gt;VimでRailsを快適に開発する（設定編）&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;スクリーンショット&lt;br&gt;
-&lt;a href=&quot;http://f.hatena.ne.jp/naotoknk/20100925193128&quot;&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naotoknk/20100925/20100925193128.jpg&quot; alt=&quot;f:id:naotoknk:20100925193128j:image&quot; title=&quot;f:id:naotoknk:20100925193128j:image&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;http://f.hatena.ne.jp/naotoknk/20100925193128&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://cdn-ak.f.st-hatena.com/images/fotolife/n/naotoknk/20100925/20100925193128.jpg&quot; alt=&quot;f:id:naotoknk:20100925193128j:image&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;f:id:naotoknk:20100925193128j:image&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;今のところ不安が残るポイント&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;「Rserver」コマンドがエラーになる。&lt;/li&gt;
@@ -22474,7 +22474,7 @@ function sql_request($sql){
     <id>https://blog.naoty.dev/7/</id>
     <link href="https://blog.naoty.dev/7/"/>
     <summary>&lt;p&gt;　初級者から中級者へ脱皮したい人向けだというレビューを参考にこんな本をかいました。パッと見、見やすい。効果の程は、ジワジワくると思う。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798119865/hatena-hamazou-22/&quot;&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/518bklf0j0L._SL160_.jpg&quot; alt=&quot;PHP 逆引きレシピ (PROGRAMMER’S RECiPE)&quot; title=&quot;PHP 逆引きレシピ (PROGRAMMER’S RECiPE)&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798119865/hatena-hamazou-22/&quot;&gt;&lt;figure&gt;&lt;img src=&quot;http://ecx.images-amazon.com/images/I/518bklf0j0L._SL160_.jpg&quot; alt=&quot;PHP 逆引きレシピ (PROGRAMMER’S RECiPE)&quot; style=&quot;max-width:100%;&quot;&gt;&lt;figcaption&gt;PHP 逆引きレシピ (PROGRAMMER’S RECiPE)&lt;/figcaption&gt;&lt;/figure&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.amazon.co.jp/exec/obidos/ASIN/4798119865/hatena-hamazou-22/&quot;&gt;PHP 逆引きレシピ (PROGRAMMER’S RECiPE)&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;作者: 鈴木憲治,安藤建一,山田直明,八木照朗,山本義之,河合勝彦&lt;/li&gt;
