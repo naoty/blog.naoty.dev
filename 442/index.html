@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auroraのレプリケーション</title>
+    <meta property="og:title" content="Auroraのレプリケーション">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/442/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Auroraのレプリケーション</h1>
+          <p class="metadata">
+            <time datetime="2021-05-02T16:49:00.000+0000">2021-05-02 16:49</time>
+            <a href="/db/">#db</a>
+            <a href="/aws/">#aws</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://www.oreilly.co.jp/books/9784873118703/">データ指向アプリケーションデザイン</a>（以下、本書）のレプリケーションの章を読んだ。そこで、MySQL互換のAmazon Auroraのレプリケーションについて調べてみた。</p>
+<p>Aurora MySQLのレプリケーションはAurora組み込みのものと、MySQLのものを選択できる。今回は前者について調べた。</p>
+<h1>クラスターボリューム</h1>
+<p>Auroraのデータはクラスターボリュームと呼ばれる単一の論理ボリュームに保存される。クラスターボリュームは1つのリージョンの3つのAZにある各2個のノード、計6個のノードから構成される。</p>
+<p>クラスターボリュームはDBインスタンスとは独立しており、クラスターに含まれるDBインスタンスはこれを共有している。プライマリのみがこれへの書き込みを許可されており、レプリカは読み取りしかできない。</p>
+<h1>クオラム書き込み</h1>
+<p>プライマリに書き込まれたデータは6個のノードにコピーされる。ただし、6個のうち4個のノードに書き込まれた時点でプライマリへの書き込みに対して成功を返す。こうすることで、ネットワーク障害などで一部のノードに遅延が発生した際でも影響を受けにくくなる。こういった手法を本書ではクオラム書き込みと読んでいる。</p>
+<p>リーダーレスレプリケーションの説明のなかで登場したけど、シングルリーダーのレプリケーションでもクオラム書き込みが使われているのは発見だった。</p>
+<h1>参考</h1>
+<ul>
+<li><a href="https://aws.amazon.com/jp/blogs/news/amazon-aurora-under-the-hood-quorum-and-correlated-failure/">https://aws.amazon.com/jp/blogs/news/amazon-aurora-under-the-hood-quorum-and-correlated-failure/</a></li>
+<li><a href="https://aws.typepad.com/sajp/2017/02/introducing-the-aurora-storage-engine.html">https://aws.typepad.com/sajp/2017/02/introducing-the-aurora-storage-engine.html</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

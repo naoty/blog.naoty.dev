@@ -10,6 +10,26 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/442/</id>
+    <link href="https://blog.naoty.dev/442/"/>
+    <summary>&lt;p&gt;&lt;a href=&quot;https://www.oreilly.co.jp/books/9784873118703/&quot;&gt;データ指向アプリケーションデザイン&lt;/a&gt;（以下、本書）のレプリケーションの章を読んだ。そこで、MySQL互換のAmazon Auroraのレプリケーションについて調べてみた。&lt;/p&gt;
+&lt;p&gt;Aurora MySQLのレプリケーションはAurora組み込みのものと、MySQLのものを選択できる。今回は前者について調べた。&lt;/p&gt;
+&lt;h1&gt;クラスターボリューム&lt;/h1&gt;
+&lt;p&gt;Auroraのデータはクラスターボリュームと呼ばれる単一の論理ボリュームに保存される。クラスターボリュームは1つのリージョンの3つのAZにある各2個のノード、計6個のノードから構成される。&lt;/p&gt;
+&lt;p&gt;クラスターボリュームはDBインスタンスとは独立しており、クラスターに含まれるDBインスタンスはこれを共有している。プライマリのみがこれへの書き込みを許可されており、レプリカは読み取りしかできない。&lt;/p&gt;
+&lt;h1&gt;クオラム書き込み&lt;/h1&gt;
+&lt;p&gt;プライマリに書き込まれたデータは6個のノードにコピーされる。ただし、6個のうち4個のノードに書き込まれた時点でプライマリへの書き込みに対して成功を返す。こうすることで、ネットワーク障害などで一部のノードに遅延が発生した際でも影響を受けにくくなる。こういった手法を本書ではクオラム書き込みと読んでいる。&lt;/p&gt;
+&lt;p&gt;リーダーレスレプリケーションの説明のなかで登場したけど、シングルリーダーのレプリケーションでもクオラム書き込みが使われているのは発見だった。&lt;/p&gt;
+&lt;h1&gt;参考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://aws.amazon.com/jp/blogs/news/amazon-aurora-under-the-hood-quorum-and-correlated-failure/&quot;&gt;https://aws.amazon.com/jp/blogs/news/amazon-aurora-under-the-hood-quorum-and-correlated-failure/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://aws.typepad.com/sajp/2017/02/introducing-the-aurora-storage-engine.html&quot;&gt;https://aws.typepad.com/sajp/2017/02/introducing-the-aurora-storage-engine.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>Auroraのレプリケーション</title>
+    <updated>2021-05-02T16:49:00+00:00</updated>
+    <dc:date>2021-05-02T16:49:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/441/</id>
     <link href="https://blog.naoty.dev/441/"/>
     <summary>&lt;h1&gt;2020/8&lt;/h1&gt;
