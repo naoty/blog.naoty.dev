@@ -72,16 +72,16 @@
 <pre lang="sql" class="highlight highlight-sql"><span class="k">SELECT</span>
   <span class="o">*</span>
 <span class="k">FROM</span>
-  <span class="k">system</span><span class="p">.</span><span class="n">system_schema</span><span class="p">.</span><span class="nv">"columns"</span>
+  <span class="n">system_schema</span><span class="p">.</span><span class="n">columns</span>
 <span class="k">WHERE</span>
   <span class="n">keyspace_name</span> <span class="o">=</span> <span class="s1">'my_keyspace'</span>
-  <span class="k">AND</span> <span class="k">column_name</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="s1">'address'</span><span class="p">)</span>
+  <span class="k">AND</span> <span class="k">column_name</span> <span class="k">IN</span> <span class="s1">'email'</span>
+<span class="n">ALLOW</span> <span class="n">FILTERING</span>
 <span class="p">;</span>
 </pre>
-<p><code>system.system_schema</code>にメタデータがあったけど、このクエリは失敗する。</p>
+<p><code>system_schema.columns</code>にメタデータがある。<code>ALLOW FILTERING</code>をつけないと以下のようなエラーが出るので注意。</p>
 <pre><code>Query 1 ERROR: PRIMARY KEY column "column_name" cannot be restricted as preceding column "table_name" is not restricted
 </code></pre>
-<p>CQLがSQLと似ているからと言って、RDSのようにはうまくいかなくてまだやり方はよくわかってない。Casssandraは難しい。</p>
         </section>
         <footer>
           <nav>

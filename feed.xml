@@ -916,16 +916,16 @@ Flags:
 &lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt;
   &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;system_schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;columns&quot;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;system_schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;keyspace_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'my_keyspace'&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;column_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'email'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'address'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;column_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'email'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ALLOW&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FILTERING&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;system.system_schema&lt;/code&gt;にメタデータがあったけど、このクエリは失敗する。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;system_schema.columns&lt;/code&gt;にメタデータがある。&lt;code&gt;ALLOW FILTERING&lt;/code&gt;をつけないと以下のようなエラーが出るので注意。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Query 1 ERROR: PRIMARY KEY column &quot;column_name&quot; cannot be restricted as preceding column &quot;table_name&quot; is not restricted
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;CQLがSQLと似ているからと言って、RDSのようにはうまくいかなくてまだやり方はよくわかってない。Casssandraは難しい。&lt;/p&gt;</summary>
+&lt;/code&gt;&lt;/pre&gt;</summary>
     <title>あるカラムをもつテーブルを探すには</title>
     <updated>2020-06-08T23:03:00+00:00</updated>
     <dc:date>2020-06-08T23:03:00+00:00</dc:date>
