@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALLOW FILTERING</title>
+    <meta property="og:title" content="ALLOW FILTERING">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/444/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ALLOW FILTERING</h1>
+          <p class="metadata">
+            <time datetime="2021-05-23T16:31:00.000+0000">2021-05-23 16:31</time>
+            <a href="/cassandra/">#cassandra</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>こんなテーブルがあるとする。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">store</span><span class="p">.</span><span class="n">shopping_cart</span> <span class="p">(</span>
+    <span class="n">userid</span> <span class="nb">text</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">item_count</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">last_update_timestamp</span> <span class="nb">timestamp</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">bloom_filter_fp_chance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01</span>
+    <span class="k">AND</span> <span class="n">caching</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'keys'</span><span class="p">:</span> <span class="s1">'ALL'</span><span class="p">,</span> <span class="s1">'rows_per_partition'</span><span class="p">:</span> <span class="s1">'NONE'</span><span class="err">}</span>
+    <span class="k">AND</span> <span class="k">comment</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="k">AND</span> <span class="n">compaction</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'class'</span><span class="p">:</span> <span class="s1">'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy'</span><span class="p">,</span> <span class="s1">'max_threshold'</span><span class="p">:</span> <span class="s1">'32'</span><span class="p">,</span> <span class="s1">'min_threshold'</span><span class="p">:</span> <span class="s1">'4'</span><span class="err">}</span>
+    <span class="k">AND</span> <span class="n">compression</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'chunk_length_in_kb'</span><span class="p">:</span> <span class="s1">'64'</span><span class="p">,</span> <span class="s1">'class'</span><span class="p">:</span> <span class="s1">'org.apache.cassandra.io.compress.LZ4Compressor'</span><span class="err">}</span>
+    <span class="k">AND</span> <span class="n">crc_check_chance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span>
+    <span class="k">AND</span> <span class="n">dclocal_read_repair_chance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+    <span class="k">AND</span> <span class="n">default_time_to_live</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">AND</span> <span class="n">gc_grace_seconds</span> <span class="o">=</span> <span class="mi">864000</span>
+    <span class="k">AND</span> <span class="n">max_index_interval</span> <span class="o">=</span> <span class="mi">2048</span>
+    <span class="k">AND</span> <span class="n">memtable_flush_period_in_ms</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">AND</span> <span class="n">min_index_interval</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="k">AND</span> <span class="n">read_repair_chance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span>
+    <span class="k">AND</span> <span class="n">speculative_retry</span> <span class="o">=</span> <span class="s1">'99PERCENTILE'</span><span class="p">;</span>
+</pre>
+<p>適当にSELECT文を実行するとエラーになる。</p>
+<pre><code>cassandra@cql&gt; SELECT * FROM store.shopping_cart WHERE item_count &gt; 0;
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+</code></pre>
+<p>言われた通り、<code>ALLOW FILTERING</code>をつけるとエラーがでなくなる。</p>
+<pre><code>cassandra@cqlsh&gt; select * from shopping_cart where item_count &gt; 0 ALLOW FILTERING;
+
+ userid | item_count | last_update_timestamp
+--------+------------+-----------------------
+   4567 |         20 |                  null
+
+(1 rows)
+</code></pre>
+<p>こういったエラーが出るクエリはテーブルからすべてのレコードを取得してからフィルタリングをおこなうため、場合によっては非常に効率が悪くなる。例えば、100万件中2件だけの結果になる場合でも100万件を取得することになってしまう。逆に、100万件中99万件を返すことになるならそこまで非効率ではない。そういう場合は<code>ALLOW FILTERING</code>をつけて実行すればいい。</p>
+<p>すべてのレコードを取得しないようにするには、partitionを特定できるように条件を指定する必要がある。以下のようにPRIMARY KEYである<code>userid</code>カラムに対する一致条件を指定した場合、partitionが特定されるためエラーメッセージが出ない。</p>
+<pre><code>cassandra@cqlsh&gt; select * from shopping_cart where userid = '4567';
+
+ userid | item_count | last_update_timestamp
+--------+------------+-----------------------
+   4567 |         20 |                  null
+
+(1 rows)
+</code></pre>
+<h1>参考</h1>
+<ul>
+<li><a href="https://www.datastax.com/blog/allow-filtering-explained">ALLOW FILTERING explained</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
