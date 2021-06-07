@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>予約システムを作ってロックについて学ぶ</title>
-    <meta property="og:title" content="予約システムを作ってロックについて学ぶ">
+    <title>手を動かしながらロックを学ぶ</title>
+    <meta property="og:title" content="手を動かしながらロックを学ぶ">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://blog.naoty.dev/445/">
     <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
@@ -23,106 +23,136 @@
     <main>
       <article>
         <header>
-          <h1 class="title mt-0">予約システムを作ってロックについて学ぶ</h1>
+          <h1 class="title mt-0">手を動かしながらロックを学ぶ</h1>
           <p class="metadata">
-            <time datetime="2021-06-05T16:31:00.000+0000">2021-06-05 16:31</time>
+            <time datetime="2021-06-07T22:47:00.000+0000">2021-06-07 22:47</time>
             <a href="/mysql/">#mysql</a>
           </p>
         </header>
         <section class="body">
-          <p>昨今話題となっている予約システムをもし自分が作るとしたらどのように作るか、興味が湧いてきた。</p>
-<p>そこで、毎日10席までしか予約できないシステムを考えてみる。</p>
-<p>予約を表すテーブルを定義する。</p>
-<pre lang="sql" class="highlight highlight-sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">bookings</span> <span class="p">(</span>
-  <span class="nv">`id`</span> <span class="nb">INT</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-  <span class="nv">`date`</span> <span class="nb">DATE</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`customer_id`</span> <span class="nb">INT</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`id`</span><span class="p">),</span>
-  <span class="k">UNIQUE</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`date`</span><span class="p">,</span> <span class="nv">`customer_id`</span><span class="p">)</span>
-<span class="p">);</span>
+          <p>いつまで経ってもロックについて理解したと言えなかったので、ロックについて手を動かしながら学んでみることにした。</p>
+<p>MySQLが公式にサンプルデータとして提供している<a href="https://dev.mysql.com/doc/world-setup/en/">world</a>データベースと、補完が使えて便利なMySQLクライアントである<a href="https://www.mycli.net/">mycli</a>をインストールした<a href="https://github.com/naoty/mysql-playground">Dockerイメージ</a>を作ったので、それを使って試してみる。</p>
+<p>今回は以下のような<code>city</code>テーブルに対して特定の一行へのロックをとったときについて試してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">city</span> <span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span><span class="p">[</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>
+<span class="k">Table</span>        <span class="o">|</span> <span class="n">city</span>
+<span class="k">Create</span> <span class="k">Table</span> <span class="o">|</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`city`</span> <span class="p">(</span>
+  <span class="nv">`ID`</span> <span class="nb">int</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="nv">`Name`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`CountryCode`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`District`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`Population`</span> <span class="nb">int</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">'0'</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`ID`</span><span class="p">),</span>
+  <span class="k">KEY</span> <span class="nv">`CountryCode`</span> <span class="p">(</span><span class="nv">`CountryCode`</span><span class="p">),</span>
+  <span class="k">CONSTRAINT</span> <span class="nv">`city_ibfk_1`</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`CountryCode`</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="nv">`country`</span> <span class="p">(</span><span class="nv">`Code`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">4080</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span> <span class="k">COLLATE</span><span class="o">=</span><span class="n">utf8mb4_0900_ai_ci</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">003</span><span class="n">s</span>
 </pre>
-<h1>ナイーブな実装</h1>
-<p>100人の客が予約システムに殺到した状況をナイーブな実装で再現する。</p>
-<pre lang="ruby" class="highlight highlight-ruby"><span class="nb">require</span> <span class="s2">"mysql2"</span>
+<h1>共有ロック</h1>
+<p>トランザクションT1で<code>select ... lock in share mode</code>を実行して共有ロックをとる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">lock</span> <span class="k">in</span> <span class="k">share</span> <span class="k">mode</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>  <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
 
-<span class="no">CUSTOMER_SIZE</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="no">CAPACITY_PER_DAY</span> <span class="o">=</span> <span class="mi">10</span>
-
-<span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="mi">1</span><span class="p">.</span><span class="nf">upto</span><span class="p">(</span><span class="no">CUSTOMER_SIZE</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
-  <span class="n">threads</span> <span class="o">&lt;&lt;</span> <span class="no">Thread</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">customer_id</span><span class="o">|</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="no">Mysql2</span><span class="o">::</span><span class="no">Client</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span>
-      <span class="ss">host: </span><span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"MYSQL_HOST"</span><span class="p">),</span>
-      <span class="ss">username: </span><span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"MYSQL_USERNAME"</span><span class="p">),</span>
-      <span class="ss">password: </span><span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"MYSQL_PASSWORD"</span><span class="p">),</span>
-      <span class="ss">database: </span><span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"MYSQL_DATABASE"</span><span class="p">),</span>
-    <span class="p">)</span>
-
-    <span class="n">date</span> <span class="o">=</span> <span class="no">Date</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">customer_id</span> <span class="o">%</span> <span class="mi">7</span><span class="p">)</span>
-    <span class="n">statement</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">prepare</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) AS count FROM bookings WHERE date = ?"</span><span class="p">)</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">statement</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="ss">symbolize_keys: </span><span class="kp">true</span><span class="p">)</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="n">results</span><span class="p">.</span><span class="nf">first</span><span class="p">[</span><span class="ss">:count</span><span class="p">]</span>
-    <span class="nb">exit</span> <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="no">CAPACITY_PER_DAY</span>
-
-    <span class="n">statement</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">prepare</span><span class="p">(</span><span class="s2">"INSERT INTO bookings (date, customer_id) VALUES (?, ?)"</span><span class="p">)</span>
-    <span class="n">statement</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">customer_id</span><span class="p">)</span>
-    <span class="nb">puts</span> <span class="s2">"successfully booked: (</span><span class="si">#{</span><span class="n">date</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">)"</span>
-  <span class="k">rescue</span> <span class="no">Mysql2</span><span class="o">::</span><span class="no">Error</span> <span class="o">=&gt;</span> <span class="n">exception</span>
-    <span class="nb">puts</span> <span class="n">exception</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="n">threads</span><span class="p">.</span><span class="nf">each</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:join</span><span class="p">)</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">010</span><span class="n">s</span>
 </pre>
-<p>これを実行したところ、日の上限である10席を超えてオーバーブッキングしてしまった。</p>
-<pre><code>mysql&gt; select date, count(*) from bookings group by date;
-+------------+----------+
-| date       | count(*) |
-+------------+----------+
-| 2021-06-01 |       14 |
-| 2021-06-02 |       15 |
-| 2021-06-03 |       15 |
-| 2021-06-04 |       14 |
-| 2021-06-05 |       14 |
-| 2021-06-06 |       14 |
-| 2021-06-07 |       14 |
-+------------+----------+
-7 rows in set (0.00 sec)
-</code></pre>
+<p>別のトランザクションT2で同じ行を<code>select</code>することはできたが、<code>update</code>することはできなかった。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>  <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">009</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">lock</span> <span class="k">in</span> <span class="k">share</span> <span class="k">mode</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>  <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">009</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">update</span> <span class="n">city</span> <span class="k">set</span> <span class="nv">`Population`</span> <span class="o">=</span> <span class="mi">100</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<h1>排他ロック</h1>
+<p>トランザクションT1で<code>select ... for update</code>を実行して排他ロックをとる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>  <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">011</span><span class="n">s</span>
+</pre>
+<p>別のトランザクションT2で同じ行を<code>select</code>することはできたが、<code>select ... lock in share mode</code>や<code>select ... for update</code>や<code>update</code>はロック取得待ちになった。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>  <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">012</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">lock</span> <span class="k">in</span> <span class="k">share</span> <span class="k">mode</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">update</span> <span class="n">city</span> <span class="k">set</span> <span class="nv">`Population`</span> <span class="o">=</span> <span class="mi">100</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<h1>まとめ</h1>
+<p>特定の行に対するロックをとったとき、別のトランザクションからの操作がどうなるかまとめるとこうなった。</p>
 <table>
 <thead>
 <tr>
-<th>time</th>
-<th>transaction1</th>
-<th>transaction2</th>
-<th>count</th>
+<th>T1\T2</th>
+<th>select</th>
+<th>select ... lock in share mode</th>
+<th>select ... for update</th>
+<th>update</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>select count(*) from bookings</td>
-<td></td>
-<td>9</td>
+<td>select ... lock in share mode</td>
+<td>可</td>
+<td>可</td>
+<td>ロック待ち</td>
+<td>ロック待ち</td>
 </tr>
 <tr>
-<td>2</td>
-<td></td>
-<td>select count(*) from bookings</td>
-<td>9</td>
-</tr>
-<tr>
-<td>3</td>
-<td>insert into bookings</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>4</td>
-<td></td>
-<td>insert into bookings</td>
-<td>11</td>
+<td>select ... for update</td>
+<td>可</td>
+<td>ロック待ち</td>
+<td>ロック待ち</td>
+<td>ロック待ち</td>
 </tr>
 </tbody>
 </table>
