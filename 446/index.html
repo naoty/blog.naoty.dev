@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手を動かしながらロックを学ぶ 2</title>
+    <meta property="og:title" content="手を動かしながらロックを学ぶ 2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/446/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">手を動かしながらロックを学ぶ 2</h1>
+          <p class="metadata">
+            <time datetime="2021-06-09T22:19:00.000+0000">2021-06-09 22:19</time>
+            <a href="/mysql/">#mysql</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://blog.naoty.dev/445/">前回</a>に続いて、今度は範囲に対するロックについて試してみる。</p>
+<p>前回同様にworldデータベースの<code>city</code>テーブルを使う。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">city</span> <span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span><span class="p">[</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>
+<span class="k">Table</span>        <span class="o">|</span> <span class="n">city</span>
+<span class="k">Create</span> <span class="k">Table</span> <span class="o">|</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`city`</span> <span class="p">(</span>
+  <span class="nv">`ID`</span> <span class="nb">int</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="nv">`Name`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`CountryCode`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`District`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`Population`</span> <span class="nb">int</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">'0'</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`ID`</span><span class="p">),</span>
+  <span class="k">KEY</span> <span class="nv">`CountryCode`</span> <span class="p">(</span><span class="nv">`CountryCode`</span><span class="p">),</span>
+  <span class="k">CONSTRAINT</span> <span class="nv">`city_ibfk_1`</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`CountryCode`</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="nv">`country`</span> <span class="p">(</span><span class="nv">`Code`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">4080</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span> <span class="k">COLLATE</span><span class="o">=</span><span class="n">utf8mb4_0900_ai_ci</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">017</span><span class="n">s</span>
+</pre>
+<h1>下準備</h1>
+<p>ロック待ちの確認にかかる時間を減らすため、timeoutを1秒にしておく。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">innodb_lock_wait_timeout</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+</pre>
+<p>あとで<code>show engine innodb status</code>でトランザクションの状態を確認するため、出力するようにする。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">set</span> <span class="k">global</span> <span class="n">innodb_status_output_locks</span> <span class="o">=</span> <span class="k">on</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="n">s</span>
+</pre>
+<h1>範囲に対する排他ロック</h1>
+<p>セカンダリインデックス<code>CountryCode</code>に対して<code>select ... for update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="nv">`CountryCode`</span> <span class="o">=</span> <span class="s1">'AFG'</span> <span class="k">for</span> <span class="k">update</span>
+<span class="o">+</span><span class="c1">----+----------------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>           <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+----------------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span>          <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2</span>  <span class="o">|</span> <span class="n">Qandahar</span>       <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Qandahar</span> <span class="o">|</span> <span class="mi">237500</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="mi">3</span>  <span class="o">|</span> <span class="n">Herat</span>          <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Herat</span>    <span class="o">|</span> <span class="mi">186800</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="mi">4</span>  <span class="o">|</span> <span class="n">Mazar</span><span class="o">-</span><span class="n">e</span><span class="o">-</span><span class="n">Sharif</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Balkh</span>    <span class="o">|</span> <span class="mi">127800</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+----------------+-------------+----------+------------+</span>
+
+<span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">013</span><span class="n">s</span>
+</pre>
+<p>どのようなロックがかかっているか確認するため<code>show engine innodb status</code>を実行して<code>TRANSACTIONS</code>を見る。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="n">engine</span> <span class="n">innodb</span> <span class="n">status</span> <span class="err">\</span><span class="k">G</span>
+<span class="c1">--- (snip) ---</span>
+<span class="c1">------------</span>
+<span class="n">TRANSACTIONS</span>
+<span class="c1">------------</span>
+<span class="c1">--- (snip) ---</span>
+<span class="c1">---TRANSACTION 2650, ACTIVE 3 sec</span>
+<span class="mi">4</span> <span class="k">lock</span> <span class="n">struct</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">heap</span> <span class="k">size</span> <span class="mi">1136</span><span class="p">,</span> <span class="mi">9</span> <span class="k">row</span> <span class="k">lock</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">MySQL</span> <span class="n">thread</span> <span class="n">id</span> <span class="mi">36</span><span class="p">,</span> <span class="n">OS</span> <span class="n">thread</span> <span class="n">handle</span> <span class="mi">139918963455744</span><span class="p">,</span> <span class="n">query</span> <span class="n">id</span> <span class="mi">301</span> <span class="n">localhost</span> <span class="n">root</span>
+<span class="k">TABLE</span> <span class="k">LOCK</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="k">lock</span> <span class="k">mode</span> <span class="n">IX</span>
+<span class="n">RECORD</span> <span class="n">LOCKS</span> <span class="k">space</span> <span class="n">id</span> <span class="mi">2</span> <span class="n">page</span> <span class="k">no</span> <span class="mi">14</span> <span class="n">n</span> <span class="n">bits</span> <span class="mi">1272</span> <span class="k">index</span> <span class="n">CountryCode</span> <span class="k">of</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="n">lock_mode</span> <span class="n">X</span>
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">3</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000001</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">4</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000002</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">5</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000003</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">6</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000004</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+
+<span class="n">RECORD</span> <span class="n">LOCKS</span> <span class="k">space</span> <span class="n">id</span> <span class="mi">2</span> <span class="n">page</span> <span class="k">no</span> <span class="mi">6</span> <span class="n">n</span> <span class="n">bits</span> <span class="mi">248</span> <span class="k">index</span> <span class="k">PRIMARY</span> <span class="k">of</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="n">lock_mode</span> <span class="n">X</span> <span class="n">locks</span> <span class="n">rec</span> <span class="n">but</span> <span class="k">not</span> <span class="n">gap</span>
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">2</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000001</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a0110</span><span class="p">;</span> <span class="k">asc</span>        <span class="p">;;</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4</span><span class="n">b6162756c20202020202020202020202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Kabul</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4</span><span class="n">b61626f6c202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Kabol</span>               <span class="p">;;</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">801</span><span class="n">b2920</span><span class="p">;</span> <span class="k">asc</span>   <span class="p">)</span> <span class="p">;;</span>
+
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">3</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000002</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a011d</span><span class="p">;</span> <span class="k">asc</span>        <span class="p">;;</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">51616</span><span class="n">e646168617220202020202020202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Qandahar</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">51616</span><span class="n">e6461686172202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Qandahar</span>            <span class="p">;;</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80039</span><span class="n">fbc</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">4</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000003</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a012a</span><span class="p">;</span> <span class="k">asc</span>       <span class="o">*</span><span class="p">;;</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">486572617420202020202020202020202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Herat</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4865726174202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Herat</span>               <span class="p">;;</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">8002</span><span class="n">d9b0</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">5</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000004</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a0137</span><span class="p">;</span> <span class="k">asc</span>       <span class="mi">7</span><span class="p">;;</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4</span><span class="n">d617a61722d652d53686172696620202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Mazar</span><span class="o">-</span><span class="n">e</span><span class="o">-</span><span class="n">Sharif</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">42616</span><span class="n">c6b68202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Balkh</span>               <span class="p">;;</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">8001</span><span class="n">f338</span><span class="p">;</span> <span class="k">asc</span>    <span class="mi">8</span><span class="p">;;</span>
+
+<span class="n">RECORD</span> <span class="n">LOCKS</span> <span class="k">space</span> <span class="n">id</span> <span class="mi">2</span> <span class="n">page</span> <span class="k">no</span> <span class="mi">14</span> <span class="n">n</span> <span class="n">bits</span> <span class="mi">1272</span> <span class="k">index</span> <span class="n">CountryCode</span> <span class="k">of</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="n">lock_mode</span> <span class="n">X</span> <span class="n">locks</span> <span class="n">gap</span> <span class="k">before</span> <span class="n">rec</span>
+<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">7</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
+ <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">41474</span><span class="n">f</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AGO</span><span class="p">;;</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000038</span><span class="p">;</span> <span class="k">asc</span>    <span class="mi">8</span><span class="p">;;</span>
+<span class="c1">--- (snip) ---</span>
+</pre>
+<p><code>RECORD LOCKS</code>から始まる行に注目すると、3種類のロックを取得していることがわかる。</p>
+<blockquote>
+<p>RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table <code>world</code>.<code>city</code> trx id 2650 lock_mode X</p>
+</blockquote>
+<p>これは<code>CountryCode</code>インデックスレコードに対してネクストキーロックを取得していることを表している。ネクストキーロックとは、そのレコード自身とそのレコードと一つ前のレコードの間のギャップに対するロックを指している。</p>
+<p>今回は<code>AFG</code>にマッチする<code>Kabol</code>, <code>Qandahar</code>, <code>Herat</code>, <code>Balkh</code>を含むレコードと、それらのレコードの前のギャップにロックを取得することになる。また、<code>Kabol</code>は最小の値のはずなので、無限に小さい論理的なレコードとの間のギャップがロックされることになる。</p>
+<p>試しに別のトランザクションから<code>AFG</code>かつ<code>Kabol</code>より小さい値を<code>insert</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">city</span> <span class="p">(</span><span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`CountryCode`</span><span class="p">,</span> <span class="nv">`District`</span><span class="p">,</span> <span class="nv">`Population`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'aaa'</span><span class="p">,</span> <span class="s1">'AFG'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<blockquote>
+<p>RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table <code>world</code>.<code>city</code> trx id 2650 lock_mode X locks rec but not gap</p>
+</blockquote>
+<p>これはクラスタインデックスに対してレコードロックを取得していることを表している。レコードロックはそのまま、そのレコード自身に対するロックを指している。</p>
+<p>試しに別のトランザクションからクラスタインデックスに含まれる値を<code>update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">update</span> <span class="n">city</span> <span class="k">set</span> <span class="nv">`Population`</span> <span class="o">=</span> <span class="nv">`Population`</span> <span class="o">+</span> <span class="mi">1000000</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<blockquote>
+<p>RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table <code>world</code>.<code>city</code> trx id 2650 lock_mode X locks gap before rec</p>
+</blockquote>
+<p>これは<code>CountryCode</code>インデックスレコードに対するギャップロックを取得していることを表している。ギャップロックとは、あるレコードとその前のレコードの間のギャップに対するロックを指している。</p>
+<p>この行の下の方に以下のように出力されており、<code>CountryCode</code>が<code>AGO</code>はちょうど<code>AFG</code>の次の値になっているため、<code>AFG</code>と<code>AGO</code>の間のギャップをロックしていることになる。</p>
+<blockquote>
+<p>0: len 3; hex 41474f; asc AGO;;</p>
+</blockquote>
+<p>試しに別のトランザクションでこの間に新たな<code>CountryCode</code>を<code>insert</code>してみる。<code>CountryCode</code>には外部キー制約があるため<code>country</code>にも<code>insert</code>してから<code>insert</code>する。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">country</span> <span class="p">(</span><span class="nv">`Code`</span><span class="p">,</span> <span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`Region`</span><span class="p">,</span> <span class="nv">`LocalName`</span><span class="p">,</span> <span class="nv">`GovernmentForm`</span><span class="p">,</span> <span class="nv">`Code2`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'AFZ'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'AZ'</span><span class="p">)</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">city</span> <span class="p">(</span><span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`CountryCode`</span><span class="p">,</span> <span class="nv">`District`</span><span class="p">,</span> <span class="nv">`Population`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'aaa'</span><span class="p">,</span> <span class="s1">'AFZ'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<p>長くなったので今回はここまで。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
