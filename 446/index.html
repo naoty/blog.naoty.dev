@@ -30,7 +30,7 @@
           </p>
         </header>
         <section class="body">
-          <p><a href="https://blog.naoty.dev/445/">前回</a>に続いて、今度は範囲に対するロックについて試してみる。</p>
+          <p><a href="https://blog.naoty.dev/445/">前回</a>に続いて、今度は<code>select ... for update</code>で複数件取得した場合のロックについて試してみる。</p>
 <p>前回同様にworldデータベースの<code>city</code>テーブルを使う。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">city</span> <span class="err">\</span><span class="k">G</span>
 <span class="o">***************************</span><span class="p">[</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>
@@ -60,8 +60,64 @@
 <span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
 <span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="n">s</span>
 </pre>
-<h1>範囲に対する排他ロック</h1>
-<p>セカンダリインデックス<code>CountryCode</code>に対して<code>select ... for update</code>してみる。</p>
+<h1>クラスタインデックスによるロック</h1>
+<p>プライマリーキーを条件に指定して<code>select ... for update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span>  <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="mi">1</span>  <span class="o">|</span> <span class="n">Kabul</span> <span class="o">|</span> <span class="n">AFG</span>         <span class="o">|</span> <span class="n">Kabol</span>    <span class="o">|</span> <span class="mi">1780000</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------+-------------+----------+------------+</span>
+
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">011</span><span class="n">s</span>
+</pre>
+<p>どのようなロックがかかっているか確認するため<code>show engine innodb status</code>を実行して<code>TRANSACTIONS</code>を見る。</p>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 2668
+Purge done for trx's n:o &lt; 2667 undo n:o &lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421394077937904, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077936192, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077935336, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 2667, ACTIVE 4 sec
+2 lock struct(s), heap size 1136, 1 row lock(s)
+MySQL thread id 47, OS thread handle 139918963160832, query id 369 localhost root
+TABLE LOCK table `world`.`city` trx id 2667 lock mode IX
+RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table `world`.`city` trx id 2667 lock_mode
+X locks rec but not gap
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a0110; asc        ;;
+ 3: len 30; hex 4b6162756c20202020202020202020202020202020202020202020202020; asc Kabul
+       ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4b61626f6c202020202020202020202020202020; asc Kabol               ;;
+ 6: len 4; hex 801b2920; asc   ) ;;
+</code></pre>
+<blockquote>
+<p>RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table <code>world</code>.<code>city</code> trx id 2667 lock_mode</p>
+</blockquote>
+<p><code>RECORD LOCKS</code>から始まる行に着目すると、クラスタインデックスに対するネクストキーロックを取得していることがわかる。ネクストキーロックとは、そのレコード自身とそのレコードと一つ前のレコードの間のギャップに対するロックを指している。</p>
+<p>試しに取得したレコードを<code>update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">update</span> <span class="n">city</span> <span class="k">set</span> <span class="nv">`Population`</span> <span class="o">=</span> <span class="nv">`Population`</span> <span class="o">+</span> <span class="mi">1000000</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<h1>セカンダリインデックスによるロック</h1>
+<p>セカンダリインデックス<code>CountryCode</code>を条件に指定して<code>select ... for update</code>してみる。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
 <span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
 <span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
@@ -78,82 +134,80 @@
 <span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span>
 <span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">013</span><span class="n">s</span>
 </pre>
-<p>どのようなロックがかかっているか確認するため<code>show engine innodb status</code>を実行して<code>TRANSACTIONS</code>を見る。</p>
-<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="n">engine</span> <span class="n">innodb</span> <span class="n">status</span> <span class="err">\</span><span class="k">G</span>
-<span class="c1">--- (snip) ---</span>
-<span class="c1">------------</span>
-<span class="n">TRANSACTIONS</span>
-<span class="c1">------------</span>
-<span class="c1">--- (snip) ---</span>
-<span class="c1">---TRANSACTION 2650, ACTIVE 3 sec</span>
-<span class="mi">4</span> <span class="k">lock</span> <span class="n">struct</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">heap</span> <span class="k">size</span> <span class="mi">1136</span><span class="p">,</span> <span class="mi">9</span> <span class="k">row</span> <span class="k">lock</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="n">MySQL</span> <span class="n">thread</span> <span class="n">id</span> <span class="mi">36</span><span class="p">,</span> <span class="n">OS</span> <span class="n">thread</span> <span class="n">handle</span> <span class="mi">139918963455744</span><span class="p">,</span> <span class="n">query</span> <span class="n">id</span> <span class="mi">301</span> <span class="n">localhost</span> <span class="n">root</span>
-<span class="k">TABLE</span> <span class="k">LOCK</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="k">lock</span> <span class="k">mode</span> <span class="n">IX</span>
-<span class="n">RECORD</span> <span class="n">LOCKS</span> <span class="k">space</span> <span class="n">id</span> <span class="mi">2</span> <span class="n">page</span> <span class="k">no</span> <span class="mi">14</span> <span class="n">n</span> <span class="n">bits</span> <span class="mi">1272</span> <span class="k">index</span> <span class="n">CountryCode</span> <span class="k">of</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="n">lock_mode</span> <span class="n">X</span>
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">3</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000001</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+<p>先程と同様にロックを確認する。</p>
+<pre><code>------------
+TRANSACTIONS
+------------
+--- (snip) ---
+---TRANSACTION 2650, ACTIVE 3 sec
+4 lock struct(s), heap size 1136, 9 row lock(s)
+MySQL thread id 36, OS thread handle 139918963455744, query id 301 localhost root
+TABLE LOCK table `world`.`city` trx id 2650 lock mode IX
+RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table `world`.`city` trx id 2650 lock_mode X
+Record lock, heap no 3 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000001; asc     ;;
 
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">4</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000002</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+Record lock, heap no 4 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000002; asc     ;;
 
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">5</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000003</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+Record lock, heap no 5 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000003; asc     ;;
 
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">6</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000004</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+Record lock, heap no 6 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000004; asc     ;;
 
-<span class="n">RECORD</span> <span class="n">LOCKS</span> <span class="k">space</span> <span class="n">id</span> <span class="mi">2</span> <span class="n">page</span> <span class="k">no</span> <span class="mi">6</span> <span class="n">n</span> <span class="n">bits</span> <span class="mi">248</span> <span class="k">index</span> <span class="k">PRIMARY</span> <span class="k">of</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="n">lock_mode</span> <span class="n">X</span> <span class="n">locks</span> <span class="n">rec</span> <span class="n">but</span> <span class="k">not</span> <span class="n">gap</span>
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">2</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000001</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
- <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a0110</span><span class="p">;</span> <span class="k">asc</span>        <span class="p">;;</span>
- <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4</span><span class="n">b6162756c20202020202020202020202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Kabul</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
- <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4</span><span class="n">b61626f6c202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Kabol</span>               <span class="p">;;</span>
- <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">801</span><span class="n">b2920</span><span class="p">;</span> <span class="k">asc</span>   <span class="p">)</span> <span class="p">;;</span>
+RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table `world`.`city` trx id 2650 lock_mode X locks rec but not gap
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a0110; asc        ;;
+ 3: len 30; hex 4b6162756c20202020202020202020202020202020202020202020202020; asc Kabul    ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4b61626f6c202020202020202020202020202020; asc Kabol               ;;
+ 6: len 4; hex 801b2920; asc   ) ;;
 
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">3</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000002</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
- <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a011d</span><span class="p">;</span> <span class="k">asc</span>        <span class="p">;;</span>
- <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">51616</span><span class="n">e646168617220202020202020202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Qandahar</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
- <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">51616</span><span class="n">e6461686172202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Qandahar</span>            <span class="p">;;</span>
- <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80039</span><span class="n">fbc</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+Record lock, heap no 3 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000002; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a011d; asc        ;;
+ 3: len 30; hex 51616e646168617220202020202020202020202020202020202020202020; asc Qandahar    ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 51616e6461686172202020202020202020202020; asc Qandahar            ;;
+ 6: len 4; hex 80039fbc; asc     ;;
 
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">4</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000003</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
- <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a012a</span><span class="p">;</span> <span class="k">asc</span>       <span class="o">*</span><span class="p">;;</span>
- <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">486572617420202020202020202020202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Herat</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
- <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4865726174202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Herat</span>               <span class="p">;;</span>
- <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">8002</span><span class="n">d9b0</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
+Record lock, heap no 4 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000003; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a012a; asc       *;;
+ 3: len 30; hex 486572617420202020202020202020202020202020202020202020202020; asc Herat    ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4865726174202020202020202020202020202020; asc Herat               ;;
+ 6: len 4; hex 8002d9b0; asc     ;;
 
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">5</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">7</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000004</span><span class="p">;</span> <span class="k">asc</span>     <span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">6</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">00000000063</span><span class="n">a</span><span class="p">;</span> <span class="k">asc</span>      <span class="p">:;;</span>
- <span class="mi">2</span><span class="p">:</span> <span class="n">len</span> <span class="mi">7</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">820000008</span><span class="n">a0137</span><span class="p">;</span> <span class="k">asc</span>       <span class="mi">7</span><span class="p">;;</span>
- <span class="mi">3</span><span class="p">:</span> <span class="n">len</span> <span class="mi">30</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">4</span><span class="n">d617a61722d652d53686172696620202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Mazar</span><span class="o">-</span><span class="n">e</span><span class="o">-</span><span class="n">Sharif</span>    <span class="p">;</span> <span class="p">(</span><span class="n">total</span> <span class="mi">35</span> <span class="n">bytes</span><span class="p">);</span>
- <span class="mi">4</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">414647</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AFG</span><span class="p">;;</span>
- <span class="mi">5</span><span class="p">:</span> <span class="n">len</span> <span class="mi">20</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">42616</span><span class="n">c6b68202020202020202020202020202020</span><span class="p">;</span> <span class="k">asc</span> <span class="n">Balkh</span>               <span class="p">;;</span>
- <span class="mi">6</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">8001</span><span class="n">f338</span><span class="p">;</span> <span class="k">asc</span>    <span class="mi">8</span><span class="p">;;</span>
+Record lock, heap no 5 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000004; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a0137; asc       7;;
+ 3: len 30; hex 4d617a61722d652d53686172696620202020202020202020202020202020; asc Mazar-e-Sharif    ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 42616c6b68202020202020202020202020202020; asc Balkh               ;;
+ 6: len 4; hex 8001f338; asc    8;;
 
-<span class="n">RECORD</span> <span class="n">LOCKS</span> <span class="k">space</span> <span class="n">id</span> <span class="mi">2</span> <span class="n">page</span> <span class="k">no</span> <span class="mi">14</span> <span class="n">n</span> <span class="n">bits</span> <span class="mi">1272</span> <span class="k">index</span> <span class="n">CountryCode</span> <span class="k">of</span> <span class="k">table</span> <span class="nv">`world`</span><span class="p">.</span><span class="nv">`city`</span> <span class="n">trx</span> <span class="n">id</span> <span class="mi">2650</span> <span class="n">lock_mode</span> <span class="n">X</span> <span class="n">locks</span> <span class="n">gap</span> <span class="k">before</span> <span class="n">rec</span>
-<span class="n">Record</span> <span class="k">lock</span><span class="p">,</span> <span class="n">heap</span> <span class="k">no</span> <span class="mi">7</span> <span class="n">PHYSICAL</span> <span class="n">RECORD</span><span class="p">:</span> <span class="n">n_fields</span> <span class="mi">2</span><span class="p">;</span> <span class="n">compact</span> <span class="n">format</span><span class="p">;</span> <span class="n">info</span> <span class="n">bits</span> <span class="mi">0</span>
- <span class="mi">0</span><span class="p">:</span> <span class="n">len</span> <span class="mi">3</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">41474</span><span class="n">f</span><span class="p">;</span> <span class="k">asc</span> <span class="n">AGO</span><span class="p">;;</span>
- <span class="mi">1</span><span class="p">:</span> <span class="n">len</span> <span class="mi">4</span><span class="p">;</span> <span class="n">hex</span> <span class="mi">80000038</span><span class="p">;</span> <span class="k">asc</span>    <span class="mi">8</span><span class="p">;;</span>
-<span class="c1">--- (snip) ---</span>
-</pre>
+RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table `world`.`city` trx id 2650 lock_mode X locks gap before rec
+Record lock, heap no 7 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 41474f; asc AGO;;
+ 1: len 4; hex 80000038; asc    8;;
+--- (snip) ---
+</code></pre>
 <p><code>RECORD LOCKS</code>から始まる行に注目すると、3種類のロックを取得していることがわかる。</p>
 <blockquote>
 <p>RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table <code>world</code>.<code>city</code> trx id 2650 lock_mode X</p>
 </blockquote>
-<p>これは<code>CountryCode</code>インデックスレコードに対してネクストキーロックを取得していることを表している。ネクストキーロックとは、そのレコード自身とそのレコードと一つ前のレコードの間のギャップに対するロックを指している。</p>
+<p>これは<code>CountryCode</code>インデックスレコードに対してネクストキーロックを取得していることを表している。</p>
 <p>今回は<code>AFG</code>にマッチする<code>Kabol</code>, <code>Qandahar</code>, <code>Herat</code>, <code>Balkh</code>を含むレコードと、それらのレコードの前のギャップにロックを取得することになる。また、<code>Kabol</code>は最小の値のはずなので、無限に小さい論理的なレコードとの間のギャップがロックされることになる。</p>
 <p>試しに別のトランザクションから<code>AFG</code>かつ<code>Kabol</code>より小さい値を<code>insert</code>してみる。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">city</span> <span class="p">(</span><span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`CountryCode`</span><span class="p">,</span> <span class="nv">`District`</span><span class="p">,</span> <span class="nv">`Population`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'aaa'</span><span class="p">,</span> <span class="s1">'AFG'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
@@ -182,7 +236,84 @@
 <span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">city</span> <span class="p">(</span><span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`CountryCode`</span><span class="p">,</span> <span class="nv">`District`</span><span class="p">,</span> <span class="nv">`Population`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'aaa'</span><span class="p">,</span> <span class="s1">'AFZ'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
 </pre>
-<p>長くなったので今回はここまで。</p>
+<h1>インデックスなしでのロック</h1>
+<p>最後にインデックスを使わない条件を指定して<code>select ... for update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="nv">`Population`</span> <span class="k">between</span> <span class="mi">1000000</span> <span class="k">and</span> <span class="mi">1200000</span> <span class="k">for</span> <span class="k">update</span>
+<span class="o">+</span><span class="c1">------+-------------------+-------------+----------------------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span>   <span class="o">|</span> <span class="n">Name</span>              <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span>             <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------+-------------------+-------------+----------------------+------------+</span>
+<span class="o">|</span> <span class="mi">71</span>   <span class="o">|</span> <span class="k">C</span><span class="err">ó</span><span class="n">rdoba</span>           <span class="o">|</span> <span class="n">ARG</span>         <span class="o">|</span> <span class="k">C</span><span class="err">ó</span><span class="n">rdoba</span>              <span class="o">|</span> <span class="mi">1157507</span>    <span class="o">|</span>
+<span class="o">|</span> <span class="mi">133</span>  <span class="o">|</span> <span class="n">Perth</span>             <span class="o">|</span> <span class="n">AUS</span>         <span class="o">|</span> <span class="n">West</span> <span class="n">Australia</span>       <span class="o">|</span> <span class="mi">1096829</span>    <span class="o">|</span>
+<span class="o">|</span> <span class="mi">216</span>  <span class="o">|</span> <span class="n">Bel</span><span class="err">é</span><span class="n">m</span>             <span class="o">|</span> <span class="n">BRA</span>         <span class="o">|</span> <span class="n">Par</span><span class="err">á</span>                 <span class="o">|</span> <span class="mi">1186926</span>    <span class="o">|</span>
+<span class="o">|</span> <span class="mi">217</span>  <span class="o">|</span> <span class="n">Guarulhos</span>         <span class="o">|</span> <span class="n">BRA</span>         <span class="o">|</span> <span class="n">S</span><span class="err">ã</span><span class="n">o</span> <span class="n">Paulo</span>            <span class="o">|</span> <span class="mi">1095874</span>    <span class="o">|</span>
+<span class="c1">--- (snip) ---</span>
+</pre>
+<p>同様にしてロックを確認する。</p>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 2671
+Purge done for trx's n:o &lt; 2667 undo n:o &lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421394077937904, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077936192, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077935336, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 2670, ACTIVE 6 sec
+25 lock struct(s), heap size 3520, 4103 row lock(s)
+MySQL thread id 47, OS thread handle 139918963160832, query id 381 localhost root
+TABLE LOCK table `world`.`city` trx id 2670 lock mode IX
+RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table `world`.`city` trx id 2670 lock_mode X
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a0110; asc        ;;
+ 3: len 30; hex 4b6162756c20202020202020202020202020202020202020202020202020; asc Kabul                         ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4b61626f6c202020202020202020202020202020; asc Kabol               ;;
+ 6: len 4; hex 801b2920; asc   ) ;;
+
+Record lock, heap no 3 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000002; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a011d; asc        ;;
+ 3: len 30; hex 51616e646168617220202020202020202020202020202020202020202020; asc Qandahar                      ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 51616e6461686172202020202020202020202020; asc Qandahar            ;;
+ 6: len 4; hex 80039fbc; asc     ;;
+
+Record lock, heap no 4 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000003; asc     ;;
+ 1: len 6; hex 00000000063a; asc      :;;
+ 2: len 7; hex 820000008a012a; asc       *;;
+ 3: len 30; hex 486572617420202020202020202020202020202020202020202020202020; asc Herat                         ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4865726174202020202020202020202020202020; asc Herat               ;;
+ 6: len 4; hex 8002d9b0; asc     ;;
+--- (snip) ---
+</code></pre>
+<blockquote>
+<p>RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table <code>world</code>.<code>city</code> trx id 2670 lock_mode X</p>
+</blockquote>
+<p>とあるので、取得したクラスタインデックスすべてに対してネクストキーロックを取得していることがわかる。</p>
+<h1>まとめ</h1>
+<p>まとめると、こういうことがわかった。</p>
+<ul>
+<li>クラスタインデックスを使った<code>select ... for update</code>はマッチした行のネクストキーロックを取得する。</li>
+<li>セカンダリインデックスを使った<code>select ... for update</code>はマッチしたセカンダリインデックスのネクストキーロックと次のレコードとの間のギャップロック、そしてマッチした行のレコードロックを取得する。</li>
+<li>インデックスを使わない<code>select ... for update</code>はマッチした行のネクストキーロックを取得する。</li>
+</ul>
+<p>当たり前といえばそうなるけど、ロックを取得する場合でも可能な限りインデックスを利用してロックの範囲を狭めることが重要ということがわかった。</p>
+<p>また、セカンダリインデックスを使った場合のロックの範囲は直感的には理解しにくいため、ハマりやすいポイントかもしれないが、今回いろいろ試してみることで理解が深まってよかった。</p>
         </section>
         <footer>
           <nav>
