@@ -30,7 +30,14 @@
           </p>
         </header>
         <section class="body">
-          <p><a href="https://blog.naoty.dev/445/">前回</a>に続いて、今度は<code>select ... for update</code>で複数件取得した場合のロックについて試してみる。</p>
+          <ul>
+<li>
+<a href="/445/">Part 1</a>: <code>select</code>による特定の一行に対するロック</li>
+<li>Part 2: <code>select</code>による複数行に対するロック</li>
+<li>
+<a href="/447/">Part 3</a>: <code>insert</code>, <code>update</code>, <code>delete</code>によるロック</li>
+</ul>
+<p>前回に続いて、今度は<code>select ... for update</code>で複数件取得した場合のロックについて試してみる。</p>
 <p>前回同様にworldデータベースの<code>city</code>テーブルを使う。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">city</span> <span class="err">\</span><span class="k">G</span>
 <span class="o">***************************</span><span class="p">[</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>

@@ -30,7 +30,14 @@
           </p>
         </header>
         <section class="body">
-          <p>いつまで経ってもロックについて理解したと言えなかったので、ロックについて手を動かしながら学んでみることにした。</p>
+          <ul>
+<li>Part 1: <code>select</code>による特定の一行に対するロック</li>
+<li>
+<a href="/446/">Part 2</a>: <code>select</code>による複数行に対するロック</li>
+<li>
+<a href="/447/">Part 3</a>: <code>insert</code>, <code>update</code>, <code>delete</code>によるロック</li>
+</ul>
+<p>いつまで経ってもロックについて理解したと言えなかったので、ロックについて手を動かしながら学んでみることにした。</p>
 <p>MySQLが公式にサンプルデータとして提供している<a href="https://dev.mysql.com/doc/world-setup/en/">world</a>データベースと、補完が使えて便利なMySQLクライアントである<a href="https://www.mycli.net/">mycli</a>をインストールした<a href="https://github.com/naoty/mysql-playground">Dockerイメージ</a>を作ったので、それを使って試してみる。</p>
 <p>今回は以下のような<code>city</code>テーブルに対して特定の一行へのロックをとったときについて試してみる。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">city</span> <span class="err">\</span><span class="k">G</span>

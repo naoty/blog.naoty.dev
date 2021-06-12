@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手を動かしながらロックを学ぶ 3</title>
+    <meta property="og:title" content="手を動かしながらロックを学ぶ 3">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/447/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">手を動かしながらロックを学ぶ 3</h1>
+          <p class="metadata">
+            <time datetime="2021-06-10T08:52:00.000+0000">2021-06-10 08:52</time>
+            <a href="/mysql/">#mysql</a>
+          </p>
+        </header>
+        <section class="body">
+          <ul>
+<li>
+<a href="/445/">Part 1</a>: <code>select</code>による特定の一行に対するロック</li>
+<li>
+<a href="/446/">Part 2</a>: <code>select</code>による複数行に対するロック</li>
+<li>Part 3: <code>insert</code>, <code>update</code>, <code>delete</code>によるロック</li>
+</ul>
+<p>今回は<code>insert</code>等の操作がどのようなロックをとるのか調べてみる。前回と同様にworldデータベースを使い、同じ下準備を済ませる。</p>
+<h1>insert</h1>
+<p>外部キー制約の有無で結果が変わったため、先に外部キー制約がない場合を見る。</p>
+<p>外部キー制約がない<code>country</code>テーブルに<code>insert</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">country</span> <span class="p">(</span><span class="nv">`Code`</span><span class="p">,</span> <span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`Region`</span><span class="p">,</span> <span class="nv">`LocalName`</span><span class="p">,</span> <span class="nv">`GovernmentForm`</span><span class="p">,</span> <span class="nv">`Code2`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'AFZ'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'AZ'</span><span class="p">)</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="n">s</span>
+</pre>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 2664
+Purge done for trx's n:o &lt; 2662 undo n:o &lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421394077937904, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077936192, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077935336, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 2663, ACTIVE 3 sec
+1 lock struct(s), heap size 1136, 0 row lock(s), undo log entries 1
+MySQL thread id 47, OS thread handle 139918963160832, query id 355 localhost root
+TABLE LOCK table `world`.`country` trx id 2663 lock mode IX
+</code></pre>
+<p><code>RECORD LOCKS</code>から始まる行が出力されなかった。</p>
+<p>次に<code>country</code>テーブルへの外部キー制約をもつ<code>city</code>テーブルへの<code>insert</code>を試してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">city</span> <span class="p">(</span><span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`CountryCode`</span><span class="p">,</span> <span class="nv">`District`</span><span class="p">,</span> <span class="nv">`Population`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'dummy'</span><span class="p">,</span> <span class="s1">'AFG'</span><span class="p">,</span> <span class="s1">'dummy'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">013</span><span class="n">s</span>
+</pre>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 2059
+Purge done for trx's n:o &lt; 2054 undo n:o &lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421226401721752, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421226401720896, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421226401720040, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 2058, ACTIVE 20 sec
+3 lock struct(s), heap size 1136, 1 row lock(s), undo log entries 1
+MySQL thread id 11, OS thread handle 139751396103936, query id 40 localhost root
+TABLE LOCK table `world`.`city` trx id 2058 lock mode IX
+TABLE LOCK table `world`.`country` trx id 2058 lock mode IS
+RECORD LOCKS space id 3 page no 5 n bits 120 index PRIMARY of table `world`.`country` trx id 2058 lock mode S locks rec but not gap
+Record lock, heap no 3 PHYSICAL RECORD: n_fields 17; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 6; hex 000000000647; asc      G;;
+ 2: len 7; hex 820000008f011c; asc        ;;
+ 3: len 30; hex 41666768616e697374616e20202020202020202020202020202020202020; asc Afghanistan                   ; (total 52 bytes);
+ 4: len 1; hex 01; asc  ;;
+ 5: len 26; hex 536f75746865726e20616e642043656e7472616c204173696120; asc Southern and Central Asia ;;
+ 6: len 5; hex 8009f33a00; asc    : ;;
+ 7: len 2; hex 877f; asc   ;;
+ 8: len 4; hex 815aae00; asc  Z  ;;
+ 9: len 2; hex ad09; asc   ;;
+ 10: len 5; hex 8000175800; asc    X ;;
+ 11: SQL NULL;
+ 12: len 30; hex 416667616e697374616e2f416671616e657374616e202020202020202020; asc Afganistan/Afqanestan         ; (total 45 bytes);
+ 13: len 30; hex 49736c616d696320456d6972617465202020202020202020202020202020; asc Islamic Emirate               ; (total 45 bytes);
+ 14: len 30; hex 4d6f68616d6d6164204f6d61722020202020202020202020202020202020; asc Mohammad Omar                 ; (total 60 bytes);
+ 15: len 4; hex 80000001; asc     ;;
+ 16: len 2; hex 4146; asc AF;;
+</code></pre>
+<blockquote>
+<p>RECORD LOCKS space id 3 page no 5 n bits 120 index PRIMARY of table <code>world</code>.<code>country</code> trx id 2058 lock mode S locks rec but not gap</p>
+</blockquote>
+<p><code>country</code>テーブルのクラスタインデックスにおいて外部キーである<code>AFG</code>にマッチするレコードに対してレコードロックを取得している。ただし、排他ロックではなく共有ロックとなっている。</p>
+<p>そこで、別トランザクションで<code>country</code>テーブルに対して排他ロックを取得してみようとしたが、やっぱりできなかった。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">country</span> <span class="k">for</span> <span class="k">update</span>
+<span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
+</pre>
+<h1>update</h1>
+<p>まずはプライマリーキーで特定の列のみ<code>update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">update</span> <span class="n">city</span> <span class="k">set</span> <span class="nv">`Population`</span> <span class="o">=</span> <span class="nv">`Population`</span> <span class="o">+</span> <span class="mi">1000000</span> <span class="k">where</span> <span class="nv">`ID`</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+</pre>
+<p>このときのロックを確認する。</p>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 2666
+Purge done for trx's n:o &lt; 2662 undo n:o &lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421394077937904, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077936192, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421394077935336, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 2665, ACTIVE 16 sec
+2 lock struct(s), heap size 1136, 1 row lock(s), undo log entries 1
+MySQL thread id 47, OS thread handle 139918963160832, query id 363 localhost root
+TABLE LOCK table `world`.`city` trx id 2665 lock mode IX
+RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table `world`.`city` trx id 2665 lock_mode
+X locks rec but not gap
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;;
+ 1: len 6; hex 000000000a69; asc      i;;
+ 2: len 7; hex 02000001250151; asc     % Q;;
+ 3: len 30; hex 4b6162756c20202020202020202020202020202020202020202020202020; asc Kabul
+       ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4b61626f6c202020202020202020202020202020; asc Kabol               ;;
+ 6: len 4; hex 802a6b60; asc  *k`;;
+</code></pre>
+<p>プライマリーキーで条件を指定しているので、クラスタインデックスに対してレコードロックを取得している。これは<a href="/446/">前回</a>で<code>select ... for update</code>でプライマリーキーを条件とした場合と同じということになる。</p>
+<p>次にセカンダリインデックスに対して条件を指定して複数行を<code>update</code>してみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">update</span> <span class="n">city</span> <span class="k">set</span> <span class="nv">`Population`</span> <span class="o">=</span> <span class="nv">`Population`</span> <span class="o">+</span> <span class="mi">100000</span> <span class="k">where</span> <span class="nv">`CountryCode`</span> <span class="o">=</span> <span class="s1">'AFG'</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">4</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
+</pre>
+<p>ロックを確認する。</p>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 3085
+Purge done for trx's n:o &lt; 3084 undo n:o &lt; 0 state: running but idle
+History list length 1
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421984916573592, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421984916572736, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 421984916571880, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 3084, ACTIVE 7 sec
+4 lock struct(s), heap size 1136, 9 row lock(s), undo log entries 4
+MySQL thread id 10, OS thread handle 140509924382464, query id 44 localhost root
+TABLE LOCK table `world`.`city` trx id 3084 lock mode IX
+RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table `world`.`city` trx id 3084 lock_mode X
+Record lock, heap no 3 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000001; asc     ;;
+
+Record lock, heap no 4 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000002; asc     ;;
+
+Record lock, heap no 5 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000003; asc     ;;
+
+Record lock, heap no 6 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 414647; asc AFG;;
+ 1: len 4; hex 80000004; asc     ;;
+
+RECORD LOCKS space id 2 page no 6 n bits 248 index PRIMARY of table `world`.`city` trx id 3084 lock_mode X locks rec but not gap
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;;
+ 1: len 6; hex 000000000c0c; asc       ;;
+ 2: len 7; hex 010000011c0151; asc       Q;;
+ 3: len 30; hex 4b6162756c20202020202020202020202020202020202020202020202020; asc Kabul                         ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4b61626f6c202020202020202020202020202020; asc Kabol               ;;
+ 6: len 4; hex 801cafc0; asc     ;;
+
+Record lock, heap no 3 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000002; asc     ;;
+ 1: len 6; hex 000000000c0c; asc       ;;
+ 2: len 7; hex 010000011c0174; asc       t;;
+ 3: len 30; hex 51616e646168617220202020202020202020202020202020202020202020; asc Qandahar                      ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 51616e6461686172202020202020202020202020; asc Qandahar            ;;
+ 6: len 4; hex 8005265c; asc   &amp;\;;
+
+Record lock, heap no 4 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000003; asc     ;;
+ 1: len 6; hex 000000000c0c; asc       ;;
+ 2: len 7; hex 010000011c0197; asc        ;;
+ 3: len 30; hex 486572617420202020202020202020202020202020202020202020202020; asc Herat                         ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 4865726174202020202020202020202020202020; asc Herat               ;;
+ 6: len 4; hex 80046050; asc   `P;;
+
+Record lock, heap no 5 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
+ 0: len 4; hex 80000004; asc     ;;
+ 1: len 6; hex 000000000c0c; asc       ;;
+ 2: len 7; hex 010000011c01ba; asc        ;;
+ 3: len 30; hex 4d617a61722d652d53686172696620202020202020202020202020202020; asc Mazar-e-Sharif                ; (total 35 bytes);
+ 4: len 3; hex 414647; asc AFG;;
+ 5: len 20; hex 42616c6b68202020202020202020202020202020; asc Balkh               ;;
+ 6: len 4; hex 800379d8; asc   y ;;
+
+RECORD LOCKS space id 2 page no 14 n bits 1272 index CountryCode of table `world`.`city` trx id 3084 lock_mode X locks gap before rec
+Record lock, heap no 7 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 41474f; asc AGO;;
+ 1: len 4; hex 80000038; asc    8;;
+</code></pre>
+<p>これも同様に<code>select ... for update</code>でセカンダリインデックスを指定した場合のロック範囲と一致する。</p>
+<h1>delete</h1>
+<p><code>update</code>と同じ結果になったので割愛する。</p>
+<h1>まとめ</h1>
+<ul>
+<li>
+<code>insert</code>は外部キー制約がある場合、外部テーブルに対して共有ロックでのレコードロックを取得する。</li>
+<li>
+<code>update</code>と<code>delete</code>は<code>select ... for update</code>と同じ。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
