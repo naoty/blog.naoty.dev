@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深すぎるcontextのネストを読みやすくする</title>
+    <meta property="og:title" content="深すぎるcontextのネストを読みやすくする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/448/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">深すぎるcontextのネストを読みやすくする</h1>
+          <p class="metadata">
+            <time datetime="2021-06-27T20:56:00.000+0000">2021-06-27 20:56</time>
+            <a href="/ruby/">#ruby</a>
+            <a href="/test/">#test</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>今さらながら雰囲気でRSpecを書いているところがあったのでブログにしてみた。</p>
+<p>テスト対象に影響を与えるパラメータが複数あると、テスト対象の値がとりうるパターンが膨大な組み合わせになる。例えば、あるパラメータ<code>a</code>がテスト結果に影響を及ぼしうるパターンが2つあり、さらにパラメータ<code>b</code>に2つパターンがあれば合計4パターンのテストが必要になる。</p>
+<p>RSpecでは<code>context</code>をつかってテストの事前条件をスコープとして分割できるので、こういった組み合わせをネストされたスコープとして表現することになってしまう。</p>
+<h1>ナイーブな実装</h1>
+<p>まずは何も考えずに<code>context</code>のネストによって事前条件の組み合わせを実装した例を載せる。このコードはそのまま一つのファイルとして実行可能になっている。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="nb">require</span> <span class="s2">"bundler/inline"</span>
+
+<span class="n">gemfile</span> <span class="k">do</span>
+  <span class="n">source</span> <span class="s2">"https://rubygems.org"</span>
+
+  <span class="n">gem</span> <span class="s2">"rspec"</span>
+<span class="k">end</span>
+
+<span class="nb">require</span> <span class="s2">"rspec/autorun"</span>
+
+<span class="no">Something</span> <span class="o">=</span> <span class="no">Struct</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"Something"</span><span class="p">)</span> <span class="k">do</span>
+  <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">a</span><span class="p">:,</span> <span class="n">b</span><span class="p">:)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="k">unless</span> <span class="n">a</span><span class="p">.</span><span class="nf">nil?</span>
+    <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="k">unless</span> <span class="n">b</span><span class="p">.</span><span class="nf">nil?</span>
+
+    <span class="n">result</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">RSpec</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">formatter</span> <span class="o">=</span> <span class="ss">:documentation</span>
+<span class="k">end</span>
+
+<span class="no">RSpec</span><span class="p">.</span><span class="nf">describe</span> <span class="no">Something</span> <span class="k">do</span>
+  <span class="n">let</span><span class="p">(</span><span class="ss">:instance</span><span class="p">)</span> <span class="p">{</span> <span class="n">described_class</span><span class="p">.</span><span class="nf">new</span> <span class="p">}</span>
+
+  <span class="n">describe</span> <span class="s2">"#do_something_with_arguments"</span> <span class="k">do</span>
+    <span class="n">context</span> <span class="s2">"when a is nil"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+      <span class="n">context</span> <span class="s2">"when b is nil"</span> <span class="k">do</span>
+        <span class="n">let</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+        <span class="n">it</span> <span class="s2">"returns empty array"</span> <span class="k">do</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+          <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[]</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="n">context</span> <span class="s2">"when b isn't nil"</span> <span class="k">do</span>
+        <span class="n">let</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"b"</span> <span class="p">}</span>
+
+        <span class="n">it</span> <span class="s2">"returns array containing value for b"</span> <span class="k">do</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+          <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s2">"when a isn't nil"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"a"</span> <span class="p">}</span>
+
+      <span class="n">context</span> <span class="s2">"when b is nil"</span> <span class="k">do</span>
+        <span class="n">let</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+        <span class="n">it</span> <span class="s2">"returns array containing value for a"</span> <span class="k">do</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+          <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="n">context</span> <span class="s2">"when b isn't nil"</span> <span class="k">do</span>
+        <span class="n">let</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"b"</span> <span class="p">}</span>
+
+        <span class="n">it</span> <span class="s2">"returns array containing value for a and b"</span> <span class="k">do</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+          <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p>個人的には<code>subject { ... }</code>があまり好みじゃないので同じコードをあえて何度も書いている。</p>
+<pre><code>% ruby app.rb
+Struct::Something
+  #do_something_with_arguments
+    when a is nil
+      when b is nil
+        returns empty array
+      when b isn't nil
+        returns array containing value for b
+    when a isn't nil
+      when b is nil
+        returns array containing value for a
+      when b isn't nil
+        returns array containing value for a and b
+
+Finished in 0.00539 seconds (files took 0.20052 seconds to load)
+4 examples, 0 failures
+</code></pre>
+<p>上の例ではパラメータが2つしかないため、そこまでひどいネストにはならなかったが、現実世界ではパラメータはユーザーから渡されるパラメータやDBに保存されたデータの状態など無数に存在する。それらを愚直に<code>context</code>で実装するととんでもないことになる。</p>
+<p>そんなことをする人はいないのもまた現実であり、テストすべきパラメータの組み合わせが網羅できているかがわからないあいまいなテストコードが生まれることになる。</p>
+<h1>shared_contextをつかった実装</h1>
+<p>次に<code>shared_context</code>を使って事前条件を定義し、<code>context</code>内で<code>include_context</code>を複数回呼び出すことでそれらの組み合わせを実装する例を載せる。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="nb">require</span> <span class="s2">"bundler/inline"</span>
+
+<span class="n">gemfile</span> <span class="k">do</span>
+  <span class="n">source</span> <span class="s2">"https://rubygems.org"</span>
+
+  <span class="n">gem</span> <span class="s2">"rspec"</span>
+<span class="k">end</span>
+
+<span class="nb">require</span> <span class="s2">"rspec/autorun"</span>
+
+<span class="no">Something</span> <span class="o">=</span> <span class="no">Struct</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"Something"</span><span class="p">)</span> <span class="k">do</span>
+  <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">a</span><span class="p">:,</span> <span class="n">b</span><span class="p">:)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="k">unless</span> <span class="n">a</span><span class="p">.</span><span class="nf">nil?</span>
+    <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="k">unless</span> <span class="n">b</span><span class="p">.</span><span class="nf">nil?</span>
+
+    <span class="n">result</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">RSpec</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">formatter</span> <span class="o">=</span> <span class="ss">:documentation</span>
+<span class="k">end</span>
+
+<span class="no">RSpec</span><span class="p">.</span><span class="nf">describe</span> <span class="no">Something</span> <span class="k">do</span>
+  <span class="n">let</span><span class="p">(</span><span class="ss">:instance</span><span class="p">)</span> <span class="p">{</span> <span class="n">described_class</span><span class="p">.</span><span class="nf">new</span> <span class="p">}</span>
+
+  <span class="n">describe</span> <span class="s2">"#do_something_with_arguments"</span> <span class="k">do</span>
+    <span class="n">shared_context</span> <span class="s2">"when a is nil"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">shared_context</span> <span class="s2">"when a isn't nil"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"a"</span> <span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">shared_context</span> <span class="s2">"when b is nil"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">shared_context</span> <span class="s2">"when b isn't nil"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"b"</span> <span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s2">"when a and b is nil"</span> <span class="k">do</span>
+      <span class="n">include_context</span> <span class="s2">"when a is nil"</span>
+      <span class="n">include_context</span> <span class="s2">"when b is nil"</span>
+
+      <span class="n">it</span> <span class="s2">"returns empty array"</span> <span class="k">do</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+        <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[]</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s2">"when a is nil and b isn't nil"</span> <span class="k">do</span>
+      <span class="n">include_context</span> <span class="s2">"when a is nil"</span>
+      <span class="n">include_context</span> <span class="s2">"when b isn't nil"</span>
+
+      <span class="n">it</span> <span class="s2">"returns array containing value for b"</span> <span class="k">do</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+        <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s2">"when a isn't nil and b is nil"</span> <span class="k">do</span>
+      <span class="n">include_context</span> <span class="s2">"when a isn't nil"</span>
+      <span class="n">include_context</span> <span class="s2">"when b is nil"</span>
+
+      <span class="n">it</span> <span class="s2">"returns array containing value for a"</span> <span class="k">do</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+        <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s2">"when a and b isn't nil"</span> <span class="k">do</span>
+      <span class="n">include_context</span> <span class="s2">"when a isn't nil"</span>
+      <span class="n">include_context</span> <span class="s2">"when b isn't nil"</span>
+
+      <span class="n">it</span> <span class="s2">"returns array containing value for a and b"</span> <span class="k">do</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">do_something</span><span class="p">(</span><span class="ss">a: </span><span class="n">a</span><span class="p">,</span> <span class="ss">b: </span><span class="n">b</span><span class="p">)</span>
+        <span class="n">expect</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">to</span> <span class="n">eq</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<pre><code>% ruby app.rb
+Struct::Something
+  #do_something_with_arguments
+    when a and b is nil
+      returns empty array
+    when a is nil and b isn't nil
+      returns array containing value for b
+    when a isn't nil and b is nil
+      returns array containing value for a
+    when a and b isn't nil
+      returns array containing value for a and b
+
+Finished in 0.00564 seconds (files took 0.20556 seconds to load)
+4 examples, 0 failures
+</code></pre>
+<p><code>shared_context</code>で再利用可能な事前条件を定義し、<code>include_context</code>でそれを利用している。<code>include_context</code>は複数呼び出せるので、事前条件の組み合わせを親の<code>context</code>内で宣言でき、<code>context</code>が深くネストしていくような事態にはならなくなった。</p>
+<p>この方法であれば、あるパラメータがとりうるパターンをそれぞれ<code>shared_context</code>で定義しておくことでどれだけ組み合わせが増えてもネストがこれ以上は深くならずテストコードの読みやすさを維持できると思う。</p>
+<h1>補足</h1>
+<p>そもそも、とりうるすべての組み合わせをテストすることはテスト全体の実行時間を遅らせることになる。必要十分なテストケースのみ列挙することで、テストとしての有効性を保ちつつこうしたデメリットを回避する方法もある。<a href="/400/">以前の記事</a>ではそうしたテストケースの生成方法についてまとめたので参考になるかもしれない。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
