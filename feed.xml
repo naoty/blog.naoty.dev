@@ -10,6 +10,97 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/449/</id>
+    <link href="https://blog.naoty.dev/449/"/>
+    <summary>&lt;p&gt;Cassandraを本格的に扱う機会ができたので、CQL実際に試しながら覚えていきたい。CassandraにはDocker公式のイメージがあるため、これを利用する。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;% docker run --name hello-cassandra cassandra
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;cqlsh&lt;/code&gt;でCQLを実際に試していく。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;% docker exec --interactive --tty hello-cassandra cqlsh
+Connected to Test Cluster at 127.0.0.1:9042.
+[cqlsh 5.0.1 | Cassandra 3.11.10 | CQL spec 3.4.4 | Native protocol v4]
+Use HELP for help.
+cqlsh&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;キースペースの作成&lt;/h1&gt;
+&lt;p&gt;Cassandraはキースペースと呼ばれるものの中にテーブルが存在し、1つのアプリケーションにつき1つのキースペースを用意するとのことなので、まずはキースペースを作る。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh&amp;gt; create keyspace hello with replication = {'class' : 'SimpleStrategy', 'replication_factor' : 1};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;キースペースを作成する際にレプリケーションストラテジーとレプリケーション係数を指定する必要がある。今回はテストなので、&lt;code&gt;SimpleStrategy&lt;/code&gt;を選択しレプリケーション係数も1にする。&lt;/p&gt;
+&lt;p&gt;キースペースの一覧は&lt;code&gt;desc keyspaces&lt;/code&gt;で確認できる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh&amp;gt; desc keyspaces;
+
+system_schema  system_auth  system  system_distributed  system_traces  hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以降の操作で扱うキースペースを選択するにはSQLと同様に&lt;code&gt;use&lt;/code&gt;を使う。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh&amp;gt; use hello;
+cqlsh:hello&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;テーブルの作成&lt;/h1&gt;
+&lt;p&gt;作成したキースペース内にテーブルを作成する。これもSQLと同様に&lt;code&gt;create table&lt;/code&gt;を使う。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; create table users (user_id bigint primary key, name varchar, birthday date);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Cassandraがサポートするデータ型は&lt;a href=&quot;https://docs.datastax.com/ja/dse/5.1/cql/cql/cql_reference/refDataTypes.html&quot;&gt;ここ&lt;/a&gt;を参考にするといい。&lt;/p&gt;
+&lt;p&gt;テーブルのリストはキースペースと同様に&lt;code&gt;desc tables&lt;/code&gt;で見れる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; desc tables;
+
+users
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;各テーブルのスキーマはSQLと同様に&lt;code&gt;desc &amp;lt;table名&amp;gt;&lt;/code&gt;で見れる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; desc users;
+
+CREATE TABLE hello.users (
+    user_id bigint PRIMARY KEY,
+    birthday date,
+    name text
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;データの挿入&lt;/h1&gt;
+&lt;p&gt;これもSQL同様に&lt;code&gt;insert into &amp;lt;table名&amp;gt; (&amp;lt;カラム1&amp;gt;, ...) values (&amp;lt;値1&amp;gt;, ...)&lt;/code&gt;でデータを挿入できる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name) values (1, '2021-01-01', 'naoty');
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;クエリ実行&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from users;
+
+ user_id | birthday   | name
+---------+------------+-------
+       1 | 2021-01-01 | naoty
+
+(1 rows)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;条件を指定する場合は&lt;code&gt;where&lt;/code&gt;で指定できる。ただし、&lt;a href=&quot;/444/&quot;&gt;以前の記事&lt;/a&gt;でも書いた通り、プライマリーキー以外のカラムを&lt;code&gt;where&lt;/code&gt;で指定することは制限されている。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from users where user_id = 1;
+
+ user_id | birthday   | name
+---------+------------+-------
+       1 | 2021-01-01 | naoty
+
+(1 rows)
+cqlsh:hello&amp;gt; select * from users where name = 'naoty';
+InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;参考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.datastax.com/ja/dse/5.1/cql/index.html&quot;&gt;https://docs.datastax.com/ja/dse/5.1/cql/index.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>CQL入門</title>
+    <updated>2021-06-28T22:17:00+00:00</updated>
+    <dc:date>2021-06-28T22:17:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/448/</id>
     <link href="https://blog.naoty.dev/448/"/>
     <summary>&lt;p&gt;今さらながら雰囲気でRSpecを書いているところがあったのでブログにしてみた。&lt;/p&gt;

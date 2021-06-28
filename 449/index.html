@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CQL入門</title>
+    <meta property="og:title" content="CQL入門">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/449/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">CQL入門</h1>
+          <p class="metadata">
+            <time datetime="2021-06-28T22:17:00.000+0000">2021-06-28 22:17</time>
+            <a href="/cassandra/">#cassandra</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Cassandraを本格的に扱う機会ができたので、CQL実際に試しながら覚えていきたい。CassandraにはDocker公式のイメージがあるため、これを利用する。</p>
+<pre><code>% docker run --name hello-cassandra cassandra
+</code></pre>
+<p><code>cqlsh</code>でCQLを実際に試していく。</p>
+<pre><code>% docker exec --interactive --tty hello-cassandra cqlsh
+Connected to Test Cluster at 127.0.0.1:9042.
+[cqlsh 5.0.1 | Cassandra 3.11.10 | CQL spec 3.4.4 | Native protocol v4]
+Use HELP for help.
+cqlsh&gt;
+</code></pre>
+<h1>キースペースの作成</h1>
+<p>Cassandraはキースペースと呼ばれるものの中にテーブルが存在し、1つのアプリケーションにつき1つのキースペースを用意するとのことなので、まずはキースペースを作る。</p>
+<pre><code>cqlsh&gt; create keyspace hello with replication = {'class' : 'SimpleStrategy', 'replication_factor' : 1};
+</code></pre>
+<p>キースペースを作成する際にレプリケーションストラテジーとレプリケーション係数を指定する必要がある。今回はテストなので、<code>SimpleStrategy</code>を選択しレプリケーション係数も1にする。</p>
+<p>キースペースの一覧は<code>desc keyspaces</code>で確認できる。</p>
+<pre><code>cqlsh&gt; desc keyspaces;
+
+system_schema  system_auth  system  system_distributed  system_traces  hello
+</code></pre>
+<p>以降の操作で扱うキースペースを選択するにはSQLと同様に<code>use</code>を使う。</p>
+<pre><code>cqlsh&gt; use hello;
+cqlsh:hello&gt;
+</code></pre>
+<h1>テーブルの作成</h1>
+<p>作成したキースペース内にテーブルを作成する。これもSQLと同様に<code>create table</code>を使う。</p>
+<pre><code>cqlsh:hello&gt; create table users (user_id bigint primary key, name varchar, birthday date);
+</code></pre>
+<p>Cassandraがサポートするデータ型は<a href="https://docs.datastax.com/ja/dse/5.1/cql/cql/cql_reference/refDataTypes.html">ここ</a>を参考にするといい。</p>
+<p>テーブルのリストはキースペースと同様に<code>desc tables</code>で見れる。</p>
+<pre><code>cqlsh:hello&gt; desc tables;
+
+users
+</code></pre>
+<p>各テーブルのスキーマはSQLと同様に<code>desc &lt;table名&gt;</code>で見れる。</p>
+<pre><code>cqlsh:hello&gt; desc users;
+
+CREATE TABLE hello.users (
+    user_id bigint PRIMARY KEY,
+    birthday date,
+    name text
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+</code></pre>
+<h1>データの挿入</h1>
+<p>これもSQL同様に<code>insert into &lt;table名&gt; (&lt;カラム1&gt;, ...) values (&lt;値1&gt;, ...)</code>でデータを挿入できる。</p>
+<pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name) values (1, '2021-01-01', 'naoty');
+</code></pre>
+<h1>クエリ実行</h1>
+<pre><code>cqlsh:hello&gt; select * from users;
+
+ user_id | birthday   | name
+---------+------------+-------
+       1 | 2021-01-01 | naoty
+
+(1 rows)
+</code></pre>
+<p>条件を指定する場合は<code>where</code>で指定できる。ただし、<a href="/444/">以前の記事</a>でも書いた通り、プライマリーキー以外のカラムを<code>where</code>で指定することは制限されている。</p>
+<pre><code>cqlsh:hello&gt; select * from users where user_id = 1;
+
+ user_id | birthday   | name
+---------+------------+-------
+       1 | 2021-01-01 | naoty
+
+(1 rows)
+cqlsh:hello&gt; select * from users where name = 'naoty';
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+</code></pre>
+<h1>参考</h1>
+<ul>
+<li><a href="https://docs.datastax.com/ja/dse/5.1/cql/index.html">https://docs.datastax.com/ja/dse/5.1/cql/index.html</a></li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
