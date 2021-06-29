@@ -56,7 +56,11 @@ cqlsh:hello&gt;
 </code></pre>
 <h1>テーブルの作成</h1>
 <p>作成したキースペース内にテーブルを作成する。これもSQLと同様に<code>create table</code>を使う。</p>
-<pre><code>cqlsh:hello&gt; create table users (user_id bigint primary key, name varchar, birthday date);
+<pre><code>cqlsh:hello&gt; create table users (
+         ...   user_id bigint primary key,
+         ...   name varchar,
+         ...   birthday date
+         ... );
 </code></pre>
 <p>Cassandraがサポートするデータ型は<a href="https://docs.datastax.com/ja/dse/5.1/cql/cql/cql_reference/refDataTypes.html">ここ</a>を参考にするといい。</p>
 <p>テーブルのリストはキースペースと同様に<code>desc tables</code>で見れる。</p>
@@ -88,7 +92,8 @@ CREATE TABLE hello.users (
 </code></pre>
 <h1>データの挿入</h1>
 <p>これもSQL同様に<code>insert into &lt;table名&gt; (&lt;カラム1&gt;, ...) values (&lt;値1&gt;, ...)</code>でデータを挿入できる。</p>
-<pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name) values (1, '2021-01-01', 'naoty');
+<pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name)
+         ... values (1, '2021-01-01', 'naoty');
 </code></pre>
 <h1>クエリ実行</h1>
 <pre><code>cqlsh:hello&gt; select * from users;

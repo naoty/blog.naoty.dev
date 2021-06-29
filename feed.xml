@@ -38,7 +38,11 @@ cqlsh:hello&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;テーブルの作成&lt;/h1&gt;
 &lt;p&gt;作成したキースペース内にテーブルを作成する。これもSQLと同様に&lt;code&gt;create table&lt;/code&gt;を使う。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; create table users (user_id bigint primary key, name varchar, birthday date);
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; create table users (
+         ...   user_id bigint primary key,
+         ...   name varchar,
+         ...   birthday date
+         ... );
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Cassandraがサポートするデータ型は&lt;a href=&quot;https://docs.datastax.com/ja/dse/5.1/cql/cql/cql_reference/refDataTypes.html&quot;&gt;ここ&lt;/a&gt;を参考にするといい。&lt;/p&gt;
 &lt;p&gt;テーブルのリストはキースペースと同様に&lt;code&gt;desc tables&lt;/code&gt;で見れる。&lt;/p&gt;
@@ -70,7 +74,8 @@ CREATE TABLE hello.users (
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;データの挿入&lt;/h1&gt;
 &lt;p&gt;これもSQL同様に&lt;code&gt;insert into &amp;lt;table名&amp;gt; (&amp;lt;カラム1&amp;gt;, ...) values (&amp;lt;値1&amp;gt;, ...)&lt;/code&gt;でデータを挿入できる。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name) values (1, '2021-01-01', 'naoty');
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name)
+         ... values (1, '2021-01-01', 'naoty');
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;クエリ実行&lt;/h1&gt;
 &lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from users;
