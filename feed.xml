@@ -77,12 +77,29 @@ CREATE TABLE hello.users (
 &lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name)
          ... values (1, '2021-01-01', 'naoty');
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;SQLと違う部分は複数行を一度に&lt;code&gt;insert&lt;/code&gt;できない。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name)
+         ... values (1, '2021-01-01', 'naoty'),
+				            (2, '2021-02-01', 'naoty2');
+SyntaxException: line 2:33 mismatched input ',' expecting EOF (... (1, '2021-01-01', 'naoty')[,]...)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;さらに、primary keyが同じレコードを&lt;code&gt;insert&lt;/code&gt;すると更新処理になる。upsertと呼ばれる処理になっている。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name)
+         ... values (1, '2021-01-01', 'naoty2');
+cqlsh:hello&amp;gt; select * from users where user_id = 1;
+
+ user_id | birthday   | name
+---------+------------+--------
+       1 | 2021-01-01 | naoty2
+
+(1 rows)
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;クエリ実行&lt;/h1&gt;
 &lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from users;
 
  user_id | birthday   | name
----------+------------+-------
-       1 | 2021-01-01 | naoty
+---------+------------+--------
+       1 | 2021-01-01 | naoty2
 
 (1 rows)
 &lt;/code&gt;&lt;/pre&gt;
@@ -90,11 +107,11 @@ CREATE TABLE hello.users (
 &lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from users where user_id = 1;
 
  user_id | birthday   | name
----------+------------+-------
-       1 | 2021-01-01 | naoty
+---------+------------+--------
+       1 | 2021-01-01 | naoty2
 
 (1 rows)
-cqlsh:hello&amp;gt; select * from users where name = 'naoty';
+cqlsh:hello&amp;gt; select * from users where name = 'naoty2';
 InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;参考&lt;/h1&gt;

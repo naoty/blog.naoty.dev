@@ -95,12 +95,29 @@ CREATE TABLE hello.users (
 <pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name)
          ... values (1, '2021-01-01', 'naoty');
 </code></pre>
+<p>SQLと違う部分は複数行を一度に<code>insert</code>できない。</p>
+<pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name)
+         ... values (1, '2021-01-01', 'naoty'),
+				            (2, '2021-02-01', 'naoty2');
+SyntaxException: line 2:33 mismatched input ',' expecting EOF (... (1, '2021-01-01', 'naoty')[,]...)
+</code></pre>
+<p>さらに、primary keyが同じレコードを<code>insert</code>すると更新処理になる。upsertと呼ばれる処理になっている。</p>
+<pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name)
+         ... values (1, '2021-01-01', 'naoty2');
+cqlsh:hello&gt; select * from users where user_id = 1;
+
+ user_id | birthday   | name
+---------+------------+--------
+       1 | 2021-01-01 | naoty2
+
+(1 rows)
+</code></pre>
 <h1>クエリ実行</h1>
 <pre><code>cqlsh:hello&gt; select * from users;
 
  user_id | birthday   | name
----------+------------+-------
-       1 | 2021-01-01 | naoty
+---------+------------+--------
+       1 | 2021-01-01 | naoty2
 
 (1 rows)
 </code></pre>
@@ -108,11 +125,11 @@ CREATE TABLE hello.users (
 <pre><code>cqlsh:hello&gt; select * from users where user_id = 1;
 
  user_id | birthday   | name
----------+------------+-------
-       1 | 2021-01-01 | naoty
+---------+------------+--------
+       1 | 2021-01-01 | naoty2
 
 (1 rows)
-cqlsh:hello&gt; select * from users where name = 'naoty';
+cqlsh:hello&gt; select * from users where name = 'naoty2';
 InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
 </code></pre>
 <h1>参考</h1>
