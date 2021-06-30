@@ -10,6 +10,17 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/450/</id>
+    <link href="https://blog.naoty.dev/450/"/>
+    <summary>&lt;p&gt;前回に続いて、CQLの基本的な操作を試しながら理解していく。&lt;/p&gt;
+&lt;h1&gt;データの更新&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;
+&lt;/code&gt;&lt;/pre&gt;</summary>
+    <title>CQL入門2</title>
+    <updated>2021-06-29T23:53:00+00:00</updated>
+    <dc:date>2021-06-29T23:53:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/449/</id>
     <link href="https://blog.naoty.dev/449/"/>
     <summary>&lt;p&gt;Cassandraを本格的に扱う機会ができたので、CQL実際に試しながら覚えていきたい。CassandraにはDocker公式のイメージがあるため、これを利用する。&lt;/p&gt;
@@ -72,7 +83,7 @@ CREATE TABLE hello.users (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h1&gt;データの挿入&lt;/h1&gt;
+&lt;h1&gt;データの挿入・更新&lt;/h1&gt;
 &lt;p&gt;これもSQL同様に&lt;code&gt;insert into &amp;lt;table名&amp;gt; (&amp;lt;カラム1&amp;gt;, ...) values (&amp;lt;値1&amp;gt;, ...)&lt;/code&gt;でデータを挿入できる。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name)
          ... values (1, '2021-01-01', 'naoty');
@@ -80,7 +91,7 @@ CREATE TABLE hello.users (
 &lt;p&gt;SQLと違う部分は複数行を一度に&lt;code&gt;insert&lt;/code&gt;できない。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; insert into users (user_id, birthday, name)
          ... values (1, '2021-01-01', 'naoty'),
-				            (2, '2021-02-01', 'naoty2');
+                    (2, '2021-02-01', 'naoty2');
 SyntaxException: line 2:33 mismatched input ',' expecting EOF (... (1, '2021-01-01', 'naoty')[,]...)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;さらに、primary keyが同じレコードを&lt;code&gt;insert&lt;/code&gt;すると更新処理になる。upsertと呼ばれる処理になっている。&lt;/p&gt;
@@ -114,6 +125,7 @@ cqlsh:hello&amp;gt; select * from users where user_id = 1;
 cqlsh:hello&amp;gt; select * from users where name = 'naoty2';
 InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING&quot;
 &lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;データの削除&lt;/h1&gt;
 &lt;h1&gt;参考&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://docs.datastax.com/ja/dse/5.1/cql/index.html&quot;&gt;https://docs.datastax.com/ja/dse/5.1/cql/index.html&lt;/a&gt;&lt;/li&gt;

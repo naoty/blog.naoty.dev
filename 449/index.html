@@ -90,7 +90,7 @@ CREATE TABLE hello.users (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 </code></pre>
-<h1>データの挿入</h1>
+<h1>データの挿入・更新</h1>
 <p>これもSQL同様に<code>insert into &lt;table名&gt; (&lt;カラム1&gt;, ...) values (&lt;値1&gt;, ...)</code>でデータを挿入できる。</p>
 <pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name)
          ... values (1, '2021-01-01', 'naoty');
@@ -98,7 +98,7 @@ CREATE TABLE hello.users (
 <p>SQLと違う部分は複数行を一度に<code>insert</code>できない。</p>
 <pre><code>cqlsh:hello&gt; insert into users (user_id, birthday, name)
          ... values (1, '2021-01-01', 'naoty'),
-				            (2, '2021-02-01', 'naoty2');
+                    (2, '2021-02-01', 'naoty2');
 SyntaxException: line 2:33 mismatched input ',' expecting EOF (... (1, '2021-01-01', 'naoty')[,]...)
 </code></pre>
 <p>さらに、primary keyが同じレコードを<code>insert</code>すると更新処理になる。upsertと呼ばれる処理になっている。</p>
@@ -132,6 +132,7 @@ cqlsh:hello&gt; select * from users where user_id = 1;
 cqlsh:hello&gt; select * from users where name = 'naoty2';
 InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
 </code></pre>
+<h1>データの削除</h1>
 <h1>参考</h1>
 <ul>
 <li><a href="https://docs.datastax.com/ja/dse/5.1/cql/index.html">https://docs.datastax.com/ja/dse/5.1/cql/index.html</a></li>
