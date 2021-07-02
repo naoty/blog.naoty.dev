@@ -10,6 +10,87 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/450/</id>
+    <link href="https://blog.naoty.dev/450/"/>
+    <summary>&lt;h1&gt;クラスターの起動&lt;/h1&gt;
+&lt;p&gt;docker for macのVMに割り当てるメモリを4GBまで上げたら起動した。&lt;/p&gt;
+&lt;pre lang=&quot;yaml&quot; class=&quot;highlight highlight-yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3&quot;&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;cassandra1&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cassandra&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;CASSANDRA_SEEDS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cassandra1&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;cassandra2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cassandra&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;CASSANDRA_SEEDS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cassandra1&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;depends_on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cassandra1&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;コンテナにログインして&lt;code&gt;nodetool status&lt;/code&gt;を実行すると、複数台のノードでクラスターが構成されていることがわかる。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;% nodetool status
+
+Datacenter: datacenter1
+&lt;span class=&quot;o&quot;&gt;=======================&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;Status&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Up/Down
+|/ &lt;span class=&quot;nv&quot;&gt;State&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Normal/Leaving/Joining/Moving
+&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;  Address     Load       Tokens       Owns &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;effective&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  Host ID                               Rack
+UN  172.18.0.2  146.6 KiB  256          100.0%            410c863f-f3e8-41e6-b297-f0f1e3bd7d33  rack1
+UN  172.18.0.3  70.72 KiB  256          100.0%            a8585f68-ab42-4c87-a416-49fd48daadf7  rack1
+&lt;/pre&gt;
+&lt;h1&gt;パーティションの確認&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;nodetool ring&lt;/code&gt;を実行すると、各ノードが担当するトークンの範囲がわかる。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;% nodetool ring
+
+Datacenter: datacenter1
+&lt;span class=&quot;o&quot;&gt;==========&lt;/span&gt;
+Address     Rack        Status State   Load            Owns                Token
+                                                                           9205355899184488755
+172.18.0.3  rack1       Up     Normal  227.44 KiB      100.00%             &lt;span class=&quot;nt&quot;&gt;-9182155964809320561&lt;/span&gt;
+172.18.0.3  rack1       Up     Normal  227.44 KiB      100.00%             &lt;span class=&quot;nt&quot;&gt;-9173740678595215345&lt;/span&gt;
+172.18.0.2  rack1       Up     Normal  215.57 KiB      100.00%             &lt;span class=&quot;nt&quot;&gt;-9155666247780803709&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# (snip)&lt;/span&gt;
+172.18.0.3  rack1       Up     Normal  227.44 KiB      100.00%             9151380247043298877
+172.18.0.2  rack1       Up     Normal  215.57 KiB      100.00%             9160375385280096791
+172.18.0.2  rack1       Up     Normal  215.57 KiB      100.00%             9205355899184488755
+&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;172.18.0.2&lt;/code&gt;と&lt;code&gt;172.18.0.3&lt;/code&gt;のノードそれぞれに&lt;code&gt;Token&lt;/code&gt;が割り当てられている。&lt;code&gt;Token&lt;/code&gt;の値は担当範囲の最後の値を表している。トークンはリング状に配置されるため、上の例で言うと最大値&lt;code&gt;9205355899184488755&lt;/code&gt;の次の値は最小値&lt;code&gt;-9182155964809320561&lt;/code&gt;ということになる。&lt;/p&gt;
+&lt;p&gt;次に実際にデータがどのパーティションに保存されているか確認する。まずは、適当なテーブルを追加してデータを入れる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; create table users (id bigint primary key, name text);
+cqlsh:hello&amp;gt; insert into users (id, name) values (1, 'alice');
+cqlsh:hello&amp;gt; insert into users (id, name) values (2, 'bob');
+cqlsh:hello&amp;gt; select * from users;
+
+ id | name
+----+-------
+  2 |   bob
+  1 | alice
+
+(2 rows)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;TOKEN&lt;/code&gt;関数を使うと、渡した値からトークンとなる値を計算できる。パーティションキーを渡してトークンを計算してみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select id, token(id) from users;
+
+ id | system.token(id)
+----+----------------------
+  2 | -8218881827949364593
+  1 |  6292367497774912474
+
+(2 rows)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これらの値と&lt;code&gt;nodetool ring&lt;/code&gt;で見たトークンの範囲と見比べることで、その行がどのノードに保存されているか確認できる。先程の&lt;code&gt;nodetool ring&lt;/code&gt;の結果を再掲すると以下のようになっている。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;172.18.0.3  rack1       Up     Normal  227.44 KiB      100.00%             &lt;span class=&quot;nt&quot;&gt;-8312964340927482628&lt;/span&gt;
+172.18.0.2  rack1       Up     Normal  215.57 KiB      100.00%             &lt;span class=&quot;nt&quot;&gt;-8169459460287760239&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# (snip)&lt;/span&gt;
+172.18.0.2  rack1       Up     Normal  215.57 KiB      100.00%             6147470985463054203
+172.18.0.2  rack1       Up     Normal  215.57 KiB      100.00%             6312725102659141435
+&lt;/pre&gt;
+&lt;p&gt;よって、&lt;code&gt;id:2&lt;/code&gt;の行は&lt;code&gt;172.18.0.2&lt;/code&gt;のノードに、&lt;code&gt;id:1&lt;/code&gt;の行は同じく&lt;code&gt;172.18.0.2&lt;/code&gt;のノードに保存されていることがわかった。&lt;/p&gt;</summary>
+    <title>docker composeでcassandraクラスターを動かす</title>
+    <updated>2021-06-30T23:53:00+00:00</updated>
+    <dc:date>2021-06-30T23:53:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/449/</id>
     <link href="https://blog.naoty.dev/449/"/>
     <summary>&lt;p&gt;Cassandraを本格的に扱う機会ができたので、CQL実際に試しながら覚えていきたい。CassandraにはDocker公式のイメージがあるため、これを利用する。&lt;/p&gt;
