@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>isucon11-priorで練習</title>
+    <meta property="og:title" content="isucon11-priorで練習">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/451/">
+    <meta property="og:image" content="https://blog.naoty.dev/451/flamegraph.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">isucon11-priorで練習</h1>
+          <p class="metadata">
+            <time datetime="2021-07-11T23:08:00.000+0000">2021-07-11 23:08</time>
+            <a href="/diary/">#diary</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>初期値</h1>
+<p>なにもしていない時点でベンチマークをとると、こうなった。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
+10:32:35.193616 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FA4EA7ZJ85KFEPYZD8KBYPTY
+10:33:45.648291 score: 882<span class="o">(</span>883 - 1<span class="o">)</span> : pass
+10:33:45.648307 deduction: 1 / <span class="nb">timeout</span>: 0
+</pre>
+<h1>プロファイリング</h1>
+<p>まずはボトルネックを調査していく。<a href="https://github.com/tkuchiki/alp">alp</a>を使ってアクセスログを分析する。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>wget https://github.com/tkuchiki/alp/releases/download/v1.0.4/alp_linux_mips64.zip
+isucon@ubuntu-focal:~<span class="nv">$ </span>unzip alp_linux_mips64.zip
+isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo cat</span> /var/log/nginx/access.log | alp ltsv <span class="nt">-m</span> <span class="s1">'/api/schedules/.+'</span> <span class="nt">--reverse</span>
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+--------+-------+-------+-------+-------+--------+-----------+-------------+---------------+------------+
+| COUNT | 1XX | 2XX | 3XX | 4XX | 5XX | METHOD |        URI        |  MIN  |  MAX  |  SUM   |  AVG  |  P1   |  P50  |  P99  | STDDEV | MIN<span class="o">(</span>BODY<span class="o">)</span> |  MAX<span class="o">(</span>BODY<span class="o">)</span>  |   SUM<span class="o">(</span>BODY<span class="o">)</span>   | AVG<span class="o">(</span>BODY<span class="o">)</span>  |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+--------+-------+-------+-------+-------+--------+-----------+-------------+---------------+------------+
+|   530 |   0 | 530 |   0 |   0 |   0 | GET    | /                 | 0.012 | 0.364 |  3.576 | 0.007 | 0.000 | 0.008 | 0.000 |  0.024 |   195.000 |     195.000 |    103350.000 |    195.000 |
+|   530 |   0 |  88 | 442 |   0 |   0 | GET    | /esm/index.js     | 0.000 | 0.000 |  0.000 | 0.000 | 0.000 | 0.000 | 0.000 |  0.000 |     0.000 | 1442198.000 | 126913424.000 | 239459.291 |
+|   530 |   0 | 530 |   0 |   0 |   0 | GET    | /favicon.ico      | 0.020 | 0.376 |  3.884 | 0.007 | 0.000 | 0.004 | 0.004 |  0.024 |   195.000 |     195.000 |    103350.000 |    195.000 |
+|   462 |   0 | 461 |   0 |   1 |   0 | GET    | /api/schedules/.+ | 0.008 | 1.300 | 62.155 | 0.135 | 0.016 | 0.872 | 0.416 |  0.143 |   151.000 |   24310.000 |   3890160.000 |   8420.260 |
+|   450 |   0 | 448 |   0 |   2 |   0 | POST   | /api/reservations | 0.004 | 1.004 | 11.848 | 0.026 | 0.028 | 0.060 | 0.016 |  0.052 |    56.000 |     157.000 |     70459.000 |    156.576 |
+|   443 |   0 | 443 |   0 |   0 |   0 | GET    | /api/schedules    | 0.008 | 0.304 | 12.788 | 0.029 | 0.000 | 0.012 | 0.032 |  0.034 |     2.000 |    1412.000 |    457613.000 |   1032.986 |
+|    88 |   0 |  77 |   0 |  11 |   0 | POST   | /api/login        | 0.004 | 0.100 |  1.356 | 0.015 | 0.004 | 0.044 | 0.020 |  0.019 |    55.000 |     163.000 |     11529.000 |    131.011 |
+|    87 |   0 |  87 |   0 |   0 |   0 | POST   | /api/signup       | 0.004 | 0.224 |  1.852 | 0.021 | 0.012 | 0.052 | 0.028 |  0.027 |   130.000 |     163.000 |     12353.000 |    141.989 |
+|    10 |   0 |  10 |   0 |   0 |   0 | POST   | /api/schedules    | 0.008 | 0.036 |  0.208 | 0.021 | 0.036 | 0.024 | 0.008 |  0.010 |   120.000 |     130.000 |      1262.000 |    126.200 |
+|     1 |   0 |   1 |   0 |   0 |   0 | POST   | /initialize       | 0.064 | 0.064 |  0.064 | 0.064 | 0.064 | 0.064 | 0.064 |  0.000 |    19.000 |      19.000 |        19.000 |     19.000 |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+--------+-------+-------+-------+-------+--------+-----------+-------------+---------------+------------+
+</pre>
+<p>レギュレーションによると</p>
+<ul>
+<li>
+<code>POST /api/schedules</code>: 10点</li>
+<li>
+<code>POST /api/login</code>: 1点</li>
+<li>
+<code>POST /api/reservations</code>: 1点</li>
+</ul>
+<p>となっており、予約はそこそこ成功しているものの、スケジュールの作成が少ないために点数が伸びてないことがわかる。</p>
+<p>次にクエリのボトルネックを調べるために、スロークエリログを有効にする。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+slow_query_log = 1
++slow_query_log_file = /var/log/mysql/mysql-slow.log
++long_query_time = 0.2
++log-queries-not-using-indexes
+</span></pre>
+<p><code>pt-query-digest</code>を使うためpercona toolkitをインストールする。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo </span>apt-get update
+isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> percona-toolkit
+isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo </span>pt-query-digest /var/log/mysql/mysql-slow.log
+
+<span class="c"># 990ms user time, 30ms system time, 30.30M rss, 37.25M vsz</span>
+<span class="c"># Current date: Mon Jul  5 01:28:59 2021</span>
+<span class="c"># Hostname: ubuntu-focal</span>
+<span class="c"># Files: /var/log/mysql/mysql-slow.log</span>
+<span class="c"># Overall: 6.92k total, 3 unique, 85.43 QPS, 0.06x concurrency ___________</span>
+<span class="c"># Time range: 2021-07-04T16:27:20 to 2021-07-04T16:28:41</span>
+<span class="c"># Attribute          total     min     max     avg     95%  stddev  median</span>
+<span class="c"># ============     ======= ======= ======= ======= ======= ======= =======</span>
+<span class="c"># Exec time             5s    97us    26ms   733us     3ms     1ms   348us</span>
+<span class="c"># Lock time          503ms    29us    10ms    72us   138us   189us    44us</span>
+<span class="c"># Rows sent        244.43k       0      96   36.17   84.10   27.55   33.28</span>
+<span class="c"># Rows examine       2.71M       0     712  410.65  685.39  210.55  420.77</span>
+<span class="c"># Query size       572.33k      79     132   84.69  130.47   16.49   76.28</span>
+
+<span class="c"># Profile</span>
+<span class="c"># Rank Query ID                       Response time Calls R/Call V/M   Ite</span>
+<span class="c"># ==== ============================== ============= ===== ====== ===== ===</span>
+<span class="c">#    1 0x8AF515F23C6557EC1A32EFCBB...  4.8160 94.9%  6073 0.0008  0.00 SELECT reservations</span>
+<span class="c">#    2 0x91FE50B3151F73CAA931F4943...  0.2187  4.3%   712 0.0003  0.00 SELECT reservations</span>
+<span class="c"># MISC 0xMISC                          0.0425  0.8%   135 0.0003   0.0 &lt;1 ITEMS&gt;</span>
+
+<span class="c"># Query 1: 74.98 QPS, 0.06x concurrency, ID 0x8AF515F23C6557EC1A32EFCBB5E06C9B at byte 1972228</span>
+<span class="c"># This item is included in the report because it matches --limit.</span>
+<span class="c"># Scores: V/M = 0.00</span>
+<span class="c"># Time range: 2021-07-04T16:27:20 to 2021-07-04T16:28:41</span>
+<span class="c"># Attribute    pct   total     min     max     avg     95%  stddev  median</span>
+<span class="c"># ============ === ======= ======= ======= ======= ======= ======= =======</span>
+<span class="c"># Count         87    6073</span>
+<span class="c"># Exec time     94      5s    97us    26ms   793us     3ms     2ms   366us</span>
+<span class="c"># Lock time     89   449ms    29us    10ms    73us   144us   200us    44us</span>
+<span class="c"># Rows sent     99 244.32k       0      96   41.20   88.31   25.88   34.95</span>
+<span class="c"># Rows examine  90   2.46M       0     712  424.74  685.39  206.80  441.81</span>
+<span class="c"># Query size    81 468.52k      79      79      79      79       0      79</span>
+<span class="c"># String:</span>
+<span class="c"># Databases    isucon2021_prior</span>
+<span class="c"># Hosts        localhost</span>
+<span class="c"># Users        isucon</span>
+<span class="c"># Query_time distribution</span>
+<span class="c">#   1us</span>
+<span class="c">#  10us  #</span>
+<span class="c"># 100us  ################################################################</span>
+<span class="c">#   1ms  ########</span>
+<span class="c">#  10ms  #</span>
+<span class="c"># 100ms</span>
+<span class="c">#    1s</span>
+<span class="c">#  10s+</span>
+<span class="c"># Tables</span>
+<span class="c">#    SHOW TABLE STATUS FROM `isucon2021_prior` LIKE 'reservations'\G</span>
+<span class="c">#    SHOW CREATE TABLE `isucon2021_prior`.`reservations`\G</span>
+<span class="c"># EXPLAIN /*!50100 PARTITIONS*/</span>
+SELECT <span class="k">*</span> FROM <span class="sb">`</span>reservations<span class="sb">`</span> WHERE <span class="sb">`</span>schedule_id<span class="sb">`</span> <span class="o">=</span> <span class="s1">'01F9S5H0MKDF0HG05FECEK3BTM'</span><span class="se">\G</span>
+
+<span class="c"># Query 2: 15.48 QPS, 0.00x concurrency, ID 0x91FE50B3151F73CAA931F494357A001F at byte 1208837</span>
+<span class="c"># This item is included in the report because it matches --limit.</span>
+<span class="c"># Scores: V/M = 0.00</span>
+<span class="c"># Time range: 2021-07-04T16:27:20 to 2021-07-04T16:28:06</span>
+<span class="c"># Attribute    pct   total     min     max     avg     95%  stddev  median</span>
+<span class="c"># ============ === ======= ======= ======= ======= ======= ======= =======</span>
+<span class="c"># Count         10     712</span>
+<span class="c"># Exec time      4   219ms   114us     5ms   307us   568us   244us   260us</span>
+<span class="c"># Lock time      7    37ms    35us   588us    52us    89us    43us    40us</span>
+<span class="c"># Rows sent      0       0       0       0       0       0       0       0</span>
+<span class="c"># Rows examine   8 247.13k       0     711  355.42  652.75  200.75  346.17</span>
+<span class="c"># Query size    16  91.78k     132     132     132     132       0     132</span>
+<span class="c"># String:</span>
+<span class="c"># Databases    isucon2021_prior</span>
+<span class="c"># Hosts        localhost</span>
+<span class="c"># Users        isucon</span>
+<span class="c"># Query_time distribution</span>
+<span class="c">#   1us</span>
+<span class="c">#  10us</span>
+<span class="c"># 100us  ################################################################</span>
+<span class="c">#   1ms  #</span>
+<span class="c">#  10ms</span>
+<span class="c"># 100ms</span>
+<span class="c">#    1s</span>
+<span class="c">#  10s+</span>
+<span class="c"># Tables</span>
+<span class="c">#    SHOW TABLE STATUS FROM `isucon2021_prior` LIKE 'reservations'\G</span>
+<span class="c">#    SHOW CREATE TABLE `isucon2021_prior`.`reservations`\G</span>
+<span class="c"># EXPLAIN /*!50100 PARTITIONS*/</span>
+SELECT 1 FROM <span class="sb">`</span>reservations<span class="sb">`</span> WHERE <span class="sb">`</span>schedule_id<span class="sb">`</span> <span class="o">=</span> <span class="s1">'01F9S5HW06RF9V13Z3PGT3B0YW'</span> AND <span class="sb">`</span>user_id<span class="sb">`</span> <span class="o">=</span> <span class="s1">'01F9S5J076VP0H37MF2SZP05E1'</span> LIMIT 1<span class="se">\G</span>
+</pre>
+<p>スケジュールに関連する予約を取得する箇所がスロークエリになっていることがわかる。</p>
+<p>次に<a href="https://github.com/osyoyu/stackprof">osyoyu/stackprof</a>を使ってアプリケーションコードのプロファイリングをおこなう。<code>config.ru</code>でRackミドルウェアを追加する。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+gem 'stackprof', github: 'osyoyu/stackprof'
+</span></pre>
+<p>元の<a href="https://github.com/tmm1/stackprof">tmm1/stackprof</a>と比べると <a href="https://github.com/tmm1/stackprof/issues/80">https://github.com/tmm1/stackprof/issues/80</a> にあるような問題が修正されているものっぽい。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+require 'stackprof'
++use StackProf::Middleware,
++  enabled: ENV['ENABLE_PROFILE'].to_i.nonzero?,
++  mode: :cpu,
++  raw: ENV['ENABLE_RAW_PROFILE'].to_i.nonzero?,
++  interval: 1000,
++  save_every: 5
+</span>
+ run App.new
+</pre>
+<p>d3-flame-graphを使うために<code>raw: true</code>を追加してある。systemdは<code>~/env</code>をRailsサーバーの環境変数として設定するため、これを変更すればオン/オフを切り替えられる。</p>
+<p>Railsサーバーを再起動させてベンチマーカーを実行する。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart web-ruby
+isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
+isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">cd </span>webapp/ruby
+isucon@ubuntu-focal:~webapp/ruby<span class="nv">$ </span>bundle <span class="nb">exec </span>stackprof <span class="nt">--d3-flamegraph</span> tmp/stackprof-<span class="k">*</span>.dump <span class="o">&gt;</span> tmp/flamegraph.html
+</pre>
+<p>こんな感じのflamegraphが生成されるため、ボトルネックがわかりやすくなった。<code>App#get_reservations</code>が占める割合が大きそうだ。</p>
+<p><a href="flamegraph.png" target="_blank"><img src="flamegraph.png" alt="flamegraph" style="max-width:100%;"></a></p>
+<h1>benchmarker --progress</h1>
+<p>ベンチマーカーには<code>--progress</code>というオプションがあるようなので、これも試してみる。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker <span class="nt">--progress</span>
+02:51:43.810051 score: 0<span class="o">(</span>0 - 0<span class="o">)</span> : fail: score
+02:51:43.810096 deduction: 0 / <span class="nb">timeout</span>: 0
+02:51:44.161112 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01F9SABH0GZRNF4QYJ7H07HK40
+02:51:46.811650 score: 144<span class="o">(</span>145 - 1<span class="o">)</span> : pass
+02:51:46.811808 deduction: 1 / <span class="nb">timeout</span>: 0
+02:51:49.814398 score: 223<span class="o">(</span>224 - 1<span class="o">)</span> : pass
+02:51:49.814416 deduction: 1 / <span class="nb">timeout</span>: 0
+02:51:52.815522 score: 284<span class="o">(</span>285 - 1<span class="o">)</span> : pass
+02:51:52.815538 deduction: 1 / <span class="nb">timeout</span>: 0
+<span class="c"># snip</span>
+02:52:31.889060 score: 718<span class="o">(</span>719 - 1<span class="o">)</span> : pass
+02:52:31.889083 deduction: 1 / <span class="nb">timeout</span>: 8
+02:52:34.892716 score: 722<span class="o">(</span>724 - 2<span class="o">)</span> : pass
+02:52:34.893451 deduction: 1 / <span class="nb">timeout</span>: 10
+02:52:37.893911 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:52:37.894326 deduction: 1 / <span class="nb">timeout</span>: 10
+02:52:40.895119 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:52:40.901700 deduction: 1 / <span class="nb">timeout</span>: 10
+02:52:43.900161 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:52:43.900926 deduction: 1 / <span class="nb">timeout</span>: 10
+02:52:46.900517 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:52:46.900537 deduction: 1 / <span class="nb">timeout</span>: 11
+02:52:49.904001 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:52:49.904036 deduction: 1 / <span class="nb">timeout</span>: 11
+02:52:52.904344 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:52:52.904365 deduction: 1 / <span class="nb">timeout</span>: 11
+02:53:04.475732 score: 726<span class="o">(</span>728 - 2<span class="o">)</span> : pass
+02:53:04.476582 deduction: 1 / <span class="nb">timeout</span>: 11
+</pre>
+<p>途中からスコアが伸びなくなっている。ベンチマーカーの仕様によるものに見えるので、ここもレギュレーションを見ながら対応したい。</p>
+<h1>下準備</h1>
+<p>普段Railsで開発していると陥りがちだけど、修正したコードは実行中のsinatraアプリケーションに反映されないので、ベンチマーカーを実行する前には一度再起動する必要がある。それを毎回やるのは面倒なので、スクリプトを用意しておく。また、stackprofのダンプファイルもクリーンアップしたいので、それもスクリプトで行う。</p>
+<pre lang="bash" class="highlight highlight-bash"><span class="c">#!/bin/bash -e</span>
+
+<span class="nb">sudo </span>systemctl restart web-ruby
+<span class="nb">sleep </span>30
+<span class="nb">rm </span>webapp/ruby/tmp/stackprof-<span class="k">*</span>
+bin/benchmarker
+</pre>
+<h1>get_reservations</h1>
+<p>flamegraphを見ると、<code>#get_reservations</code>に時間がかかっているため、修正していく。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">get</span> <span class="s1">'/api/schedules/:id'</span> <span class="k">do</span>
+  <span class="nb">id</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span>
+  <span class="n">schedule</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `schedules` WHERE id = ? LIMIT 1'</span><span class="p">,</span> <span class="nb">id</span><span class="p">).</span><span class="nf">first</span>
+  <span class="n">halt</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="p">{})</span> <span class="k">unless</span> <span class="n">schedule</span>
+
+  <span class="n">get_reservations</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span>
+
+  <span class="n">json</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">get_reservations</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span>
+  <span class="n">reservations</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `reservations` WHERE `schedule_id` = ?'</span><span class="p">,</span> <span class="n">schedule</span><span class="p">[</span><span class="ss">:id</span><span class="p">]).</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">reservation</span><span class="o">|</span>
+    <span class="n">reservation</span><span class="p">[</span><span class="ss">:user</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_user</span><span class="p">(</span><span class="n">reservation</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">])</span>
+    <span class="n">reservation</span>
+  <span class="k">end</span>
+  <span class="n">schedule</span><span class="p">[</span><span class="ss">:reservations</span><span class="p">]</span> <span class="o">=</span> <span class="n">reservations</span>
+  <span class="n">schedule</span><span class="p">[</span><span class="ss">:reserved</span><span class="p">]</span> <span class="o">=</span> <span class="n">reservations</span><span class="p">.</span><span class="nf">size</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+  <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `users` WHERE `id` = ? LIMIT 1'</span><span class="p">,</span> <span class="nb">id</span><span class="p">).</span><span class="nf">first</span>
+  <span class="n">user</span><span class="p">[</span><span class="ss">:email</span><span class="p">]</span> <span class="o">=</span> <span class="s1">''</span> <span class="k">if</span> <span class="o">!</span><span class="n">current_user</span> <span class="o">||</span> <span class="o">!</span><span class="n">current_user</span><span class="p">[</span><span class="ss">:staff</span><span class="p">]</span>
+  <span class="n">user</span>
+<span class="k">end</span>
+</pre>
+<p>スケジュールに関連する予約を取得し、各予約に対して関連するユーザーを取得しているため、N+1クエリとなっている。1回のクエリでこれらを取得するように直す。</p>
+<pre lang="diff" class="highlight highlight-diff"> def get_reservations(schedule)
+<span class="gd">-  reservations = db.xquery('SELECT * FROM `reservations` WHERE `schedule_id` = ?', schedule[:id]).map do |reservation|
+-    reservation[:user] = get_user(reservation[:user_id])
+-    reservation
+-  end
+-  schedule[:reservations] = reservations
+-  schedule[:reserved] = reservations.size
+</span><span class="gi">+  reservations = db.xquery(&lt;&lt;~SQL
++    SELECT
++      r.`id` AS `r_id`,
++      r.`schedule_id` AS `r_schedule_id`,
++      r.`user_id` AS `r_user_id`,
++      r.`created_at` AS `r_created_at`,
++      u.`id` AS `u_id`,
++      u.`email` AS `u_email`,
++      u.`nickname` AS `u_nickname`,
++      u.`staff` AS `u_staff`,
++      u.`created_at` AS `u_created_at`
++    FROM
++      `reservations` AS r
++    JOIN
++      `users` AS u ON r.`user_id` = u.`id`
++    WHERE
++      r.`schedule_id` = ?
++  SQL)
++
++  schedule[:reservations] = reservations.map do |reservation|
++    {
++      id: reservation[:r_id],
++      schedule_id: reservation[:r_schedule_id],
++      user_id: reservation[:r_user_id],
++      created_at: reservation[:r_created_at],
++      user: {
++        id: reservation[:u_id],
++        email: (!current_user || !current_user[:staff]) ? '' : reservation[:u_email],
++        nickname: reservation[:u_nickname],
++        staff: reservation[:u_staff],
++        created_at: reservation[:u_created_at],
++      }
++    }
++  end
++  schedule[:reserved] = reservations.size
+</span> end
+</pre>
+<p>ベンチマークをとる。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
+06:15:41.612683 score: 910<span class="o">(</span>910 - 0<span class="o">)</span> : pass
+06:15:41.612698 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p>少し改善されたように見える。次にflamegraphでボトルネックとして出ていた<code>#current_user</code>も見る。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">def</span> <span class="nf">current_user</span>
+  <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `users` WHERE `id` = ? LIMIT 1'</span><span class="p">,</span> <span class="n">session</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">]).</span><span class="nf">first</span>
+<span class="k">end</span>
+</pre>
+<p>メモ化していないため、<code>reservations.map</code>のブロック内で毎回ユーザーを取得してしまっている。</p>
+<pre lang="diff" class="highlight highlight-diff"> def current_user
+<span class="gd">-  db.xquery('SELECT * FROM `users` WHERE `id` = ? LIMIT 1', session[:user_id]).first
+</span><span class="gi">+  @current_user ||= db.xquery('SELECT * FROM `users` WHERE `id` = ? LIMIT 1', session[:user_id]).first
+</span> end
+</pre>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
+06:20:51.566789 score: 1512<span class="o">(</span>1512 - 0<span class="o">)</span> : pass
+06:20:51.566804 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p>一気にスコアが上がった。flamegraphを見ると、<code>#current_user</code>の中で最も時間がかかっているのはクエリの実行だけど、PKを指定したクエリなのでこれ以上は最適化できない。</p>
+<p>そこで、上で修正したクエリを最適化する。<code>EXPLAIN</code>で実行計画を確認する。</p>
+<pre><code>mysql&gt; explain select * from reservations join users on reservations.user_id = users.id where reservations.schedule_id = '01F9VB8MP2Y5S0K4CZQY8K5VRK';
++----+-------------+--------------+------------+--------+---------------+---------+---------+---------------------------------------+------+----------+-------------+
+| id | select_type | table        | partitions | type   | possible_keys | key     | key_len | ref                                   | rows | filtered | Extra       |
++----+-------------+--------------+------------+--------+---------------+---------+---------+---------------------------------------+------+----------+-------------+
+|  1 | SIMPLE      | reservations | NULL       | ALL    | NULL          | NULL    | NULL    | NULL                                  |  769 |    10.00 | Using where |
+|  1 | SIMPLE      | users        | NULL       | eq_ref | PRIMARY       | PRIMARY | 1022    | isucon2021_prior.reservations.user_id |    1 |   100.00 | NULL        |
++----+-------------+--------------+------------+--------+---------------+---------+---------+---------------------------------------+------+----------+-------------+
+2 rows in set, 1 warning (0.00 sec)
+</code></pre>
+<p><code>type</code>が<code>ALL</code>となっており、フルテーブルスキャンになっている。<code>schedule_id</code>に対してインデックスを追加する。</p>
+<pre lang="diff" class="highlight highlight-diff"> CREATE TABLE `reservations` (
+   `id`          VARCHAR(255) PRIMARY KEY NOT NULL,
+   `schedule_id` VARCHAR(255) NOT NULL,
+   `user_id`     VARCHAR(255) NOT NULL,
+<span class="gd">-   `created_at`  DATETIME(6) NOT NULL
+</span><span class="gi">+  `created_at`  DATETIME(6) NOT NULL,
++  KEY (`schedule_id`)
+</span> ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+</pre>
+<p>DBを作り直してベンチマークをとる。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>webapp/tools/initdb
+isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
+06:25:40.386718 score: 1328<span class="o">(</span>1328 - 0<span class="o">)</span> : pass
+06:25:40.386733 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p>スコアが下がってしまったが、実行計画は改善されている。</p>
+<pre><code>mysql&gt; explain select * from reservations join users on reservations.user_id = users.id where reservations.schedule_id = '01F9VC5Q34QARA1A77H2WQWHM6';
++----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+
+| id | select_type | table        | partitions | type   | possible_keys | key         | key_len | ref                                   | rows | filtered | Extra |
++----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+
+|  1 | SIMPLE      | reservations | NULL       | ref    | schedule_id   | schedule_id | 1022    | const                                 |    8 |   100.00 | NULL  |
+|  1 | SIMPLE      | users        | NULL       | eq_ref | PRIMARY       | PRIMARY     | 1022    | isucon2021_prior.reservations.user_id |    1 |   100.00 | NULL  |
++----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+
+2 rows in set, 1 warning (0.00 sec)
+</code></pre>
+<p>もしかすると、インデックスによってINSERTの性能が落ちているかもしれないので、インデックスの追加は保留する。</p>
+<h1>get_reservations_count</h1>
+<p>flamegraphを見ると、依然として<code>#get_reservations</code>が占める割合が高いままだけど、それはリクエスト数が多いからなので、他をあたることにする。次に多いのは<code>#get_reservations_count</code>なので実装を見ていく。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">get</span> <span class="s1">'/api/schedules'</span> <span class="k">do</span>
+  <span class="n">schedules</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `schedules` ORDER BY `id` DESC'</span><span class="p">);</span>
+  <span class="n">schedules</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">schedule</span><span class="o">|</span>
+    <span class="n">get_reservations_count</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="n">json</span><span class="p">(</span><span class="n">schedules</span><span class="p">.</span><span class="nf">to_a</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">get_reservations_count</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span>
+  <span class="n">reservations</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `reservations` WHERE `schedule_id` = ?'</span><span class="p">,</span> <span class="n">schedule</span><span class="p">[</span><span class="ss">:id</span><span class="p">])</span>
+  <span class="n">schedule</span><span class="p">[</span><span class="ss">:reserved</span><span class="p">]</span> <span class="o">=</span> <span class="n">reservations</span><span class="p">.</span><span class="nf">size</span>
+<span class="k">end</span>
+</pre>
+<p>必要なのは予約数のみなので、すべてのカラムを取得せずに件数だけ取得する。</p>
+<pre lang="diff" class="highlight highlight-diff"> def get_reservations_count(schedule)
+<span class="gd">-  reservations = db.xquery('SELECT * FROM `reservations` WHERE `schedule_id` = ?', schedule[:id])
+</span><span class="gi">+  reservations = db.xquery('SELECT COUNT(*) AS count FROM `reservations` WHERE `schedule_id` = ?', schedule[:id])
+</span><span class="gd">-  schedule[:reserved] = reservations.size
+</span><span class="gi">+  schedule[:reserved] = reservations.first[:count]
+</span> end
+</pre>
+<pre lang="bash" class="highlight highlight-bash">18:03:08.151453 score: 1806<span class="o">(</span>1806 - 0<span class="o">)</span> : pass
+18:03:08.151469 deduction: 0 / <span class="nb">timeout</span>: 1
+</pre>
+<p>スコアが上がった。</p>
+<h1>POST /api/reservations</h1>
+<p>再度flamegraphを生成すると、<code>post '/api/reservations'</code>全体が占める割合が増えたため、実装を見ていく。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">post</span> <span class="s1">'/api/reservations'</span> <span class="k">do</span>
+  <span class="n">required_login!</span>
+
+  <span class="n">transaction</span> <span class="k">do</span> <span class="o">|</span><span class="n">tx</span><span class="o">|</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">generate_id</span><span class="p">(</span><span class="s1">'reservations'</span><span class="p">,</span> <span class="n">tx</span><span class="p">)</span>
+    <span class="n">schedule_id</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:schedule_id</span><span class="p">].</span><span class="nf">to_s</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">current_user</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span>
+
+    <span class="n">halt</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">(</span><span class="ss">error: </span><span class="s1">'schedule not found'</span><span class="p">))</span> <span class="k">if</span> <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE'</span><span class="p">,</span> <span class="n">schedule_id</span><span class="p">).</span><span class="nf">first</span><span class="p">.</span><span class="nf">nil?</span>
+    <span class="n">halt</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">(</span><span class="ss">error: </span><span class="s1">'user not found'</span><span class="p">))</span> <span class="k">unless</span> <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT 1 FROM `users` WHERE `id` = ? LIMIT 1'</span><span class="p">,</span> <span class="n">user_id</span><span class="p">).</span><span class="nf">first</span>
+    <span class="n">halt</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">(</span><span class="ss">error: </span><span class="s1">'already taken'</span><span class="p">))</span> <span class="k">if</span> <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1'</span><span class="p">,</span> <span class="n">schedule_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">).</span><span class="nf">first</span>
+
+    <span class="c1"># snip</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p><code>user not found</code>エラーは<code>#required_login!</code>ですでにチェックしていることを二重にチェックしているため不要なはず。</p>
+<pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
+   required_login!
+
+   transaction do |tx|
+     id = generate_id('reservations', tx)
+     schedule_id = params[:schedule_id].to_s
+     user_id = current_user[:id]
+
+     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
+<span class="gd">-    halt(403, JSON.generate(error: 'user not found')) unless tx.xquery('SELECT 1 FROM `users` WHERE `id` = ? LIMIT 1', user_id).first
+</span>     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
+
+     # snip
+   end
+ end
+</pre>
+<pre lang="bash" class="highlight highlight-bash">18:22:16.026245 score: 1556<span class="o">(</span>1556 - 0<span class="o">)</span> : pass
+18:22:16.026260 deduction: 0 / <span class="nb">timeout</span>: 1
+</pre>
+<p>スコアは減っているけど、おそらく誤差の範囲のはずなので続きを見る。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">post</span> <span class="s1">'/api/reservations'</span> <span class="k">do</span>
+  <span class="n">required_login!</span>
+
+  <span class="n">transaction</span> <span class="k">do</span> <span class="o">|</span><span class="n">tx</span><span class="o">|</span>
+    <span class="c1"># snip</span>
+
+    <span class="n">capacity</span> <span class="o">=</span> <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1'</span><span class="p">,</span> <span class="n">schedule_id</span><span class="p">).</span><span class="nf">first</span><span class="p">[</span><span class="ss">:capacity</span><span class="p">]</span>
+    <span class="n">reserved</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `reservations` WHERE `schedule_id` = ?'</span><span class="p">,</span> <span class="n">schedule_id</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span>
+      <span class="n">reserved</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">end</span>
+
+    <span class="c1"># snip</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p><code>reserved</code>をインクリメントしているので、<code>COUNT(*)</code>を取得するように直す。</p>
+<pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
+   required_login!
+ 
+   transaction do |tx|
+     # snip
+ 
+     capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
+<span class="gd">-    reserved = 0
+-    tx.xquery('SELECT * FROM `reservations` WHERE `schedule_id` = ?', schedule_id).each do
+-      reserved += 1
+-    end
+</span><span class="gi">+    reserved = tx.xquery('SELECT COUNT(*) AS count FROM `reservations` WHERE `schedule_id` = ?', schedule_id).first[:count]
+</span> 
+     # snip
+   end
+ end
+</pre>
+<pre lang="bash" class="highlight highlight-bash">18:33:05.264692 score: 1786<span class="o">(</span>1786 - 0<span class="o">)</span> : pass
+18:33:05.264705 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p>もう少しよく見てみると、予約を更新していないのに排他ロックを取得しているため、これをやめる。</p>
+<pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
+   required_login!
+
+   transaction do |tx|
+     id = generate_id('reservations', tx)
+     schedule_id = params[:schedule_id].to_s
+     user_id = current_user[:id]
+
+-    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
+<span class="gi">+    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first.nil?
+</span>     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
+
+     # snip
+   end
+ end
+</pre>
+<pre lang="bash" class="highlight highlight-bash">18:42:40.103174 score: 1789<span class="o">(</span>1789 - 0<span class="o">)</span> : pass
+18:42:40.103188 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<h1>仕様から見直し</h1>
+<p>flamegraphから見ても手がかりが見当たらなくなってきたため、仕様を見直してみる。</p>
+<blockquote>
+<p>API は予約を受け付けているスケジュールの一覧をレスポンスしてください。ただし、管理者が全スケジュールの一覧を要求した時は、予約が埋まっていてもすべてのスケジュールを返してください。</p>
+</blockquote>
+<p>現状の実装だと、この仕様が満たせていないことがわかる。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">get</span> <span class="s1">'/api/schedules'</span> <span class="k">do</span>
+  <span class="n">schedules</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT * FROM `schedules` ORDER BY `id` DESC'</span><span class="p">);</span>
+  <span class="n">schedules</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">schedule</span><span class="o">|</span>
+    <span class="n">get_reservations_count</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="n">json</span><span class="p">(</span><span class="n">schedules</span><span class="p">.</span><span class="nf">to_a</span><span class="p">)</span>
+<span class="k">end</span>
+</pre>
+<p>仕様に沿うように修正する。</p>
+<pre lang="diff" class="highlight highlight-diff"> get '/api/schedules' do
+   schedules = db.xquery('SELECT * FROM `schedules` ORDER BY `id` DESC');
+   schedules.each do |schedule|
+     get_reservations_count(schedule)
+   end
+
++  if current_user.nil? || !current_user[:staff]
+<span class="gi">+    schedules = schedules.select { |schedule| schedule[:capacity] &gt; schedule[:reserved] }
++  end
+</span> 
+   json(schedules.to_a)
+ end
+</pre>
+<pre><code>21:08:56.729009 score: 1778(1778 - 0) : pass
+21:08:56.729022 deduction: 0 / timeout: 0
+</code></pre>
+<p>ベンチマーカーの仕様というか、お題の設定を確認する。</p>
+<blockquote>
+<p>とある日から世界各地で Webinar が開催されます。<br>
+受け付けられる参加申込上限は、各 Webinar ごとに設定されています。<br>
+管理者は Webinar の申し込みが埋まってくると、新たな Webinar の予定を設定します。<br>
+ユーザーは1度の Webinar 参加では満足せず、複数回参加しようとします。</p>
+</blockquote>
+<p>ベンチマーカー走行後の予約の埋まり具合を確認すると、そこまで予約が埋まっていない予定もまだありそうだった。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">schedules</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">schedules</span><span class="p">.</span><span class="n">capacity</span><span class="p">,</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="k">count</span> <span class="k">from</span> <span class="n">schedules</span> <span class="k">join</span> <span class="n">reservations</span> <span class="k">on</span> <span class="n">schedules</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">reservations</span><span class="p">.</span><span class="n">schedule_id</span> <span class="k">group</span> <span class="k">by</span> <span class="n">schedules</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----------------------------+----------+-------+</span>
+<span class="o">|</span> <span class="n">id</span>                         <span class="o">|</span> <span class="n">capacity</span> <span class="o">|</span> <span class="k">count</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------+----------+-------+</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA864ZF243KEES0AD1RYP58Q</span> <span class="o">|</span>       <span class="mi">70</span> <span class="o">|</span>    <span class="mi">70</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA864ZK8W9RXPYK29TBVZSNA</span> <span class="o">|</span>       <span class="mi">92</span> <span class="o">|</span>    <span class="mi">92</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA864ZQV5H9R23DJSQVV9JCN</span> <span class="o">|</span>       <span class="mi">75</span> <span class="o">|</span>    <span class="mi">75</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA864ZW6KY01AVS47GR8E3EJ</span> <span class="o">|</span>       <span class="mi">36</span> <span class="o">|</span>    <span class="mi">36</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA86500PX63PH9P07NH46ZXY</span> <span class="o">|</span>       <span class="mi">96</span> <span class="o">|</span>    <span class="mi">96</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA86504JY07NJAM9CJVPBMVV</span> <span class="o">|</span>       <span class="mi">88</span> <span class="o">|</span>    <span class="mi">88</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA86560C28TCP8XPFN3Q914Y</span> <span class="o">|</span>       <span class="mi">40</span> <span class="o">|</span>    <span class="mi">40</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865CRMPTJFZKWH86H1W06D</span> <span class="o">|</span>       <span class="mi">70</span> <span class="o">|</span>    <span class="mi">70</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865DYMY0R2441PBAR85D9P</span> <span class="o">|</span>       <span class="mi">82</span> <span class="o">|</span>    <span class="mi">82</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865DTDN7RVX0AVMXJ14TWM</span> <span class="o">|</span>       <span class="mi">36</span> <span class="o">|</span>    <span class="mi">36</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865GNSMGZH7RNPDHDGKHQK</span> <span class="o">|</span>      <span class="mi">113</span> <span class="o">|</span>   <span class="mi">113</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865H7Z25AZ55Q7380E5J00</span> <span class="o">|</span>       <span class="mi">35</span> <span class="o">|</span>    <span class="mi">36</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865J3T90ADJFM4AMRZV90N</span> <span class="o">|</span>       <span class="mi">39</span> <span class="o">|</span>    <span class="mi">39</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865N5P6EW1B5K8WDMJM59G</span> <span class="o">|</span>      <span class="mi">124</span> <span class="o">|</span>   <span class="mi">106</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865R660AK2QC1R3JD3VA6N</span> <span class="o">|</span>       <span class="mi">39</span> <span class="o">|</span>    <span class="mi">39</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865T3JKEXGETJ5XYMNMDEK</span> <span class="o">|</span>       <span class="mi">44</span> <span class="o">|</span>    <span class="mi">44</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865TV03V3Z3DQ7YRFS9ZWT</span> <span class="o">|</span>      <span class="mi">106</span> <span class="o">|</span>    <span class="mi">78</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA865Z0HK75NF4SVX5PWH3R8</span> <span class="o">|</span>       <span class="mi">80</span> <span class="o">|</span>    <span class="mi">59</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA8660P2Y2GT2TMSXDN32V27</span> <span class="o">|</span>       <span class="mi">55</span> <span class="o">|</span>    <span class="mi">51</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA866372TPJG09G1ZB7VFJVQ</span> <span class="o">|</span>       <span class="mi">40</span> <span class="o">|</span>    <span class="mi">37</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA8668JK4SAP3B1G6B64KDXJ</span> <span class="o">|</span>       <span class="mi">55</span> <span class="o">|</span>    <span class="mi">13</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------+----------+-------+</span>
+<span class="mi">21</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+</pre>
+<p>次にユーザーごとの予約回数を見てみると、ほぼすべてのユーザーが6回で打ち止めになっており、ここがスコアが伸びない原因のように見える。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">users</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="k">count</span> <span class="k">from</span> <span class="n">users</span> <span class="k">join</span> <span class="n">reservations</span> <span class="k">on</span> <span class="n">users</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">reservations</span><span class="p">.</span><span class="n">user_id</span> <span class="k">group</span> <span class="k">by</span> <span class="n">users</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----------------------------+-------+</span>
+<span class="o">|</span> <span class="n">id</span>                         <span class="o">|</span> <span class="k">count</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------+-------+</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA864ZD35SD8ED82VSTCQYG2</span> <span class="o">|</span>     <span class="mi">5</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA864ZPQBCAT79NMYK77ZAW5</span> <span class="o">|</span>     <span class="mi">5</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA8650765HP9ZPE77WW3Z1N0</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA86506KC7T955XGAWM8ZBRA</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA8650GF8XS85A2NA39H66D2</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA8650H7G6EV0JM96JBMYP1B</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="c1">-- snip</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA866A5HQH99A4X9A8B6FHK5</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA866AE3MMMZVGJV7S2F8T53</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA866AS78FFQSP2RX2SYZT74</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA866AS8Z7A4R26PEK3BSEN3</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">01</span><span class="n">FA866B61T85RBTZ7XZJH4TYE</span> <span class="o">|</span>     <span class="mi">6</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------+-------+</span>
+<span class="mi">218</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+</pre>
+<h1>POST /api/signup</h1>
+<p>ユーザー登録を改善することでスコアが伸びないか試してみる。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">post</span> <span class="s1">'/api/signup'</span> <span class="k">do</span>
+  <span class="nb">id</span> <span class="o">=</span> <span class="s1">''</span>
+  <span class="n">nickname</span> <span class="o">=</span> <span class="s1">''</span>
+
+  <span class="n">user</span> <span class="o">=</span> <span class="n">transaction</span> <span class="k">do</span> <span class="o">|</span><span class="n">tx</span><span class="o">|</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">generate_id</span><span class="p">(</span><span class="s1">'users'</span><span class="p">,</span> <span class="n">tx</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:email</span><span class="p">]</span>
+    <span class="n">nickname</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:nickname</span><span class="p">]</span>
+    <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, NOW(6))'</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">nickname</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s1">'SELECT `created_at` FROM `users` WHERE `id` = ? LIMIT 1'</span><span class="p">,</span> <span class="nb">id</span><span class="p">).</span><span class="nf">first</span><span class="p">[</span><span class="ss">:created_at</span><span class="p">]</span>
+
+    <span class="p">{</span> <span class="ss">id: </span><span class="nb">id</span><span class="p">,</span> <span class="ss">email: </span><span class="n">email</span><span class="p">,</span> <span class="ss">nickname: </span><span class="n">nickname</span><span class="p">,</span> <span class="ss">created_at: </span><span class="n">created_at</span> <span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">generate_id</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">tx</span><span class="p">)</span>
+  <span class="nb">id</span> <span class="o">=</span> <span class="no">ULID</span><span class="p">.</span><span class="nf">generate</span>
+  <span class="k">while</span> <span class="n">tx</span><span class="p">.</span><span class="nf">xquery</span><span class="p">(</span><span class="s2">"SELECT 1 FROM `</span><span class="si">#{</span><span class="n">table</span><span class="si">}</span><span class="s2">` WHERE `id` = ? LIMIT 1"</span><span class="p">,</span> <span class="nb">id</span><span class="p">).</span><span class="nf">first</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="no">ULID</span><span class="p">.</span><span class="nf">generate</span>
+  <span class="k">end</span>
+  <span class="nb">id</span>
+<span class="k">end</span>
+</pre>
+<p>ULIDが衝突する可能性は無視できるはずなので、重複チェックをやめる。</p>
+<pre lang="diff" class="highlight highlight-diff"> def generate_id(table, tx)
+<span class="gd">-  id = ULID.generate
+-  while tx.xquery("SELECT 1 FROM `#{table}` WHERE `id` = ? LIMIT 1", id).first
+-    id = ULID.generate
+-  end
+-  id
+</span><span class="gi">+  ULID.generate
+</span> end
+</pre>
+<pre><code>08:17:46.688947 score: 1843(1843 - 0) : pass
+08:17:46.688961 deduction: 0 / timeout: 0
+</code></pre>
+<p><code>created_at</code>もアプリケーションで生成してクエリを減らす。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="p">post '/api/signup' do
+</span>  id = ''
+  nickname = ''
+
+  user = transaction do |tx|
+    id = generate_id('users', tx)
+    email = params[:email]
+    nickname = params[:nickname]
+<span class="gd">-   tx.xquery('INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, NOW(6))', id, email, nickname)
+-   created_at = tx.xquery('SELECT `created_at` FROM `users` WHERE `id` = ? LIMIT 1', id).first[:created_at]
+</span><span class="gi">+   created_at = Time.now.iso8601(6)
++   tx.xquery('INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, ?)', id, email, nickname, created_at)
+</span>
+    { id: id, email: email, nickname: nickname, created_at: created_at }
+  end
+
+  json(user)
+<span class="p">end
+</span></pre>
+<pre><code>08:23:51.263969 score: 1909(1909 - 0) : pass
+08:23:51.263984 deduction: 0 / timeout: 2
+</code></pre>
+<p>ユーザー登録自体はこれ以上改善できなさそうなので、ここまでにする。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

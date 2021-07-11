@@ -10,6 +10,616 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/451/</id>
+    <link href="https://blog.naoty.dev/451/"/>
+    <summary>&lt;h1&gt;初期値&lt;/h1&gt;
+&lt;p&gt;なにもしていない時点でベンチマークをとると、こうなった。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/benchmarker
+10:32:35.193616 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FA4EA7ZJ85KFEPYZD8KBYPTY
+10:33:45.648291 score: 882&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;883 - 1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+10:33:45.648307 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;/pre&gt;
+&lt;h1&gt;プロファイリング&lt;/h1&gt;
+&lt;p&gt;まずはボトルネックを調査していく。&lt;a href=&quot;https://github.com/tkuchiki/alp&quot;&gt;alp&lt;/a&gt;を使ってアクセスログを分析する。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;wget https://github.com/tkuchiki/alp/releases/download/v1.0.4/alp_linux_mips64.zip
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unzip alp_linux_mips64.zip
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo cat&lt;/span&gt; /var/log/nginx/access.log | alp ltsv &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/schedules/.+'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--reverse&lt;/span&gt;
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+--------+-------+-------+-------+-------+--------+-----------+-------------+---------------+------------+
+| COUNT | 1XX | 2XX | 3XX | 4XX | 5XX | METHOD |        URI        |  MIN  |  MAX  |  SUM   |  AVG  |  P1   |  P50  |  P99  | STDDEV | MIN&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;BODY&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; |  MAX&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;BODY&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  |   SUM&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;BODY&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;   | AVG&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;BODY&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+--------+-------+-------+-------+-------+--------+-----------+-------------+---------------+------------+
+|   530 |   0 | 530 |   0 |   0 |   0 | GET    | /                 | 0.012 | 0.364 |  3.576 | 0.007 | 0.000 | 0.008 | 0.000 |  0.024 |   195.000 |     195.000 |    103350.000 |    195.000 |
+|   530 |   0 |  88 | 442 |   0 |   0 | GET    | /esm/index.js     | 0.000 | 0.000 |  0.000 | 0.000 | 0.000 | 0.000 | 0.000 |  0.000 |     0.000 | 1442198.000 | 126913424.000 | 239459.291 |
+|   530 |   0 | 530 |   0 |   0 |   0 | GET    | /favicon.ico      | 0.020 | 0.376 |  3.884 | 0.007 | 0.000 | 0.004 | 0.004 |  0.024 |   195.000 |     195.000 |    103350.000 |    195.000 |
+|   462 |   0 | 461 |   0 |   1 |   0 | GET    | /api/schedules/.+ | 0.008 | 1.300 | 62.155 | 0.135 | 0.016 | 0.872 | 0.416 |  0.143 |   151.000 |   24310.000 |   3890160.000 |   8420.260 |
+|   450 |   0 | 448 |   0 |   2 |   0 | POST   | /api/reservations | 0.004 | 1.004 | 11.848 | 0.026 | 0.028 | 0.060 | 0.016 |  0.052 |    56.000 |     157.000 |     70459.000 |    156.576 |
+|   443 |   0 | 443 |   0 |   0 |   0 | GET    | /api/schedules    | 0.008 | 0.304 | 12.788 | 0.029 | 0.000 | 0.012 | 0.032 |  0.034 |     2.000 |    1412.000 |    457613.000 |   1032.986 |
+|    88 |   0 |  77 |   0 |  11 |   0 | POST   | /api/login        | 0.004 | 0.100 |  1.356 | 0.015 | 0.004 | 0.044 | 0.020 |  0.019 |    55.000 |     163.000 |     11529.000 |    131.011 |
+|    87 |   0 |  87 |   0 |   0 |   0 | POST   | /api/signup       | 0.004 | 0.224 |  1.852 | 0.021 | 0.012 | 0.052 | 0.028 |  0.027 |   130.000 |     163.000 |     12353.000 |    141.989 |
+|    10 |   0 |  10 |   0 |   0 |   0 | POST   | /api/schedules    | 0.008 | 0.036 |  0.208 | 0.021 | 0.036 | 0.024 | 0.008 |  0.010 |   120.000 |     130.000 |      1262.000 |    126.200 |
+|     1 |   0 |   1 |   0 |   0 |   0 | POST   | /initialize       | 0.064 | 0.064 |  0.064 | 0.064 | 0.064 | 0.064 | 0.064 |  0.000 |    19.000 |      19.000 |        19.000 |     19.000 |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+--------+-------+-------+-------+-------+--------+-----------+-------------+---------------+------------+
+&lt;/pre&gt;
+&lt;p&gt;レギュレーションによると&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;POST /api/schedules&lt;/code&gt;: 10点&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;POST /api/login&lt;/code&gt;: 1点&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;POST /api/reservations&lt;/code&gt;: 1点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;となっており、予約はそこそこ成功しているものの、スケジュールの作成が少ないために点数が伸びてないことがわかる。&lt;/p&gt;
+&lt;p&gt;次にクエリのボトルネックを調べるために、スロークエリログを有効にする。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+slow_query_log = 1
++slow_query_log_file = /var/log/mysql/mysql-slow.log
++long_query_time = 0.2
++log-queries-not-using-indexes
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;pt-query-digest&lt;/code&gt;を使うためpercona toolkitをインストールする。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; percona-toolkit
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;pt-query-digest /var/log/mysql/mysql-slow.log
+
+&lt;span class=&quot;c&quot;&gt;# 990ms user time, 30ms system time, 30.30M rss, 37.25M vsz&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Current date: Mon Jul  5 01:28:59 2021&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Hostname: ubuntu-focal&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Files: /var/log/mysql/mysql-slow.log&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Overall: 6.92k total, 3 unique, 85.43 QPS, 0.06x concurrency ___________&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Time range: 2021-07-04T16:27:20 to 2021-07-04T16:28:41&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Attribute          total     min     max     avg     95%  stddev  median&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# ============     ======= ======= ======= ======= ======= ======= =======&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Exec time             5s    97us    26ms   733us     3ms     1ms   348us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Lock time          503ms    29us    10ms    72us   138us   189us    44us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rows sent        244.43k       0      96   36.17   84.10   27.55   33.28&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rows examine       2.71M       0     712  410.65  685.39  210.55  420.77&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Query size       572.33k      79     132   84.69  130.47   16.49   76.28&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Profile&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rank Query ID                       Response time Calls R/Call V/M   Ite&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# ==== ============================== ============= ===== ====== ===== ===&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    1 0x8AF515F23C6557EC1A32EFCBB...  4.8160 94.9%  6073 0.0008  0.00 SELECT reservations&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    2 0x91FE50B3151F73CAA931F4943...  0.2187  4.3%   712 0.0003  0.00 SELECT reservations&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# MISC 0xMISC                          0.0425  0.8%   135 0.0003   0.0 &amp;lt;1 ITEMS&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Query 1: 74.98 QPS, 0.06x concurrency, ID 0x8AF515F23C6557EC1A32EFCBB5E06C9B at byte 1972228&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# This item is included in the report because it matches --limit.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Scores: V/M = 0.00&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Time range: 2021-07-04T16:27:20 to 2021-07-04T16:28:41&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Attribute    pct   total     min     max     avg     95%  stddev  median&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# ============ === ======= ======= ======= ======= ======= ======= =======&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Count         87    6073&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Exec time     94      5s    97us    26ms   793us     3ms     2ms   366us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Lock time     89   449ms    29us    10ms    73us   144us   200us    44us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rows sent     99 244.32k       0      96   41.20   88.31   25.88   34.95&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rows examine  90   2.46M       0     712  424.74  685.39  206.80  441.81&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Query size    81 468.52k      79      79      79      79       0      79&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# String:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Databases    isucon2021_prior&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Hosts        localhost&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Users        isucon&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Query_time distribution&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   1us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  10us  #&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 100us  ################################################################&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   1ms  ########&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  10ms  #&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 100ms&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    1s&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  10s+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Tables&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    SHOW TABLE STATUS FROM `isucon2021_prior` LIKE 'reservations'\G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    SHOW CREATE TABLE `isucon2021_prior`.`reservations`\G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# EXPLAIN /*!50100 PARTITIONS*/&lt;/span&gt;
+SELECT &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; FROM &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;reservations&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; WHERE &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;schedule_id&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'01F9S5H0MKDF0HG05FECEK3BTM'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\G&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Query 2: 15.48 QPS, 0.00x concurrency, ID 0x91FE50B3151F73CAA931F494357A001F at byte 1208837&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# This item is included in the report because it matches --limit.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Scores: V/M = 0.00&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Time range: 2021-07-04T16:27:20 to 2021-07-04T16:28:06&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Attribute    pct   total     min     max     avg     95%  stddev  median&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# ============ === ======= ======= ======= ======= ======= ======= =======&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Count         10     712&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Exec time      4   219ms   114us     5ms   307us   568us   244us   260us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Lock time      7    37ms    35us   588us    52us    89us    43us    40us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rows sent      0       0       0       0       0       0       0       0&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rows examine   8 247.13k       0     711  355.42  652.75  200.75  346.17&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Query size    16  91.78k     132     132     132     132       0     132&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# String:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Databases    isucon2021_prior&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Hosts        localhost&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Users        isucon&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Query_time distribution&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   1us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  10us&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 100us  ################################################################&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   1ms  #&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  10ms&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 100ms&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    1s&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  10s+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Tables&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    SHOW TABLE STATUS FROM `isucon2021_prior` LIKE 'reservations'\G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#    SHOW CREATE TABLE `isucon2021_prior`.`reservations`\G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# EXPLAIN /*!50100 PARTITIONS*/&lt;/span&gt;
+SELECT 1 FROM &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;reservations&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; WHERE &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;schedule_id&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'01F9S5HW06RF9V13Z3PGT3B0YW'&lt;/span&gt; AND &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;user_id&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'01F9S5J076VP0H37MF2SZP05E1'&lt;/span&gt; LIMIT 1&lt;span class=&quot;se&quot;&gt;\G&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;スケジュールに関連する予約を取得する箇所がスロークエリになっていることがわかる。&lt;/p&gt;
+&lt;p&gt;次に&lt;a href=&quot;https://github.com/osyoyu/stackprof&quot;&gt;osyoyu/stackprof&lt;/a&gt;を使ってアプリケーションコードのプロファイリングをおこなう。&lt;code&gt;config.ru&lt;/code&gt;でRackミドルウェアを追加する。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+gem 'stackprof', github: 'osyoyu/stackprof'
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;元の&lt;a href=&quot;https://github.com/tmm1/stackprof&quot;&gt;tmm1/stackprof&lt;/a&gt;と比べると &lt;a href=&quot;https://github.com/tmm1/stackprof/issues/80&quot;&gt;https://github.com/tmm1/stackprof/issues/80&lt;/a&gt; にあるような問題が修正されているものっぽい。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+require 'stackprof'
++use StackProf::Middleware,
++  enabled: ENV['ENABLE_PROFILE'].to_i.nonzero?,
++  mode: :cpu,
++  raw: ENV['ENABLE_RAW_PROFILE'].to_i.nonzero?,
++  interval: 1000,
++  save_every: 5
+&lt;/span&gt;
+ run App.new
+&lt;/pre&gt;
+&lt;p&gt;d3-flame-graphを使うために&lt;code&gt;raw: true&lt;/code&gt;を追加してある。systemdは&lt;code&gt;~/env&lt;/code&gt;をRailsサーバーの環境変数として設定するため、これを変更すればオン/オフを切り替えられる。&lt;/p&gt;
+&lt;p&gt;Railsサーバーを再起動させてベンチマーカーを実行する。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl restart web-ruby
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/benchmarker
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;webapp/ruby
+isucon@ubuntu-focal:~webapp/ruby&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;stackprof &lt;span class=&quot;nt&quot;&gt;--d3-flamegraph&lt;/span&gt; tmp/stackprof-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.dump &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; tmp/flamegraph.html
+&lt;/pre&gt;
+&lt;p&gt;こんな感じのflamegraphが生成されるため、ボトルネックがわかりやすくなった。&lt;code&gt;App#get_reservations&lt;/code&gt;が占める割合が大きそうだ。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;flamegraph.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;flamegraph.png&quot; alt=&quot;flamegraph&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;benchmarker --progress&lt;/h1&gt;
+&lt;p&gt;ベンチマーカーには&lt;code&gt;--progress&lt;/code&gt;というオプションがあるようなので、これも試してみる。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/benchmarker &lt;span class=&quot;nt&quot;&gt;--progress&lt;/span&gt;
+02:51:43.810051 score: 0&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : fail: score
+02:51:43.810096 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+02:51:44.161112 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01F9SABH0GZRNF4QYJ7H07HK40
+02:51:46.811650 score: 144&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;145 - 1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:51:46.811808 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+02:51:49.814398 score: 223&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;224 - 1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:51:49.814416 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+02:51:52.815522 score: 284&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;285 - 1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:51:52.815538 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;span class=&quot;c&quot;&gt;# snip&lt;/span&gt;
+02:52:31.889060 score: 718&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;719 - 1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:31.889083 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 8
+02:52:34.892716 score: 722&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;724 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:34.893451 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 10
+02:52:37.893911 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:37.894326 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 10
+02:52:40.895119 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:40.901700 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 10
+02:52:43.900161 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:43.900926 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 10
+02:52:46.900517 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:46.900537 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 11
+02:52:49.904001 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:49.904036 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 11
+02:52:52.904344 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:52:52.904365 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 11
+02:53:04.475732 score: 726&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;728 - 2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+02:53:04.476582 deduction: 1 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 11
+&lt;/pre&gt;
+&lt;p&gt;途中からスコアが伸びなくなっている。ベンチマーカーの仕様によるものに見えるので、ここもレギュレーションを見ながら対応したい。&lt;/p&gt;
+&lt;h1&gt;下準備&lt;/h1&gt;
+&lt;p&gt;普段Railsで開発していると陥りがちだけど、修正したコードは実行中のsinatraアプリケーションに反映されないので、ベンチマーカーを実行する前には一度再起動する必要がある。それを毎回やるのは面倒なので、スクリプトを用意しておく。また、stackprofのダンプファイルもクリーンアップしたいので、それもスクリプトで行う。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash -e&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl restart web-ruby
+&lt;span class=&quot;nb&quot;&gt;sleep &lt;/span&gt;30
+&lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;webapp/ruby/tmp/stackprof-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+bin/benchmarker
+&lt;/pre&gt;
+&lt;h1&gt;get_reservations&lt;/h1&gt;
+&lt;p&gt;flamegraphを見ると、&lt;code&gt;#get_reservations&lt;/code&gt;に時間がかかっているため、修正していく。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/schedules/:id'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `schedules` WHERE id = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;404&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;get_reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `reservations` WHERE `schedule_id` = ?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reservation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;reservation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reservation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;reservation&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:reserved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;size&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `users` WHERE `id` = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:staff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;スケジュールに関連する予約を取得し、各予約に対して関連するユーザーを取得しているため、N+1クエリとなっている。1回のクエリでこれらを取得するように直す。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; def get_reservations(schedule)
+&lt;span class=&quot;gd&quot;&gt;-  reservations = db.xquery('SELECT * FROM `reservations` WHERE `schedule_id` = ?', schedule[:id]).map do |reservation|
+-    reservation[:user] = get_user(reservation[:user_id])
+-    reservation
+-  end
+-  schedule[:reservations] = reservations
+-  schedule[:reserved] = reservations.size
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  reservations = db.xquery(&amp;lt;&amp;lt;~SQL
++    SELECT
++      r.`id` AS `r_id`,
++      r.`schedule_id` AS `r_schedule_id`,
++      r.`user_id` AS `r_user_id`,
++      r.`created_at` AS `r_created_at`,
++      u.`id` AS `u_id`,
++      u.`email` AS `u_email`,
++      u.`nickname` AS `u_nickname`,
++      u.`staff` AS `u_staff`,
++      u.`created_at` AS `u_created_at`
++    FROM
++      `reservations` AS r
++    JOIN
++      `users` AS u ON r.`user_id` = u.`id`
++    WHERE
++      r.`schedule_id` = ?
++  SQL)
++
++  schedule[:reservations] = reservations.map do |reservation|
++    {
++      id: reservation[:r_id],
++      schedule_id: reservation[:r_schedule_id],
++      user_id: reservation[:r_user_id],
++      created_at: reservation[:r_created_at],
++      user: {
++        id: reservation[:u_id],
++        email: (!current_user || !current_user[:staff]) ? '' : reservation[:u_email],
++        nickname: reservation[:u_nickname],
++        staff: reservation[:u_staff],
++        created_at: reservation[:u_created_at],
++      }
++    }
++  end
++  schedule[:reserved] = reservations.size
+&lt;/span&gt; end
+&lt;/pre&gt;
+&lt;p&gt;ベンチマークをとる。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/benchmarker
+06:15:41.612683 score: 910&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;910 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+06:15:41.612698 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;/pre&gt;
+&lt;p&gt;少し改善されたように見える。次にflamegraphでボトルネックとして出ていた&lt;code&gt;#current_user&lt;/code&gt;も見る。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;current_user&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `users` WHERE `id` = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;メモ化していないため、&lt;code&gt;reservations.map&lt;/code&gt;のブロック内で毎回ユーザーを取得してしまっている。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; def current_user
+&lt;span class=&quot;gd&quot;&gt;-  db.xquery('SELECT * FROM `users` WHERE `id` = ? LIMIT 1', session[:user_id]).first
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  @current_user ||= db.xquery('SELECT * FROM `users` WHERE `id` = ? LIMIT 1', session[:user_id]).first
+&lt;/span&gt; end
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/benchmarker
+06:20:51.566789 score: 1512&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1512 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+06:20:51.566804 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;/pre&gt;
+&lt;p&gt;一気にスコアが上がった。flamegraphを見ると、&lt;code&gt;#current_user&lt;/code&gt;の中で最も時間がかかっているのはクエリの実行だけど、PKを指定したクエリなのでこれ以上は最適化できない。&lt;/p&gt;
+&lt;p&gt;そこで、上で修正したクエリを最適化する。&lt;code&gt;EXPLAIN&lt;/code&gt;で実行計画を確認する。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; explain select * from reservations join users on reservations.user_id = users.id where reservations.schedule_id = '01F9VB8MP2Y5S0K4CZQY8K5VRK';
++----+-------------+--------------+------------+--------+---------------+---------+---------+---------------------------------------+------+----------+-------------+
+| id | select_type | table        | partitions | type   | possible_keys | key     | key_len | ref                                   | rows | filtered | Extra       |
++----+-------------+--------------+------------+--------+---------------+---------+---------+---------------------------------------+------+----------+-------------+
+|  1 | SIMPLE      | reservations | NULL       | ALL    | NULL          | NULL    | NULL    | NULL                                  |  769 |    10.00 | Using where |
+|  1 | SIMPLE      | users        | NULL       | eq_ref | PRIMARY       | PRIMARY | 1022    | isucon2021_prior.reservations.user_id |    1 |   100.00 | NULL        |
++----+-------------+--------------+------------+--------+---------------+---------+---------+---------------------------------------+------+----------+-------------+
+2 rows in set, 1 warning (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;type&lt;/code&gt;が&lt;code&gt;ALL&lt;/code&gt;となっており、フルテーブルスキャンになっている。&lt;code&gt;schedule_id&lt;/code&gt;に対してインデックスを追加する。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; CREATE TABLE `reservations` (
+   `id`          VARCHAR(255) PRIMARY KEY NOT NULL,
+   `schedule_id` VARCHAR(255) NOT NULL,
+   `user_id`     VARCHAR(255) NOT NULL,
+&lt;span class=&quot;gd&quot;&gt;-   `created_at`  DATETIME(6) NOT NULL
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  `created_at`  DATETIME(6) NOT NULL,
++  KEY (`schedule_id`)
+&lt;/span&gt; ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+&lt;/pre&gt;
+&lt;p&gt;DBを作り直してベンチマークをとる。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;webapp/tools/initdb
+isucon@ubuntu-focal:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/benchmarker
+06:25:40.386718 score: 1328&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1328 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+06:25:40.386733 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;/pre&gt;
+&lt;p&gt;スコアが下がってしまったが、実行計画は改善されている。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; explain select * from reservations join users on reservations.user_id = users.id where reservations.schedule_id = '01F9VC5Q34QARA1A77H2WQWHM6';
++----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+
+| id | select_type | table        | partitions | type   | possible_keys | key         | key_len | ref                                   | rows | filtered | Extra |
++----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+
+|  1 | SIMPLE      | reservations | NULL       | ref    | schedule_id   | schedule_id | 1022    | const                                 |    8 |   100.00 | NULL  |
+|  1 | SIMPLE      | users        | NULL       | eq_ref | PRIMARY       | PRIMARY     | 1022    | isucon2021_prior.reservations.user_id |    1 |   100.00 | NULL  |
++----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+
+2 rows in set, 1 warning (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;もしかすると、インデックスによってINSERTの性能が落ちているかもしれないので、インデックスの追加は保留する。&lt;/p&gt;
+&lt;h1&gt;get_reservations_count&lt;/h1&gt;
+&lt;p&gt;flamegraphを見ると、依然として&lt;code&gt;#get_reservations&lt;/code&gt;が占める割合が高いままだけど、それはリクエスト数が多いからなので、他をあたることにする。次に多いのは&lt;code&gt;#get_reservations_count&lt;/code&gt;なので実装を見ていく。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/schedules'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `schedules` ORDER BY `id` DESC'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;get_reservations_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_reservations_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `reservations` WHERE `schedule_id` = ?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:reserved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;size&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;必要なのは予約数のみなので、すべてのカラムを取得せずに件数だけ取得する。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; def get_reservations_count(schedule)
+&lt;span class=&quot;gd&quot;&gt;-  reservations = db.xquery('SELECT * FROM `reservations` WHERE `schedule_id` = ?', schedule[:id])
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  reservations = db.xquery('SELECT COUNT(*) AS count FROM `reservations` WHERE `schedule_id` = ?', schedule[:id])
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;-  schedule[:reserved] = reservations.size
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  schedule[:reserved] = reservations.first[:count]
+&lt;/span&gt; end
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;18:03:08.151453 score: 1806&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1806 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+18:03:08.151469 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 1
+&lt;/pre&gt;
+&lt;p&gt;スコアが上がった。&lt;/p&gt;
+&lt;h1&gt;POST /api/reservations&lt;/h1&gt;
+&lt;p&gt;再度flamegraphを生成すると、&lt;code&gt;post '/api/reservations'&lt;/code&gt;全体が占める割合が増えたため、実装を見ていく。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/reservations'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;required_login!&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'reservations'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;schedule_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:schedule_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_s&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;user_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;403&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;error: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'schedule not found'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;nil?&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;403&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;error: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'user not found'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT 1 FROM `users` WHERE `id` = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;403&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;error: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'already taken'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# snip&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;user not found&lt;/code&gt;エラーは&lt;code&gt;#required_login!&lt;/code&gt;ですでにチェックしていることを二重にチェックしているため不要なはず。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; post '/api/reservations' do
+   required_login!
+
+   transaction do |tx|
+     id = generate_id('reservations', tx)
+     schedule_id = params[:schedule_id].to_s
+     user_id = current_user[:id]
+
+     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
+&lt;span class=&quot;gd&quot;&gt;-    halt(403, JSON.generate(error: 'user not found')) unless tx.xquery('SELECT 1 FROM `users` WHERE `id` = ? LIMIT 1', user_id).first
+&lt;/span&gt;     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
+
+     # snip
+   end
+ end
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;18:22:16.026245 score: 1556&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1556 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+18:22:16.026260 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 1
+&lt;/pre&gt;
+&lt;p&gt;スコアは減っているけど、おそらく誤差の範囲のはずなので続きを見る。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/reservations'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;required_login!&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# snip&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;capacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:capacity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;reserved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `reservations` WHERE `schedule_id` = ?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedule_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;reserved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# snip&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;reserved&lt;/code&gt;をインクリメントしているので、&lt;code&gt;COUNT(*)&lt;/code&gt;を取得するように直す。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; post '/api/reservations' do
+   required_login!
+ 
+   transaction do |tx|
+     # snip
+ 
+     capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
+&lt;span class=&quot;gd&quot;&gt;-    reserved = 0
+-    tx.xquery('SELECT * FROM `reservations` WHERE `schedule_id` = ?', schedule_id).each do
+-      reserved += 1
+-    end
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+    reserved = tx.xquery('SELECT COUNT(*) AS count FROM `reservations` WHERE `schedule_id` = ?', schedule_id).first[:count]
+&lt;/span&gt; 
+     # snip
+   end
+ end
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;18:33:05.264692 score: 1786&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1786 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+18:33:05.264705 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;/pre&gt;
+&lt;p&gt;もう少しよく見てみると、予約を更新していないのに排他ロックを取得しているため、これをやめる。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; post '/api/reservations' do
+   required_login!
+
+   transaction do |tx|
+     id = generate_id('reservations', tx)
+     schedule_id = params[:schedule_id].to_s
+     user_id = current_user[:id]
+
+-    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
+&lt;span class=&quot;gi&quot;&gt;+    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first.nil?
+&lt;/span&gt;     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
+
+     # snip
+   end
+ end
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;18:42:40.103174 score: 1789&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1789 - 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : pass
+18:42:40.103188 deduction: 0 / &lt;span class=&quot;nb&quot;&gt;timeout&lt;/span&gt;: 0
+&lt;/pre&gt;
+&lt;h1&gt;仕様から見直し&lt;/h1&gt;
+&lt;p&gt;flamegraphから見ても手がかりが見当たらなくなってきたため、仕様を見直してみる。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;API は予約を受け付けているスケジュールの一覧をレスポンスしてください。ただし、管理者が全スケジュールの一覧を要求した時は、予約が埋まっていてもすべてのスケジュールを返してください。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;現状の実装だと、この仕様が満たせていないことがわかる。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/schedules'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT * FROM `schedules` ORDER BY `id` DESC'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;get_reservations_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;仕様に沿うように修正する。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; get '/api/schedules' do
+   schedules = db.xquery('SELECT * FROM `schedules` ORDER BY `id` DESC');
+   schedules.each do |schedule|
+     get_reservations_count(schedule)
+   end
+
++  if current_user.nil? || !current_user[:staff]
+&lt;span class=&quot;gi&quot;&gt;+    schedules = schedules.select { |schedule| schedule[:capacity] &amp;gt; schedule[:reserved] }
++  end
+&lt;/span&gt; 
+   json(schedules.to_a)
+ end
+&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;21:08:56.729009 score: 1778(1778 - 0) : pass
+21:08:56.729022 deduction: 0 / timeout: 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ベンチマーカーの仕様というか、お題の設定を確認する。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;とある日から世界各地で Webinar が開催されます。&lt;br&gt;
+受け付けられる参加申込上限は、各 Webinar ごとに設定されています。&lt;br&gt;
+管理者は Webinar の申し込みが埋まってくると、新たな Webinar の予定を設定します。&lt;br&gt;
+ユーザーは1度の Webinar 参加では満足せず、複数回参加しようとします。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ベンチマーカー走行後の予約の埋まり具合を確認すると、そこまで予約が埋まっていない予定もまだありそうだった。&lt;/p&gt;
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;capacity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schedule_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schedules&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------------------------+----------+-------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;                         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;capacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------------------------+----------+-------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA864ZF243KEES0AD1RYP58Q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA864ZK8W9RXPYK29TBVZSNA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;92&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;92&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA864ZQV5H9R23DJSQVV9JCN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;75&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;75&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA864ZW6KY01AVS47GR8E3EJ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;36&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;36&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA86500PX63PH9P07NH46ZXY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA86504JY07NJAM9CJVPBMVV&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;88&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;88&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA86560C28TCP8XPFN3Q914Y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865CRMPTJFZKWH86H1W06D&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865DYMY0R2441PBAR85D9P&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;82&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;82&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865DTDN7RVX0AVMXJ14TWM&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;36&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;36&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865GNSMGZH7RNPDHDGKHQK&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;      &lt;span class=&quot;mi&quot;&gt;113&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;113&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865H7Z25AZ55Q7380E5J00&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;35&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;36&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865J3T90ADJFM4AMRZV90N&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865N5P6EW1B5K8WDMJM59G&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;      &lt;span class=&quot;mi&quot;&gt;124&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;106&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865R660AK2QC1R3JD3VA6N&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865T3JKEXGETJ5XYMNMDEK&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;44&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;44&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865TV03V3Z3DQ7YRFS9ZWT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;      &lt;span class=&quot;mi&quot;&gt;106&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;78&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA865Z0HK75NF4SVX5PWH3R8&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;59&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA8660P2Y2GT2TMSXDN32V27&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;55&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;51&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA866372TPJG09G1ZB7VFJVQ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;37&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA8668JK4SAP3B1G6B64KDXJ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;55&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------------------------+----------+-------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;21&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;次にユーザーごとの予約回数を見てみると、ほぼすべてのユーザーが6回で打ち止めになっており、ここがスコアが伸びない原因のように見える。&lt;/p&gt;
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reservations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------------------------+-------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;                         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------------------------+-------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA864ZD35SD8ED82VSTCQYG2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA864ZPQBCAT79NMYK77ZAW5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA8650765HP9ZPE77WW3Z1N0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA86506KC7T955XGAWM8ZBRA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA8650GF8XS85A2NA39H66D2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA8650H7G6EV0JM96JBMYP1B&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- snip&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA866A5HQH99A4X9A8B6FHK5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA866AE3MMMZVGJV7S2F8T53&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA866AS78FFQSP2RX2SYZT74&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA866AS8Z7A4R26PEK3BSEN3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FA866B61T85RBTZ7XZJH4TYE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------------------------+-------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;218&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;h1&gt;POST /api/signup&lt;/h1&gt;
+&lt;p&gt;ユーザー登録を改善することでスコアが伸びないか試してみる。&lt;/p&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api/signup'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;nickname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'users'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;nickname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:nickname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, NOW(6))'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nickname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;created_at&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'SELECT `created_at` FROM `users` WHERE `id` = ? LIMIT 1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:created_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;id: &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;email: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;nickname: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nickname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;created_at: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;created_at&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;generate_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ULID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xquery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;SELECT 1 FROM `&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;` WHERE `id` = ? LIMIT 1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ULID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;generate&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;ULIDが衝突する可能性は無視できるはずなので、重複チェックをやめる。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; def generate_id(table, tx)
+&lt;span class=&quot;gd&quot;&gt;-  id = ULID.generate
+-  while tx.xquery(&quot;SELECT 1 FROM `#{table}` WHERE `id` = ? LIMIT 1&quot;, id).first
+-    id = ULID.generate
+-  end
+-  id
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  ULID.generate
+&lt;/span&gt; end
+&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;08:17:46.688947 score: 1843(1843 - 0) : pass
+08:17:46.688961 deduction: 0 / timeout: 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;created_at&lt;/code&gt;もアプリケーションで生成してクエリを減らす。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;p&quot;&gt;post '/api/signup' do
+&lt;/span&gt;  id = ''
+  nickname = ''
+
+  user = transaction do |tx|
+    id = generate_id('users', tx)
+    email = params[:email]
+    nickname = params[:nickname]
+&lt;span class=&quot;gd&quot;&gt;-   tx.xquery('INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, NOW(6))', id, email, nickname)
+-   created_at = tx.xquery('SELECT `created_at` FROM `users` WHERE `id` = ? LIMIT 1', id).first[:created_at]
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+   created_at = Time.now.iso8601(6)
++   tx.xquery('INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, ?)', id, email, nickname, created_at)
+&lt;/span&gt;
+    { id: id, email: email, nickname: nickname, created_at: created_at }
+  end
+
+  json(user)
+&lt;span class=&quot;p&quot;&gt;end
+&lt;/span&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;08:23:51.263969 score: 1909(1909 - 0) : pass
+08:23:51.263984 deduction: 0 / timeout: 2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ユーザー登録自体はこれ以上改善できなさそうなので、ここまでにする。&lt;/p&gt;</summary>
+    <title>isucon11-priorで練習</title>
+    <updated>2021-07-11T23:08:00+00:00</updated>
+    <dc:date>2021-07-11T23:08:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/450/</id>
     <link href="https://blog.naoty.dev/450/"/>
     <summary>&lt;h1&gt;クラスターの起動&lt;/h1&gt;
