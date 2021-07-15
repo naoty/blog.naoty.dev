@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>isucon11-priorでisuconの練習をした2</title>
+    <meta property="og:title" content="isucon11-priorでisuconの練習をした2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/452/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">isucon11-priorでisuconの練習をした2</h1>
+          <p class="metadata">
+            <time datetime="2021-07-12T08:33:00.000+0000">2021-07-12 08:33</time>
+            <a href="/isucon/">#isucon</a>
+          </p>
+        </header>
+        <section class="body">
+          <ul>
+<li><a href="/451/">その1</a></li>
+<li>その2</li>
+</ul>
+<h1>Redisで予約数を管理する</h1>
+<p>予約数をMySQLではなくRedisで管理することで高速化できないか試してみる。</p>
+<p>すでにRedisはセットアップされているので起動する。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo </span>systemctl start redis-server
+</pre>
+<p>バルクでの取得を高速化するためにredisとともにhiredisをセットアップする。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+gem 'redis'
++gem 'hiredis'
+</span></pre>
+<pre lang="diff" class="highlight highlight-diff"> class App &lt; Sinatra::Base
+   helpers do
+     # snip
+
++    def redis
+<span class="gi">+      Thread.current[:redis] ||= Redis.new(driver: :hiredis)
++    end
+</span>
+     # snip
+   end
+ end
+</pre>
+<p><code>POST /initialize</code>でデータが初期化されるようにする。</p>
+<pre lang="diff" class="highlight highlight-diff"> post '/initialize' do
+   transaction do |tx|
+     tx.query('TRUNCATE `reservations`')
+     tx.query('TRUNCATE `schedules`')
+     tx.query('TRUNCATE `users`')
+ 
+     id = generate_id('users', tx)
+     tx.xquery('INSERT INTO `users` (`id`, `email`, `nickname`, `staff`, `created_at`) VALUES (?, ?, ?, true, NOW(6))', id, 'isucon2021_
+   end
+ 
+<span class="gi">+  redis.flushall
++
+</span>   json(language: 'ruby')
+ end
+</pre>
+<p><code>POST /api/reservations</code>で予約数をインクリメントし、予約数をRedisから取得するようにする。</p>
+<pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
+   required_login!
+
+   transaction do |tx|
+     id = generate_id('reservations', tx)
+     schedule_id = params[:schedule_id].to_s
+     user_id = current_user[:id]
+
+     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id)
+     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` =
+
+     capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
+<span class="gd">-    reserved = tx.xquery('SELECT COUNT(*) AS count FROM `reservations` WHERE `schedule_id` = ?', schedule_id).first[:count]
+</span><span class="gi">+    reserved = redis.get("schedules:#{schedule_id}:reserved").to_i
+</span>
+     halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= capacity
+
+     tx.xquery('INSERT INTO `reservations` (`id`, `schedule_id`, `user_id`, `created_at`) VALUES (?, ?, ?, NOW(6))', id, schedule_id, us
+     created_at = tx.xquery('SELECT `created_at` FROM `reservations` WHERE `id` = ?', id).first[:created_at]
+
++    redis.incr("schedules:#{schedule_id}:reserved")
+<span class="gi">+
+</span>     json({ id: id, schedule_id: schedule_id, user_id: user_id, created_at: created_at})
+   end
+ end
+</pre>
+<p><code>GET /api/schedules</code>でRedisから予約数をまとめて取得するようにする。</p>
+<pre lang="diff" class="highlight highlight-diff"> get '/api/schedules' do
+   schedules = db.xquery('SELECT * FROM `schedules` ORDER BY `id` DESC')
+<span class="gd">-  schedules.each do |schedule|
+-    get_reservations_count(schedule)
+-  end
+</span><span class="gi">+  reserved_keys = schedules.map { |schedule| "schedules:#{schedule[:id]}:reserved" }
++  reserved_counts = reserved_keys.empty? ? {} : redis.mapped_mget(*reserved_keys)
++  schedules.each do |schedule|
++    schedule[:reserved] = reserved_counts["schedules:#{schedule[:id]}:reserved"].to_i
++  end
+</span>
+   if current_user.nil? || !current_user[:staff]
+     schedules = schedules.select { |schedule| schedule[:capacity] &gt; schedule[:reserved] }
+   end
+
+   json(schedules.to_a)
+ end
+</pre>
+<p>ベンチマークの結果はそこまで変化がなかった。</p>
+<pre lang="bash" class="highlight highlight-bash">09:34:48.277101 score: 1951<span class="o">(</span>1953 - 2<span class="o">)</span> : pass
+09:34:48.277114 deduction: 2 / <span class="nb">timeout</span>: 0
+</pre>
+<h1>JSONエンコーダーの変更</h1>
+<p>flamegraphを見ると、JSONの生成で時間がかかっていることがわかる。</p>
+<pre lang="diff" class="highlight highlight-diff"> require 'sinatra/json'
+<span class="gd">-require 'active_support/json'
+</span> require 'active_support/time'
+ require_relative 'db'
+</pre>
+<pre lang="diff" class="highlight highlight-diff"> set :session_secret, 'tagomoris'
+ set :sessions, key: 'session_isucon2021_prior', expire_after: 3600
+ set :show_exceptions, false
+<span class="gd">-set :json_encoder, ActiveSupport::JSON
+</span><span class="gi">+set :json_encoder, :to_json
+</span></pre>
+<p>すると、JSONのフォーマットがinvalidというエラーが出てしまった。</p>
+<pre lang="bash" class="highlight highlight-bash">22:03:47.963385 ERR: prepare: json: invalid JSON at /api/login
+22:03:47.964026 score: 0<span class="o">(</span>0 - 0<span class="o">)</span> : fail: critical
+22:03:47.964593 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p><code>ActiveSupport::JSON.encode</code>と<code>JSON.generate</code>の仕様の差によるものと思われる。<code>Time#iso8601</code>を使って文字列に変換したものをJSONに渡すことでこの差分を埋めることができそう。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="nb">puts</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">JSON</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+<span class="c1">#=&gt; "{\"created_at\":\"2021-07-13T22:07:25.346+09:00\"}"</span>
+<span class="nb">puts</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">({</span> <span class="ss">created_at: </span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="p">})</span>
+<span class="c1">#=&gt; "{\"created_at\":\"2021-07-13 22:07:12 +0900\"}"</span>
+<span class="nb">puts</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">({</span> <span class="ss">created_at: </span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">iso8601</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="p">})</span>
+<span class="c1">#=&gt; "{\"created_at\":\"2021-07-13T22:11:44.003+09:00\"}"</span>
+</pre>
+<p>レスポンスに渡している<code>created_at</code>を<code>created_at.iso8601(3)</code>として形式を変換した。</p>
+<p>ベンチマークをとるとスコアが上がった。</p>
+<pre lang="bash" class="highlight highlight-bash">22:20:27.911849 score: 2103<span class="o">(</span>2103 - 0<span class="o">)</span> : pass
+22:20:27.911866 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<h1>POST /api/reservations</h1>
+<p>JSONの修正によってflamegraphの形が大きく変わった。次はどうやら予約の作成に時間がかかっているようなので、再度見直してみる。</p>
+<p><code>created_at</code>を取得するためのクエリを省くためにRubyで生成した現在時刻を使い回すようにした。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gd">-tx.xquery('INSERT INTO `reservations` (`id`, `schedule_id`, `user_id`, `created_at`) VALUES (?, ?, ?, NOW(6))', id, schedule_id, user_id)
+-created_at = tx.xquery('SELECT `created_at` FROM `reservations` WHERE `id` = ?', id).first[:created_at]
+</span><span class="gi">+created_at = Time.now
++tx.xquery('INSERT INTO `reservations` (`id`, `schedule_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?)', id, schedule_id, user_id, created_at.iso8601(6))
+</span></pre>
+<pre lang="bash" class="highlight highlight-bash">09:08:25.905845 score: 2225<span class="o">(</span>2225 - 0<span class="o">)</span> : pass
+09:08:25.905860 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p>スケジュールを2回取得していたので1回にする。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gd">-halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first.nil?
+</span><span class="gi">+schedule = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first
++halt(403, JSON.generate(error: 'schedule not found')) if schedule.nil?
+</span> halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
+
+-capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
+ reserved = redis.get("schedules:#{schedule_id}:reserved").to_i
+
+-halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= capacity
+<span class="gi">+halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= schedule[:capacity]
+</span></pre>
+<pre><code>09:09:39.008965 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH5HZDT68S0519B4PNJBFX6
+09:09:39.499605 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH5HZX6YW4S72110SHX75SF
+09:10:48.801984 ERR: validation: invalid: overbooking at 01FAH5HZRE7F7C0TFQ0J269Z1P
+09:10:49.004425 score: 2255(2307 - 52) : pass
+09:10:49.004439 deduction: 52 / timeout: 0
+</code></pre>
+<h1>GET /api/schedules/:id</h1>
+<p>次にスケジュールと予約しているユーザーの取得にやはり時間がかかっているため、再度見直す。</p>
+<p>コード自体は変更できそうなところはないので、今までは保留していたけど、予約テーブルにインデックスを追加することで改善しないか試してみる。</p>
+<pre lang="diff" class="highlight highlight-diff"> CREATE TABLE `reservations` (
+   `id`          VARCHAR(255) PRIMARY KEY NOT NULL,
+   `schedule_id` VARCHAR(255) NOT NULL,
+   `user_id`     VARCHAR(255) NOT NULL,
+<span class="gd">-  `created_at`  DATETIME(6) NOT NULL
+</span><span class="gi">+  `created_at`  DATETIME(6) NOT NULL,
++  KEY (`schedule_id`)
+</span> ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+</pre>
+<p>大きな変化は見られなかった。</p>
+<pre lang="bash" class="highlight highlight-bash">09:38:16.792266 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH76CYJPV68QY935P3SJ2EB
+09:38:16.941098 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH76D325T6CFGBHGDB03JMS
+09:38:16.950073 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH76D325T6CFGBHGDB03JMS
+09:39:26.331983 score: 2222<span class="o">(</span>2225 - 3<span class="o">)</span> : pass
+09:39:26.331998 deduction: 3 / <span class="nb">timeout</span>: 0
+</pre>
+<p><code>EXPLAIN</code>をしてみる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">reservations</span> <span class="k">join</span> <span class="n">users</span> <span class="k">on</span> <span class="n">reservations</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">users</span><span class="p">.</span><span class="n">id</span> <span class="k">where</span> <span class="n">reservations</span><span class="p">.</span><span class="n">schedule_id</span> <span class="o">=</span> <span class="s1">'01FAH77NGEVQ4Y9WDNYBCFN5PK'</span><span class="p">;</span>                  
+<span class="o">+</span><span class="c1">----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>        <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span>   <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>         <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>                                   <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">reservations</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">ref</span>    <span class="o">|</span> <span class="n">schedule_id</span>   <span class="o">|</span> <span class="n">schedule_id</span> <span class="o">|</span> <span class="mi">1022</span>    <span class="o">|</span> <span class="n">const</span>                                 <span class="o">|</span>   <span class="mi">20</span> <span class="o">|</span>   <span class="mi">100</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="k">NULL</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">users</span>        <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="n">eq_ref</span> <span class="o">|</span> <span class="k">PRIMARY</span>       <span class="o">|</span> <span class="k">PRIMARY</span>     <span class="o">|</span> <span class="mi">1022</span>    <span class="o">|</span> <span class="n">isucon2021_prior</span><span class="p">.</span><span class="n">reservations</span><span class="p">.</span><span class="n">user_id</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span>   <span class="mi">100</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="k">NULL</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+</span>
+<span class="mi">2</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">,</span> <span class="mi">1</span> <span class="n">warning</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</pre>
+<p><code>type</code>列を見ると<code>ref</code>となっているため、追加したインデックスが使われていることがわかる。</p>
+<p>まだ改善できるところがないか探してみると、<code>key_len</code>がやや大きいように見える。これは<code>id</code>をULIDにしている影響と思われるため、すべてのテーブルの<code>id</code>を<code>int</code>型にし、<code>AUTO_INCREMENT</code>を設定する。</p>
+<p>なお、マニュアルには</p>
+<blockquote>
+<p>各エンドポイントの URI の変更は認められませんが、以下の点については明確に許可されます。<br>
+ID 発行形式の変更</p>
+</blockquote>
+<p>とわざわざ書かれているため、問題ないはず。</p>
+<pre lang="diff" class="highlight highlight-diff"> DROP TABLE IF EXISTS `users`;
+ CREATE TABLE `users` (
+<span class="gd">-  `id`         VARCHAR(255) PRIMARY KEY NOT NULL,
+</span><span class="gi">+  `id`         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+</span>   `email`      VARCHAR(255) NOT NULL DEFAULT '',
+   `nickname`   VARCHAR(120) NOT NULL DEFAULT '',
+   `staff`      BOOLEAN NOT NULL DEFAULT false,
+ ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+ DROP TABLE IF EXISTS `schedules`;
+ CREATE TABLE `schedules` (
+<span class="gd">-  `id`         VARCHAR(255) PRIMARY KEY NOT NULL,
+</span><span class="gi">+  `id`         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+</span>   `title`      VARCHAR(255) NOT NULL DEFAULT '',
+   `capacity`   INT UNSIGNED NOT NULL DEFAULT 0,
+   `created_at` DATETIME(6) NOT NULL
+ ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+ DROP TABLE IF EXISTS `reservations`;
+ CREATE TABLE `reservations` (
+<span class="gd">-  `id`          VARCHAR(255) PRIMARY KEY NOT NULL,
+-  `schedule_id` VARCHAR(255) NOT NULL,
+-  `user_id`     VARCHAR(255) NOT NULL,
+</span><span class="gi">+  `id`          INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
++  `schedule_id` INT NOT NULL,
++  `user_id`     INT NOT NULL,
+</span>   `created_at`  DATETIME(6) NOT NULL,
+   KEY (`schedule_id`)
+ ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+</pre>
+<p>ULIDを発番して挿入している箇所もすべてやめる。すると、validation errorになってしまった。</p>
+<pre lang="bash" class="highlight highlight-bash">10:09:08.050628 ERR: prepare: json: invalid JSON at /api/login
+10:09:08.052437 score: 0<span class="o">(</span>0 - 0<span class="o">)</span> : fail: critical
+10:09:08.052819 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+<p>どうやらJSONの<code>id</code>フィールドを文字列にする必要がありそうなので、<code>to_s</code>しておく。</p>
+<p>そこまでスコアは上がらなかった。</p>
+<pre lang="bash" class="highlight highlight-bash">22:55:06.307661 ERR: validation: invalid: overbooking at 7
+22:55:06.334715 score: 2205<span class="o">(</span>2255 - 50<span class="o">)</span> : pass
+22:55:06.335481 deduction: 50 / <span class="nb">timeout</span>: 0
+</pre>
+<p><code>EXPLAIN</code>の結果を見ると確かに<code>key_len</code>が小さくなった。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">reservations</span> <span class="k">join</span> <span class="n">users</span> <span class="k">on</span> <span class="n">reservations</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">users</span><span class="p">.</span><span class="n">id</span> <span class="k">where</span> <span class="n">reservations</span><span class="p">.</span><span class="n">schedule_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>        <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span>   <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>         <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>                                   <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">reservations</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">ref</span>    <span class="o">|</span> <span class="n">schedule_id</span>   <span class="o">|</span> <span class="n">schedule_id</span> <span class="o">|</span> <span class="mi">4</span>       <span class="o">|</span> <span class="n">const</span>                                 <span class="o">|</span>   <span class="mi">70</span> <span class="o">|</span>   <span class="mi">100</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="k">NULL</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">users</span>        <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="n">eq_ref</span> <span class="o">|</span> <span class="k">PRIMARY</span>       <span class="o">|</span> <span class="k">PRIMARY</span>     <span class="o">|</span> <span class="mi">4</span>       <span class="o">|</span> <span class="n">isucon2021_prior</span><span class="p">.</span><span class="n">reservations</span><span class="p">.</span><span class="n">user_id</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span>   <span class="mi">100</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="k">NULL</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+--------------+------------+--------+---------------+-------------+---------+---------------------------------------+------+----------+-------+</span>
+<span class="mi">2</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">,</span> <span class="mi">1</span> <span class="n">warning</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</pre>
+<h1>シナリオを調べる</h1>
+<p>視点を変えてログインユーザーがどのような行動をとっているのか調べてみることにした。そこで、アクセスログにユーザーIDを出力するようにする。</p>
+<p>まず、sinatraでユーザーIDをレスポンスヘッダに追加する。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+if ENV['ENABLE_PROFILE'].to_i.nonzero?
++  after do
++    response.headers['X-User-ID'] = session[:user_id]
++  end
++end
+</span></pre>
+<p>次にnginxのアクセスログにレスポンスヘッダの中身を出力する。<code>$upstream_http_&lt;ヘッダ&gt;</code>という形式でレスポンスヘッダの値に参照できる。</p>
+<pre lang="diff" class="highlight highlight-diff"> log_format ltsv "time:$time_local"
+   "\thost:$remote_addr"
+   "\tforwardedfor:$http_x_forwarded_for"
+   "\treq:$request"
+   "\tmethod:$request_method"
+   "\turi:$request_uri"
+   "\tstatus:$status"
+   "\tsize:$body_bytes_sent"
+   "\treferer:$http_referer"
+   "\tua:$http_user_agent"
+   "\treqtime:$request_time"
+   "\truntime:$upstream_http_x_runtime"
+   "\tapptime:$upstream_response_time"
+   "\tcache:$upstream_http_x_cache"
+<span class="gi">+  "\tuserid:$upstream_http_x_user_id"
+</span>   "\tvhost:$host"
+</pre>
+<p>ユーザー毎の行動をアクセスログから調べられるようになった。例えば、ユーザーID 1を持つ管理者はスケジュール一覧を大量に閲覧しており、各スケジュールに1回だけアクセスしているのがわかる。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo grep</span> <span class="s2">"userid:1[[:space:]]"</span> /var/log/nginx/access.log | alp ltsv
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+-------+-------+-------+-------+-------+--------+-----------+-----------+------------+-----------+
+| COUNT | 1XX | 2XX | 3XX | 4XX | 5XX | METHOD |        URI        |  MIN  |  MAX  |  SUM  |  AVG  |  P1   |  P50  |  P99  | STDDEV | MIN<span class="o">(</span>BODY<span class="o">)</span> | MAX<span class="o">(</span>BODY<span class="o">)</span> | SUM<span class="o">(</span>BODY<span class="o">)</span>  | AVG<span class="o">(</span>BODY<span class="o">)</span> |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+-------+-------+-------+-------+-------+--------+-----------+-----------+------------+-----------+
+|     1 |   0 |   1 |   0 |   0 |   0 | POST   | /api/login        | 0.008 | 0.008 | 0.008 | 0.008 | 0.008 | 0.008 | 0.008 |  0.000 |   108.000 |   108.000 |    108.000 |   108.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/4  | 0.156 | 0.156 | 0.156 | 0.156 | 0.156 | 0.156 | 0.156 |  0.000 |  8140.000 |  8140.000 |   8140.000 |  8140.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/2  | 0.152 | 0.152 | 0.152 | 0.152 | 0.152 | 0.152 | 0.152 |  0.000 | 20684.000 | 20684.000 |  20684.000 | 20684.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/7  | 0.140 | 0.140 | 0.140 | 0.140 | 0.140 | 0.140 | 0.140 |  0.000 |  9104.000 |  9104.000 |   9104.000 |  9104.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/1  | 0.004 | 0.004 | 0.004 | 0.004 | 0.004 | 0.004 | 0.004 |  0.000 | 15758.000 | 15758.000 |  15758.000 | 15758.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/22 | 0.012 | 0.012 | 0.012 | 0.012 | 0.012 | 0.012 | 0.012 |  0.000 |   132.000 |   132.000 |    132.000 |   132.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/19 | 0.016 | 0.016 | 0.016 | 0.016 | 0.016 | 0.016 | 0.016 |  0.000 |  6464.000 |  6464.000 |   6464.000 |  6464.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/20 | 0.024 | 0.024 | 0.024 | 0.024 | 0.024 | 0.024 | 0.024 |  0.000 |  5570.000 |  5570.000 |   5570.000 |  5570.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/18 | 0.036 | 0.036 | 0.036 | 0.036 | 0.036 | 0.036 | 0.036 |  0.000 |  8765.000 |  8765.000 |   8765.000 |  8765.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/21 | 0.040 | 0.040 | 0.040 | 0.040 | 0.040 | 0.040 | 0.040 |  0.000 |  2408.000 |  2408.000 |   2408.000 |  2408.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/16 | 0.044 | 0.044 | 0.044 | 0.044 | 0.044 | 0.044 | 0.044 |  0.000 | 10125.000 | 10125.000 |  10125.000 | 10125.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/17 | 0.056 | 0.056 | 0.056 | 0.056 | 0.056 | 0.056 | 0.056 |  0.000 | 10333.000 | 10333.000 |  10333.000 | 10333.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/15 | 0.068 | 0.068 | 0.068 | 0.068 | 0.068 | 0.068 | 0.068 |  0.000 | 16018.000 | 16018.000 |  16018.000 | 16018.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/12 | 0.076 | 0.076 | 0.076 | 0.076 | 0.076 | 0.076 | 0.076 |  0.000 | 16046.000 | 16046.000 |  16046.000 | 16046.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/14 | 0.076 | 0.076 | 0.076 | 0.076 | 0.076 | 0.076 | 0.076 |  0.000 | 13767.000 | 13767.000 |  13767.000 | 13767.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/13 | 0.088 | 0.088 | 0.088 | 0.088 | 0.088 | 0.088 | 0.088 |  0.000 |  8788.000 |  8788.000 |   8788.000 |  8788.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/9  | 0.100 | 0.100 | 0.100 | 0.100 | 0.100 | 0.100 | 0.100 |  0.000 | 10721.000 | 10721.000 |  10721.000 | 10721.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/10 | 0.108 | 0.108 | 0.108 | 0.108 | 0.108 | 0.108 | 0.108 |  0.000 | 11670.000 | 11670.000 |  11670.000 | 11670.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/8  | 0.120 | 0.120 | 0.120 | 0.120 | 0.120 | 0.120 | 0.120 |  0.000 | 22467.000 | 22467.000 |  22467.000 | 22467.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/6  | 0.128 | 0.128 | 0.128 | 0.128 | 0.128 | 0.128 | 0.128 |  0.000 | 19817.000 | 19817.000 |  19817.000 | 19817.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/11 | 0.132 | 0.132 | 0.132 | 0.132 | 0.132 | 0.132 | 0.132 |  0.000 | 26703.000 | 26703.000 |  26703.000 | 26703.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/5  | 0.132 | 0.132 | 0.132 | 0.132 | 0.132 | 0.132 | 0.132 |  0.000 | 21596.000 | 21596.000 |  21596.000 | 21596.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/3  | 0.156 | 0.156 | 0.156 | 0.156 | 0.156 | 0.156 | 0.156 |  0.000 | 16882.000 | 16882.000 |  16882.000 | 16882.000 |
+|    22 |   0 |  22 |   0 |   0 |   0 | POST   | /api/schedules    | 0.004 | 0.152 | 0.576 | 0.026 | 0.068 | 0.012 | 0.008 |  0.032 |   100.000 |   111.000 |   2306.000 |   104.818 |
+|   365 |   0 | 365 |   0 |   0 |   0 | GET    | /api/schedules    | 0.000 | 0.320 | 6.344 | 0.017 | 0.000 | 0.008 | 0.000 |  0.032 |     2.000 |  2505.000 | 561496.000 |  1538.345 |
+|   365 |   0 |   0 |   0 | 365 |   0 | GET    | /favicon.ico      | 0.004 | 0.272 | 3.808 | 0.010 | 0.052 | 0.004 | 0.000 |  0.023 |   377.000 |   377.000 | 137605.000 |   377.000 |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+-------+-------+-------+-------+-------+--------+-----------+-----------+------------+-----------+
+</pre>
+<p>管理者ではない一般ユーザーはスケジュール一覧を1回だけ見て、各スケジュールにアクセスして予約をとっているのがわかる。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span><span class="nb">sudo grep</span> <span class="s2">"userid:100[[:space:]]"</span> /var/log/nginx/access.log | alp ltsv
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+-------+-------+-------+-------+-------+--------+-----------+-----------+-----------+-----------+
+| COUNT | 1XX | 2XX | 3XX | 4XX | 5XX | METHOD |        URI        |  MIN  |  MAX  |  SUM  |  AVG  |  P1   |  P50  |  P99  | STDDEV | MIN<span class="o">(</span>BODY<span class="o">)</span> | MAX<span class="o">(</span>BODY<span class="o">)</span> | SUM<span class="o">(</span>BODY<span class="o">)</span> | AVG<span class="o">(</span>BODY<span class="o">)</span> |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+-------+-------+-------+-------+-------+--------+-----------+-----------+-----------+-----------+
+|     1 |   0 |   1 |   0 |   0 |   0 | POST   | /api/login        | 0.052 | 0.052 | 0.052 | 0.052 | 0.052 | 0.052 | 0.052 |  0.000 |   112.000 |   112.000 |   112.000 |   112.000 |
+|     1 |   0 |   0 |   0 |   1 |   0 | GET    | /favicon.ico      | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |  0.000 |   377.000 |   377.000 |   377.000 |   377.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules    | 0.008 | 0.008 | 0.008 | 0.008 | 0.008 | 0.008 | 0.008 |  0.000 |   675.000 |   675.000 |   675.000 |   675.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/10 | 0.004 | 0.004 | 0.004 | 0.004 | 0.004 | 0.004 | 0.004 |  0.000 |  1311.000 |  1311.000 |  1311.000 |  1311.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/9  | 0.020 | 0.020 | 0.020 | 0.020 | 0.020 | 0.020 | 0.020 |  0.000 |  1705.000 |  1705.000 |  1705.000 |  1705.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/8  | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |  0.000 |  2482.000 |  2482.000 |  2482.000 |  2482.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/6  | 0.020 | 0.020 | 0.020 | 0.020 | 0.020 | 0.020 | 0.020 |  0.000 | 16049.000 | 16049.000 | 16049.000 | 16049.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/5  | 0.060 | 0.060 | 0.060 | 0.060 | 0.060 | 0.060 | 0.060 |  0.000 | 16436.000 | 16436.000 | 16436.000 | 16436.000 |
+|     1 |   0 |   1 |   0 |   0 |   0 | GET    | /api/schedules/2  | 0.028 | 0.028 | 0.028 | 0.028 | 0.028 | 0.028 | 0.028 |  0.000 | 16430.000 | 16430.000 | 16430.000 | 16430.000 |
+|     6 |   0 |   6 |   0 |   0 |   0 | POST   | /api/reservations | 0.004 | 0.060 | 0.128 | 0.021 | 0.016 | 0.024 | 0.060 |  0.018 |    87.000 |    88.000 |   523.000 |    87.167 |
++-------+-----+-----+-----+-----+-----+--------+-------------------+-------+-------+-------+-------+-------+-------+-------+--------+-----------+-----------+-----------+-----------+
+</pre>
+<p><code>GET /api/schedules</code>が管理者から大量にアクセスされているけど、予約数を出す以上はキャッシュすることも難しそう。特にこれといって方針が決まるかと言うとそこまでではなさそうだった。</p>
+<h1>GET /favicon.ico</h1>
+<p>alpによるプロファイリング結果を見ていると<code>GET /favicon.ico</code>へのアクセスがそれなりに遅いことがわかる。試しに<code>curl</code>でリクエストを送ると、sinatraから返していることがわかる。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~<span class="nv">$ </span>curl localhost/favicon.ico
+&lt;<span class="o">!</span>DOCTYPE html&gt;
+&lt;html&gt;
+&lt;<span class="nb">head</span><span class="o">&gt;</span>
+  &lt;style <span class="nb">type</span><span class="o">=</span><span class="s2">"text/css"</span><span class="o">&gt;</span>
+  body <span class="o">{</span> text-align:center<span class="p">;</span>font-family:helvetica,arial<span class="p">;</span>font-size:22px<span class="p">;</span>
+    color:#888<span class="p">;</span>margin:20px<span class="o">}</span>
+  <span class="c">#c {margin:0 auto;width:500px;text-align:left}</span>
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;Sinatra doesn’t know this ditty.&lt;/h2&gt;
+  &lt;img <span class="nv">src</span><span class="o">=</span><span class="s1">'http://localhost/__sinatra__/404.png'</span><span class="o">&gt;</span>
+  &lt;div <span class="nb">id</span><span class="o">=</span><span class="s2">"c"</span><span class="o">&gt;</span>
+    Try this:
+    &lt;pre&gt;# <span class="k">in </span>app.rb
+class App
+  get &amp;#x27<span class="p">;</span>&amp;#x2F<span class="p">;</span>favicon.ico&amp;#x27<span class="p">;</span> <span class="k">do</span>
+    &amp;quot<span class="p">;</span>Hello World&amp;quot<span class="p">;</span>
+  end
+end
+&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>そこで、nginxから404を返すように変更する。</p>
+<pre lang="diff" class="highlight highlight-diff"><span class="gi">+# favicon
++location = /favicon.ico {
++  return 404;
++}
+</span></pre>
+<p>nginxの404ページが返るようになった。</p>
+<pre lang="bash" class="highlight highlight-bash">isucon@ubuntu-focal:~/webapp/ruby<span class="nv">$ </span>curl localhost/favicon.ico
+&lt;html&gt;
+&lt;<span class="nb">head</span><span class="o">&gt;</span>&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.18.0 <span class="o">(</span>Ubuntu<span class="o">)</span>&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>スコアには特に影響しなかった。</p>
+<pre lang="bash" class="highlight highlight-bash">10:00:28.076825 score: 2092<span class="o">(</span>2092 - 0<span class="o">)</span> : pass
+10:00:28.076840 deduction: 0 / <span class="nb">timeout</span>: 0
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
