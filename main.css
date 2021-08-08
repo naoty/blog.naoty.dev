@@ -127,7 +127,8 @@ blockquote {
 .body pre,
 .body ol,
 .body table,
-.body ul {
+.body ul,
+.body figure {
   margin: 1.5rem 0;
 }
 
@@ -137,6 +138,7 @@ blockquote {
 }
 
 .body figcaption {
+  margin: 0.5rem 0 0 0;
   color:rgba(0, 0, 0, 0.54);
   text-align: center;
 }
@@ -163,10 +165,6 @@ ul.footer-links {
   ul {
     padding-left: 1rem;
   }
-
-  body img {
-    width: 200px;
-  }
 }
 
 @media (min-width: 36rem) {
@@ -179,9 +177,5 @@ ul.footer-links {
   ol,
   ul {
     padding-left: 1.5rem;
-  }
-
-  body img {
-    width: 300px;
   }
 }

@@ -10,6 +10,25 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/453/</id>
+    <link href="https://blog.naoty.dev/453/"/>
+    <summary>&lt;p&gt;最近&lt;a href=&quot;https://github.com/naoty/todo&quot;&gt;naoty/todo&lt;/a&gt;をGoからRubyで書き直したのだけど、これまで何度もCLIアプリケーションを異なる言語で書き直してきて、設計方針が自分の中で固まってきたので、忘れないうちに言語化しておきたいと思う。&lt;/p&gt;
+&lt;p&gt;CLIアプリケーションを作るとき、Command、Model、Repositoryの3つの責務を分けて実装している。アプリケーションによってはここに異なる責務を追加している。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./diagram.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./diagram.png&quot; alt=&quot;diagram&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;責務と依存関係&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h1&gt;Command&lt;/h1&gt;
+&lt;p&gt;Commandはシェルとのやり取りを行う。コマンドライン引数、標準入出力、標準エラー出力、終了ステータス、環境変数などを扱う。Rubyで言うと、&lt;code&gt;ARGV&lt;/code&gt;や&lt;code&gt;STDIN&lt;/code&gt;、さらに&lt;code&gt;Kernel#.exit&lt;/code&gt;といったシステムコールはCommandで扱う。&lt;/p&gt;
+&lt;p&gt;コマンドライン引数をパースして、実行すべき処理を判定し、RepositoryやModelを呼び出す。RepositoryやModelで標準入出力を扱いたい場合、Commandから入出力のインターフェイスを持つオブジェクトを渡す。Rubyだと&lt;code&gt;IO&lt;/code&gt;オブジェクト、Goだと&lt;code&gt;io.Reader&lt;/code&gt;や&lt;code&gt;io.Writer&lt;/code&gt;が該当する。&lt;/p&gt;
+&lt;h1&gt;Model&lt;/h1&gt;
+&lt;p&gt;Modelはアプリケーションが扱うドメインを表現する。CLIアプリケーションであっても、Webアプリケーションであっても、Modelのコードは扱うドメインが変わらない限り不変のはず。&lt;/p&gt;
+&lt;p&gt;他の責務を持つオブジェクトには依存せず、プレーンな実装になることが多い。ただ、GoだとJSONのためのアノテーションがModelに含まれることがあり、含めるべきか個人的には迷いがある。&lt;/p&gt;
+&lt;h1&gt;Repository&lt;/h1&gt;
+&lt;p&gt;RepositoryはModelが表すオブジェクトをストレージに永続化したり、ストレージからModelを取得したりする。ストレージはファイルシステムかもしれないし、Webサービスかもしれない。CLIアプリケーションを作るときはファイルシステムをストレージに使うことが多い。Modelを永続化可能な形式にエンコードしたり、逆に取得する際にはデコードしたりする実装も含まれる。経験上、Repositoryの実装が一番泥臭くて複雑になりやすい。&lt;/p&gt;
+&lt;p&gt;RepositoryのおかげでCommandはどうやってModelを永続化し、どこから取得するか詳細を知る必要がなくなり、テストが非常にやりやすくなる。&lt;/p&gt;</summary>
+    <title>CLIアプリケーションの設計</title>
+    <updated>2021-08-08T18:15:00+00:00</updated>
+    <dc:date>2021-08-08T18:15:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/452/</id>
     <link href="https://blog.naoty.dev/452/"/>
     <summary>&lt;ul&gt;
