@@ -10,6 +10,123 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/454/</id>
+    <link href="https://blog.naoty.dev/454/"/>
+    <summary>&lt;p&gt;テストに関連するパラメータが複数あると、その組み合わせの数が膨れ上がる。ただし、あるパラメータがある値の場合は別のパラメータがどんな値であってもテスト結果には影響しない、ということがある。&lt;/p&gt;
+&lt;p&gt;こうしたどれでもいいパラメータの値を扱う方針は3つあると思う。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;どれか1つの値に固定してテストする&lt;/li&gt;
+&lt;li&gt;とりうる値すべてをテストする&lt;/li&gt;
+&lt;li&gt;とりうる値から1つランダムに選んでテストする&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;例: ユーザー登録&lt;/h1&gt;
+&lt;p&gt;emailとpasswordがどちらも入力されていれば成功、いずれかが入力されていなければ失敗、という単純化した例で考えてみる。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;email&lt;/th&gt;
+&lt;th&gt;password&lt;/th&gt;
+&lt;th&gt;結果&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;有&lt;/td&gt;
+&lt;td&gt;有&lt;/td&gt;
+&lt;td&gt;成功&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;有&lt;/td&gt;
+&lt;td&gt;無&lt;/td&gt;
+&lt;td&gt;失敗&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;無&lt;/td&gt;
+&lt;td&gt;有&lt;/td&gt;
+&lt;td&gt;失敗&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;無&lt;/td&gt;
+&lt;td&gt;無&lt;/td&gt;
+&lt;td&gt;失敗&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;この場合、emailが入力されていない場合はpasswordがどの値であっても失敗するので、passwordの値をどう扱うかそれぞれの方針で考えてみる。&lt;/p&gt;
+&lt;p&gt;例としてRubyとRSpecを使うけど、言語とフレームワークには依存しない。&lt;/p&gt;
+&lt;h2&gt;1. どれか1つの値に固定してテストする&lt;/h2&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;POST /users&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;when email is empty&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# passwordの値を固定する&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;password&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fails to create a user&quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;pros&lt;/strong&gt;: 組み合わせの数を抑えられる。実行時間が短くなるし、テストコードも読みやすくなる。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;cons&lt;/strong&gt;: passwordの値が空でも結果が変わらないというのが実装者の勘違いだった場合、テストすべきケースを取りこぼすことになる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;2. とりうる値すべてをテストする&lt;/h2&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;POST /users&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;when email is empty&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# passwordがとりうる値どちらもテストする&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;and password is empty&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fails to create a user&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;but password isn't empty&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;password&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fails to create a user&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;pros&lt;/strong&gt;: 上記のようなテストケースのとりこぼしが少なくなる。それでもとりうる値が網羅できていなければとりこぼしは生じうる。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;cons&lt;/strong&gt;: 組み合わせの数が膨れ上がる。今回のような単純化したケースでは問題にはならないものの、現実にははるかに多くのパラメータととりうる値の組み合わせが存在する。その分、実行時間が伸び、テストコードも複雑になる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;consの補足として、現実世界ではすべての組み合わせを網羅できず、とりうる値の一部をテストすることが多いと思う。その場合はprosで上げたような利点も部分的にしか享受できないことになる。&lt;/p&gt;
+&lt;h2&gt;3. とりうる値から1つランダムに選んでテストする&lt;/h2&gt;
+&lt;pre lang=&quot;ruby&quot; class=&quot;highlight highlight-ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;POST /users&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;when email is empty&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# passwordの値をとりうる値からランダムに選ぶ&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;password&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fails to create a user&quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;pros&lt;/strong&gt;: 組み合わせの数を抑えられる。実行するテストケースは1つのみなので1.と同じ。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;pros&lt;/strong&gt;: CIで継続的にテストを実行することでとりうる値の組み合わせを網羅でき、上記のようなテストケースのとりこぼしが少なくなる。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;cons&lt;/strong&gt;: 予期しない形でテストが失敗することが出てくるため、チームに混乱をもたらすかもしれない。例えば、自分の変更とは無関係な場所でテストが落ちることがあると、誰がそのテストをパスさせるかコミュニケーションが必要になる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;補足としては、テストで乱数を使うと再現できないのでは？というツッコミが考えられる。テスティングフレームワークによるかもしれないが、失敗したときのシード値を再利用することで再現できるため、この点は特に問題はないと思う。&lt;/p&gt;
+&lt;h1&gt;個人的見解&lt;/h1&gt;
+&lt;p&gt;個人的にはまず3.を採用したいと考える。その上で開発上の懸念が出てくるようであれば1.を採用する。2.は現実的にはconsがprosを上回っていると感じるため、採用しないだろう。&lt;/p&gt;</summary>
+    <title>どれでもいいテストパラメータの扱い</title>
+    <updated>2021-09-05T19:43:00+00:00</updated>
+    <dc:date>2021-09-05T19:43:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/453/</id>
     <link href="https://blog.naoty.dev/453/"/>
     <summary>&lt;p&gt;最近&lt;a href=&quot;https://github.com/naoty/todo&quot;&gt;naoty/todo&lt;/a&gt;をGoからRubyで書き直したのだけど、これまで何度もCLIアプリケーションを異なる言語で書き直してきて、設計方針が自分の中で固まってきたので、忘れないうちに言語化しておきたいと思う。&lt;/p&gt;

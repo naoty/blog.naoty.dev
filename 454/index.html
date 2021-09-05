@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>どれでもいいテストパラメータの扱い</title>
+    <meta property="og:title" content="どれでもいいテストパラメータの扱い">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/454/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">どれでもいいテストパラメータの扱い</h1>
+          <p class="metadata">
+            <time datetime="2021-09-05T19:43:00.000+0000">2021-09-05 19:43</time>
+            <a href="/test/">#test</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>テストに関連するパラメータが複数あると、その組み合わせの数が膨れ上がる。ただし、あるパラメータがある値の場合は別のパラメータがどんな値であってもテスト結果には影響しない、ということがある。</p>
+<p>こうしたどれでもいいパラメータの値を扱う方針は3つあると思う。</p>
+<ol>
+<li>どれか1つの値に固定してテストする</li>
+<li>とりうる値すべてをテストする</li>
+<li>とりうる値から1つランダムに選んでテストする</li>
+</ol>
+<h1>例: ユーザー登録</h1>
+<p>emailとpasswordがどちらも入力されていれば成功、いずれかが入力されていなければ失敗、という単純化した例で考えてみる。</p>
+<table>
+<thead>
+<tr>
+<th>email</th>
+<th>password</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有</td>
+<td>有</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>有</td>
+<td>無</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>無</td>
+<td>有</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>無</td>
+<td>無</td>
+<td>失敗</td>
+</tr>
+</tbody>
+</table>
+<p>この場合、emailが入力されていない場合はpasswordがどの値であっても失敗するので、passwordの値をどう扱うかそれぞれの方針で考えてみる。</p>
+<p>例としてRubyとRSpecを使うけど、言語とフレームワークには依存しない。</p>
+<h2>1. どれか1つの値に固定してテストする</h2>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">describe</span> <span class="s2">"POST /users"</span> <span class="k">do</span>
+  <span class="n">context</span> <span class="s2">"when email is empty"</span> <span class="k">do</span>
+    <span class="n">let</span><span class="p">(</span><span class="ss">:email</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+    <span class="c1"># passwordの値を固定する</span>
+    <span class="n">let</span><span class="p">(</span><span class="ss">:password</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"password"</span> <span class="p">}</span>
+
+    <span class="n">it</span> <span class="s2">"fails to create a user"</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<ul>
+<li>
+<strong>pros</strong>: 組み合わせの数を抑えられる。実行時間が短くなるし、テストコードも読みやすくなる。</li>
+<li>
+<strong>cons</strong>: passwordの値が空でも結果が変わらないというのが実装者の勘違いだった場合、テストすべきケースを取りこぼすことになる。</li>
+</ul>
+<h2>2. とりうる値すべてをテストする</h2>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">describe</span> <span class="s2">"POST /users"</span> <span class="k">do</span>
+  <span class="n">context</span> <span class="s2">"when email is empty"</span> <span class="k">do</span>
+    <span class="n">let</span><span class="p">(</span><span class="ss">:email</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+    <span class="c1"># passwordがとりうる値どちらもテストする</span>
+    <span class="n">context</span> <span class="s2">"and password is empty"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:password</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+      <span class="n">it</span> <span class="s2">"fails to create a user"</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s2">"but password isn't empty"</span> <span class="k">do</span>
+      <span class="n">let</span><span class="p">(</span><span class="ss">:password</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"password"</span> <span class="p">}</span>
+
+      <span class="n">it</span> <span class="s2">"fails to create a user"</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<ul>
+<li>
+<strong>pros</strong>: 上記のようなテストケースのとりこぼしが少なくなる。それでもとりうる値が網羅できていなければとりこぼしは生じうる。</li>
+<li>
+<strong>cons</strong>: 組み合わせの数が膨れ上がる。今回のような単純化したケースでは問題にはならないものの、現実にははるかに多くのパラメータととりうる値の組み合わせが存在する。その分、実行時間が伸び、テストコードも複雑になる。</li>
+</ul>
+<p>consの補足として、現実世界ではすべての組み合わせを網羅できず、とりうる値の一部をテストすることが多いと思う。その場合はprosで上げたような利点も部分的にしか享受できないことになる。</p>
+<h2>3. とりうる値から1つランダムに選んでテストする</h2>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="n">describe</span> <span class="s2">"POST /users"</span> <span class="k">do</span>
+  <span class="n">context</span> <span class="s2">"when email is empty"</span> <span class="k">do</span>
+    <span class="n">let</span><span class="p">(</span><span class="ss">:email</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+
+    <span class="c1"># passwordの値をとりうる値からランダムに選ぶ</span>
+    <span class="n">let</span><span class="p">(</span><span class="ss">:password</span><span class="p">)</span> <span class="p">{</span> <span class="p">[</span><span class="kp">nil</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">].</span><span class="nf">sample</span> <span class="p">}</span>
+
+    <span class="n">it</span> <span class="s2">"fails to create a user"</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<ul>
+<li>
+<strong>pros</strong>: 組み合わせの数を抑えられる。実行するテストケースは1つのみなので1.と同じ。</li>
+<li>
+<strong>pros</strong>: CIで継続的にテストを実行することでとりうる値の組み合わせを網羅でき、上記のようなテストケースのとりこぼしが少なくなる。</li>
+<li>
+<strong>cons</strong>: 予期しない形でテストが失敗することが出てくるため、チームに混乱をもたらすかもしれない。例えば、自分の変更とは無関係な場所でテストが落ちることがあると、誰がそのテストをパスさせるかコミュニケーションが必要になる。</li>
+</ul>
+<p>補足としては、テストで乱数を使うと再現できないのでは？というツッコミが考えられる。テスティングフレームワークによるかもしれないが、失敗したときのシード値を再利用することで再現できるため、この点は特に問題はないと思う。</p>
+<h1>個人的見解</h1>
+<p>個人的にはまず3.を採用したいと考える。その上で開発上の懸念が出てくるようであれば1.を採用する。2.は現実的にはconsがprosを上回っていると感じるため、採用しないだろう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
