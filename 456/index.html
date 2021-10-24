@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cassandraでのページネーションの実装</title>
+    <meta property="og:title" content="Cassandraでのページネーションの実装">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/456/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Cassandraでのページネーションの実装</h1>
+          <p class="metadata">
+            <time datetime="2021-10-24T23:07:00.000+0000">2021-10-24 23:07</time>
+            <a href="/cassandra/">#cassandra</a>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Cassandraのさまざまな操作に使われるCQLは見た目こそSQLに似ているものの、実態はかなり異なるため、Cassandraとやり取りをおこなうアプリケーションを実装する際にはその差分をよく理解しておく必要がある。</p>
+<p>今回はページネーションの実装について詳しく調べた。</p>
+<h1>CQLでの実装</h1>
+<p>CQLには<code>LIMIT</code>はあるものの<code>OFFSET</code>がないため、SQLのようにページネーションを実装することができない。</p>
+<h1>Native Protocol</h1>
+<p>Cassandraと各言語のDriverとのやり取りに関する仕様をまとめたNative Protocolには、ページネーションに関する仕様が含まれている（<a href="https://github.com/apache/cassandra/blob/trunk/doc/native_protocol_v4.spec#L1009">リンク</a>）。</p>
+<p><code>result_page_size</code>を指定すると、クエリ結果を指定した値の行数にページを分割する。また、クエリ結果には<code>paging_state</code>と呼ばれる値が含まれており、それを使って次ページを取得できるようになっている。</p>
+<h1>Railsでの実装</h1>
+<p>Ruby Driverを使ってRailsアプリケーションからCassandraへのクエリ結果をページネーションする例を考える。以下のようなテーブルからアクセスログを取得したいとする。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">access_logs</span> <span class="p">(</span>
+  <span class="k">day</span> <span class="nb">INT</span><span class="p">,</span>
+  <span class="nb">time</span> <span class="nb">TIMESTAMP</span><span class="p">,</span>
+  <span class="n">path</span> <span class="nb">TEXT</span><span class="p">,</span>
+  <span class="k">method</span> <span class="nb">TEXT</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">((</span><span class="k">day</span><span class="p">),</span> <span class="nb">time</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="n">CLUSTERING</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="p">(</span><span class="nb">time</span> <span class="k">DESC</span><span class="p">);</span>
+</pre>
+<p><code>access_logs</code>テーブルにアクセスするためのmodelを以下のように実装する。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="c1"># app/models/access_log.rb</span>
+<span class="k">class</span> <span class="nc">AccessLog</span> <span class="o">&lt;</span> <span class="no">CassandraRecord</span>
+  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+    <span class="k">def</span> <span class="nf">where</span><span class="p">(</span><span class="n">day</span><span class="p">:,</span> <span class="ss">limit: </span><span class="mi">10</span><span class="p">,</span> <span class="ss">paging_state: </span><span class="kp">nil</span><span class="p">)</span>
+      <span class="n">statement</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">prepare</span><span class="p">(</span><span class="o">&lt;&lt;~</span><span class="no">CQL</span><span class="p">)</span><span class="sh">
+        SELECT
+          time, method, path
+        FROM
+          </span><span class="si">#{</span><span class="n">keyspace</span><span class="si">}</span><span class="sh">.access_logs
+        WHERE
+          day = :day
+</span><span class="no">      CQL</span>
+
+      <span class="n">session</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span>
+        <span class="n">statement</span><span class="p">,</span>
+        <span class="ss">arguments: </span><span class="p">{</span> <span class="ss">day: </span><span class="n">day</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="s2">"%Y%m%d"</span><span class="p">).</span><span class="nf">to_i</span> <span class="p">},</span>
+        <span class="ss">page_size: </span><span class="n">limit</span><span class="p">,</span>
+        <span class="ss">paging_state: </span><span class="n">paging_state</span>
+      <span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p>Native Protocolに従い<code>Session#execute</code>に<code>page_size</code>を渡すことでページネーションを有効にしている。また、<code>paging_state</code>を渡すことで次ページを取得できるようにしている。</p>
+<p>親クラスの<code>CassandraRecord</code>でCassandraと接続するためのセットアップをRuby Driverで実装する。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="c1"># app/models/cassandra_record.rb</span>
+<span class="k">class</span> <span class="nc">CassandraRecord</span>
+  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+    <span class="k">def</span> <span class="nf">session</span>
+      <span class="no">Thread</span><span class="p">.</span><span class="nf">current</span><span class="p">[</span><span class="ss">:cassandra_session</span><span class="p">]</span> <span class="o">||=</span> <span class="n">cluster</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">keyspace</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="kp">private</span>
+
+    <span class="k">def</span> <span class="nf">cluster</span>
+      <span class="o">::</span><span class="no">Cassandra</span><span class="p">.</span><span class="nf">cluster</span><span class="p">(</span>
+        <span class="ss">hosts: </span><span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"CASSANDRA_HOSTS"</span><span class="p">).</span><span class="nf">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+      <span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">keyspace</span>
+      <span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"CASSANDRA_KEYSPACE"</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p>次にcontrollerは以下のように実装する。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="k">class</span> <span class="nc">AccessLogsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="no">PAGING_STATE_SALT</span> <span class="o">=</span> <span class="s2">"cc79c9014617e4b3d4fd2e7326619913"</span>
+
+  <span class="n">before_action</span> <span class="ss">:decrypt_paging_state</span>
+
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="no">AccessLog</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span>
+      <span class="ss">day: </span><span class="no">Date</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+      <span class="ss">paging_state: </span><span class="vi">@paging_state</span>
+    <span class="p">)</span>
+
+    <span class="k">unless</span> <span class="n">result</span><span class="p">.</span><span class="nf">last_page?</span>
+      <span class="n">encrypted_paging_state</span> <span class="o">=</span> <span class="n">encryptor</span><span class="p">.</span><span class="nf">encrypt_and_sign</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">paging_state</span><span class="p">)</span>
+      <span class="n">next_url</span> <span class="o">=</span> <span class="n">access_logs_url</span><span class="p">(</span><span class="ss">paging_state: </span><span class="n">encrypted_paging_state</span><span class="p">)</span>
+      <span class="n">response</span><span class="p">.</span><span class="nf">headers</span><span class="p">[</span><span class="s2">"Link"</span><span class="p">]</span> <span class="o">=</span> <span class="sx">%[&lt;#{next_url}&gt;; rel="next"]</span>
+    <span class="k">end</span>
+
+    <span class="n">render</span> <span class="ss">json: </span><span class="n">result</span><span class="p">.</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+      <span class="p">{</span>
+        <span class="ss">time: </span><span class="n">row</span><span class="p">[</span><span class="s2">"time"</span><span class="p">],</span>
+        <span class="ss">path: </span><span class="n">row</span><span class="p">[</span><span class="s2">"path"</span><span class="p">],</span>
+        <span class="ss">method: </span><span class="n">row</span><span class="p">[</span><span class="s2">"method"</span><span class="p">],</span>
+      <span class="p">}</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">decrypt_paging_state</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="ss">:paging_state</span><span class="p">].</span><span class="nf">nil?</span>
+    <span class="vi">@paging_state</span> <span class="o">=</span> <span class="n">encryptor</span><span class="p">.</span><span class="nf">decrypt_and_verify</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="ss">:paging_state</span><span class="p">])</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">encryptor</span>
+    <span class="k">return</span> <span class="vi">@encryptor</span> <span class="k">unless</span> <span class="vi">@encryptor</span><span class="p">.</span><span class="nf">nil?</span>
+
+    <span class="n">key_generator</span> <span class="o">=</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">KeyGenerator</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">secret_key_base</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">MessageEncryptor</span><span class="p">.</span><span class="nf">key_len</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">key_generator</span><span class="p">.</span><span class="nf">generate_key</span><span class="p">(</span><span class="no">PAGING_STATE_SALT</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="vi">@encryptor</span> <span class="o">=</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">MessageEncryptor</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p>クエリ結果に含まれる<code>paging_state</code>を<code>ActiveSupport::MessageEncryptor</code>を使い暗号化し次ページのクエリパラメータとして付与している。また、クエリパラメータの<code>paging_state</code>を復号しmodelに渡している。</p>
+<p><code>paging_state</code>にはCassandraに内部情報がエンコードされているため、外部に公開する際には暗号化することが推奨されている。<code>ActiveSupport::MessageEncryptor</code>はこのようなデータを暗号化、復号する用途に合っていそうなので使ってみた。</p>
+<h1>traceで走査行数を確認する</h1>
+<p>Native Protocolを使ったページネーションが本当に一部の行のみを取得しているのか確認するため、traceを有効にする。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="c1"># app/models/access_log.rb</span>
+<span class="k">class</span> <span class="nc">AccessLog</span> <span class="o">&lt;</span> <span class="no">CassandraRecord</span>
+  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+    <span class="k">def</span> <span class="nf">where</span><span class="p">(</span><span class="n">day</span><span class="p">:,</span> <span class="ss">limit: </span><span class="mi">10</span><span class="p">,</span> <span class="ss">paging_state: </span><span class="kp">nil</span><span class="p">)</span>
+      <span class="n">statement</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">prepare</span><span class="p">(</span><span class="o">&lt;&lt;~</span><span class="no">CQL</span><span class="p">)</span><span class="sh">
+        SELECT
+          time, method, path
+        FROM
+          </span><span class="si">#{</span><span class="n">keyspace</span><span class="si">}</span><span class="sh">.access_logs
+        WHERE
+          day = :day
+</span><span class="no">      CQL</span>
+      <span class="n">arguments</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">day: </span><span class="n">day</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="s2">"%Y%m%d"</span><span class="p">).</span><span class="nf">to_i</span> <span class="p">}</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span>
+        <span class="n">statement</span><span class="p">,</span>
+        <span class="ss">arguments: </span><span class="n">arguments</span><span class="p">,</span>
+        <span class="ss">page_size: </span><span class="n">limit</span><span class="p">,</span>
+        <span class="ss">paging_state: </span><span class="n">paging_state</span><span class="p">,</span>
+        <span class="ss">trace: </span><span class="kp">true</span>
+      <span class="p">)</span>
+
+      <span class="n">log_trace</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">execution_info</span><span class="p">.</span><span class="nf">trace</span><span class="p">)</span>
+
+      <span class="n">result</span>
+    <span class="k">end</span>
+
+    <span class="kp">private</span>
+
+    <span class="k">def</span> <span class="nf">log_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="n">trace</span><span class="p">.</span><span class="nf">nil?</span>
+
+      <span class="no">Rails</span><span class="p">.</span><span class="nf">logger</span><span class="p">.</span><span class="nf">info</span> <span class="s2">"Cassandra trace"</span>
+      <span class="n">trace</span><span class="p">.</span><span class="nf">events</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">event</span><span class="o">|</span>
+        <span class="no">Rails</span><span class="p">.</span><span class="nf">logger</span><span class="p">.</span><span class="nf">info</span> <span class="s2">"  </span><span class="si">#{</span><span class="n">event</span><span class="p">.</span><span class="nf">activity</span><span class="si">}</span><span class="s2">"</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p><code>Session#execute</code>に<code>trace: true</code>を渡すことでtraceを有効にしている。そして、traceで取得したアクティビティをログに出力すると以下のようになった。</p>
+<pre><code>Started GET "/access_logs?limit=1&amp;paging_state=3FRoptnPMhywVQ3dLdDDj87slY0XshvxltQ%3D--7E6TsIMY7px87omJ--n8sLyC7y5qyU5Cm5L0wJ4Q%3D%3D" for 172.19.0.1 at 2021-10-24 13:07:03 +0000
+Processing by AccessLogsController#index as */*
+  Parameters: {"limit"=&gt;"1", "paging_state"=&gt;"3FRoptnPMhywVQ3dLdDDj87slY0XshvxltQ=--7E6TsIMY7px87omJ--n8sLyC7y5qyU5Cm5L0wJ4Q=="}
+Cassandra trace
+  Executing single-partition query on access_logs
+  Acquiring sstable references
+  Skipped 0/0 non-slice-intersecting sstables, included 0 due to tombstones
+  Merged data from memtables and 0 sstables
+  Read 1 live rows and 0 tombstone cells
+Completed 200 OK in 116ms (Views: 1.2ms | Allocations: 1192)
+</code></pre>
+<p><code>page_size</code>を1にした場合はたしかに1件のみreadしているようだ。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
