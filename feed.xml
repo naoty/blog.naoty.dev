@@ -10,6 +10,94 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/457/</id>
+    <link href="https://blog.naoty.dev/457/"/>
+    <summary>&lt;p&gt;Cassandraではデータがsstableと呼ばれるファイルにデータを格納している。sstabledumpというツールを使ってこのファイルの中身を見ることでどのようにデータが格納されているか確認してみた。&lt;/p&gt;
+&lt;p&gt;まず、例となるテーブルを作ってデータを追加する。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; create table access_logs (
+         ...   date int,
+         ...   time timestamp,
+         ...   path text,
+         ...   method text,
+         ...   user_id bigint,
+         ...   primary key ((date), time)
+         ... ) with clustering order by (time desc);
+cqlsh:hello&amp;gt; insert into access_logs (date, time, path, method, user_id) values (20210101, '2021-01-01 00:00:00', '/', 'GET', 1);
+cqlsh:hello&amp;gt; insert into access_logs (date, time, path, method, user_id) values (20210101, '2021-01-01 01:00:00', '/', 'GET', 1);
+cqlsh:hello&amp;gt; insert into access_logs (date, time, path, method, user_id) values (20210102, '2021-01-02 00:00:00', '/', 'GET', 1);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;書き込まれたデータはすぐにsstableに格納されるわけではなく、memtableと呼ばれるメモリ上の領域に書き込まれ、その後flushによってsstableに書き込まれる。そこで、&lt;code&gt;nodetool flush&lt;/code&gt;を使って手動でflushしてからsstableの中身を確認する。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ nodetool flush -- hello access_logs
+$ sstabledump data/data/hello/access_logs-725f76b04e4d11ec9a87738bc243f3cf/nb-1-big-Data.db
+[
+  {
+    &quot;partition&quot; : {
+      &quot;key&quot; : [ &quot;20210101&quot; ],
+      &quot;position&quot; : 0
+    },
+    &quot;rows&quot; : [
+      {
+        &quot;type&quot; : &quot;row&quot;,
+        &quot;position&quot; : 18,
+        &quot;clustering&quot; : [ &quot;2021-01-01 01:00:00.000Z&quot; ],
+        &quot;liveness_info&quot; : { &quot;tstamp&quot; : &quot;2021-11-26T00:12:04.653070Z&quot; },
+        &quot;cells&quot; : [
+          { &quot;name&quot; : &quot;method&quot;, &quot;value&quot; : &quot;GET&quot; },
+          { &quot;name&quot; : &quot;path&quot;, &quot;value&quot; : &quot;/&quot; },
+          { &quot;name&quot; : &quot;user_id&quot;, &quot;value&quot; : 1 }
+        ]
+      },
+      {
+        &quot;type&quot; : &quot;row&quot;,
+        &quot;position&quot; : 51,
+        &quot;clustering&quot; : [ &quot;2021-01-01 00:00:00.000Z&quot; ],
+        &quot;liveness_info&quot; : { &quot;tstamp&quot; : &quot;2021-11-26T00:11:57.459111Z&quot; },
+        &quot;cells&quot; : [
+          { &quot;name&quot; : &quot;method&quot;, &quot;value&quot; : &quot;GET&quot; },
+          { &quot;name&quot; : &quot;path&quot;, &quot;value&quot; : &quot;/&quot; },
+          { &quot;name&quot; : &quot;user_id&quot;, &quot;value&quot; : 1 }
+        ]
+      }
+    ]
+  },
+  {
+    &quot;partition&quot; : {
+      &quot;key&quot; : [ &quot;20210102&quot; ],
+      &quot;position&quot; : 82
+    },
+    &quot;rows&quot; : [
+      {
+        &quot;type&quot; : &quot;row&quot;,
+        &quot;position&quot; : 100,
+        &quot;clustering&quot; : [ &quot;2021-01-02 00:00:00.000Z&quot; ],
+        &quot;liveness_info&quot; : { &quot;tstamp&quot; : &quot;2021-11-26T00:12:12.925794Z&quot; },
+        &quot;cells&quot; : [
+          { &quot;name&quot; : &quot;method&quot;, &quot;value&quot; : &quot;GET&quot; },
+          { &quot;name&quot; : &quot;path&quot;, &quot;value&quot; : &quot;/&quot; },
+          { &quot;name&quot; : &quot;user_id&quot;, &quot;value&quot; : 1 }
+        ]
+      }
+    ]
+  }
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;sstabledumpの結果からいくつかのことが分かる。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;パーティション毎に行がまとめられている。&lt;/li&gt;
+&lt;li&gt;パーティション内の各行はクラスタリングキーでソートされている（&lt;code&gt;clustering order&lt;/code&gt;で指定したとおり&lt;code&gt;time&lt;/code&gt;の降順になっている）。&lt;/li&gt;
+&lt;li&gt;プライマリーキー以外の値は各行のセルと呼ばれる領域に格納されている。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;このことからも以下のようなことが自然と理解できる。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;プライマリーキー以外のカラムを&lt;code&gt;where&lt;/code&gt;に指定するとパーティションをまたいで取得することになる&lt;/li&gt;
+&lt;li&gt;クラスタリングキーのソート順と異なる&lt;code&gt;order by&lt;/code&gt;が非効率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;sstabledumpを通じてまたひとつCassandraへの理解が深まった。&lt;/p&gt;</summary>
+    <title>sstabledump</title>
+    <updated>2021-11-26T09:13:00+00:00</updated>
+    <dc:date>2021-11-26T09:13:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/456/</id>
     <link href="https://blog.naoty.dev/456/"/>
     <summary>&lt;p&gt;Cassandraのさまざまな操作に使われるCQLは見た目こそSQLに似ているものの、実態はかなり異なるため、Cassandraとやり取りをおこなうアプリケーションを実装する際にはその差分をよく理解しておく必要がある。&lt;/p&gt;

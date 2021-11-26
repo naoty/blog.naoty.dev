@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sstabledump</title>
+    <meta property="og:title" content="sstabledump">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/457/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">sstabledump</h1>
+          <p class="metadata">
+            <time datetime="2021-11-26T09:13:00.000+0000">2021-11-26 09:13</time>
+            <a href="/cassandra/">#cassandra</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Cassandraではデータがsstableと呼ばれるファイルにデータを格納している。sstabledumpというツールを使ってこのファイルの中身を見ることでどのようにデータが格納されているか確認してみた。</p>
+<p>まず、例となるテーブルを作ってデータを追加する。</p>
+<pre><code>cqlsh:hello&gt; create table access_logs (
+         ...   date int,
+         ...   time timestamp,
+         ...   path text,
+         ...   method text,
+         ...   user_id bigint,
+         ...   primary key ((date), time)
+         ... ) with clustering order by (time desc);
+cqlsh:hello&gt; insert into access_logs (date, time, path, method, user_id) values (20210101, '2021-01-01 00:00:00', '/', 'GET', 1);
+cqlsh:hello&gt; insert into access_logs (date, time, path, method, user_id) values (20210101, '2021-01-01 01:00:00', '/', 'GET', 1);
+cqlsh:hello&gt; insert into access_logs (date, time, path, method, user_id) values (20210102, '2021-01-02 00:00:00', '/', 'GET', 1);
+</code></pre>
+<p>書き込まれたデータはすぐにsstableに格納されるわけではなく、memtableと呼ばれるメモリ上の領域に書き込まれ、その後flushによってsstableに書き込まれる。そこで、<code>nodetool flush</code>を使って手動でflushしてからsstableの中身を確認する。</p>
+<pre><code>$ nodetool flush -- hello access_logs
+$ sstabledump data/data/hello/access_logs-725f76b04e4d11ec9a87738bc243f3cf/nb-1-big-Data.db
+[
+  {
+    "partition" : {
+      "key" : [ "20210101" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 18,
+        "clustering" : [ "2021-01-01 01:00:00.000Z" ],
+        "liveness_info" : { "tstamp" : "2021-11-26T00:12:04.653070Z" },
+        "cells" : [
+          { "name" : "method", "value" : "GET" },
+          { "name" : "path", "value" : "/" },
+          { "name" : "user_id", "value" : 1 }
+        ]
+      },
+      {
+        "type" : "row",
+        "position" : 51,
+        "clustering" : [ "2021-01-01 00:00:00.000Z" ],
+        "liveness_info" : { "tstamp" : "2021-11-26T00:11:57.459111Z" },
+        "cells" : [
+          { "name" : "method", "value" : "GET" },
+          { "name" : "path", "value" : "/" },
+          { "name" : "user_id", "value" : 1 }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "20210102" ],
+      "position" : 82
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 100,
+        "clustering" : [ "2021-01-02 00:00:00.000Z" ],
+        "liveness_info" : { "tstamp" : "2021-11-26T00:12:12.925794Z" },
+        "cells" : [
+          { "name" : "method", "value" : "GET" },
+          { "name" : "path", "value" : "/" },
+          { "name" : "user_id", "value" : 1 }
+        ]
+      }
+    ]
+  }
+]
+</code></pre>
+<p>sstabledumpの結果からいくつかのことが分かる。</p>
+<ul>
+<li>パーティション毎に行がまとめられている。</li>
+<li>パーティション内の各行はクラスタリングキーでソートされている（<code>clustering order</code>で指定したとおり<code>time</code>の降順になっている）。</li>
+<li>プライマリーキー以外の値は各行のセルと呼ばれる領域に格納されている。</li>
+</ul>
+<p>このことからも以下のようなことが自然と理解できる。</p>
+<ul>
+<li>プライマリーキー以外のカラムを<code>where</code>に指定するとパーティションをまたいで取得することになる</li>
+<li>クラスタリングキーのソート順と異なる<code>order by</code>が非効率</li>
+</ul>
+<p>sstabledumpを通じてまたひとつCassandraへの理解が深まった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
