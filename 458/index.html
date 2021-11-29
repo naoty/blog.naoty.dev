@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cassandraへのクエリの注意点</title>
+    <meta property="og:title" content="Cassandraへのクエリの注意点">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/458/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Cassandraへのクエリの注意点</h1>
+          <p class="metadata">
+            <time datetime="2021-11-29T18:11:00.000+0000">2021-11-29 18:11</time>
+            <a href="/cassandra/">#cassandra</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Cassandraでテーブルを設計する際、どのようなクエリが実行されるのか想定する必要がある。というのも、Cassandraではテーブルへのクエリに多くの制約があるため、これを知らずにテーブルを設計すると期待していたクエリが実行できない事態になってしまう。</p>
+<p>そこで、クエリにどのような制約があるかまとめることにした。例に使うテーブルは以下のようなスキーマで作成した。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">create</span> <span class="k">table</span> <span class="n">access_logs</span> <span class="p">(</span>
+  <span class="nb">date</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="nb">time</span> <span class="nb">timestamp</span><span class="p">,</span>
+  <span class="n">path</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="k">method</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">user_id</span> <span class="nb">bigint</span><span class="p">,</span>
+  <span class="k">primary</span> <span class="k">key</span> <span class="p">((</span><span class="nb">date</span><span class="p">),</span> <span class="nb">time</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="k">method</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">with</span> <span class="n">clustering</span> <span class="k">order</span> <span class="k">by</span> <span class="p">(</span><span class="nb">time</span> <span class="k">desc</span><span class="p">,</span> <span class="n">path</span> <span class="k">asc</span><span class="p">,</span> <span class="k">method</span> <span class="k">asc</span><span class="p">);</span>
+</pre>
+<p>他にもあるかもしれないし、バージョンによって変わりうるが、v3.11.10で検証したところ以下のような制約が見つかった。</p>
+<ul>
+<li>パーティションキーは必須</li>
+<li>クラスタリングキーは前方のカラムを省略できない</li>
+<li>プライマリーキーに含まれていないカラムを指定できない</li>
+<li>ORは使えない</li>
+<li>NOTは使えない</li>
+<li>不等号は最後に指定するカラムにしか使えない</li>
+<li>OFFSETは使えない</li>
+</ul>
+<h1>パーティションキーは必須</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where time = '2021-01-01 00:00:00';
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00';
+
+ date     | time                            | path | method | user_id
+----------+---------------------------------+------+--------+---------
+ 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+
+(1 rows)
+</code></pre>
+<p>データを返すノードを決定するためにパーティションキーをすべて指定する必要がある。</p>
+<h1>クラスタリングキーは前方のカラムを省略できない</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where date = 20210101 and path = '/';
+InvalidRequest: Error from server: code=2200 [Invalid query] message="PRIMARY KEY column "path" cannot be restricted as preceding column "time" is not restricted"
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and method = 'GET';
+InvalidRequest: Error from server: code=2200 [Invalid query] message="PRIMARY KEY column "method" cannot be restricted as preceding column "time" is not restricted"
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00' and path = '/';
+
+ date     | time                            | path | method | user_id
+----------+---------------------------------+------+--------+---------
+ 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+
+(1 rows)
+</code></pre>
+<p>あるクラスタリングキーよりも前に定義されているクラスタリングキーがあれば、それも指定する必要がある。</p>
+<h1>プライマリーキーに含まれていないカラムを指定できない</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00' and path = '/' and method = 'GET' and user_id = 1;
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00' and path = '/' and method = 'GET';
+
+ date     | time                            | path | method | user_id
+----------+---------------------------------+------+--------+---------
+ 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+
+(1 rows)
+</code></pre>
+<h1>ORは使えない</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where date = 20210101 and (time = '2021-01-01 00:00:00' or time = '2021-01-02 00:00:00');
+SyntaxException: line 1:82 mismatched input 'or' expecting ')' (... and (time = '2021-01-01 00:00:00' [or]...)
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and time in ('2021-01-01 00:00:00', '2021-01-02 00:00:00');
+
+ date     | time                            | path | method | user_id
+----------+---------------------------------+------+--------+---------
+ 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+
+(1 rows)
+</code></pre>
+<h1>NOTは使えない</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where date = 20210101 and time &lt;&gt; '2021-01-01 00:00:00';
+SyntaxException: line 1:58 no viable alternative at input '&gt;' (... = 20210101 and time &lt;[&gt;]...)
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and time &gt; '2021-01-01 00:00:00';
+
+ date | time | path | method | user_id
+------+------+------+--------+---------
+
+(0 rows)
+</code></pre>
+<p><code>OR</code>や<code>NOT</code>が使えないのはCassandraがシーケンシャルリードのために設計されており、ランダムリードを生じさせる<code>OR</code>や<code>NOT</code>はサポートされていない。</p>
+<h1>不等号は最後に指定するカラムにしか使えない</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where date = 20210101 and time &gt;= '2021-01-01 00:00:00' and path = '/';
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Clustering column "path" cannot be restricted (preceding column "time" is restricted by a non-EQ relation)"
+cqlsh:hello&gt; select * from access_logs where date = 20210101 and time &gt;= '2021-01-01 00:00:00';
+
+ date     | time                            | path | method | user_id
+----------+---------------------------------+------+--------+---------
+ 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+
+(1 rows)
+</code></pre>
+<h1>OFFSETは使えない</h1>
+<pre><code>cqlsh:hello&gt; select * from access_logs where date = 20210101 limit 1 offset 1;
+SyntaxException: line 1:56 mismatched input 'offset' expecting EOF (...date = 20210101 limit 1 [offset]...)
+cqlsh:hello&gt; select * from access_logs where date = 20210101 limit 1;
+
+ date     | time                            | path | method | user_id
+----------+---------------------------------+------+--------+---------
+ 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+
+(1 rows)
+</code></pre>
+<p><code>LIMIT</code>は使えるものの<code>OFFSET</code>が使えないため、SQLのようにページネーションを実装できない。ページネーションの実装については<a href="/456/">以前の記事</a>に書いた。</p>
+<h1>ALLOW FILTERING</h1>
+<p>これらの制約はエラーメッセージにもあるとおり<code>ALLOW FILTERING</code>で回避することができるが、パフォーマンスに重大な影響をあたえる可能性があるため推奨されていない。詳細については<a href="/444/">以前の記事</a>にも書いている。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
