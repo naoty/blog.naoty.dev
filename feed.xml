@@ -34,86 +34,60 @@
 &lt;li&gt;OFFSETは使えない&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;パーティションキーは必須&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where time = '2021-01-01 00:00:00';
-InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING&quot;
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00';
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
- date     | time                            | path | method | user_id
-----------+---------------------------------+------+--------+---------
- 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
-
-(1 rows)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/pre&gt;
 &lt;p&gt;データを返すノードを決定するためにパーティションキーをすべて指定する必要がある。&lt;/p&gt;
 &lt;h1&gt;クラスタリングキーは前方のカラムを省略できない&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and path = '/';
-InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;PRIMARY KEY column &quot;path&quot; cannot be restricted as preceding column &quot;time&quot; is not restricted&quot;
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and method = 'GET';
-InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;PRIMARY KEY column &quot;method&quot; cannot be restricted as preceding column &quot;time&quot; is not restricted&quot;
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00' and path = '/';
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
- date     | time                            | path | method | user_id
-----------+---------------------------------+------+--------+---------
- 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
+&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'GET'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-(1 rows)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/pre&gt;
 &lt;p&gt;あるクラスタリングキーよりも前に定義されているクラスタリングキーがあれば、それも指定する必要がある。&lt;/p&gt;
 &lt;h1&gt;プライマリーキーに含まれていないカラムを指定できない&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00' and path = '/' and method = 'GET' and user_id = 1;
-InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING&quot;
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time = '2021-01-01 00:00:00' and path = '/' and method = 'GET';
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'GET'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
- date     | time                            | path | method | user_id
-----------+---------------------------------+------+--------+---------
- 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
-
-(1 rows)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'GET'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/pre&gt;
 &lt;h1&gt;ORは使えない&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and (time = '2021-01-01 00:00:00' or time = '2021-01-02 00:00:00');
-SyntaxException: line 1:82 mismatched input 'or' expecting ')' (... and (time = '2021-01-01 00:00:00' [or]...)
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time in ('2021-01-01 00:00:00', '2021-01-02 00:00:00');
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-02 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
- date     | time                            | path | method | user_id
-----------+---------------------------------+------+--------+---------
- 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
-
-(1 rows)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-02 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;
 &lt;h1&gt;NOTは使えない&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time &amp;lt;&amp;gt; '2021-01-01 00:00:00';
-SyntaxException: line 1:58 no viable alternative at input '&amp;gt;' (... = 20210101 and time &amp;lt;[&amp;gt;]...)
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time &amp;gt; '2021-01-01 00:00:00';
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
- date | time | path | method | user_id
-------+------+------+--------+---------
-
-(0 rows)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;OR&lt;/code&gt;や&lt;code&gt;NOT&lt;/code&gt;が使えないのはCassandraがシーケンシャルリードのために設計されており、ランダムリードを生じさせる&lt;code&gt;OR&lt;/code&gt;や&lt;code&gt;NOT&lt;/code&gt;はサポートされていない。&lt;/p&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;Cassandraがシーケンシャルリードのために設計されており、ランダムリードを生じさせる&lt;code&gt;OR&lt;/code&gt;や&lt;code&gt;NOT&lt;/code&gt;はサポートされていない。&lt;/p&gt;
 &lt;h1&gt;不等号は最後に指定するカラムにしか使えない&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time &amp;gt;= '2021-01-01 00:00:00' and path = '/';
-InvalidRequest: Error from server: code=2200 [Invalid query] message=&quot;Clustering column &quot;path&quot; cannot be restricted (preceding column &quot;time&quot; is restricted by a non-EQ relation)&quot;
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 and time &amp;gt;= '2021-01-01 00:00:00';
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
- date     | time                            | path | method | user_id
-----------+---------------------------------+------+--------+---------
- 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
-
-(1 rows)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2021-01-01 00:00:00'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/pre&gt;
 &lt;h1&gt;OFFSETは使えない&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 limit 1 offset 1;
-SyntaxException: line 1:56 mismatched input 'offset' expecting EOF (...date = 20210101 limit 1 [offset]...)
-cqlsh:hello&amp;gt; select * from access_logs where date = 20210101 limit 1;
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;--- NG&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;limit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;offset&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
- date     | time                            | path | method | user_id
-----------+---------------------------------+------+--------+---------
- 20210101 | 2021-01-01 00:00:00.000000+0000 |    / |    GET |       1
-
-(1 rows)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c1&quot;&gt;--- OK&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;access_logs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20210101&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;limit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/pre&gt;
 &lt;p&gt;&lt;code&gt;LIMIT&lt;/code&gt;は使えるものの&lt;code&gt;OFFSET&lt;/code&gt;が使えないため、SQLのようにページネーションを実装できない。ページネーションの実装については&lt;a href=&quot;/456/&quot;&gt;以前の記事&lt;/a&gt;に書いた。&lt;/p&gt;
 &lt;h1&gt;ALLOW FILTERING&lt;/h1&gt;
 &lt;p&gt;これらの制約はエラーメッセージにもあるとおり&lt;code&gt;ALLOW FILTERING&lt;/code&gt;で回避することができるが、パフォーマンスに重大な影響をあたえる可能性があるため推奨されていない。詳細については&lt;a href=&quot;/444/&quot;&gt;以前の記事&lt;/a&gt;にも書いている。&lt;/p&gt;</summary>
