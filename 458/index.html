@@ -53,58 +53,163 @@
 </ul>
 <h1>パーティションキーは必須</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+<span class="p">;</span>
 </pre>
 <p>データを返すノードを決定するためにパーティションキーをすべて指定する必要がある。</p>
 <h1>クラスタリングキーは前方のカラムを省略できない</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span><span class="p">;</span>
-
-<span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="k">method</span> <span class="o">=</span> <span class="s1">'GET'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span> <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+  <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span>
+<span class="p">;</span>
 </pre>
 <p>あるクラスタリングキーよりも前に定義されているクラスタリングキーがあれば、それも指定する必要がある。</p>
 <h1>プライマリーキーに含まれていないカラムを指定できない</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span> <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span> <span class="k">and</span> <span class="k">method</span> <span class="o">=</span> <span class="s1">'GET'</span> <span class="k">and</span> <span class="n">user_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+  <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span>
+  <span class="k">and</span> <span class="k">method</span> <span class="o">=</span> <span class="s1">'GET'</span>
+  <span class="k">and</span> <span class="n">user_id</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span> <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span> <span class="k">and</span> <span class="k">method</span> <span class="o">=</span> <span class="s1">'GET'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+  <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span>
+  <span class="k">and</span> <span class="k">method</span> <span class="o">=</span> <span class="s1">'GET'</span>
+<span class="p">;</span>
 </pre>
 <h1>ORは使えない</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="p">(</span><span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span> <span class="k">or</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-02 00:00:00'</span><span class="p">);</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="p">(</span><span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-01 00:00:00'</span> <span class="k">or</span> <span class="nb">time</span> <span class="o">=</span> <span class="s1">'2021-01-02 00:00:00'</span><span class="p">)</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="k">in</span> <span class="p">(</span><span class="s1">'2021-01-01 00:00:00'</span><span class="p">,</span> <span class="s1">'2021-01-02 00:00:00'</span><span class="p">);</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="k">in</span> <span class="p">(</span><span class="s1">'2021-01-01 00:00:00'</span><span class="p">,</span> <span class="s1">'2021-01-02 00:00:00'</span><span class="p">)</span>
+<span class="p">;</span>
 </pre>
 <h1>NOTは使えない</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">&lt;&gt;</span> <span class="s1">'2021-01-01 00:00:00'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">&lt;&gt;</span> <span class="s1">'2021-01-01 00:00:00'</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">&gt;</span> <span class="s1">'2021-01-01 00:00:00'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">&gt;</span> <span class="s1">'2021-01-01 00:00:00'</span>
+<span class="p">;</span>
 </pre>
 <p>Cassandraがシーケンシャルリードのために設計されており、ランダムリードを生じさせる<code>OR</code>や<code>NOT</code>はサポートされていない。</p>
 <h1>不等号は最後に指定するカラムにしか使えない</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">&gt;=</span> <span class="s1">'2021-01-01 00:00:00'</span> <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">&gt;=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+  <span class="k">and</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'/'</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">and</span> <span class="nb">time</span> <span class="o">&gt;=</span> <span class="s1">'2021-01-01 00:00:00'</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+  <span class="k">and</span> <span class="nb">time</span> <span class="o">&gt;=</span> <span class="s1">'2021-01-01 00:00:00'</span>
+<span class="p">;</span>
 </pre>
 <h1>OFFSETは使えない</h1>
 <pre lang="sql" class="highlight highlight-sql"><span class="c1">--- NG</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">limit</span> <span class="mi">1</span> <span class="k">offset</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+<span class="k">limit</span>
+  <span class="mi">1</span>
+<span class="k">offset</span>
+  <span class="mi">1</span>
+<span class="p">;</span>
 
 <span class="c1">--- OK</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">access_logs</span> <span class="k">where</span> <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span> <span class="k">limit</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">select</span>
+  <span class="o">*</span>
+<span class="k">from</span>
+  <span class="n">access_logs</span>
+<span class="k">where</span>
+  <span class="nb">date</span> <span class="o">=</span> <span class="mi">20210101</span>
+<span class="k">limit</span>
+  <span class="mi">1</span>
+<span class="p">;</span>
 </pre>
 <p><code>LIMIT</code>は使えるものの<code>OFFSET</code>が使えないため、SQLのようにページネーションを実装できない。ページネーションの実装については<a href="/456/">以前の記事</a>に書いた。</p>
 <h1>ALLOW FILTERING</h1>
