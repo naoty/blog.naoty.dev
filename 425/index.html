@@ -42,10 +42,10 @@
 </code></pre>
 <p><code>csv_reader.rs</code>, <code>jsonl_reader.rs</code>, <code>ltsv_reader.rs</code>にはそれぞれ<code>CsvReader</code>, <code>JsonlReader</code>, <code>LtsvReader</code>がある。</p>
 <h1>ファイルごとにモジュールを公開する</h1>
-<pre lang="rust" class="highlight highlight-rust"><span class="c">// lib.rs</span>
+<pre lang="rust" class="highlight highlight-rust"><span class="c1">// lib.rs</span>
 <span class="k">pub</span> <span class="k">mod</span> <span class="n">reader</span><span class="p">;</span>
 </pre>
-<pre lang="rust" class="highlight highlight-rust"><span class="c">// reader.rs</span>
+<pre lang="rust" class="highlight highlight-rust"><span class="c1">// reader.rs</span>
 <span class="k">pub</span> <span class="k">mod</span> <span class="n">csv_reader</span><span class="p">;</span>
 <span class="k">pub</span> <span class="k">mod</span> <span class="n">jsonl_reader</span><span class="p">;</span>
 <span class="k">pub</span> <span class="k">mod</span> <span class="n">ltsv_reader</span><span class="p">;</span>
@@ -57,10 +57,10 @@
 </pre>
 <p>各ファイルがモジュールとして公開されているため、冗長な感じになる。</p>
 <h1>モジュールをまとめて公開し直す</h1>
-<pre lang="rust" class="highlight highlight-rust"><span class="c">// lib.rs</span>
+<pre lang="rust" class="highlight highlight-rust"><span class="c1">// lib.rs</span>
 <span class="k">pub</span> <span class="k">mod</span> <span class="n">reader</span><span class="p">;</span>
 </pre>
-<pre lang="rust" class="highlight highlight-rust"><span class="c">// reader.rs</span>
+<pre lang="rust" class="highlight highlight-rust"><span class="c1">// reader.rs</span>
 <span class="k">mod</span> <span class="n">csv_reader</span><span class="p">;</span>
 <span class="k">mod</span> <span class="n">jsonl_reader</span><span class="p">;</span>
 <span class="k">mod</span> <span class="n">ltsv_reader</span><span class="p">;</span>

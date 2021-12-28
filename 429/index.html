@@ -38,9 +38,9 @@
 <span class="p">}</span>
 
 <span class="k">impl</span> <span class="nn">fmt</span><span class="p">::</span><span class="n">Display</span> <span class="k">for</span> <span class="n">MyError</span> <span class="p">{</span>
-  <span class="k">fn</span> <span class="nf">fmt</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">fmt</span><span class="p">::</span><span class="n">Formatter</span><span class="o">&lt;</span><span class="nv">'_</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">fmt</span><span class="p">::</span><span class="n">Result</span> <span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">fmt</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">fmt</span><span class="p">::</span><span class="n">Formatter</span><span class="o">&lt;</span><span class="nv">'_</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">fmt</span><span class="p">::</span><span class="nb">Result</span> <span class="p">{</span>
     <span class="k">match</span> <span class="k">self</span> <span class="p">{</span>
-      <span class="nn">Self</span><span class="p">::</span><span class="n">InvalidFormat</span> <span class="k">=&gt;</span> <span class="nd">write!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"invalid format"</span><span class="p">),</span>
+      <span class="k">Self</span><span class="p">::</span><span class="n">InvalidFormat</span> <span class="k">=&gt;</span> <span class="nd">write!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"invalid format"</span><span class="p">),</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -48,7 +48,7 @@
 <span class="k">impl</span> <span class="nn">error</span><span class="p">::</span><span class="n">Error</span> <span class="k">for</span> <span class="n">MyError</span> <span class="p">{}</span>
 
 <span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">let</span> <span class="n">error</span><span class="p">:</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">dyn</span> <span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Box</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">MyError</span><span class="p">::</span><span class="n">InvalidFormat</span><span class="p">);</span>
+  <span class="k">let</span> <span class="n">error</span><span class="p">:</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Box</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">MyError</span><span class="p">::</span><span class="n">InvalidFormat</span><span class="p">);</span>
   <span class="nd">eprintln!</span><span class="p">(</span><span class="s">"error: {}"</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
 <span class="p">}</span>
 </pre>
