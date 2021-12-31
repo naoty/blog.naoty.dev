@@ -10,6 +10,55 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/460/</id>
+    <link href="https://blog.naoty.dev/460/"/>
+    <summary>&lt;h1&gt;作ったもの&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;a href=&quot;https://github.com/naoty/todo&quot;&gt;naoty/todo&lt;/a&gt;&lt;/strong&gt;: 細かいバグがあったのと、長期的にメンテナンスしていくことを踏まえてTODO管理ツールをGoからRubyで書き直した。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;a href=&quot;https://github.com/naoty/blog&quot;&gt;naoty/blog&lt;/a&gt;&lt;/strong&gt;: このブログを生成するツールをRubyで書いた。また、過去のブログなどのコンテンツを &lt;a href=&quot;https://blog.naoty.dev&quot;&gt;https://blog.naoty.dev&lt;/a&gt; に移した。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;家計管理アプリケーション&lt;/strong&gt;: 家を建てた結果、修繕費の積立や固定資産税など今までなかった費用が発生するようになった。毎月発生する費用だけでなく年単位で発生する費用まで管理するためのWebアプリケーションをいま作っている。学習目的も兼ねてフロントエンドにNext.js in TypeScriptを使い、バックエンドにRailsを使い、GraphQLで通信するようにしている。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;読んだもの&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;a href=&quot;https://www.oreilly.co.jp/books/9784873118703/&quot;&gt;データ指向アプリケーションデザイン&lt;/a&gt;&lt;/strong&gt;: 最後まで読むことを目標としていたけど、達成できなかった。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;a href=&quot;https://www.oreilly.com/library/view/mastering-apache-cassandra/9781789131499/&quot;&gt;Mastering Apache Cassandra 3.x&lt;/a&gt;&lt;/strong&gt;: 仕事でCassandraを扱っていたので、気になるところだけ読んだ。日本語では3系のCassandraのまとまった情報がないため、とても助かった。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;買ったもの&lt;/h1&gt;
+&lt;p&gt;金を借り、土地を買い、家を建て、庭を作った。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;./441/&quot;&gt;家づくり振り返り 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;./445/&quot;&gt;家づくり振り返り 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;あとは&lt;a href=&quot;./459/&quot;&gt;前回の記事&lt;/a&gt;に書いた。&lt;/p&gt;
+&lt;h1&gt;仕事&lt;/h1&gt;
+&lt;p&gt;だいたい以下のようなことをした。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Railsアプリケーションのチューニング&lt;/li&gt;
+&lt;li&gt;大量に書き込まれるデータを非同期にCassandraに書き込んでRailsアプリケーションから配信する機能の開発&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;将棋&lt;/h1&gt;
+&lt;p&gt;今年は将棋にハマってた一年だった。もともと高校時代の部活で将棋をやっていたんだけど、YouTubeでプロ棋士の動画を見たり、Abemaトーナメントを見ていたりして、将棋熱が再燃してきた。&lt;/p&gt;
+&lt;h1&gt;新しい生活&lt;/h1&gt;
+&lt;p&gt;9月に5年以上住んでいた練馬を離れて新しい街に住み始めた。近くの大きな駅まで徒歩25分くらいかかるけど、駅まで行けばいろんなお店があってとても便利。歩道が広いし、自転車レーンもあるし、通行しやすくていい。また、大きめの道はすべて並木が植えられているので、歩いていて気持ちいい。&lt;/p&gt;
+&lt;h1&gt;来年の目標&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;プログラミング&lt;/strong&gt;: データベースの仕組みに興味があるので、引き続き勉強していきたい。まずは&lt;a href=&quot;https://link.springer.com/book/10.1007/978-3-030-33836-7&quot;&gt;Database Design and Implementation&lt;/a&gt;を買ったので読破したい。そして、仕事でKafkaを扱う機会がありそうなので、Kafkaについても勉強していきたい。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;将棋&lt;/strong&gt;: 二段に昇段したい。終盤力に課題があるので、詰将棋をこなしていきたい。&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;その他&lt;/strong&gt;: 来年35歳になるので、そろそろ健康を意識してなんでもいいから運動習慣を身につけたい。&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>2021年振り返り</title>
+    <updated>2021-12-31T14:29:00+00:00</updated>
+    <dc:date>2021-12-31T14:29:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/459/</id>
     <link href="https://blog.naoty.dev/459/"/>
     <summary>&lt;p&gt;今年は家を建てて生活がガラッと変わったため、買うものが多かった。その中でも特によかったものをまとめてみた。家とか土地とかその他設備類はあんまり参考にならないと思うので除いた。&lt;/p&gt;
