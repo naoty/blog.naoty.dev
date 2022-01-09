@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネクストキーロックの範囲</title>
+    <meta property="og:title" content="ネクストキーロックの範囲">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/463/">
+    <meta property="og:image" content="https://blog.naoty.dev/463/next-key-lock.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ネクストキーロックの範囲</h1>
+          <p class="metadata">
+            <time datetime="2022-01-09T22:07:00.000+0000">2022-01-09 22:07</time>
+            <a href="/mysql/">#mysql</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>MySQLのネクストキーロックについて理解できていない気がしてきたので、あらためて手を動かしながら動作を理解する。前提として、分離レベルは<code>REPEATABLE-READ</code>で考える。</p>
+<p>下のようなテーブルを例にとる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">users</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="n">name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="n">age</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre>
+<p>また、すでに下のようにデータが入っているとする。</p>
+<pre><code>+----+-------+-----+
+| id | name  | age |
++----+-------+-----+
+| 1  | alice | 20  |
+| 2  | bob   | 30  |
+| 3  | carol | 40  |
+| 4  | dave  | 50  |
++----+-------+-----+
+</code></pre>
+<p>このとき、下のクエリがどのような範囲にロックを取得するか確認する。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">users</span> <span class="k">WHERE</span> <span class="n">age</span> <span class="k">BETWEEN</span> <span class="mi">30</span> <span class="k">AND</span> <span class="mi">40</span> <span class="k">FOR</span> <span class="k">UPDATE</span><span class="p">;</span>
+</pre>
+<h1>インデックスあり</h1>
+<p>まずは<code>age</code>カラムにインデックスがある場合のネクストキーロックの動作を確認する。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">users</span> <span class="k">WHERE</span> <span class="n">age</span> <span class="k">BETWEEN</span> <span class="mi">30</span> <span class="k">AND</span> <span class="mi">40</span> <span class="k">FOR</span> <span class="k">UPDATE</span><span class="p">;</span>
+</pre>
+<pre><code>+----+-------+-----+
+| id | name  | age |
++----+-------+-----+
+| 2  | bob   | 30  |
+| 3  | carol | 40  |
++----+-------+-----+
+</code></pre>
+<p>この状態で別セッションから<code>users</code>テーブルに操作を試みる。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">19</span><span class="p">);</span>
+<span class="c1">-- Query OK, 1 row affected</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">49</span><span class="p">);</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+<span class="c1">-- Query OK, 1 row affected</span>
+</pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="c1">-- Query OK, 1 row affected</span>
+<span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+</pre>
+<p>ネクストキーロックの範囲を整理するとこうなる。</p>
+<ul>
+<li>マッチした行とその前の行の間（末端含む）のギャップロック</li>
+<li>マッチした行のレコードロック</li>
+<li>マッチした行の次の行のレコードロック</li>
+<li>マッチした行とその次の行の間（末端含まない）のギャップロック</li>
+</ul>
+<p>分かりづらいので図にしてみた（赤い部分がロック）。</p>
+<p><a href="next-key-lock.png" target="_blank"><img src="next-key-lock.png" alt="next key lock" style="max-width:100%;"></a></p>
+<h1>インデックスなし</h1>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">users</span> <span class="k">WHERE</span> <span class="n">age</span> <span class="k">BETWEEN</span> <span class="mi">30</span> <span class="k">AND</span> <span class="mi">40</span> <span class="k">FOR</span> <span class="k">UPDATE</span><span class="p">;</span>
+</pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">19</span><span class="p">);</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">49</span><span class="p">);</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'naoty'</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+</pre>
+<pre lang="sql" class="highlight highlight-sql"><span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+<span class="k">UPDATE</span> <span class="n">users</span> <span class="k">SET</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="c1">-- Lock wait timeout exceeded; try restarting transaction</span>
+</pre>
+<p>スキャンされた行すべてに対してネクストキーロックを取得しているため、ことごとく操作が失敗している。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
