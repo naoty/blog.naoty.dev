@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>図で理解するトランザクション競合パターン</title>
+    <meta property="og:title" content="図で理解するトランザクション競合パターン">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/464/">
+    <meta property="og:image" content="https://blog.naoty.dev/464/./dirty-reads.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">図で理解するトランザクション競合パターン</h1>
+          <p class="metadata">
+            <time datetime="2022-01-15T23:16:00.000+0000">2022-01-15 23:16</time>
+            <a href="/db/">#db</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>古くからある有名な問題なのだけど、文章で何回読んでも頭にすんなり入らないので、できるだけシンプルに理解するため図を書いて整理してみた。</p>
+<h1>Dirty Reads</h1>
+<p><a href="./dirty-reads.png" target="_blank"><img src="./dirty-reads.png" alt="Dirty Reads" style="max-width:100%;"></a></p>
+<ul>
+<li>コミットしていない変更が他のトランザクションから見える。</li>
+</ul>
+<h1>Dirty Writes</h1>
+<p><a href="./dirty-writes.png" target="_blank"><img src="./dirty-writes.png" alt="Dirty Writes" style="max-width:100%;"></a></p>
+<ul>
+<li>コミットしていない変更が他のトランザクションに上書きされる。</li>
+</ul>
+<h1>Non-Repeatable Reads</h1>
+<p><a href="./nonrepeatable-reads.png" target="_blank"><img src="./nonrepeatable-reads.png" alt="Non-Repeatable Reads" style="max-width:100%;"></a></p>
+<ul>
+<li>同じトランザクションでも読み取るタイミングによって結果が変わり整合性がとれなくなる。</li>
+<li>Dirty Readsとの違いはコミットされた変更によっても影響を受ける点。</li>
+<li>バックアップや分析用途でのクエリで問題になりうる。</li>
+</ul>
+<h1>Lost Updates</h1>
+<p><a href="./lost-updates.png" target="_blank"><img src="./lost-updates.png" alt="Lost Updates" style="max-width:100%;"></a></p>
+<ul>
+<li>2つ目の変更が1つ目の変更を踏まえていないため、1つ目の変更が失われる。</li>
+<li>前の値に基づいて変更する処理が並行する場合に発生する。</li>
+<li>例: カウンターの更新、JSONの書き換え</li>
+</ul>
+<h1>Phantom Reads</h1>
+<p><a href="./phantom-reads.png" target="_blank"><img src="./phantom-reads.png" alt="Phantom Reads" style="max-width:100%;"></a></p>
+<ul>
+<li>変更すべきか判断する条件が判断後に別のトランザクションによって影響を受ける。</li>
+<li>「条件の確認」「変更すべきか判断」「変更」という3ステップの処理が並行する場合に発生する。</li>
+<li>例: 会議室の予約（会議室が空いていれば予約）、商品の購入（在庫があれば購入）</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
