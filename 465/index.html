@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSCodeで現在時刻をｽｯと出す</title>
+    <meta property="og:title" content="VSCodeで現在時刻をｽｯと出す">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/465/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">VSCodeで現在時刻をｽｯと出す</h1>
+          <p class="metadata">
+            <time datetime="2022-01-17T21:43:00.000+0000">2022-01-17 21:43</time>
+            <a href="/vscode/">#vscode</a>
+            <a href="/lifehack/">#lifehack</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>VSCodeで作業メモをとりながら作業していると、作業した時間を記録しておくために現在時刻のタイムスタンプをｽｯと出したくなる。</p>
+<p><code>Preferences: Configure User Snippets</code>からmarkdownを選んで、以下のようにスニペットを登録しておくと便利。<code>$CURRENT_YEAR</code>みたいな変数が組み込みで備わっているようだ。</p>
+<pre lang="json" class="highlight highlight-json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"prefix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#timestamp"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"body"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"[$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND]"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Insert timestamp"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>ただし、デフォルトだとmarkdownでは補完が効かないはずなので、以下の設定も追加する必要がある。</p>
+<pre lang="json" class="highlight highlight-json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"[markdown]"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"editor.quickSuggestions"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
