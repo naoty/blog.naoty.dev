@@ -10,6 +10,17 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/466/</id>
+    <link href="https://blog.naoty.dev/466/"/>
+    <summary>&lt;p&gt;&lt;a href=&quot;./database-design-and-implementation.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./database-design-and-implementation.jpg&quot; alt=&quot;Database Design and Implementation&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.springer.com/book/10.1007/978-3-030-33836-7&quot;&gt;https://link.springer.com/book/10.1007/978-3-030-33836-7&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;昨年末に注文して1ヶ月くらい経ってようやく届いた。データベースについて深く理解したいと思って&lt;a href=&quot;https://www.oreilly.co.jp/books/9784873118703/&quot;&gt;データ指向アプリケーションデザイン&lt;/a&gt;などを読んでいたんだけど、文字だけだと理解できない派なので、今年はデータベースを自作する本に挑戦してみようと思った。&lt;/p&gt;
+&lt;p&gt;前書きだけ読んでみたけど、どうやらボストン大学でCSを教えている方が書いている本で、大学のテキストとして使われているみたいだ。DBはJavaで作るみたいなので、Javaの復習にもなりそう。洋書だし続けられるか若干不安ではあるけど、手を動かしながらコツコツ読み進めていきたい。&lt;/p&gt;</summary>
+    <title>Database Design and Implementationを読み始めた</title>
+    <updated>2022-01-21T22:08:00+00:00</updated>
+    <dc:date>2022-01-21T22:08:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/465/</id>
     <link href="https://blog.naoty.dev/465/"/>
     <summary>&lt;p&gt;VSCodeで作業メモをとりながら作業していると、作業した時間を記録しておくために現在時刻のタイムスタンプをｽｯと出したくなる。&lt;/p&gt;
