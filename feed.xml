@@ -10,6 +10,246 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/467/</id>
+    <link href="https://blog.naoty.dev/467/"/>
+    <summary>&lt;p&gt;なにかを理解するときにミニマムな単位から一つずつステップアップして理解していきたいんだけど、gradleの場合、&lt;code&gt;gradle init&lt;/code&gt;で対話型のセットアップを求められてしまうため、ミニマムなプロジェクト構成を探ってみた。&lt;/p&gt;
+&lt;h1&gt;起動&lt;/h1&gt;
+&lt;p&gt;無から始める。まずは作業用ディレクトリを作る。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ mkdir hello-gradle
+$ cd hello-gradle
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;まだ何もないけど、タスクのリストを出すコマンドを実行してみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle tasks
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Directory '/Users/naoty/src/github.com/naoty/hello-gradle' does not contain a Gradle build.
+
+A Gradle build should contain a 'settings.gradle' or 'settings.gradle.kts' file in its root directory. It may also contain a 'build.gradle' or 'build.gradle.kts' file.
+
+To create a new Gradle build in this directory run 'gradle init'
+
+(snip)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;gradle init&lt;/code&gt;を実行してくれ、と言われるけどいろいろできてしまうので無視する。メッセージによると&lt;code&gt;settings.gradle&lt;/code&gt;があるとよさそうなので、作る。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ touch settings.gradle
+$ gradle tasks
+
+&amp;gt; Task :tasks
+
+------------------------------------------------------------
+Tasks runnable from root project 'hello-gradle'
+------------------------------------------------------------
+
+Build Setup tasks
+-----------------
+init - Initializes a new Gradle build.
+wrapper - Generates Gradle wrapper files.
+
+Help tasks
+----------
+
+(snip)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;タスクのリストが表示された。&lt;/p&gt;
+&lt;h1&gt;ビルド&lt;/h1&gt;
+&lt;p&gt;次にJavaのソースコードをクラスファイルにコンパイルしたい。&lt;/p&gt;
+&lt;p&gt;「gradle java」で検索するとJavaプラグインというものがあると知る。&lt;a href=&quot;https://docs.gradle.org/current/userguide/java_plugin.html&quot;&gt;公式ドキュメント&lt;/a&gt;に目を通す。&lt;code&gt;build.gradle&lt;/code&gt;を作って次のように書くとよさそう。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+plugins {
++  id 'java'
++}
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;タスクのリストを表示してみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle tasks
+
+&amp;gt; Task :tasks
+
+------------------------------------------------------------
+Tasks runnable from root project 'hello-gradle'
+------------------------------------------------------------
+
+Build tasks
+-----------
+assemble - Assembles the outputs of this project.
+build - Assembles and tests this project.
+buildDependents - Assembles and tests this project and all projects that depend on it.
+buildNeeded - Assembles and tests this project and all projects it depends on.
+classes - Assembles main classes.
+clean - Deletes the build directory.
+jar - Assembles a jar archive containing the main classes.
+testClasses - Assembles test classes.
+
+Build Setup tasks
+-----------------
+init - Initializes a new Gradle build.
+wrapper - Generates Gradle wrapper files.
+
+(snip)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ビルド用のタスクが追加された。さっそく実行してみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle build
+
+BUILD SUCCESSFUL in 1s
+1 actionable task: 1 executed
+$ tree .
+.
+├── build
+│   ├── libs
+│   │   └── hello-gradle.jar
+│   └── tmp
+│       └── jar
+│           └── MANIFEST.MF
+├── build.gradle
+└── settings.gradle
+
+4 directories, 4 files
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;build&lt;/code&gt;ディレクトリにjarファイルが作られている。jarの中身はマニフェストファイルのみだった。&lt;/p&gt;
+&lt;p&gt;もう少しドキュメントを見ていると&lt;a href=&quot;https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layout&quot;&gt;Project layout&lt;/a&gt;という章があるので、これを参考にビルドしたいソースコードを置いてみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ mkdir -p src/main/java/hello
+$ touch src/main/java/hello/App.java
+$ gradle build
+
+BUILD SUCCESSFUL in 1s
+2 actionable tasks: 2 executed
+$ tree .
+.
+├── build
+│   ├── classes
+│   │   └── java
+│   │       └── main
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       └── main
+│   │       └── headers
+│   │           └── java
+│   │               └── main
+│   ├── libs
+│   │   └── hello-gradle.jar
+│   └── tmp
+│       ├── compileJava
+│       │   └── previous-compilation-data.bin
+│       └── jar
+│           └── MANIFEST.MF
+├── build.gradle
+├── settings.gradle
+└── src
+    └── main
+        └── java
+            └── hello
+                └── App.java
+
+19 directories, 6 files
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;いろいろなファイルが生成されるようになった。&lt;/p&gt;
+&lt;h1&gt;実行&lt;/h1&gt;
+&lt;p&gt;次に実行可能ファイルを生成して実行できるようにしたい。まずは空の&lt;code&gt;src/main/java/hello/App.java&lt;/code&gt;を編集して&lt;code&gt;main&lt;/code&gt;を実装しておく。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt;&lt;span class=&quot;gi&quot;&gt;+package hello;
++
++public class App {
++    public static void main(String[] args) {
++        System.out.println(&quot;Hello, gradle!&quot;);
++    }
++}
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;gradleで実行可能ファイルを生成するにはApplicationプラグインというものを使うといいらしい。&lt;a href=&quot;https://docs.gradle.org/current/userguide/application_plugin.html&quot;&gt;公式ドキュメント&lt;/a&gt;によると、ApplicationプラグインはJavaプラグインを内包しているようなので、これまでの設定をそのまま使うことができる。&lt;/p&gt;
+&lt;p&gt;公式ドキュメントに沿ってbuild.gradleに必要最小限の設定を追加する。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; plugins {
+&lt;span class=&quot;gd&quot;&gt;-  id 'java'
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+  id 'application'
+&lt;/span&gt; }
+&lt;span class=&quot;gi&quot;&gt;+
++application {
++  mainClass = 'hello.App'
++}
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;タスクのリストを確認すると、確かにこれまでのタスクに加えて&lt;code&gt;run&lt;/code&gt;が追加されている。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle tasks
+
+&amp;gt; Task :tasks
+
+------------------------------------------------------------
+Tasks runnable from root project 'hello-gradle'
+------------------------------------------------------------
+
+Application tasks
+-----------------
+run - Runs this project as a JVM application
+
+Build tasks
+-----------
+(snip)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;では、実行してみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle run
+
+&amp;gt; Task :run
+Hello, gradle!
+
+BUILD SUCCESSFUL in 1s
+2 actionable tasks: 2 executed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;依存ライブラリ&lt;/h1&gt;
+&lt;p&gt;次に依存するライブラリを追加したい。依存ライブラリの追加はJavaプラグインの機能なので、Applicationプラグインでも利用できる。Apache Commons Lang 3を追加してみる。&lt;/p&gt;
+&lt;p&gt;依存関係の設定を&lt;a href=&quot;https://docs.gradle.org/current/userguide/dependency_management_for_java_projects.html&quot;&gt;公式ドキュメント&lt;/a&gt;を見ながら書いてみる。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; plugins {
+     id 'application'
+ }
+ 
+ application {
+     mainClass = 'hello.App'
+ }
+&lt;span class=&quot;gi&quot;&gt;+
++repositories {
++    mavenCentral()
++}
++
++dependencies {
++    implementation 'org.apache.commons:commons-lang3:3.12.0'
++}
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;そして、ソースコードから利用する。&lt;/p&gt;
+&lt;pre lang=&quot;diff&quot; class=&quot;highlight highlight-diff&quot;&gt; package hello;
+
++import org.apache.commons.lang3.StringUtils;
+&lt;span class=&quot;gi&quot;&gt;+
+&lt;/span&gt; public class App {
+     public static void main(String[] args) {
+&lt;span class=&quot;gd&quot;&gt;-        System.out.println(&quot;Hello, gradle!&quot;);
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+        String text = null;
++        if (StringUtils.isEmpty(text)) {
++            System.out.println(&quot;text is empty!&quot;);
++        } else {
++            System.out.println(&quot;text is not empty!&quot;);
++        }
++    }
+&lt;/span&gt; }
+&lt;/pre&gt;
+&lt;p&gt;実行してみる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ gradle run
+
+&amp;gt; Task :run
+text is empty!
+
+BUILD SUCCESSFUL in 1s
+2 actionable tasks: 2 executed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;無からライブラリを使ったコードを実行できるところまで構築できた。他にもテストのための設定も必要になるだろうけど、Javaプラグインや依存関係の設定方法をもう少し調べれば難しくないだろう。&lt;/p&gt;
+&lt;h1&gt;まとめ&lt;/h1&gt;
+&lt;p&gt;ここまでで学んだことを整理する。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ルートディレクトリに&lt;code&gt;build.gradle&lt;/code&gt;があればgradleはとりあえず動く。&lt;/li&gt;
+&lt;li&gt;JavaプラグインでJavaのソースコードのビルドや依存関係に関するタスクが使えるようになる。&lt;code&gt;src/{main,text}/java/&lt;/code&gt;以下にソースコードを置くことでビルドできる。&lt;/li&gt;
+&lt;li&gt;さらに、Javaプラグインを内包するApplicationプラグインを使うことで実行できるようになる。&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>ミニマムなgradleプロジェクト</title>
+    <updated>2022-01-25T23:39:00+00:00</updated>
+    <dc:date>2022-01-25T23:39:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/466/</id>
     <link href="https://blog.naoty.dev/466/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;./database-design-and-implementation.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./database-design-and-implementation.jpg&quot; alt=&quot;Database Design and Implementation&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
