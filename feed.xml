@@ -10,6 +10,28 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/468/</id>
+    <link href="https://blog.naoty.dev/468/"/>
+    <summary>&lt;p&gt;昨年9月に家を建ててから数ヶ月が経って、計画段階からの目玉機能（？）でもあったスマートキー付き勝手口（以下、スマート勝手口）がようやく運用に乗ったので、記念に日記をつけたい。&lt;/p&gt;
+&lt;h1&gt;スマート勝手口とは&lt;/h1&gt;
+&lt;p&gt;スマート勝手口というのはスマートキーがついた勝手口のことで、配達員の方がこちらで事前に設定した暗証番号を入力して勝手口を開け、荷物を屋内に置き配してくれるようになっている。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./outside.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./outside.jpg&quot; alt=&quot;外側&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;スマートキーと使い方を説明するシール&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;勝手口内は1畳くらいの小さい空間で、念のため監視カメラを設置してある。勝手口のとなりはパントリーになっていて、置き配してもらった荷物はすぐに収納できるようにしてあるんだけど、その間の扉には当然カギが中からかかっているため、配達員の方が家に上がりこんでくることはない。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./inside.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./inside.jpg&quot; alt=&quot;内側&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;ここに置いてもらう&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;我が家は警備会社と契約していて防犯センサーが各所に設置してあるが、スマート勝手口に防犯センサーがあると配達員の方に反応してしまうため、勝手口内とパントリーの間のドアにセンサーをとりつけるようにした。&lt;/p&gt;
+&lt;h1&gt;運用&lt;/h1&gt;
+&lt;p&gt;スマート勝手口の暗証番号はECサイト毎のprefixと伝票番号から生成していて、スマートキーの専用アプリから設定する必要がある。そのため、伝票番号が書かれたメールを見落とさないようにフィルターを設定してラベリングするなどの苦しい運用を強いられている。&lt;/p&gt;
+&lt;p&gt;専用アプリとスマートキーはおそらくBluetoothで通信しているはずなので、ハックして自動的に暗証番号を設定できるようにしたい。&lt;/p&gt;
+&lt;h1&gt;運用までの道のり&lt;/h1&gt;
+&lt;p&gt;スマート勝手口のアイデア自体はハウスメーカー側から提案いただいたもので、自分たちのニーズにも合致していたため、採用させてもらった。どうやら全国初の採用案件だったらしい。&lt;/p&gt;
+&lt;p&gt;間取りを決める時点でスマート勝手口を前提としてパントリーやキッチンの配置を決め、工事段階では上記のとおり警備会社とも連携が必要になるため、打ち合わせを行ったりした。&lt;/p&gt;
+&lt;p&gt;引き渡し後もスマートキーの設定につまづき、ハウスメーカーやスマートキーのメーカーに何度も問い合わせしてようやく専用アプリから接続できるようになった。&lt;/p&gt;
+&lt;p&gt;スマートキーの設定ができるようになっても、配達員の方に利用してもらうまでもかなり時間がかかった。置き配の指定オプションにスマート勝手口というものがないため（それはそう）、それに近しいオプションを選び補足で細かく説明を書いた。それでも何度も失敗し、文言の微調整やインターフォン横に配達員の方向けのメッセージプレートを設置したりするなどし、ようやくスマート勝手口を利用してもらえるようになった。&lt;/p&gt;</summary>
+    <title>スマート勝手口に置き配してもらう</title>
+    <updated>2022-01-31T23:13:00+00:00</updated>
+    <dc:date>2022-01-31T23:13:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/467/</id>
     <link href="https://blog.naoty.dev/467/"/>
     <summary>&lt;p&gt;なにかを理解するときにミニマムな単位から一つずつステップアップして理解していきたいんだけど、gradleの場合、&lt;code&gt;gradle init&lt;/code&gt;で対話型のセットアップを求められてしまうため、ミニマムなプロジェクト構成を探ってみた。&lt;/p&gt;
