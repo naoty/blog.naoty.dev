@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Streams入門1</title>
+    <meta property="og:title" content="Kafka Streams入門1">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/470/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Kafka Streams入門1</h1>
+          <p class="metadata">
+            <time datetime="2022-02-19T21:13:00.000+0000">2022-02-19 21:13</time>
+            <a href="/kafka/">#kafka</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Kafka Streamsに入門する機運が出てきたため、実際に動かしてみながら学んでみることにした。</p>
+<h1>Kafka Streamsとは</h1>
+<p>Kafkaとのメッセージの送信/取得、そしてメッセージの処理のためのJavaのライブラリ。</p>
+<p>Kafkaからメッセージを取得して、それをリアルタイムに処理して、またKafkaに送ったり、別のデータストアに書き込んだりするようなアプリケーションを書く際にフレームワークとして使われている。</p>
+<h1>開発環境のセットアップ</h1>
+<p>以前の<a href="/427/">記事</a>でDockerコンテナでKafkaの動作環境をセットアップする方法を紹介した。今回もそれに沿ってセットアップした。以下再掲。</p>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">kafka</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">confluentinc/cp-kafka</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">KAFKA_ZOOKEEPER_CONNECT</span><span class="pi">:</span> <span class="s">zookeeper:2181</span>
+      <span class="na">KAFKA_ADVERTISED_LISTENERS</span><span class="pi">:</span> <span class="s">PLAINTEXT://localhost:9092</span>
+      <span class="na">KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR</span><span class="pi">:</span> <span class="m">1</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">9092:9092</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">zookeeper</span>
+  <span class="na">zookeeper</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">confluentinc/cp-zookeeper</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">ZOOKEEPER_CLIENT_PORT</span><span class="pi">:</span> <span class="m">2181</span>
+</pre>
+<p>また、Kafka Streamsアプリケーションのプロジェクトのセットアップについては、これも以前の<a href="/467/">記事</a>で紹介したミニマムなgradleプロジェクトを参考にセットアップして動作するようになった。build.gradleはこんな感じ。</p>
+<pre lang="groovy" class="highlight highlight-groovy"><span class="n">plugins</span> <span class="o">{</span>
+  <span class="n">id</span> <span class="s1">'application'</span>
+<span class="o">}</span>
+
+<span class="n">application</span> <span class="o">{</span>
+  <span class="n">mainClass</span> <span class="o">=</span> <span class="s1">'dev.naoty.kafka.Main'</span>
+<span class="o">}</span>
+
+<span class="n">repositories</span> <span class="o">{</span>
+  <span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+  <span class="n">implementation</span> <span class="s1">'org.apache.kafka:kafka-streams:3.1.0'</span>
+<span class="o">}</span>
+</pre>
+<h1>動かしてみる</h1>
+<p>Kafka StreamsにはStreams DSLとProcessor APIという2種類の書き方が存在するが、今回はより簡単なStreams DSLを使って動かしてみる。</p>
+<p>実際のコード全体は記事の一番下に載せたけど、重要な箇所だけを切り抜く。</p>
+<pre lang="java" class="highlight highlight-java"><span class="kd">final</span> <span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+<span class="kd">final</span> <span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-input"</span><span class="o">);</span>
+<span class="n">source</span><span class="o">.</span><span class="na">peek</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"key:%s, value:%s\n"</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+<span class="n">source</span><span class="o">.</span><span class="na">mapValues</span><span class="o">(</span><span class="n">value</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">()).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+<span class="n">source</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">KeyValue</span><span class="o">.</span><span class="na">pair</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">(),</span> <span class="n">value</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">())).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+<span class="n">source</span><span class="o">.</span><span class="na">filter</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="o">).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+<span class="n">source</span><span class="o">.</span><span class="na">selectKey</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+</pre>
+<ul>
+<li>
+<code>StreamsBuilder#stream</code>で<code>streams-plaintext-input</code>というtopicからメッセージを取得する<code>KStream</code>を生成している</li>
+<li>
+<code>KStream</code>に対して<code>map</code>や<code>filter</code>などのおなじみのメソッドでメッセージを処理できる。当然メソッドチェーンもできる。</li>
+<li>
+<code>peek</code>は受け取ったメッセージに何もしないため、処理のチェーンの中で副作用を発生させるのに便利。例えば、この例のようにログを出力できる。Rubyの<code>#tap</code>みたいなやつ。</li>
+<li>
+<code>selectKey</code>を使うとキーを変更できる。</li>
+<li>
+<code>print</code>を使うと標準出力やファイルにメッセージを出力できるが、これは終端でしか使えないため、メソッドチェーンできない。</li>
+</ul>
+<p>kcat（旧kafkacat）を使って<code>streams-plaintext-input</code>にメッセージを送ると、標準出力に処理されたメッセージが出力された。</p>
+<pre lang="bash" class="highlight highlight-bash">% <span class="nb">echo</span> <span class="s2">"hello:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext <span class="nt">-K</span> :
+</pre>
+<pre><code>key:hello, value:naoty
+[KSTREAM-PEEK-0000000001]: hello, naoty
+[KSTREAM-MAPVALUES-0000000003]: hello, NAOTY
+[KSTREAM-MAP-0000000005]: HELLO, NAOTY
+[KSTREAM-FILTER-0000000007]: hello, naoty
+[KSTREAM-KEY-SELECT-0000000009]: naoty, naoty
+</code></pre>
+<h1>コード全体</h1>
+<pre lang="java" class="highlight highlight-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Properties</span> <span class="n">props</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Properties</span><span class="o">();</span>
+    <span class="n">props</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">StreamsConfig</span><span class="o">.</span><span class="na">APPLICATION_ID_CONFIG</span><span class="o">,</span> <span class="s">"my-first-streams-app"</span><span class="o">);</span>
+    <span class="n">props</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">StreamsConfig</span><span class="o">.</span><span class="na">BOOTSTRAP_SERVERS_CONFIG</span><span class="o">,</span> <span class="s">"localhost:9092"</span><span class="o">);</span>
+    <span class="n">props</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">StreamsConfig</span><span class="o">.</span><span class="na">DEFAULT_KEY_SERDE_CLASS_CONFIG</span><span class="o">,</span> <span class="nc">Serdes</span><span class="o">.</span><span class="na">String</span><span class="o">().</span><span class="na">getClass</span><span class="o">());</span>
+    <span class="n">props</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">StreamsConfig</span><span class="o">.</span><span class="na">DEFAULT_VALUE_SERDE_CLASS_CONFIG</span><span class="o">,</span> <span class="nc">Serdes</span><span class="o">.</span><span class="na">String</span><span class="o">().</span><span class="na">getClass</span><span class="o">());</span>
+
+    <span class="kd">final</span> <span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-input"</span><span class="o">);</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">peek</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"key:%s, value:%s\n"</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">mapValues</span><span class="o">(</span><span class="n">value</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">()).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">KeyValue</span><span class="o">.</span><span class="na">pair</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">(),</span> <span class="n">value</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">())).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">filter</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="o">).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">selectKey</span><span class="o">((</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">).</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+
+    <span class="kd">final</span> <span class="nc">Topology</span> <span class="n">topology</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="nc">KafkaStreams</span> <span class="n">streams</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">KafkaStreams</span><span class="o">(</span><span class="n">topology</span><span class="o">,</span> <span class="n">props</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="nc">CountDownLatch</span> <span class="n">latch</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CountDownLatch</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+
+    <span class="nc">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">addShutdownHook</span><span class="o">(</span><span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="s">"streams-shutdown-hook"</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">streams</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="n">latch</span><span class="o">.</span><span class="na">countDown</span><span class="o">();</span>
+      <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">streams</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+      <span class="n">latch</span><span class="o">.</span><span class="na">await</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
