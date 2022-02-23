@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>送信元メールアドレスの検証</title>
+    <meta property="og:title" content="送信元メールアドレスの検証">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/471/">
+    <meta property="og:image" content="https://blog.naoty.dev/471/./spf.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">送信元メールアドレスの検証</h1>
+          <p class="metadata">
+            <time datetime="2022-02-23T13:03:00.000+0000">2022-02-23 13:03</time>
+            <a href="/mail/">#mail</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>なりすましメールかどうかを見分けるために送信元メールアドレスを検証する仕組みについて調べたので自分なりに整理してみた。もっとわかりやすい記事はたくさんあるので、これは自分のためのメモにすぎない。</p>
+<h1>エンベロープFromとヘッダFrom</h1>
+<p>検証する仕組みを説明する前に、なぜなりすましが可能なのか前提を踏まえておく必要がある。</p>
+<p>送信元メールアドレスと呼ばれるものは、エンベロープFromとヘッダFromの2つ存在する。エンベロープFromはメールの送信に使われる情報で、ヘッダFromはメールクライアントで表示される情報だ。封筒に書かれた送信元と手紙に書かれた送信元が違う、といった説明がよく見られるけど分かりやすい例えだと思う。</p>
+<p>エンベロープFromとヘッダFromは異なるアドレスを設定できる。2つが異なることによって、例えば、転送機能（転送者のアドレスがエンベロープFrom、転送者にメール送信したアドレスがヘッダFromになる）やメールの送信代行といったことが可能になる。一方で、悪意のある攻撃者が別人のアドレスをヘッダFromに設定することでなりすますことが可能になる。</p>
+<p>また、ヘッダFromだけでなく、エンベロープFromも悪意のある攻撃者によってなりすまされる可能性がある。エンベロープFromはSMTPの<code>MAIL FROM</code>コマンドによって設定されるが、SMTPではそのメールアドレスの所有者本人が設定しているかどうかを検証できない。</p>
+<h1>SPF</h1>
+<p>SPFはエンベロープFromにあるメールアドレスが送信者本人のものかどうかをDNSを利用して検証する。</p>
+<p><a href="./spf.png" target="_blank"><img src="./spf.png" alt="spf" style="max-width:100%;"></a></p>
+<ul>
+<li>受信者はエンベロープFromのドメイン（図だとnaoty.dev）のDNSサーバーにSPFレコードを問い合わせる。</li>
+<li>SPFレコードにはそのドメインで送信できるIPアドレスが記載されている。</li>
+<li>受信者は送信者のIPアドレスがSPFレコードに含まれているか確認する。含まれていなければ、なりすましと見なす。</li>
+</ul>
+<h1>DKIM</h1>
+<p>DKIMは公開鍵暗号を使ってメールの中身が改ざんされていないかを検証する。</p>
+<p><a href="./dkim.png" target="_blank"><img src="./dkim.png" alt="dkim" style="max-width:100%;"></a></p>
+<ul>
+<li>送信者はあらかじめDNSに公開鍵を登録しておく。</li>
+<li>送信者は秘密鍵を使ってメールのメッセージ等から電子署名を生成し、<code>DKIM-Signature</code>ヘッダに設定してメールを送信する。その際、公開鍵が登録されたDNSサーバーや公開鍵の識別子（セレクタ）を<code>DKIM-Signature</code>に設定する。</li>
+<li>受信者は<code>DKIM-Signature</code>で指定されたDNSサーバーから公開鍵を取得し、電子署名をデコードしてハッシュ値を取り出す。もし、メールが改ざんされていれば受信したメールから計算したハッシュ値と一致しないはずなので、改ざんされたと見なす。</li>
+</ul>
+<h1>DMARC</h1>
+<p>DMARCはSPFやDKIMで認証に失敗したメールをどう扱うかを送信者側で設定できる仕組みを提供する。</p>
+<p><a href="./dmarc.png" target="_blank"><img src="./dmarc.png" alt="dmarc" style="max-width:100%;"></a></p>
+<ul>
+<li>送信者はあらかじめDMARCレコードをDNSに登録しておく。</li>
+<li>受信者はDMARCレコードを取得して、そこにある<code>p</code>タグで指定された方法で認証に失敗したメールを処理する。</li>
+<li>受信者は認証に失敗したメールに関するレポートをDMARCレコードで設定されたメールアドレスに送る。レポートを集めることで、認証に失敗したメールがどういったものなのか（認証に失敗してはいけないメールを失敗させていないか等）を知ることができる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
