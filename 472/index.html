@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Streams入門2</title>
+    <meta property="og:title" content="Kafka Streams入門2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/472/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Kafka Streams入門2</h1>
+          <p class="metadata">
+            <time datetime="2022-02-27T10:24:00.000+0000">2022-02-27 10:24</time>
+            <a href="/kafka/">#kafka</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="/470/">前回</a>はstatelessな操作を試してみたので、statefulな操作のうち簡単なものだけ動かしてみた。</p>
+<p>sourceとなるtopicには以下のようにしてレコードを流している。</p>
+<pre lang="bash" class="highlight highlight-bash">% <span class="nb">echo</span> <span class="s2">"a:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"a:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"b:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-input <span class="nt">-K</span> :
+</pre>
+<h1>count</h1>
+<pre lang="java" class="highlight highlight-java"><span class="kd">final</span> <span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+<span class="kd">final</span> <span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-input"</span><span class="o">);</span>
+<span class="n">source</span><span class="o">.</span><span class="na">groupByKey</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">count</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">toStream</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+</pre>
+<pre><code>[KTABLE-TOSTREAM-0000000003]: a, 1
+[KTABLE-TOSTREAM-0000000003]: a, 2
+[KTABLE-TOSTREAM-0000000003]: b, 1
+</code></pre>
+<h1>reduce</h1>
+<pre lang="java" class="highlight highlight-java"><span class="kd">final</span> <span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+<span class="kd">final</span> <span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-input"</span><span class="o">);</span>
+<span class="n">source</span><span class="o">.</span><span class="na">groupByKey</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">reduce</span><span class="o">((</span><span class="n">result</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">result</span> <span class="o">+</span> <span class="n">value</span><span class="o">)</span>
+      <span class="o">.</span><span class="na">toStream</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+</pre>
+<pre><code>[KTABLE-TOSTREAM-0000000003]: a, naoty
+[KTABLE-TOSTREAM-0000000003]: a, naotynaoty
+[KTABLE-TOSTREAM-0000000003]: b, naoty
+</code></pre>
+<h1>aggregate</h1>
+<pre lang="java" class="highlight highlight-java"><span class="kd">final</span> <span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+<span class="kd">final</span> <span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-input"</span><span class="o">);</span>
+<span class="n">source</span><span class="o">.</span><span class="na">groupByKey</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">aggregate</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="s">""</span><span class="o">,</span> <span class="o">(</span><span class="n">resultKey</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">result</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">result</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">toStream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+</pre>
+<pre><code>[KTABLE-TOSTREAM-0000000003]: a, �������NAOTY
+[KTABLE-TOSTREAM-0000000003]: a, �������NAOTYNAOTY
+[KTABLE-TOSTREAM-0000000003]: b, �������NAOTY
+</code></pre>
+<p>なぜか先頭にゴミが入ってしまった。</p>
+<h1>整理</h1>
+<ul>
+<li>
+<code>groupByKey</code>, <code>group</code>などのメソッドで集約する単位を定義した<code>KGroupedStream</code>を返す。</li>
+<li>
+<code>KGroupedStream</code>に対して<code>count</code>などの集約するメソッドが実行でき、これらは<code>KTable</code>を返す。上流から流れてきたレコードはState Storeと呼ばれるローカルのキーバリューストアに保存され、更新があったレコードを下流に流す。</li>
+<li>
+<code>KTable</code>に対して<code>toStream()</code>を実行すると、更新されたレコードが流れる<code>KStream</code>が返る。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
