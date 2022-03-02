@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Streams入門4(Join)</title>
+    <meta property="og:title" content="Kafka Streams入門4(Join)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/474/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Kafka Streams入門4(Join)</h1>
+          <p class="metadata">
+            <time datetime="2022-03-01T22:00:00.000+0000">2022-03-01 22:00</time>
+            <a href="/kafka/">#kafka</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="/473/">前回</a>とりあげたwindowに続いて、joinも動かしながら理解してみる。joinはいろいろなバリエーションがあるため、基本的なinner joinに絞ってKStream同士の場合とKStreamとKTableの場合を動かしてみた。</p>
+<h1>KStream同士のinner join</h1>
+<pre lang="java" class="highlight highlight-java"><span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+<span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">left</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-left-input"</span><span class="o">);</span>
+<span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">right</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-right-input"</span><span class="o">);</span>
+<span class="n">left</span><span class="o">.</span><span class="na">join</span><span class="o">(</span>
+      <span class="n">right</span><span class="o">,</span>
+      <span class="o">(</span><span class="n">leftValue</span><span class="o">,</span> <span class="n">rightValue</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="s">"left: %s, right: %s"</span><span class="o">.</span><span class="na">formatted</span><span class="o">(</span><span class="n">leftValue</span><span class="o">,</span> <span class="n">rightValue</span><span class="o">),</span>
+      <span class="nc">JoinWindows</span><span class="o">.</span><span class="na">ofTimeDifferenceWithNoGrace</span><span class="o">(</span><span class="nc">Duration</span><span class="o">.</span><span class="na">ofSeconds</span><span class="o">(</span><span class="mi">30</span><span class="o">))</span>
+    <span class="o">)</span>
+    <span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+</pre>
+<pre lang="bash" class="highlight highlight-bash">% <span class="nb">echo</span> <span class="s2">"hello:alice"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-left-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"hello:bob"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-right-input <span class="nt">-K</span> :
+<span class="c">#=&gt; [KSTREAM-MERGE-0000000006]: hello, left: alice, right: bob</span>
+% <span class="nb">echo</span> <span class="s2">"hello:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-left-input <span class="nt">-K</span> :
+<span class="c">#=&gt; [KSTREAM-MERGE-0000000006]: hello, left: naoty, right: bob</span>
+% <span class="nb">echo</span> <span class="s2">"hello:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-right-input <span class="nt">-K</span> :
+<span class="c">#=&gt; [KSTREAM-MERGE-0000000006]: hello, left: naoty, right: naoty</span>
+</pre>
+<pre lang="bash" class="highlight highlight-bash"><span class="c"># 30秒経過後</span>
+% <span class="nb">echo</span> <span class="s2">"hello:alice"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-left-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"hello:bob"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-right-input <span class="nt">-K</span> :
+<span class="c">#=&gt; [KSTREAM-MERGE-0000000006]: hello, left: alice, right: bob</span>
+</pre>
+<ul>
+<li>キーが一致するレコードがもう片方のKStreamに流れるのをwindowで指定した期間だけ待つ。</li>
+<li>キーが一致するレコードを受けとったら、joinerを呼んでその結果を下流に流す。</li>
+<li>期間内にキーが一致するレコードを受け取らなかったら、windowが閉じる。</li>
+</ul>
+<h1>KStreamとKTableのinner join</h1>
+<pre lang="java" class="highlight highlight-java"><span class="nc">StreamsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamsBuilder</span><span class="o">();</span>
+<span class="nc">KStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">left</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="s">"streams-plaintext-left-input"</span><span class="o">);</span>
+<span class="nc">KTable</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">right</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">table</span><span class="o">(</span><span class="s">"streams-plaintext-right-input"</span><span class="o">);</span>
+<span class="n">left</span><span class="o">.</span><span class="na">join</span><span class="o">(</span>
+      <span class="n">right</span><span class="o">,</span>
+      <span class="o">(</span><span class="n">leftValue</span><span class="o">,</span> <span class="n">rightValue</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="s">"left: %s, right: %s"</span><span class="o">.</span><span class="na">formatted</span><span class="o">(</span><span class="n">leftValue</span><span class="o">,</span> <span class="n">rightValue</span><span class="o">),</span>
+    <span class="o">)</span>
+    <span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">Printed</span><span class="o">.</span><span class="na">toSysOut</span><span class="o">());</span>
+</pre>
+<pre lang="bash" class="highlight highlight-bash">% <span class="nb">echo</span> <span class="s2">"hello:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-left-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"hello:alice"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-right-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"hello:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-left-input <span class="nt">-K</span> :
+<span class="c">#=&gt; [KSTREAM-JOIN-0000000004]: hello, left: naoty, right: alice</span>
+% <span class="nb">echo</span> <span class="s2">"hello:bob"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-right-input <span class="nt">-K</span> :
+% <span class="nb">echo</span> <span class="s2">"hello:naoty"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-left-input <span class="nt">-K</span> :
+<span class="c">#=&gt; [KSTREAM-JOIN-0000000004]: hello, left: naoty, right: bob</span>
+</pre>
+<ul>
+<li>KTableとのjoinの場合は時間の制限が必要ないため、windowは指定しなくていい。</li>
+<li>KStreamで受け取ったレコードのキーがKTableにも存在すれば、下流にjoinerの結果を流す。</li>
+<li>KTableの更新時には下流にはレコードが流れないが、次にKStreamで同じキーを受け取った場合には更新が反映されている。</li>
+</ul>
+<h1>tips：kcatでtombstoneを送る方法</h1>
+<p>KTableのレコードを削除したい場合などでkcatでtombstoneを送りたい場合、ただ空文字列を指定するだけでは空文字列が登録されるだけなので、<code>-Z</code>オプションが必要になる。</p>
+<pre lang="bash" class="highlight highlight-bash">% <span class="nb">echo</span> <span class="s2">"hello:"</span> | kcat <span class="nt">-b</span> localhost:9092 <span class="nt">-t</span> streams-plaintext-right-input <span class="nt">-K</span> : <span class="nt">-Z</span>
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -10,6 +10,70 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/474/</id>
+    <link href="https://blog.naoty.dev/474/"/>
+    <summary>&lt;p&gt;&lt;a href=&quot;/473/&quot;&gt;前回&lt;/a&gt;とりあげたwindowに続いて、joinも動かしながら理解してみる。joinはいろいろなバリエーションがあるため、基本的なinner joinに絞ってKStream同士の場合とKStreamとKTableの場合を動かしてみた。&lt;/p&gt;
+&lt;h1&gt;KStream同士のinner join&lt;/h1&gt;
+&lt;pre lang=&quot;java&quot; class=&quot;highlight highlight-java&quot;&gt;&lt;span class=&quot;nc&quot;&gt;StreamsBuilder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StreamsBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;KStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;streams-plaintext-left-input&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;KStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;streams-plaintext-right-input&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;leftValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rightValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;left: %s, right: %s&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;formatted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;leftValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rightValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;nc&quot;&gt;JoinWindows&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ofTimeDifferenceWithNoGrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ofSeconds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Printed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toSysOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:alice&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-left-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:bob&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-right-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; [KSTREAM-MERGE-0000000006]: hello, left: alice, right: bob&lt;/span&gt;
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:naoty&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-left-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; [KSTREAM-MERGE-0000000006]: hello, left: naoty, right: bob&lt;/span&gt;
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:naoty&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-right-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; [KSTREAM-MERGE-0000000006]: hello, left: naoty, right: naoty&lt;/span&gt;
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# 30秒経過後&lt;/span&gt;
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:alice&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-left-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:bob&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-right-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; [KSTREAM-MERGE-0000000006]: hello, left: alice, right: bob&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;キーが一致するレコードがもう片方のKStreamに流れるのをwindowで指定した期間だけ待つ。&lt;/li&gt;
+&lt;li&gt;キーが一致するレコードを受けとったら、joinerを呼んでその結果を下流に流す。&lt;/li&gt;
+&lt;li&gt;期間内にキーが一致するレコードを受け取らなかったら、windowが閉じる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;KStreamとKTableのinner join&lt;/h1&gt;
+&lt;pre lang=&quot;java&quot; class=&quot;highlight highlight-java&quot;&gt;&lt;span class=&quot;nc&quot;&gt;StreamsBuilder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StreamsBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;KStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;streams-plaintext-left-input&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;KTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;streams-plaintext-right-input&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;leftValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rightValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;left: %s, right: %s&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;formatted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;leftValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rightValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Printed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toSysOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;/pre&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:naoty&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-left-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:alice&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-right-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:naoty&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-left-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; [KSTREAM-JOIN-0000000004]: hello, left: naoty, right: alice&lt;/span&gt;
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:bob&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-right-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:naoty&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-left-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; :
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; [KSTREAM-JOIN-0000000004]: hello, left: naoty, right: bob&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;KTableとのjoinの場合は時間の制限が必要ないため、windowは指定しなくていい。&lt;/li&gt;
+&lt;li&gt;KStreamで受け取ったレコードのキーがKTableにも存在すれば、下流にjoinerの結果を流す。&lt;/li&gt;
+&lt;li&gt;KTableの更新時には下流にはレコードが流れないが、次にKStreamで同じキーを受け取った場合には更新が反映されている。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;tips：kcatでtombstoneを送る方法&lt;/h1&gt;
+&lt;p&gt;KTableのレコードを削除したい場合などでkcatでtombstoneを送りたい場合、ただ空文字列を指定するだけでは空文字列が登録されるだけなので、&lt;code&gt;-Z&lt;/code&gt;オプションが必要になる。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;% &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello:&quot;&lt;/span&gt; | kcat &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; localhost:9092 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; streams-plaintext-right-input &lt;span class=&quot;nt&quot;&gt;-K&lt;/span&gt; : &lt;span class=&quot;nt&quot;&gt;-Z&lt;/span&gt;
+&lt;/pre&gt;</summary>
+    <title>Kafka Streams入門4(Join)</title>
+    <updated>2022-03-01T22:00:00+00:00</updated>
+    <dc:date>2022-03-01T22:00:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/473/</id>
     <link href="https://blog.naoty.dev/473/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;/472/&quot;&gt;前回&lt;/a&gt;では簡単なstatefulな操作を扱ったので、今回はwindowを伴う操作を動かしてみた。&lt;/p&gt;
