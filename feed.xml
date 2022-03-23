@@ -10,6 +10,27 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/475/</id>
+    <link href="https://blog.naoty.dev/475/"/>
+    <summary>&lt;p&gt;最近は&lt;a href=&quot;https://exercism.org&quot;&gt;Exercism&lt;/a&gt;でJavaの練習をしているのだけど、Streamの扱いで少しハマったので頭を整理して定着させるためにブログを書いておきたい。&lt;/p&gt;
+&lt;pre lang=&quot;java&quot; class=&quot;highlight highlight-java&quot;&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;acronym&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Arrays&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;substring&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toUpperCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]::&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;Arrays.stream()&lt;/code&gt;や&lt;code&gt;Stream.of()&lt;/code&gt;で配列からStreamへ変換できる。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;toArray()&lt;/code&gt;でStreamから配列へ変換できる。ただし、引数を指定しないと&lt;code&gt;Object[]&lt;/code&gt;を返すため、&lt;code&gt;IntStream&lt;/code&gt;を渡す必要がある。&lt;code&gt;IntStream&lt;/code&gt;は配列のサイズを表すintegerを受け取ってStreamの要素の型の配列を返す関数で、この例だと&lt;code&gt;String[]::new&lt;/code&gt;にあたる。&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>Streamと配列の変換</title>
+    <updated>2022-03-23T09:48:00+00:00</updated>
+    <dc:date>2022-03-23T09:48:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/474/</id>
     <link href="https://blog.naoty.dev/474/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;/473/&quot;&gt;前回&lt;/a&gt;とりあげたwindowに続いて、joinも動かしながら理解してみる。joinはいろいろなバリエーションがあるため、基本的なinner joinに絞ってKStream同士の場合とKStreamとKTableの場合を動かしてみた。&lt;/p&gt;

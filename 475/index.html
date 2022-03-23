@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamと配列の変換</title>
+    <meta property="og:title" content="Streamと配列の変換">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/475/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Streamと配列の変換</h1>
+          <p class="metadata">
+            <time datetime="2022-03-23T09:48:00.000+0000">2022-03-23 09:48</time>
+            <a href="/java/">#java</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近は<a href="https://exercism.org">Exercism</a>でJavaの練習をしているのだけど、Streamの扱いで少しハマったので頭を整理して定着させるためにブログを書いておきたい。</p>
+<pre lang="java" class="highlight highlight-java"><span class="nc">String</span><span class="o">[]</span> <span class="nf">acronym</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="nc">Arrays</span>
+    <span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">text</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">" "</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">word</span> <span class="o">-&gt;</span> <span class="n">word</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">).</span><span class="na">toUpperCase</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="nc">String</span><span class="o">[]::</span><span class="k">new</span><span class="o">);</span>
+<span class="o">};</span>
+</pre>
+<ul>
+<li>
+<code>Arrays.stream()</code>や<code>Stream.of()</code>で配列からStreamへ変換できる。</li>
+<li>
+<code>toArray()</code>でStreamから配列へ変換できる。ただし、引数を指定しないと<code>Object[]</code>を返すため、<code>IntStream</code>を渡す必要がある。<code>IntStream</code>は配列のサイズを表すintegerを受け取ってStreamの要素の型の配列を返す関数で、この例だと<code>String[]::new</code>にあたる。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
