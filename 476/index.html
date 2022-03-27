@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラムダ式・メソッド参照</title>
+    <meta property="og:title" content="ラムダ式・メソッド参照">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/476/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ラムダ式・メソッド参照</h1>
+          <p class="metadata">
+            <time datetime="2022-03-27T19:56:00.000+0000">2022-03-27 19:56</time>
+            <a href="/java/">#java</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>はるか昔にAndroidアプリを開発していたときはJava 1.6を使っており、当時はラムダ式などはなく無名クラスを実装するしかなかった。Javaを書くのはそれ以来なので、ラムダ式やメソッド参照を確実に理解しておきたい。</p>
+<h1>関数型インターフェイス</h1>
+<p>ラムダ式の前に関数型インターフェイスを理解する必要がある。関数型インターフェイスは実装すべきメソッドが1つだけのインターフェイスだ。</p>
+<pre lang="java" class="highlight highlight-java"><span class="kd">interface</span> <span class="nc">Function</span> <span class="o">{</span>
+  <span class="no">R</span> <span class="nf">apply</span><span class="o">(</span><span class="no">T</span> <span class="n">t</span><span class="o">);</span>
+<span class="o">}</span>
+</pre>
+<p><code>java.util.function</code>パッケージに汎用的な関数型インターフェイスが定義されており、以下のような命名規則に従っている。</p>
+<ul>
+<li>
+<code>*Function</code>: 引数を受け取って、戻り値を返す</li>
+<li>
+<code>*Consumer</code>: 引数を受け取って、戻り値を返さない（副作用をおこす）</li>
+<li>
+<code>*Predicate</code>: 引数を受け取って、booleanを返す</li>
+<li>
+<code>*Supplier</code>: 引数を受け取らず、戻り値を返す</li>
+</ul>
+<p>さらに、引数を2つ受け取る場合は<code>BiFunction</code>のように<code>Bi*</code>というprefixがつき、特定の型を扱う場合は<code>IntConsumer</code>というように型名がくっつく。</p>
+<h1>ラムダ式</h1>
+<p>関数型インターフェイスを実装する際に、以前のように無名クラスを定義する代わりに以下のようにラムダ式を渡せる。</p>
+<p>以下の2つのコードは同じ結果になる。</p>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">words</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">b</span><span class="o">));</span>
+</pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">words</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="nc">String</span> <span class="n">a</span><span class="o">,</span> <span class="nc">String</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">});</span>
+</pre>
+<p><code>Comparator</code>インターフェイスも<code>compare</code>しか抽象メソッドをもたない関数型インターフェイスで、<code>compare</code>の実装部分をラムダ式として渡すことができる。</p>
+<h1>メソッド参照</h1>
+<p>ラムダ式を定義する際にただメソッドを呼び出しているだけの場合、メソッド参照を使うことでさらに簡潔に書けるようになる。</p>
+<p>上記の例だと、ラムダ式はただ<code>compareTo()</code>を呼び出しているだけなので、メソッド参照を使って下のように書ける。</p>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">words</span><span class="o">,</span> <span class="nl">String:</span><span class="o">:</span><span class="n">compareTo</span><span class="o">);</span>
+</pre>
+<p>メソッド参照は4種類ある。以下の2つ並んだコードはいずれも同じ結果になる。</p>
+<h2>staticメソッドへの参照</h2>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">).</span><span class="na">map</span><span class="o">(</span><span class="n">text</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">text</span><span class="o">));</span>
+</pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"1"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">).</span><span class="na">map</span><span class="o">(</span><span class="nl">Integer:</span><span class="o">:</span><span class="n">valueOf</span><span class="o">);</span>
+</pre>
+<h2>特定のオブジェクトに対するインスタンスメソッドへの参照</h2>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">forEach</span><span class="o">(</span><span class="n">lang</span> <span class="o">-&gt;</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lang</span><span class="o">));</span>
+</pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">forEach</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre>
+<h2>引数のオブジェクトに対するインスタンスメソッドの参照</h2>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">map</span><span class="o">(</span><span class="n">lang</span> <span class="o">-&gt;</span> <span class="n">lang</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">());</span>
+</pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">map</span><span class="o">(</span><span class="nl">String:</span><span class="o">:</span><span class="n">toUpperCase</span><span class="o">);</span>
+</pre>
+<h2>コンストラクタへの参照</h2>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">map</span><span class="o">(</span><span class="n">lang</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">.</span><span class="na">new</span><span class="o">(</span><span class="n">lang</span><span class="o">));</span>
+</pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">map</span><span class="o">(</span><span class="nl">StringBuilder:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</pre>
+<h1>おさらい</h1>
+<p>関数型インターフェイスや4種類のメソッド参照を理解できると、<code>Stream#collect</code>が理解できてくる。下のコードは同じ結果になる。</p>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">collect</span><span class="o">(</span>
+  <span class="o">()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(),</span>
+  <span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">lang</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lang</span><span class="o">),</span>
+  <span class="o">(</span><span class="n">list1</span><span class="o">,</span> <span class="n">list2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">list1</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">list2</span><span class="o">)</span>
+<span class="o">);</span>
+</pre>
+<pre lang="java" class="highlight highlight-java"><span class="nc">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"java"</span><span class="o">,</span> <span class="s">"ruby"</span><span class="o">).</span><span class="na">collect</span><span class="o">(</span><span class="nl">ArrayList:</span><span class="o">:</span><span class="k">new</span><span class="o">,</span> <span class="nl">ArrayList:</span><span class="o">:</span><span class="n">add</span><span class="o">,</span> <span class="nl">ArrayList:</span><span class="o">:</span><span class="n">addAll</span><span class="o">);</span>
+</pre>
+<ul>
+<li>
+<code>collect</code>の引数は順に<code>Supplier</code>, <code>BiConsumer</code>, <code>BiConsumer</code>となっている。上述のとおり、<code>Supplier</code>は引数を受け取らず、今回だと<code>ArrayList</code>を返す。<code>BiConsumer</code>は<code>Bi</code>とあるとおり2つの引数を受け取り、戻り値がない。</li>
+<li>
+<code>collect</code>の第一引数ではコンストラクタへの参照を利用し、第二、第三引数ではラムダ式の引数に対するインスタンスメソッドへの参照を応用している。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
