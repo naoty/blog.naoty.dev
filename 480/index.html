@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Ready GraphQL</title>
+    <meta property="og:title" content="Production Ready GraphQL">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/480/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Production Ready GraphQL</h1>
+          <p class="metadata">
+            <time datetime="2022-06-14T22:04:00.000+0000">2022-06-14 22:04</time>
+            <a href="/book/">#book</a>
+            <a href="/graphql/">#graphql</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、GraphQLのフロントエンドとバックエンドを実装していて、GraphQLのベストプラクティスを学んでみようと思い、<a href="https://productionreadygraphql.myshopify.com/">Production Ready GraphQL</a>という本をななめ読みした。</p>
+<h1>Client First</h1>
+<p>RESTful APIを設計する際、ドメインからリソースを抽出してCRUDを考えていくことになるけど、GraphQLではそういったリソース中心の設計ではなく、クライアントのユースケースを中心に設計していくことになる。</p>
+<p>分かりやすい例が、作成や更新に対する考え方の違いで、RESTful APIであれば、CREATEとUPDATEを同じようなパラメータを受け取るように実装するけど、GraphQLでは</p>
+<blockquote>
+<p>coarse-grained create mutation and finer-grained mutations to update an entity</p>
+</blockquote>
+<p>と本書で表現されているように、作成時は対象のオブジェクトの属性をまとめて受け取れるようにし、更新時は属性ごとに細かく更新できるようにすることが多い。これは、なにかを更新するときはすべての属性を変更するわけではなく一部の属性だけを更新するユースケースが圧倒的に多いからだ。</p>
+<h1>Expressive Schemas</h1>
+<p>GraphQLはnullability, enum, interface, unionといった静的型付け言語のような型システムを持っていて、表現力の高いスキーマを定義できる。これによって、例えば、不整合なデータを返さないようにスキーマで強制することができたり、クライアントからの入力に制約を設けることで、アプリケーション側で入力のバリデーションを実装する手間を省くことができるなどのメリットがある。</p>
+<p>個人的に一番印象的だったのは、mutationの結果をunionで表現する使い方だった。</p>
+<pre lang="graphql" class="highlight highlight-graphql"><span class="k">type</span><span class="w"> </span><span class="n">Mutation</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">signUp</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">!,</span><span class="w"> </span><span class="n">password</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">!):</span><span class="w"> </span><span class="n">SignUpPayload</span><span class="p">!</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="k">union</span><span class="w"> </span><span class="n">SignUpPayload</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">SignUpSuccess</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="n">UserNameTaken</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="n">PasswordTooWeek</span><span class="w">
+</span></pre>
+<p><code>signUp</code>の結果は<code>SignUpSuccess</code>, <code>UserNameTaken</code>, <code>PasswordTooWeek</code>のいずれかの型で表現できる。このように定義するメリットとしては、nullableなフィールドを用意する必要がないことが挙げられる。</p>
+<p>以下のようなスキーマで結果を表現するのがよくある形だが、sign upに失敗した場合には<code>account</code>フィールドがnullになるなど、ある程度のnullabilityを許容することになったり、さまざまな種類のエラーを<code>UserError</code>という抽象的な型で表現する必要が出てくる。</p>
+<pre lang="graphql" class="highlight highlight-graphql"><span class="k">type</span><span class="w"> </span><span class="n">SignUpPayload</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">userErrors</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">UserError</span><span class="p">!]!</span><span class="w">
+  </span><span class="n">account</span><span class="p">:</span><span class="w"> </span><span class="n">Account</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>そうすると、「<code>account === null</code>の場合は失敗である」という判断をクライアントアプリケーションに委ねることになる。union型を使うことで、より明確にエラーとその種類をクライアントに返すことができる。</p>
+<p>当然、unionを使った表現にもデメリットがあるわけだけど、これ以上は長くなるので、ここまでにする。</p>
+<h1>Resolver Design</h1>
+<p>本書はスキーマのベストプラクティスだけでなく、GraphQLサービスのバックエンドを実装する際の設計についてもある程度触れられている。その中でも、Resolverの設計について触れられている章があった。</p>
+<blockquote>
+<p>A great resolver often contains very little code. It deals with user input, calls down to our domain layer, and transforms the result into an API result.</p>
+</blockquote>
+<p>Resolverの責務とはこのようなことで、Resolverにドメインロジックを書いてはいけない。</p>
+<p>ただ、これはRESTful APIを実装する際にcontrollerにドメインロジックを書かないみたいなことで、さほど驚きはなかった。やっぱりそうだよね、という確認ができてよかった。</p>
+<hr>
+<p>本書は、これ以外にもセキュリティ、パフォーマンス、バージョニングなど多岐にわたって解説されており、まだすべて目を通せていないものの、現時点でかなり良い本であることは間違いないので、GraphQLとの向き合い方に悩んでいる方にはオススメしたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
