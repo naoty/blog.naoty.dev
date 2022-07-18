@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外部キー制約によるデッドロックの再現</title>
+    <meta property="og:title" content="外部キー制約によるデッドロックの再現">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/481/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">外部キー制約によるデッドロックの再現</h1>
+          <p class="metadata">
+            <time datetime="2022-07-18T11:35:00.000+0000">2022-07-18 11:35</time>
+            <a href="/mysql/">#mysql</a>
+            <a href="/rails/">#rails</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>デッドロックをテキストや図で理解するのはなかなか難しかったので、最小限のアプリケーションコードで再現できないか試してみた。こうすることで、実際に自分がデッドロックを引き起こすコードを書かないように注意できたり、同僚が書いたコードをレビューできるようになるだろう。</p>
+<p>今回は見落としがちな外部キー制約がからむデッドロックを再現してみた。</p>
+<p>再現にあたりなるべく簡潔に書けるようにRubyとActiveRecordを使い、デッドロックが起きたかどうかをテストによって検証する。以下のコードはローカルにMySQLが起動していれば動作する。</p>
+<pre lang="ruby" class="highlight highlight-ruby"><span class="nb">require</span> <span class="s1">'bundler/inline'</span>
+
+<span class="n">gemfile</span> <span class="k">do</span>
+  <span class="n">source</span> <span class="s1">'https://rubygems.org'</span>
+
+  <span class="n">gem</span> <span class="s1">'minitest'</span>
+  <span class="n">gem</span> <span class="s1">'activerecord'</span><span class="p">,</span> <span class="ss">require: </span><span class="s1">'active_record'</span>
+  <span class="n">gem</span> <span class="s1">'mysql2'</span>
+<span class="k">end</span>
+
+<span class="nb">require</span> <span class="s1">'minitest/autorun'</span>
+<span class="nb">require</span> <span class="s1">'logger'</span>
+
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">logger</span> <span class="o">=</span> <span class="no">Logger</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="no">STDOUT</span><span class="p">)</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">adapter: </span><span class="s1">'mysql2'</span><span class="p">,</span> <span class="ss">host: </span><span class="s1">'127.0.0.1'</span><span class="p">,</span> <span class="ss">username: </span><span class="s1">'root'</span><span class="p">,</span> <span class="ss">password: </span><span class="s1">'password'</span> <span class="p">}</span>
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">establish_connection</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">connection</span><span class="p">.</span><span class="nf">recreate_database</span><span class="p">(</span><span class="s1">'mysql_test'</span><span class="p">)</span>
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">establish_connection</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="nf">merge</span><span class="p">({</span> <span class="ss">database: </span><span class="s1">'mysql_test'</span> <span class="p">}))</span>
+
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Schema</span><span class="p">.</span><span class="nf">define</span> <span class="k">do</span>
+  <span class="n">create_table</span> <span class="ss">:users</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">datetime</span> <span class="ss">:last_tweeted_at</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">datetime</span> <span class="ss">:last_followed_at</span>
+  <span class="k">end</span>
+
+  <span class="n">create_table</span> <span class="ss">:tweets</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="ss">:body</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span>
+    <span class="n">t</span><span class="p">.</span><span class="nf">belongs_to</span> <span class="ss">:user</span><span class="p">,</span> <span class="ss">foreign_key: </span><span class="kp">true</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:tweets</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Tweet</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:user</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">MysqlTest</span> <span class="o">&lt;</span> <span class="no">Minitest</span><span class="o">::</span><span class="no">Test</span>
+  <span class="k">def</span> <span class="nf">test_deadlock_by_foreign_keys</span>
+    <span class="n">assert_raises</span><span class="p">(</span><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Deadlocked</span><span class="p">)</span> <span class="k">do</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">name: </span><span class="s1">'naoty'</span><span class="p">)</span>
+
+      <span class="no">Thread</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span>
+        <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">transaction</span> <span class="k">do</span>
+          <span class="c1"># (1)外部キー制約により親テーブルのレコードに対して共有ロックを取得する</span>
+          <span class="n">user</span><span class="p">.</span><span class="nf">tweets</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">body: </span><span class="s1">'hello'</span><span class="p">)</span>
+          <span class="nb">sleep</span> <span class="mi">1</span>
+          <span class="c1"># (3)排他ロックを取得するため、(2)のロック解除待ち -&gt; デッドロック</span>
+          <span class="n">user</span><span class="p">.</span><span class="nf">update!</span><span class="p">(</span><span class="ss">last_tweeted_at: </span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">transaction</span> <span class="k">do</span>
+        <span class="nb">sleep</span> <span class="mi">1</span>
+        <span class="c1"># (2)排他ロックを取得するため、(1)のロック解除待ち</span>
+        <span class="n">user</span><span class="p">.</span><span class="nf">update!</span><span class="p">(</span><span class="ss">last_followed_at: </span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">test_avoid_deadlock_by_foreign_keys</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">name: </span><span class="s1">'naoty'</span><span class="p">)</span>
+
+    <span class="no">Thread</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span>
+      <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">transaction</span> <span class="k">do</span>
+        <span class="c1"># (1)親テーブルのレコードに排他ロックを取得する</span>
+        <span class="n">user</span><span class="p">.</span><span class="nf">lock!</span>
+        <span class="c1"># (2)排他ロックを取得済み</span>
+        <span class="n">user</span><span class="p">.</span><span class="nf">tweets</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">body: </span><span class="s1">'hello'</span><span class="p">)</span>
+        <span class="nb">sleep</span> <span class="mi">1</span>
+        <span class="c1"># (4)排他ロックを取得済みなので、ロックの解除を待つ必要がない -&gt; デッドロックは起きない</span>
+        <span class="n">user</span><span class="p">.</span><span class="nf">update!</span><span class="p">(</span><span class="ss">last_tweeted_at: </span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">transaction</span> <span class="k">do</span>
+      <span class="nb">sleep</span> <span class="mi">1</span>
+      <span class="c1"># (3)排他ロックを取得するため、(1)のロック解除待ち</span>
+      <span class="n">user</span><span class="p">.</span><span class="nf">update!</span><span class="p">(</span><span class="ss">last_followed_at: </span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p><code>#test_deadlock_by_foreign_keys</code>はデッドロックを再現させるテスト、<code>#test_avoid_deadlock_by_foreign_keys</code>はそれを避ける実装のテスト（例外が起きないテストは何もassertする必要がない）を表している。</p>
+<p>比べてみると、子テーブルへのINSERTの前に親テーブルのレコードに排他ロックを取得しておくことで、デッドロックを回避できていることがわかる。</p>
+<p>また、子テーブルを持つ親テーブルに<code>last_tweeted_at</code>や<code>last_followed_at</code>といった更新を必要とするカラムを定義すると、デッドロックを引き起こしやすいこともわかる。</p>
+<hr>
+<p>今回は、外部キー制約が関わるデッドロックを再現してみたが、他のパターンについても同様の方法で再現させることでデッドロックについて理解を深めていきたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
