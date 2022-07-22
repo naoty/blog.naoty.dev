@@ -3705,7 +3705,7 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1205&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Lock wait timeout exceeded; try restarting transaction'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/pre&gt;
 &lt;p&gt;&lt;code&gt;id&lt;/code&gt;が最大のレコードと&lt;code&gt;suprenum&lt;/code&gt;との間のギャップロックが取得されているため、&lt;code&gt;insert&lt;/code&gt;がロック解除待ちになってしまった。&lt;/p&gt;
-&lt;p&gt;存在しないレコードを取得しようとすると、新規作成がロック解除待ちになってしまうのは陥りやすそうなミスなので、注意したい。&lt;/p&gt;
+&lt;p&gt;条件をいろいろ変えてみると、インデックスのどの範囲に含まれるかによってロックの種類や範囲は変わることがわかった。指定した条件を含むレコードの区間のギャップロックが取得されると考えてよさそうだ。&lt;/p&gt;
 &lt;h1&gt;セカンダリインデックスによるロック&lt;/h1&gt;
 &lt;p&gt;セカンダリインデックス&lt;code&gt;CountryCode&lt;/code&gt;を条件に指定して&lt;code&gt;select ... for update&lt;/code&gt;してみる。&lt;/p&gt;
 &lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt;
@@ -3826,6 +3826,42 @@ Record lock, heap no 7 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
 &lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;city&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`Name`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`CountryCode`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`District`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`Population`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'aaa'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'AFZ'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'aaa'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1205&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Lock wait timeout exceeded; try restarting transaction'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/pre&gt;
+&lt;p&gt;次に、条件にマッチしなかった場合も確認する。&lt;/p&gt;
+&lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;localhost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;affected&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;003&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;localhost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;city&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`CountryCode`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NTY'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----+------+-------------+----------+------------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CountryCode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;District&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Population&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----+------+-------------+----------+------------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----+------+-------------+----------+------------+&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;014&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;------------
+TRANSACTIONS
+------------
+Trx id counter 7010
+Purge done for trx's n:o &amp;lt; 7001 undo n:o &amp;lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421497825593776, not started
+0 lock struct(s), heap size 1128, 0 row lock(s)
+---TRANSACTION 421497825592968, not started
+0 lock struct(s), heap size 1128, 0 row lock(s)
+---TRANSACTION 7009, ACTIVE 24 sec
+2 lock struct(s), heap size 1128, 1 row lock(s)
+MySQL thread id 99, OS thread handle 140022381811456, query id 705 172.21.0.1 root starting
+show engine innodb status
+TABLE LOCK table `world`.`city` trx id 7009 lock mode IX
+RECORD LOCKS space id 2 page no 20 n bits 1272 index CountryCode of table `world`.`city` trx id 7009 lock_mode X locks gap before rec
+Record lock, heap no 178 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 4e5a4c; asc NZL;;
+ 1: len 4; hex 80000da6; asc     ;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;lock_mode X locks gap before rec&lt;/code&gt;とあるので、ギャップロックが取得されている。この場合、&lt;code&gt;NTY&lt;/code&gt;という&lt;code&gt;CountryCode&lt;/code&gt;はなかったので、&lt;code&gt;NZL&lt;/code&gt;という&lt;code&gt;CountryCode&lt;/code&gt;の手前のギャップロックが取得されている。&lt;/p&gt;
+&lt;p&gt;マッチした場合とは異なり、セカンダリインデックスのみロックが取得され、クラスタリングインデックスには影響がなかった。&lt;/p&gt;
 &lt;h1&gt;インデックスなしでのロック&lt;/h1&gt;
 &lt;p&gt;最後にインデックスを使わない条件を指定して&lt;code&gt;select ... for update&lt;/code&gt;してみる。&lt;/p&gt;
 &lt;pre lang=&quot;sql&quot; class=&quot;highlight highlight-sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt;
@@ -3898,8 +3934,8 @@ Record lock, heap no 4 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
 &lt;h1&gt;まとめ&lt;/h1&gt;
 &lt;p&gt;まとめると、こういうことがわかった。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;クラスタインデックスを使った&lt;code&gt;select ... for update&lt;/code&gt;はマッチした行のレコードロックを取得する。&lt;/li&gt;
-&lt;li&gt;セカンダリインデックスを使った&lt;code&gt;select ... for update&lt;/code&gt;はマッチしたセカンダリインデックスのネクストキーロックと次のレコードとの間のギャップロック、そしてマッチした行のレコードロックを取得する。&lt;/li&gt;
+&lt;li&gt;クラスタインデックスを使った&lt;code&gt;select ... for update&lt;/code&gt;はマッチした行のレコードロックを取得する。マッチしなかった場合、条件の値を含む区間のギャップロックを取得する。&lt;/li&gt;
+&lt;li&gt;セカンダリインデックスを使った&lt;code&gt;select ... for update&lt;/code&gt;はマッチしたセカンダリインデックスのネクストキーロックと次のレコードとの間のギャップロック、そしてマッチした行のレコードロックを取得する。マッチしなかった場合、セカンダリインデックスのみ条件の値を含む区間のギャップロックを取得する。&lt;/li&gt;
 &lt;li&gt;インデックスを使わない&lt;code&gt;select ... for update&lt;/code&gt;はマッチした行のネクストキーロックを取得する。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;当たり前といえばそうなるけど、ロックを取得する場合でも可能な限りインデックスを利用してロックの範囲を狭めることが重要ということがわかった。&lt;/p&gt;

@@ -167,7 +167,7 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 <span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
 </pre>
 <p><code>id</code>が最大のレコードと<code>suprenum</code>との間のギャップロックが取得されているため、<code>insert</code>がロック解除待ちになってしまった。</p>
-<p>存在しないレコードを取得しようとすると、新規作成がロック解除待ちになってしまうのは陥りやすそうなミスなので、注意したい。</p>
+<p>条件をいろいろ変えてみると、インデックスのどの範囲に含まれるかによってロックの種類や範囲は変わることがわかった。指定した条件を含むレコードの区間のギャップロックが取得されると考えてよさそうだ。</p>
 <h1>セカンダリインデックスによるロック</h1>
 <p>セカンダリインデックス<code>CountryCode</code>を条件に指定して<code>select ... for update</code>してみる。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
@@ -288,6 +288,42 @@ Record lock, heap no 7 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
 <span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">city</span> <span class="p">(</span><span class="nv">`Name`</span><span class="p">,</span> <span class="nv">`CountryCode`</span><span class="p">,</span> <span class="nv">`District`</span><span class="p">,</span> <span class="nv">`Population`</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="s1">'aaa'</span><span class="p">,</span> <span class="s1">'AFZ'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="p">(</span><span class="mi">1205</span><span class="p">,</span> <span class="s1">'Lock wait timeout exceeded; try restarting transaction'</span><span class="p">)</span>
 </pre>
+<p>次に、条件にマッチしなかった場合も確認する。</p>
+<pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">003</span><span class="n">s</span>
+<span class="n">MySQL</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">city</span> <span class="k">where</span> <span class="nv">`CountryCode`</span> <span class="o">=</span> <span class="s1">'NTY'</span> <span class="k">for</span> <span class="k">update</span>
+<span class="o">+</span><span class="c1">----+------+-------------+----------+------------+</span>
+<span class="o">|</span> <span class="n">ID</span> <span class="o">|</span> <span class="n">Name</span> <span class="o">|</span> <span class="n">CountryCode</span> <span class="o">|</span> <span class="n">District</span> <span class="o">|</span> <span class="n">Population</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------+-------------+----------+------------+</span>
+<span class="o">+</span><span class="c1">----+------+-------------+----------+------------+</span>
+
+<span class="mi">0</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span>
+<span class="nb">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">014</span><span class="n">s</span>
+</pre>
+<pre><code>------------
+TRANSACTIONS
+------------
+Trx id counter 7010
+Purge done for trx's n:o &lt; 7001 undo n:o &lt; 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 421497825593776, not started
+0 lock struct(s), heap size 1128, 0 row lock(s)
+---TRANSACTION 421497825592968, not started
+0 lock struct(s), heap size 1128, 0 row lock(s)
+---TRANSACTION 7009, ACTIVE 24 sec
+2 lock struct(s), heap size 1128, 1 row lock(s)
+MySQL thread id 99, OS thread handle 140022381811456, query id 705 172.21.0.1 root starting
+show engine innodb status
+TABLE LOCK table `world`.`city` trx id 7009 lock mode IX
+RECORD LOCKS space id 2 page no 20 n bits 1272 index CountryCode of table `world`.`city` trx id 7009 lock_mode X locks gap before rec
+Record lock, heap no 178 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 3; hex 4e5a4c; asc NZL;;
+ 1: len 4; hex 80000da6; asc     ;;
+</code></pre>
+<p><code>lock_mode X locks gap before rec</code>とあるので、ギャップロックが取得されている。この場合、<code>NTY</code>という<code>CountryCode</code>はなかったので、<code>NZL</code>という<code>CountryCode</code>の手前のギャップロックが取得されている。</p>
+<p>マッチした場合とは異なり、セカンダリインデックスのみロックが取得され、クラスタリングインデックスには影響がなかった。</p>
 <h1>インデックスなしでのロック</h1>
 <p>最後にインデックスを使わない条件を指定して<code>select ... for update</code>してみる。</p>
 <pre lang="sql" class="highlight highlight-sql"><span class="n">MySQL</span> <span class="p">(</span><span class="k">none</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">world</span><span class="o">&gt;</span> <span class="k">begin</span>
@@ -360,8 +396,8 @@ Record lock, heap no 4 PHYSICAL RECORD: n_fields 7; compact format; info bits 0
 <h1>まとめ</h1>
 <p>まとめると、こういうことがわかった。</p>
 <ul>
-<li>クラスタインデックスを使った<code>select ... for update</code>はマッチした行のレコードロックを取得する。</li>
-<li>セカンダリインデックスを使った<code>select ... for update</code>はマッチしたセカンダリインデックスのネクストキーロックと次のレコードとの間のギャップロック、そしてマッチした行のレコードロックを取得する。</li>
+<li>クラスタインデックスを使った<code>select ... for update</code>はマッチした行のレコードロックを取得する。マッチしなかった場合、条件の値を含む区間のギャップロックを取得する。</li>
+<li>セカンダリインデックスを使った<code>select ... for update</code>はマッチしたセカンダリインデックスのネクストキーロックと次のレコードとの間のギャップロック、そしてマッチした行のレコードロックを取得する。マッチしなかった場合、セカンダリインデックスのみ条件の値を含む区間のギャップロックを取得する。</li>
 <li>インデックスを使わない<code>select ... for update</code>はマッチした行のネクストキーロックを取得する。</li>
 </ul>
 <p>当たり前といえばそうなるけど、ロックを取得する場合でも可能な限りインデックスを利用してロックの範囲を狭めることが重要ということがわかった。</p>
