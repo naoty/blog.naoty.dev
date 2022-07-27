@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live reloadの実装</title>
+    <meta property="og:title" content="Live reloadの実装">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/483/">
+    <meta property="og:image" content="https://blog.naoty.dev/483//483/sequence.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Live reloadの実装</h1>
+          <p class="metadata">
+            <time datetime="2022-07-27T21:49:00.000+0000">2022-07-27 21:49</time>
+            <a href="/meta/">#meta</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>このブログを生成するためのプログラムである<a href="https://github.com/naoty/blog">naoty/blog</a>には、プレビュー機能がある。</p>
+<pre lang="bash" class="highlight highlight-bash">% blog serve &lt;記事を含むディレクトリ&gt;
+<span class="o">[</span>2022-07-27 21:49:33] INFO  WEBrick 1.7.0
+<span class="o">[</span>2022-07-27 21:49:33] INFO  ruby 3.1.0 <span class="o">(</span>2021-12-25<span class="o">)</span> <span class="o">[</span>x86_64-darwin20]
+<span class="o">[</span>2022-07-27 21:49:33] INFO  WEBrick::HTTPServer#start: <span class="nv">pid</span><span class="o">=</span>2299 <span class="nv">port</span><span class="o">=</span>8080
+</pre>
+<p>このアプリケーションは、リクエストを受け取ったら、パスにマッチするmarkdownファイルをパースしてHTMLを生成し、それを静的ファイルとして返す。シンプルなRackアプリケーションとして実装し、webrick上で動かしている。</p>
+<p>最近、このプレビュー機能にLive reloadの機能を実装した。記事の元になるmarkdownファイルを編集し保存すると、その変更が自動的にブラウザに反映される。といっても、モダンなWebフロントエンド開発に備わっているような高度なものではなく、<code>setInterval</code>で定期的にリクエストを送り続けるだけのものだ。</p>
+<p><a href="/483/sequence.png" target="_blank"><img src="/483/sequence.png" alt="sequence" style="max-width:100%;"></a></p>
+<p>図にしてみた。<code>[200, env, HTML]</code>とか書いてあるのはRackアプリケーションの<code>#call</code>の返り値のイメージ。</p>
+<p>定期的にリクエストを送るスクリプトは、サーバーがHTMLをmarkdownから生成したあとに<code>&lt;script&gt;</code>を挿入してからブラウザに返すことでブラウザから実行される。<code>fetch</code>を使ってリクエストを送り、レスポンスに含まれるHTMLを<code>document.write</code>を使って雑にページごと書き換えるようにした。</p>
+<p>それと同時に、サーバー側でHTTPキャッシュの仕様に準拠するようにし、元となるmarkdownファイルに変更がなければ<code>304</code>を返すようにした。具体的には、ブラウザから送られた<code>If-Modified-Since</code>ヘッダの値とファイルの<code>mtime</code>を比較して判定した。</p>
+<hr>
+<p>こういった実装のおかげで、ブログの執筆作業がかなりスムーズにできるようになった。</p>
+<p>naoty/blogに手を入れるのは1年ぶりくらいのはずだけど、手に馴染んだRubyでフルスクラッチしていたおかげで改修もスムーズだった。まだ足りていない機能がいくつかあるので、naoty/blogを継続的にメンテナンスしていきたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

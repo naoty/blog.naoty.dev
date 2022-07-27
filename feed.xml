@@ -10,6 +10,28 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/483/</id>
+    <link href="https://blog.naoty.dev/483/"/>
+    <summary>&lt;p&gt;このブログを生成するためのプログラムである&lt;a href=&quot;https://github.com/naoty/blog&quot;&gt;naoty/blog&lt;/a&gt;には、プレビュー機能がある。&lt;/p&gt;
+&lt;pre lang=&quot;bash&quot; class=&quot;highlight highlight-bash&quot;&gt;% blog serve &amp;lt;記事を含むディレクトリ&amp;gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2022-07-27 21:49:33] INFO  WEBrick 1.7.0
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2022-07-27 21:49:33] INFO  ruby 3.1.0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2021-12-25&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-darwin20]
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2022-07-27 21:49:33] INFO  WEBrick::HTTPServer#start: &lt;span class=&quot;nv&quot;&gt;pid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2299 &lt;span class=&quot;nv&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;8080
+&lt;/pre&gt;
+&lt;p&gt;このアプリケーションは、リクエストを受け取ったら、パスにマッチするmarkdownファイルをパースしてHTMLを生成し、それを静的ファイルとして返す。シンプルなRackアプリケーションとして実装し、webrick上で動かしている。&lt;/p&gt;
+&lt;p&gt;最近、このプレビュー機能にLive reloadの機能を実装した。記事の元になるmarkdownファイルを編集し保存すると、その変更が自動的にブラウザに反映される。といっても、モダンなWebフロントエンド開発に備わっているような高度なものではなく、&lt;code&gt;setInterval&lt;/code&gt;で定期的にリクエストを送り続けるだけのものだ。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;/483/sequence.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;/483/sequence.png&quot; alt=&quot;sequence&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;図にしてみた。&lt;code&gt;[200, env, HTML]&lt;/code&gt;とか書いてあるのはRackアプリケーションの&lt;code&gt;#call&lt;/code&gt;の返り値のイメージ。&lt;/p&gt;
+&lt;p&gt;定期的にリクエストを送るスクリプトは、サーバーがHTMLをmarkdownから生成したあとに&lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt;を挿入してからブラウザに返すことでブラウザから実行される。&lt;code&gt;fetch&lt;/code&gt;を使ってリクエストを送り、レスポンスに含まれるHTMLを&lt;code&gt;document.write&lt;/code&gt;を使って雑にページごと書き換えるようにした。&lt;/p&gt;
+&lt;p&gt;それと同時に、サーバー側でHTTPキャッシュの仕様に準拠するようにし、元となるmarkdownファイルに変更がなければ&lt;code&gt;304&lt;/code&gt;を返すようにした。具体的には、ブラウザから送られた&lt;code&gt;If-Modified-Since&lt;/code&gt;ヘッダの値とファイルの&lt;code&gt;mtime&lt;/code&gt;を比較して判定した。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;こういった実装のおかげで、ブログの執筆作業がかなりスムーズにできるようになった。&lt;/p&gt;
+&lt;p&gt;naoty/blogに手を入れるのは1年ぶりくらいのはずだけど、手に馴染んだRubyでフルスクラッチしていたおかげで改修もスムーズだった。まだ足りていない機能がいくつかあるので、naoty/blogを継続的にメンテナンスしていきたい。&lt;/p&gt;</summary>
+    <title>Live reloadの実装</title>
+    <updated>2022-07-27T21:49:00+00:00</updated>
+    <dc:date>2022-07-27T21:49:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/482/</id>
     <link href="https://blog.naoty.dev/482/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;/481/&quot;&gt;前回&lt;/a&gt;に続いて、今回はDELETEの空振りによってデッドロックが発生するケースをテストコードによって再現させてみる。&lt;/p&gt;
@@ -4982,7 +5004,7 @@ Flags:
     <summary>&lt;p&gt;for式を書くと所有権まわりのエラーが出てしまい、よくわからなかったので整理する。&lt;/p&gt;
 &lt;h1&gt;into_iter()&lt;/h1&gt;
 &lt;pre lang=&quot;rust&quot; class=&quot;highlight highlight-rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;vec!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;// numberは要素そのもの&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;// numbersは再利用不可&lt;/span&gt;
@@ -6437,7 +6459,7 @@ Splits: 17 total, 17 done (100.00%)
     <summary>&lt;p&gt;最近コンテナのセキュリティへの意識が高まっているので、まずはセキュアなイメージのためのDockerfileを書く方法を調べる。&lt;/p&gt;
 &lt;h1&gt;Before&lt;/h1&gt;
 &lt;p&gt;Rails 6.0.1を動かすためのDockerfileを書いてみた。webpackerを動かすためにNode.jsやYarnも入れている。&lt;/p&gt;
-&lt;pre lang=&quot;dockerfile&quot; class=&quot;highlight highlight-dockerfile&quot;&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; node:12.13.1 AS node&lt;/span&gt;
+&lt;pre lang=&quot;dockerfile&quot; class=&quot;highlight highlight-dockerfile&quot;&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;node:12.13.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;node&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; ruby:2.6.5&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;apt-get update
@@ -8684,7 +8706,7 @@ EOS
     <id>https://blog.naoty.dev/341/</id>
     <link href="https://blog.naoty.dev/341/"/>
     <summary>&lt;p&gt;Goで書いているWebアプリケーションをDockerイメージにするとき、multi-stage buildを使ってビルド用のイメージと実行用のイメージを分けると思う。実行用のイメージをalpine linuxベースにするとイメージのサイズが異常に小さくなる。&lt;/p&gt;
-&lt;pre lang=&quot;docker&quot; class=&quot;highlight highlight-docker&quot;&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; golang as builder&lt;/span&gt;
+&lt;pre lang=&quot;docker&quot; class=&quot;highlight highlight-docker&quot;&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;golang&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;builder&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; CGO_ENABLED 0&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /go/src/github.com/naoty/hello&lt;/span&gt;
 

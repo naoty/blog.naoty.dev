@@ -34,7 +34,7 @@
           <p>最近コンテナのセキュリティへの意識が高まっているので、まずはセキュアなイメージのためのDockerfileを書く方法を調べる。</p>
 <h1>Before</h1>
 <p>Rails 6.0.1を動かすためのDockerfileを書いてみた。webpackerを動かすためにNode.jsやYarnも入れている。</p>
-<pre lang="dockerfile" class="highlight highlight-dockerfile"><span class="k">FROM</span><span class="s"> node:12.13.1 AS node</span>
+<pre lang="dockerfile" class="highlight highlight-dockerfile"><span class="k">FROM</span><span class="w"> </span><span class="s">node:12.13.1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">node</span>
 <span class="k">FROM</span><span class="s"> ruby:2.6.5</span>
 
 <span class="k">RUN </span>apt-get update

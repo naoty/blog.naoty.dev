@@ -32,7 +32,7 @@
         </header>
         <section class="body">
           <p>Goで書いているWebアプリケーションをDockerイメージにするとき、multi-stage buildを使ってビルド用のイメージと実行用のイメージを分けると思う。実行用のイメージをalpine linuxベースにするとイメージのサイズが異常に小さくなる。</p>
-<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="s"> golang as builder</span>
+<pre lang="docker" class="highlight highlight-docker"><span class="k">FROM</span><span class="w"> </span><span class="s">golang</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
 <span class="k">ENV</span><span class="s"> CGO_ENABLED 0</span>
 <span class="k">WORKDIR</span><span class="s"> /go/src/github.com/naoty/hello</span>
 
