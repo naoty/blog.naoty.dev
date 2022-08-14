@@ -10,6 +10,22 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/485/</id>
+    <link href="https://blog.naoty.dev/485/"/>
+    <summary>&lt;h1&gt;zshの補完機能からからFigへ&lt;/h1&gt;
+&lt;p&gt;最近&lt;a href=&quot;https://fig.io/&quot;&gt;Fig&lt;/a&gt;を試している。これはターミナル上の入力をいい感じに補完してくれるツールで、さまざまなシェルやターミナルのソフトウェアをサポートしている。&lt;/p&gt;
+&lt;p&gt;これまではzshの補完機能を利用していたけど、開発環境の見直しに伴ってFigに切り替えてみた。インストールとセットアップをしただけで、基本的なLinuxのコマンド以外にもgit、docker、bundle、npmなどよく使うコマンドの補完が自動的に有効になった。&lt;/p&gt;
+&lt;h1&gt;補完設定の追加&lt;/h1&gt;
+&lt;p&gt;Figは補完機能を簡単に追加できるようになっている。自分は日頃から&lt;a href=&quot;https://github.com/naoty/todo&quot;&gt;naoty/todo&lt;/a&gt;という自分用のTODO管理コマンドを使っており、シェルで補完できるようにしたいと思っていた。&lt;/p&gt;
+&lt;p&gt;詳細な手順は&lt;a href=&quot;https://fig.io/docs/guides/autocomplete-for-internal-tools&quot;&gt;ドキュメント&lt;/a&gt;にある通りだけど、補完設定の開発環境がかなり充実していて、TypeScriptで必要な設定を型としてチェックしていたり、規約をeslintでチェックしていたり、開発用サーバーからすぐに動作確認できたりするので、体験がいい。&lt;/p&gt;
+&lt;p&gt;おかげで、naoty/todoの補完が簡単に実装できてしまった。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./todo-completion.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./todo-completion.png&quot; alt=&quot;completion&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;サブコマンドが補完される様子&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;かなり惜しいポイントとして、補完の候補となる引数のリストを生成する際に任意のコマンドの標準出力を利用するのだけど、そのコマンド実行が環境変数をうまく反映していなかったり、標準エラー出力を補完設定側から参照できないため、デバッグがやりにくいという問題がある。なので、本当は引数の候補もいい感じに補完できるようにしたいのだけど、そこまでは至っていない。&lt;/p&gt;</summary>
+    <title>Fig</title>
+    <updated>2022-08-14T11:18:00+00:00</updated>
+    <dc:date>2022-08-14T11:18:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/484/</id>
     <link href="https://blog.naoty.dev/484/"/>
     <summary>&lt;p&gt;巷で話題の&lt;a href=&quot;https://www.amazon.co.jp/dp/B09MS8BML8&quot;&gt;チームトポロジー&lt;/a&gt;を読んでいる。読みながら感じたことが多いのでそれを雑に残しておきたい。まだ半分くらいしか読んでないので、その2に続くかもしれないし、続かないかもしれない。&lt;/p&gt;

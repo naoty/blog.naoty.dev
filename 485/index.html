@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fig</title>
+    <meta property="og:title" content="Fig">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/485/">
+    <meta property="og:image" content="https://blog.naoty.dev/485/todo-completion.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Fig</h1>
+          <p class="metadata">
+            <time datetime="2022-08-14T11:18:00.000+0000">2022-08-14 11:18</time>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>zshの補完機能からからFigへ</h1>
+<p>最近<a href="https://fig.io/">Fig</a>を試している。これはターミナル上の入力をいい感じに補完してくれるツールで、さまざまなシェルやターミナルのソフトウェアをサポートしている。</p>
+<p>これまではzshの補完機能を利用していたけど、開発環境の見直しに伴ってFigに切り替えてみた。インストールとセットアップをしただけで、基本的なLinuxのコマンド以外にもgit、docker、bundle、npmなどよく使うコマンドの補完が自動的に有効になった。</p>
+<h1>補完設定の追加</h1>
+<p>Figは補完機能を簡単に追加できるようになっている。自分は日頃から<a href="https://github.com/naoty/todo">naoty/todo</a>という自分用のTODO管理コマンドを使っており、シェルで補完できるようにしたいと思っていた。</p>
+<p>詳細な手順は<a href="https://fig.io/docs/guides/autocomplete-for-internal-tools">ドキュメント</a>にある通りだけど、補完設定の開発環境がかなり充実していて、TypeScriptで必要な設定を型としてチェックしていたり、規約をeslintでチェックしていたり、開発用サーバーからすぐに動作確認できたりするので、体験がいい。</p>
+<p>おかげで、naoty/todoの補完が簡単に実装できてしまった。</p>
+<p><figure><a href="./todo-completion.png" target="_blank"><img src="./todo-completion.png" alt="completion" style="max-width:100%;"></a><figcaption>サブコマンドが補完される様子</figcaption></figure></p>
+<p>かなり惜しいポイントとして、補完の候補となる引数のリストを生成する際に任意のコマンドの標準出力を利用するのだけど、そのコマンド実行が環境変数をうまく反映していなかったり、標準エラー出力を補完設定側から参照できないため、デバッグがやりにくいという問題がある。なので、本当は引数の候補もいい感じに補完できるようにしたいのだけど、そこまでは至っていない。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
