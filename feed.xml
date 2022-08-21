@@ -10,6 +10,43 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/486/</id>
+    <link href="https://blog.naoty.dev/486/"/>
+    <summary>&lt;p&gt;自分専用のTODO管理ツールである&lt;a href=&quot;https://github.com/naoty/todo&quot;&gt;naoty/todo&lt;/a&gt;にタグ機能を追加した。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./tagged-todos.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./tagged-todos.png&quot; alt=&quot;タグつきTODO&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;個人開発のTODO&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;#naoty/todo&lt;/code&gt;とついているのがタグで、以下のコマンドで複数つけることができる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;% todo add '芝刈り機を買う' --tag '家' --tag '出費'
+ 1 | 芝刈り機を買う #家 #出費
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;タグは各TODOファイルのfront matterに配列として保持している。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: 芝刈り機を買う
+state: undone
+tags: [&quot;家&quot;, &quot;出費&quot;]
+---
+
+# 2022-08-20
+* 駅前のホームセンターでいくつか見てみたが、もう少しネットで調査することにした。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これまで、TODOをグルーピングする際にこんな感じで親子関係を利用していたのだが、&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;% todo list
+  237 | review
+        160 | https://github.com/naoty/todo/pull/1
+        183 | https://github.com/naoty/todo/pull/2
+        187 | https://github.com/naoty/todo/pull/3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;親TODOは実際にはTODOではなく、ただのフォルダとしてしか使っていないことに気づき、本来の用途とは違うと思ったため、代替手段としてタグで管理できるようにした。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;% todo list
+  160 | https://github.com/naoty/todo/pull/1 #review
+  183 | https://github.com/naoty/todo/pull/2 #review
+  187 | https://github.com/naoty/todo/pull/3 #review
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;今のところ、タグによってTODOをフィルタリングするような機能はないので、これから作っていきたい。&lt;/p&gt;</summary>
+    <title>TODOをタグで管理できるようにする</title>
+    <updated>2022-08-21T16:27:00+00:00</updated>
+    <dc:date>2022-08-21T16:27:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/485/</id>
     <link href="https://blog.naoty.dev/485/"/>
     <summary>&lt;h1&gt;zshの補完機能からからFigへ&lt;/h1&gt;

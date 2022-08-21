@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODOをタグで管理できるようにする</title>
+    <meta property="og:title" content="TODOをタグで管理できるようにする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/486/">
+    <meta property="og:image" content="https://blog.naoty.dev/486/tagged-todos.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">TODOをタグで管理できるようにする</h1>
+          <p class="metadata">
+            <time datetime="2022-08-21T16:27:00.000+0000">2022-08-21 16:27</time>
+            <a href="/oss/">#oss</a>
+            <a href="/lifehack/">#lifehack</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>自分専用のTODO管理ツールである<a href="https://github.com/naoty/todo">naoty/todo</a>にタグ機能を追加した。</p>
+<p><figure><a href="./tagged-todos.png" target="_blank"><img src="./tagged-todos.png" alt="タグつきTODO" style="max-width:100%;"></a><figcaption>個人開発のTODO</figcaption></figure></p>
+<p><code>#naoty/todo</code>とついているのがタグで、以下のコマンドで複数つけることができる。</p>
+<pre><code>% todo add '芝刈り機を買う' --tag '家' --tag '出費'
+ 1 | 芝刈り機を買う #家 #出費
+</code></pre>
+<p>タグは各TODOファイルのfront matterに配列として保持している。</p>
+<pre><code>---
+title: 芝刈り機を買う
+state: undone
+tags: ["家", "出費"]
+---
+
+# 2022-08-20
+* 駅前のホームセンターでいくつか見てみたが、もう少しネットで調査することにした。
+</code></pre>
+<p>これまで、TODOをグルーピングする際にこんな感じで親子関係を利用していたのだが、</p>
+<pre><code>% todo list
+  237 | review
+        160 | https://github.com/naoty/todo/pull/1
+        183 | https://github.com/naoty/todo/pull/2
+        187 | https://github.com/naoty/todo/pull/3
+</code></pre>
+<p>親TODOは実際にはTODOではなく、ただのフォルダとしてしか使っていないことに気づき、本来の用途とは違うと思ったため、代替手段としてタグで管理できるようにした。</p>
+<pre><code>% todo list
+  160 | https://github.com/naoty/todo/pull/1 #review
+  183 | https://github.com/naoty/todo/pull/2 #review
+  187 | https://github.com/naoty/todo/pull/3 #review
+</code></pre>
+<p>今のところ、タグによってTODOをフィルタリングするような機能はないので、これから作っていきたい。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
