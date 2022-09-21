@@ -10,6 +10,23 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/489/</id>
+    <link href="https://blog.naoty.dev/489/"/>
+    <summary>&lt;h1&gt;有給消化の過ごし方&lt;/h1&gt;
+&lt;p&gt;転職まで3週間くらい有給消化でゆっくり過ごしている。&lt;/p&gt;
+&lt;p&gt;だいたいの時間、次の職場で必要になりそうな技術、具体的にはFlutter、dart、gRPCなどに入門してみたり、サンプルアプリケーションを作って感触を確かめている。Flutterの第1印象としては、それっぽいアプリが簡単に実装できてすごいと思った。あとは、React的な状態管理手法がモバイルアプリ開発にも導入されていて、こういった開発手法はすっかり定着しているなと思った。5年以上前にSwiftでiOSアプリを書いている頃はそういった手法が導入されつつある雰囲気があったくらいだったと思う。dartは、今のところコンストラクタが異様に難しく感じるが、それ以外はすんなり飲み込める言語という感じ。Goは表現力が足りないけど、Rustは難しそうみたいな感想を持つ層には支持されるんじゃないだろうか、と思った。&lt;/p&gt;
+&lt;h1&gt;2022-09-21&lt;/h1&gt;
+&lt;p&gt;今日はプログラミングをお休みして、以前から気になっていた&lt;a href=&quot;https://www.shinkogeisha.com/&quot;&gt;新工芸舎さん&lt;/a&gt;の展示が東京で行われると聞いて、池上までいってきた。ついでに、乗り換え駅の五反田でおにやんまのうどんを久々に食べてきた。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./tenji.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./tenji.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;展示の様子（撮影許可をいただきました）&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;3Dプリンターで樹脂を編むように積み重ねて作られているとのことで、前々から気になっており、実物を見れてよかった。展示されているものの一部は購入可能だったため、HyotanStandというペンスタンドを1つ買ってみた。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./hyotan-stand.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./hyotan-stand.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;HyotanStand&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;鮮やかなグラデーションからソフトウェアみを感じつつも、網目状の質感から不思議と温かみも感じられる魅力的なプロダクトだった。&lt;/p&gt;
+&lt;p&gt;この頃は雨模様の天気だったけど、今日は天気もよく涼しく過ごしやすい陽気でとてもいい一日だった。&lt;/p&gt;</summary>
+    <title>2022-09-21</title>
+    <updated>2022-09-21T19:37:00+00:00</updated>
+    <dc:date>2022-09-21T19:37:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/488/</id>
     <link href="https://blog.naoty.dev/488/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;./rubykaigi-2022.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./rubykaigi-2022.jpg&quot; alt=&quot;RubyKaigi 2022の看板&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
