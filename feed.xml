@@ -10,6 +10,37 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/490/</id>
+    <link href="https://blog.naoty.dev/490/"/>
+    <summary>&lt;h1&gt;cloud_firestore以外の選択肢&lt;/h1&gt;
+&lt;p&gt;FlutterからFirestoreを利用する場合、&lt;a href=&quot;https://pub.dev/packages/cloud_firestore&quot;&gt;cloud_firestore&lt;/a&gt;というパッケージを使えばいい。ただ、Flutter以外のDartのコードでFirestoreにアクセスする場合、&lt;a href=&quot;https://pub.dev/packages/googleapis&quot;&gt;googleapis&lt;/a&gt;というパッケージを使うことになる。このパッケージはおそらくgRPCのサービス定義から自動生成されたクライアントを含んでいるのだと思うけど、ドキュメントにはgRPCかどうかは明記されていないようだ。また、認証には&lt;a href=&quot;https://pub.dev/packages/googleapis_auth&quot;&gt;googleapis_auth&lt;/a&gt;という別のパッケージも必要になる。&lt;/p&gt;
+&lt;pre lang=&quot;yaml&quot; class=&quot;highlight highlight-yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;dependencies&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;googleapis&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;^9.2.0&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;googleapis_auth&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;^1.3.1&lt;/span&gt;
+&lt;/pre&gt;
+&lt;h1&gt;認証&lt;/h1&gt;
+&lt;p&gt;Firestoreにアクセスする際の認証については、いくつか方法がある。&lt;a href=&quot;https://cloud.google.com/docs/authentication&quot;&gt;公式ドキュメント&lt;/a&gt;によると、アプリケーションのデフォルト認証情報（以下、ADC）を利用する方式が今回のケースに適しているようだ。&lt;/p&gt;
+&lt;p&gt;ADCを利用する場合、クライアントライブラリはいくつかの方法でADCを探索することになる。今回は以下のコマンドでADCを生成することで、クライアントライブラリがそれを利用できるようにした。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;% gcloud auth application-default login
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Dart側はgoogleapis_authパッケージを使い、以下のように実装することでADCを利用して認証できるようになる。&lt;/p&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clientViaApplicationDefaultCredentials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;scopes:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FirestoreApi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;datastoreScope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;
+&lt;h1&gt;Firestoreへのアクセス&lt;/h1&gt;
+&lt;p&gt;googleapisパッケージのコードを使うと、直感的なコードでFirestoreにアクセスできるようになる。以下の例では、ドキュメントのリストを取得している。&lt;/p&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;api&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FirestoreApi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;databases&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;documents&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;'projects/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$project_id&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/databases/(default)/documents'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$collection_id&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;</summary>
+    <title>DartからFirestoreにアクセスする</title>
+    <updated>2022-09-22T21:04:00+00:00</updated>
+    <dc:date>2022-09-22T21:04:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/489/</id>
     <link href="https://blog.naoty.dev/489/"/>
     <summary>&lt;h1&gt;有給消化の過ごし方&lt;/h1&gt;

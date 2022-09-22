@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DartからFirestoreにアクセスする</title>
+    <meta property="og:title" content="DartからFirestoreにアクセスする">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/490/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">DartからFirestoreにアクセスする</h1>
+          <p class="metadata">
+            <time datetime="2022-09-22T21:04:00.000+0000">2022-09-22 21:04</time>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>cloud_firestore以外の選択肢</h1>
+<p>FlutterからFirestoreを利用する場合、<a href="https://pub.dev/packages/cloud_firestore">cloud_firestore</a>というパッケージを使えばいい。ただ、Flutter以外のDartのコードでFirestoreにアクセスする場合、<a href="https://pub.dev/packages/googleapis">googleapis</a>というパッケージを使うことになる。このパッケージはおそらくgRPCのサービス定義から自動生成されたクライアントを含んでいるのだと思うけど、ドキュメントにはgRPCかどうかは明記されていないようだ。また、認証には<a href="https://pub.dev/packages/googleapis_auth">googleapis_auth</a>という別のパッケージも必要になる。</p>
+<pre lang="yaml" class="highlight highlight-yaml"><span class="na">dependencies</span><span class="pi">:</span>
+  <span class="na">googleapis</span><span class="pi">:</span> <span class="s">^9.2.0</span>
+  <span class="na">googleapis_auth</span><span class="pi">:</span> <span class="s">^1.3.1</span>
+</pre>
+<h1>認証</h1>
+<p>Firestoreにアクセスする際の認証については、いくつか方法がある。<a href="https://cloud.google.com/docs/authentication">公式ドキュメント</a>によると、アプリケーションのデフォルト認証情報（以下、ADC）を利用する方式が今回のケースに適しているようだ。</p>
+<p>ADCを利用する場合、クライアントライブラリはいくつかの方法でADCを探索することになる。今回は以下のコマンドでADCを生成することで、クライアントライブラリがそれを利用できるようにした。</p>
+<pre><code>% gcloud auth application-default login
+</code></pre>
+<p>Dart側はgoogleapis_authパッケージを使い、以下のように実装することでADCを利用して認証できるようになる。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">authClient</span> <span class="o">=</span> <span class="k">await</span> <span class="n">clientViaApplicationDefaultCredentials</span><span class="o">(</span>
+  <span class="nl">scopes:</span> <span class="o">[</span><span class="n">FirestoreApi</span><span class="o">.</span><span class="na">datastoreScope</span><span class="o">],</span>
+<span class="o">);</span>
+</pre>
+<h1>Firestoreへのアクセス</h1>
+<p>googleapisパッケージのコードを使うと、直感的なコードでFirestoreにアクセスできるようになる。以下の例では、ドキュメントのリストを取得している。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">api</span> <span class="o">=</span> <span class="n">FirestoreApi</span><span class="o">(</span><span class="n">authClient</span><span class="o">);</span>
+<span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="na">projects</span><span class="o">.</span><span class="na">databases</span><span class="o">.</span><span class="na">documents</span><span class="o">.</span><span class="na">list</span><span class="o">(</span>
+  <span class="s">'projects/</span><span class="si">$project_id</span><span class="s">/databases/(default)/documents'</span><span class="o">,</span>
+  <span class="s">'</span><span class="si">$collection_id</span><span class="s">'</span><span class="o">,</span>
+<span class="o">);</span>
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
