@@ -10,6 +10,44 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/496/</id>
+    <link href="https://blog.naoty.dev/496/"/>
+    <summary>&lt;p&gt;最近読んでいた&quot;&lt;a href=&quot;https://pragprog.com/titles/swdddf/domain-modeling-made-functional/&quot;&gt;Domain Modeling Made Functional&lt;/a&gt;&quot;という本のなかで、スマートコンストラクタと呼ばれるテクニックが紹介されていてとても面白く明日から使えるなと思ったので、最近書いているDartでどのように実装できるか調べてみた。&lt;/p&gt;
+&lt;h1&gt;スマートコンストラクタとは&lt;/h1&gt;
+&lt;p&gt;スマートコンストラクタというのは、すべてのコンストラクタをprivateにし、代わりに有効な値ならインスタンスを返し無効な値ならエラーを返すようなコンストラクタのみを提供するような実装パターンのことを指す。&lt;/p&gt;
+&lt;p&gt;このような実装により、このクラスのインスタンスは必ず有効な値であることが保証される。そのため、あるオブジェクトをあちこちで検証する必要がなくなり、検証のための実装がスマートコンストラクタに集約されるため、凝集性の高いコードになる。また、検証漏れによる不具合も回避できるため、堅牢なコードになるとも言えるだろう。&lt;/p&gt;
+&lt;h1&gt;実装例&lt;/h1&gt;
+&lt;p&gt;JANコードを例にとる。JANコードは13桁または8桁の数字で構成され、&lt;code&gt;&quot;jancode&quot;&lt;/code&gt;のような文字列はJANコードではない。こういったビジネスルールをスマートコンストラクタを使って実装してみる。&lt;/p&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Jancode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;Jancode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;_internal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Jancode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fromNumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'invalid JAN code'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// TODO: implement validation rules&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Jancode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;_internal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jancode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Jancode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fromNumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'12345678'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Dartでは&lt;code&gt;_&lt;/code&gt;から始まるメソッドやフィールドはprivateとして扱われる。ここではコンストラクタを&lt;code&gt;_internal&lt;/code&gt;のように定義することでprivateにしている。&lt;/li&gt;
+&lt;li&gt;Dartでは必ずしも新しいインスタンスを返すわけではないコンストラクタを実装する際には&lt;code&gt;factory&lt;/code&gt;キーワードを使う。不正な値を受け取ったら例外をthrowするために&lt;code&gt;factory&lt;/code&gt;を使ったファクトリコンストラクタとして定義している。&lt;/li&gt;
+&lt;li&gt;「JANコードは13桁または8桁である」といったビジネスルールを&lt;code&gt;fromNumbers&lt;/code&gt;に実装することで、正しいJANコードのみが&lt;code&gt;Jancode&lt;/code&gt;のインスタンスとして生成できるようになった。&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>スマートコンストラクタ in Dart</title>
+    <updated>2022-11-14T21:45:00+00:00</updated>
+    <dc:date>2022-11-14T21:45:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/495/</id>
     <link href="https://blog.naoty.dev/495/"/>
     <summary>&lt;p&gt;9月の有給消化中に10年間くらいのプログラマーの経験から自分なりのベストプラクティスを言語化してみようという試みをした。&lt;/p&gt;
