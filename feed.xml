@@ -10,6 +10,63 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/497/</id>
+    <link href="https://blog.naoty.dev/497/"/>
+    <summary>&lt;h1&gt;プライベート&lt;/h1&gt;
+&lt;p&gt;昨年9月に引っ越してから、新しい街で過ごした初めての一年だった。自転車を買って行動範囲が広がり、だいぶこの街での生活に馴染んできた。&lt;/p&gt;
+&lt;p&gt;新居は外構ができあがり、庭というものを手に入れた。そして、24回払いで気に入ったソファも買った。プロジェクターも買って、家での生活はすっかり快適になった。優先的に買いたいものが落ち着いた頃に、ようやく自室にもお金をかけられるようになり、シェルフを買い部屋らしい部屋になった。また、建てるときに自室に付けてもらったピクチャーレールを活用すべく、富樫展でポスターを買い自室に飾ることができた。&lt;/p&gt;
+&lt;p&gt;趣味の将棋は二段昇段を目標にしていたけど、仕事や新しい技術のキャッチアップで余裕ができず、あまり捗らなかった。だけど、四間飛車に代わって新たな戦法に取り組んでいく機運が高まった。そして、初めて将棋会館に行けたのもよかった。思いの外、小さいビルで、建て替わる前に行けて記念になった。&lt;/p&gt;
+&lt;p&gt;9月には、夫婦で旅行も兼ねてRubyKaigiに参加した。初めて三重県に行き、伊勢神宮を参拝したり、松坂牛を堪能した。コロナ禍に入ってから初の旅行で、旅行の楽しさを思い出した。&lt;/p&gt;
+&lt;h1&gt;仕事&lt;/h1&gt;
+&lt;p&gt;今年は10月に転職するまでは、だいたいこんな感じのことをやっていた気がする。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;個人情報を削除する機能の改修&lt;/li&gt;
+&lt;li&gt;Kafka Streamアプリケーションの実装&lt;/li&gt;
+&lt;li&gt;ReactとGraphQLを使った管理画面の実装&lt;/li&gt;
+&lt;li&gt;厳しいスケジュールのなかでリリースするスコープを調整していた&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;10月に転職してからはこんな感じ。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Flutterやバックエンドの細かな機能改修&lt;/li&gt;
+&lt;li&gt;大きめの機能のDesign Docを書いた&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;振り返ってみると、前職ではJava、Kafka、React、GraphQLを新たに経験し、現職ではDart、Flutterを新たに経験し、キャッチアップの多い一年となった。そのせいか、あまり自分の作りたいものを作る時間がとれなかったかもしれない。スケジュールが厳しい中で開発したり、新しい環境に適応したりで、一年通してストレスが高い一年でもあった。&lt;/p&gt;
+&lt;h1&gt;作ったもの&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://github.com/naoty/blog&quot;&gt;naoty/blog&lt;/a&gt;: このブログを生成するツールなんだけど、ブログのプレビュー時にLive reloadできるようにした。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;読んだもの&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://link.springer.com/book/10.1007/978-3-030-33836-7&quot;&gt;Database Design and Implementation&lt;/a&gt;: 自作DB本は途中までで挫折してしまったけど、内容はとても良いのでキャッチアップが落ち着いたらまたやりたい。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://productionreadygraphql.myshopify.com/&quot;&gt;Production Ready GraphQL&lt;/a&gt;: GraphQLをキャッチアップするために一通りのチュートリアルの後に読んでみたけど、ベストプラクティスがちょうどいい分量でまとまっていて良かった。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://www.amazon.co.jp/dp/4820729632&quot;&gt;チームトポロジー&lt;/a&gt;: 周囲でチームトポロジーの内容を前提とした話が増えてきたので、自分も読んだ。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://pragprog.com/titles/swdddf/domain-modeling-made-functional/&quot;&gt;Domain Modeling Made Functional&lt;/a&gt;: 久々にDDDをやっていく機運が出てきたので気になっていた本を読んだ。全部は読みきれてないけど、それでも良い内容だった。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://book.mynavi.jp/ec/products/detail/id=134252&quot;&gt;単体テストの考え方/使い方&lt;/a&gt;: RSpecから離れたことでテスティングフレームワークの些末な違いではなく、単体テストをどう書くか理解したくなり、昨日買って読み始めた。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;買ったもの&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Pixel 6&lt;/li&gt;
+&lt;li&gt;ソファ&lt;/li&gt;
+&lt;li&gt;Dahonの自転車&lt;/li&gt;
+&lt;li&gt;将棋会館で買った将棋盤&lt;/li&gt;
+&lt;li&gt;3Dプリンターで作られた不思議なペンスタンド&lt;/li&gt;
+&lt;li&gt;無印良品のコスパの良いスチールラック&lt;/li&gt;
+&lt;li&gt;富樫展で買ったハンターハンターの原画っぽいやつ&lt;/li&gt;
+&lt;li&gt;軟骨伝導イヤホン&lt;/li&gt;
+&lt;li&gt;ポケットモンスターバイオレット&lt;/li&gt;
+&lt;li&gt;iittalaの皿とスープマグ&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>2022年振り返り</title>
+    <updated>2022-12-31T17:01:00+00:00</updated>
+    <dc:date>2022-12-31T17:01:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/496/</id>
     <link href="https://blog.naoty.dev/496/"/>
     <summary>&lt;p&gt;最近読んでいた&quot;&lt;a href=&quot;https://pragprog.com/titles/swdddf/domain-modeling-made-functional/&quot;&gt;Domain Modeling Made Functional&lt;/a&gt;&quot;という本のなかで、スマートコンストラクタと呼ばれるテクニックが紹介されていてとても面白く明日から使えるなと思ったので、最近書いているDartでどのように実装できるか調べてみた。&lt;/p&gt;
