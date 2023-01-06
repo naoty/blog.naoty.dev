@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モックとスタブ</title>
+    <meta property="og:title" content="モックとスタブ">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/499/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">モックとスタブ</h1>
+          <p class="metadata">
+            <time datetime="2023-01-06T23:20:00.000+0000">2023-01-06 23:20</time>
+            <a href="/test/">#test</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>当たり前すぎるかもしれないけど、ちゃんと言語化しておきたいと思いブログにした。</p>
+<h1>モック</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="n">test</span><span class="o">(</span><span class="s">'Service posts message via API'</span><span class="o">,</span> <span class="o">()</span> <span class="o">{</span>
+  <span class="c1">// Arrange</span>
+  <span class="kd">final</span> <span class="n">apiClient</span> <span class="o">=</span> <span class="n">MockApiClient</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">databaseClient</span> <span class="o">=</span> <span class="n">MockDatabaseClient</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="o">(</span>
+    <span class="nl">apiClient:</span> <span class="n">apiClient</span><span class="o">,</span>
+    <span class="nl">databaseClient:</span> <span class="n">databaseClient</span><span class="o">,</span>
+  <span class="o">);</span>
+
+  <span class="c1">// Act</span>
+  <span class="n">service</span><span class="o">.</span><span class="na">postMessages</span><span class="o">();</span>
+
+  <span class="c1">// Assert</span>
+  <span class="n">verify</span><span class="o">(</span><span class="n">apiClient</span><span class="o">.</span><span class="na">postMessage</span><span class="o">());</span>
+<span class="o">});</span>
+</pre>
+<p>モックはテスト対象から外部へのコミュニケーションを模倣し、検証する。外部というのは、他のサービス、データベース、メッセージキューなどテスト対象とは別の場所で動いているもの全般を指す。</p>
+<h1>スタブ</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="n">test</span><span class="o">(</span><span class="s">'Service returns the list of messages'</span><span class="o">,</span> <span class="o">()</span> <span class="o">{</span>
+  <span class="c1">// Arrange</span>
+  <span class="kd">final</span> <span class="n">apiClient</span> <span class="o">=</span> <span class="n">MockApiClient</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">databaseClient</span> <span class="o">=</span> <span class="n">MockDatabaseClient</span><span class="o">();</span>
+  <span class="kd">final</span> <span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="o">(</span>
+    <span class="nl">apiClient:</span> <span class="n">apiClient</span><span class="o">,</span>
+    <span class="nl">databaseClient:</span> <span class="n">databaseClient</span><span class="o">,</span>
+  <span class="o">);</span>
+  <span class="n">when</span><span class="o">(</span><span class="n">databaseClient</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">any</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">'DUMMY'</span><span class="o">);</span>
+
+  <span class="c1">// Act</span>
+  <span class="kd">final</span> <span class="n">messages</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">listMessages</span><span class="o">();</span>
+
+  <span class="c1">// Assert</span>
+  <span class="n">expect</span><span class="o">(</span><span class="n">messages</span><span class="o">,</span> <span class="n">equals</span><span class="o">([</span><span class="s">'DUMMY'</span><span class="o">]));</span>
+<span class="o">});</span>
+</pre>
+<p>スタブは外部からテスト対象へのコミュニケーションを模倣する。モックがテスト対象からの出力を模倣するのに対して、スタブはテスト対象への入力を模倣するとも言える。</p>
+<p>モックとは異なり、スタブを使ってコミュニケーションを検証しない。スタブはテスト対象への入力なので、テスト対象の内部でどのようなコミュニケーションが行われたかを検証することは、実装の詳細に立ち入りすぎている。詳細と深く結びついたテストは、実装をリファクタリングすると壊れてしまうため、保守性が低いといえる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
