@@ -10,6 +10,19 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/500/</id>
+    <link href="https://blog.naoty.dev/500/"/>
+    <summary>&lt;p&gt;ずっと気になってたKindle Paperwhiteを買ってみた。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./kindle-paperwhite.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./kindle-paperwhite.jpg&quot; alt=&quot;'PDFの技術書を表示するKindle Paperwhite'&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;PDFの技術書も読める&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;今まではAndroidのAdobe AcrobatアプリでPDFの技術書を読んでいたのだけど、集中が切れるとすぐにTwitterを開いてしまい、読書量が十分にとれていなかったのが課題だった。読書専用のデバイスによってこれを解決したいと思い、購入してみた。&lt;/p&gt;
+&lt;p&gt;PDFを読めるのかが懸念だったけど、MacとKindle PaperwhiteをUSBで接続すると、Finderにデバイスとして表示され、簡単にPC上のPDFを転送できたのでまったく問題なかった。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./kindle-on-finder.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./kindle-on-finder.png&quot; alt='&quot;Finder上に表示されたKindle&quot;' style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;Finder上にKindleが表示される&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;今のところ、読みたいマンガを読み尽くしておいたおかげか、技術書をかなり集中して読めており、読書量がかなり増えたと感じている。ディスプレイの特性上、スマホと比べるとレンダリングがモッサリとしているけど、読書に支障をきたすレベルにはなく、むしろ読書以外の余計な操作をする気力を削いでいるとも言えそう。&lt;/p&gt;</summary>
+    <title>Kindle Paperwhite</title>
+    <updated>2023-01-14T21:26:00+00:00</updated>
+    <dc:date>2023-01-14T21:26:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/499/</id>
     <link href="https://blog.naoty.dev/499/"/>
     <summary>&lt;p&gt;当たり前すぎるかもしれないけど、ちゃんと言語化しておきたいと思いブログにした。&lt;/p&gt;
