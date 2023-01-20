@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドメイン・プリミティブ in Dart</title>
+    <meta property="og:title" content="ドメイン・プリミティブ in Dart">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/501/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">ドメイン・プリミティブ in Dart</h1>
+          <p class="metadata">
+            <time datetime="2023-01-16T22:51:00.000+0000">2023-01-16 22:51</time>
+            <a href="/ddd/">#ddd</a>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://book.mynavi.jp/ec/products/detail/id=124056">セキュア・バイ・デザイン</a>という本を最近読んでいて、その中で紹介されるドメイン・プリミティブという設計手法が印象に残ったのでDartでどのように実装できるか試してみた。</p>
+<p>ドメイン・プリミティブとは、簡単に言うと、その値が常に有効であることが保証された値オブジェクトのことを指していて、<code>String</code>や<code>int</code>のような汎用的なデータ型に代わって使われる。</p>
+<h1>実装例</h1>
+<p>以下の例では税を含む金額の計算をDartを使ってモデリングしている。</p>
+<p>まず、金額を表すために単なる<code>int</code>の代わりに<code>Money</code>というドメイン・プリミティブを定義する。-1000円といった負の値は有効ではないのでファクトリーコンストラクタで事前条件を検証し、デフォルトコンストラクタを非公開にすることで有効な値のみで初期化できるようにしている。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Money</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+
+  <span class="n">Money</span><span class="o">.</span><span class="na">_internal</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+
+  <span class="kd">factory</span> <span class="n">Money</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="n">ArgumentError</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="s">'value'</span><span class="o">,</span> <span class="s">'must be &gt;= 0'</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">Money</span><span class="o">.</span><span class="na">_internal</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<p>次に、税を表す<code>Tax</code>というドメイン・プリミティブを定義する。ここでは通常税率と軽減税率の2種類を定義した。Dartのenhanced enumsを使い、定数コンストラクタを定義すれば、コンパイル時には値が決定するためコンストラクタの引数を検証する必要がない。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">enum</span> <span class="n">Tax</span> <span class="o">{</span>
+  <span class="n">regular</span><span class="o">(</span><span class="nl">rate:</span> <span class="mf">0.1</span><span class="o">),</span>
+  <span class="n">reduced</span><span class="o">(</span><span class="nl">rate:</span> <span class="mf">0.08</span><span class="o">);</span>
+
+  <span class="kd">final</span> <span class="kt">double</span> <span class="n">rate</span><span class="o">;</span>
+
+  <span class="kd">const</span> <span class="n">Tax</span><span class="o">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">rate</span><span class="o">});</span>
+<span class="o">}</span>
+</pre>
+<p>次に、税抜価格を<code>Money</code>型を利用して定義する。<code>Money</code>型を利用しているので、自動的に負の値になることは実行時に保証されている。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">TaxExcludedPrice</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">Money</span> <span class="n">money</span><span class="o">;</span>
+
+  <span class="n">TaxExcludedPrice</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">money</span><span class="o">);</span>
+<span class="o">}</span>
+</pre>
+<p>最後に、これらを利用して税込価格を定義する。コンストラクタにて税抜価格と税から生成するようにしているため、任意の数値から税込価格を直接生成することができない。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">TaxIncludedPrice</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">Money</span> <span class="n">money</span><span class="o">;</span>
+
+  <span class="n">TaxIncludedPrice</span><span class="o">({</span>
+    <span class="kd">required</span> <span class="n">TaxExcludedPrice</span> <span class="n">taxExcludedPrice</span><span class="o">,</span>
+    <span class="kd">required</span> <span class="n">Tax</span> <span class="n">tax</span><span class="o">,</span>
+  <span class="o">})</span> <span class="o">:</span> <span class="n">money</span> <span class="o">=</span> <span class="n">Money</span><span class="o">((</span><span class="n">taxExcludedPrice</span><span class="o">.</span><span class="na">money</span><span class="o">.</span><span class="na">value</span> <span class="o">*</span> <span class="o">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">tax</span><span class="o">.</span><span class="na">rate</span><span class="o">)).</span><span class="na">round</span><span class="o">());</span>
+<span class="o">}</span>
+</pre>
+<p>これらを使って軽減税率の商品の税込価格を計算してみる（紙幅の関係で<code>toString()</code>の実装は省略してある）。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">taxExcludedPrice</span> <span class="o">=</span> <span class="n">TaxExcludedPrice</span><span class="o">(</span><span class="n">Money</span><span class="o">(</span><span class="mi">1000</span><span class="o">));</span>
+  <span class="kd">final</span> <span class="n">taxIncludedPrice</span> <span class="o">=</span> <span class="n">TaxIncludedPrice</span><span class="o">(</span>
+    <span class="nl">taxExcludedPrice:</span> <span class="n">taxExcludedPrice</span><span class="o">,</span>
+    <span class="nl">tax:</span> <span class="n">Tax</span><span class="o">.</span><span class="na">reduced</span><span class="o">,</span>
+  <span class="o">);</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="s">'tax included price is </span><span class="si">$taxIncludedPrice</span><span class="s">.'</span><span class="o">);</span>
+  <span class="c1">//=&gt; tax included price is 1080.</span>
+<span class="o">}</span>
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
