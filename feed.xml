@@ -71,7 +71,8 @@
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
 &lt;h1&gt;何が良いのか&lt;/h1&gt;
-&lt;p&gt;こうした金額を実装する際、&lt;code&gt;int&lt;/code&gt;や&lt;code&gt;double&lt;/code&gt;といった基本データ型を直接使って表すことが多いが、&lt;code&gt;Money&lt;/code&gt;型を導入することで「負の値は許容しない」といったドメインルールを内包することができるし、&lt;code&gt;TaxIncludedPrice&lt;/code&gt;型が&lt;code&gt;TaxExcludedPrice&lt;/code&gt;型と&lt;code&gt;Tax&lt;/code&gt;型からでないと生成できないようにしていることで「税込価格は税抜価格に税を加えた値である」といったドメインロジックを型システムによって強制できるため、単体テストなどによる保証よりもさらにfail-fastな設計となり、より堅牢なコードになる。&lt;/p&gt;</summary>
+&lt;p&gt;こうした金額を実装する際、&lt;code&gt;int&lt;/code&gt;や&lt;code&gt;double&lt;/code&gt;といった基本データ型を直接使って表すことが多いが、&lt;code&gt;Money&lt;/code&gt;型を導入することで「負の値は許容しない」といったドメインルールを内包することができる。&lt;/p&gt;
+&lt;p&gt;また、&lt;code&gt;TaxIncludedPrice&lt;/code&gt;型が&lt;code&gt;TaxExcludedPrice&lt;/code&gt;型と&lt;code&gt;Tax&lt;/code&gt;型からでないと生成できないようにしていることで「税込価格は税抜価格に税を加えた値である」といったドメインロジックを型システムによって強制できるため、単体テストなどによる保証よりもさらにfail-fastな設計となり、より堅牢なコードになる。&lt;/p&gt;</summary>
     <title>ドメイン・プリミティブ in Dart</title>
     <updated>2023-01-20T22:25:00+00:00</updated>
     <dc:date>2023-01-20T22:25:00+00:00</dc:date>
