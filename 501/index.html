@@ -89,6 +89,8 @@
   <span class="c1">//=&gt; tax included price is 1080.</span>
 <span class="o">}</span>
 </pre>
+<h1>何が良いのか</h1>
+<p>こうした金額を実装する際、<code>int</code>や<code>double</code>といった基本データ型を直接使って表すことが多いが、<code>Money</code>型を導入することで「負の値は許容しない」といったドメインルールを内包することができるし、<code>TaxIncludedPrice</code>型が<code>TaxExcludedPrice</code>型と<code>Tax</code>型からでないと生成できないようにしていることで「税込価格は税抜価格に税を加えた値である」といったドメインロジックを型システムによって強制できるため、単体テストなどによる保証よりもさらにfail-fastな設計となり、より堅牢なコードになる。</p>
         </section>
         <footer>
           <nav>
