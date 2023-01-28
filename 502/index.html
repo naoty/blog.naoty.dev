@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セキュア・バイ・デザイン</title>
+    <meta property="og:title" content="セキュア・バイ・デザイン">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/502/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">セキュア・バイ・デザイン</h1>
+          <p class="metadata">
+            <time datetime="2023-01-28T12:41:00.000+0000">2023-01-28 12:41</time>
+            <a href="/book/">#book</a>
+            <a href="/ddd/">#ddd</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近<a href="https://book.mynavi.jp/ec/products/detail/id=124056">セキュア・バイ・デザイン</a>という本を2週間くらいかけて読んでいた。</p>
+<h1>感想</h1>
+<p>社内の輪読会で読むことになり、少し先取りして読んでみたところ、面白いし読みやすかったため、一気に読み進めてしまった。前回の「単体テストの感想/使い方」に並んで、大当たりの本だった。</p>
+<h1>内容</h1>
+<p>タイトルからは想像つかないけど、感覚的には7割くらいはDDDの実装パターンの話で、残りはセキュリティの話という印象だった。DDDに則った設計を推し進めることでセキュアなサービスにつながるという感じだった。</p>
+<p>以下は印象にのこったことを書いていく。</p>
+<h2>汎用データ型が適切な場面はほとんどない</h2>
+<p><code>int</code>や<code>string</code>といった汎用データ型がドメインモデルの表現として適切であることはほとんどない、という強烈なパンチラインが最初の方に出てくる。</p>
+<p>例えば、ユーザー名を表すデータ型として<code>string</code>を使うのは当然だと思われるが、ユーザー名に使える文字種や長さといったドメインルールを<code>User</code>クラスなどそれを包含する概念で検証するのではなく、<code>UserName</code>クラスを新たに作りそこで検証させる方が凝集度が高くfail-fastな設計になるということだった。当然ながら、この<code>UserName</code>クラスの中で文字列の表現として<code>string</code>を使うことにはなるが、それを直接使うことはないということだろう。</p>
+<p>確か「<a href="/491/">Domain modeling made functional</a>」にも同じような話が出てきた記憶がある。ただの<code>string</code>ではなく型エイリアスを使ってドメインを型として表現することの重要性について書かれていたはず。</p>
+<h2>契約プログラミング</h2>
+<p>自分は例の分厚い「オブジェクト指向入門」を読んだことがなく、ちゃんと契約プログラミングについて書かれた本を読んだことがなかったのだけど、本書には部分的に契約プログラミングについて書かれた箇所があり、とても勉強になった。</p>
+<p>以前読んだ「<a href="/498/">単体テストの考え方/使い方</a>」の中でも「事前条件」「事後条件」「不変条件」といった用語は登場しており、契約プログラミングはプログラミングにおける基本的な考え方の一つとして捉えられるのだろう。</p>
+<p>本書では値オブジェクトの不変条件を守るために、コンストラクタにおいて引数を検証する実装を紹介している。そして、immutableであり、かつ不変条件が常に保証された値オブジェクトを特にドメイン・プリミティブと呼んでいる。</p>
+<h2>コードレビューと確証バイアス</h2>
+<p>本書では一致する特徴を探してしまう人間の習性のことを確証バイアスと呼んでおり、それがコードレビューにも影響するという話が面白かった。</p>
+<p>レビューするコードの99%が正しかったとすると、無意識のうちに残り1%も正しいだろうと思い込んでしまう。逆に、バグをいくつか見つかると、他のコードも疑わしく見えてくる。</p>
+<p>警察官はこういった確証バイアスに陥らないように特殊な訓練を受けているそうだけど、僕たちプログラマーも確証バイアスに陥らない工夫が必要になるのだろうと思った。</p>
+<h2>コレクションを持つエンティティの完全性</h2>
+<p>エンティティのメンバーに<code>List</code>などのコレクションがある場合、エンティティの完全性を保つ工夫が必要という話。</p>
+<p>エンティティは、immutableである値オブジェクトとは異なり、mutableな存在なので、コンストラクタで不変条件を検証するだけでは不十分で、setterや状態を更新するメソッドにおいて不変条件が守られているかを検証する必要がある。なので、mutableなメンバーをpublicにせず状態を更新するメソッドにカプセル化するといった基本的な工夫をとることになる。</p>
+<p>ただ、コレクションをメンバーに持つ場合はさらに踏み込んで考える必要がある。コレクションそのものをgetter等で外部に公開すると、そのコレクションの中身を外部から更新できてしまうため、エンティティの不変条件を守れなくなってしまう。</p>
+<p>そこで、外部にコレクションを公開する場合は、コレクションそのものではなくimmutableな参照を返すようにする。Javaにはこれを可能にする<code>Collection.unmodifiableList</code>といった便利メソッドがある。これにより、外部の利用者に読み取り専用のコレクションを公開できるようになる。</p>
+<h1>ドメインDoS攻撃</h1>
+<p>ドメインDoS攻撃というのは、ドメインルールを悪用してサービスを提供できない状態に追い詰める攻撃のことで、本書ではホテルに5000件予約してキャンセル料が発生する直前で全件キャンセルするといった攻撃が紹介されていた。</p>
+<p>こういった攻撃が存在することを知っているだけでも、ドメインルールを悪用してみようという発想が生まれ、そこから隠されたドメインルールを発見する手がかりが生まれると思う。</p>
+<h2>11章全部</h2>
+<p>11章は保険アプリケーションを開発する企業においてチーム間で「支払い」に関わる認識のずれに誰も気づかないまま機能をリリースした結果、裁判沙汰にまで発展したという話で、一見同じに見えるドメインモデルでもそのコンテキストを意識しなくてはならないという示唆があったし、コンテキストごとにチームを分割することで独立して動けるようになったが、そのコンテキストマッピングを疎かにしたことによる弊害に気付かされた。個人的に非常に刺さる内容だった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
