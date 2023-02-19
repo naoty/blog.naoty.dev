@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamと仲良くなる</title>
+    <meta property="og:title" content="Streamと仲良くなる">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/505/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Streamと仲良くなる</h1>
+          <p class="metadata">
+            <time datetime="2023-02-19T13:47:00.000+0000">2023-02-19 13:47</time>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>今までなんとなくでStreamを触ってきたけど、そろそろちゃんと理解しておきたいので記事に残すことにした。基本的なところからエラーハンドリングまで調べたり手を動かして検証した。</p>
+<h1>Streamの生成</h1>
+<h2>
+<code>async*</code>による生成</h2>
+<pre lang="dart" class="highlight highlight-dart"><span class="n">Stream</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">countStream</span><span class="o">(</span><span class="kt">int</span> <span class="n">max</span><span class="o">)</span> <span class="kd">async</span><span class="o">*</span> <span class="o">{</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kd">var</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">max</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="k">yield</span> <span class="n">i</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<p><code>async*</code>がついた関数を呼ぶとStreamが生成され、関数が終了するとそのStreamは終了する。その間、<code>yield</code>や<code>yield*</code>によってStreamに値を送ることができる。</p>
+<p><code>yield</code>は値をそのままStreamに送るのに対して、<code>yield*</code>は別のStreamを受け取り、そのStreamから受け取った値を<code>yield</code>する。</p>
+<h2>別のStreamから生成</h2>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">countStream</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">map</span><span class="o">((</span><span class="n">n</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span><span class="o">);</span>
+</pre>
+<p><code>Stream</code>クラスには新しい<code>Stream</code>を生成するための便利なメソッドが用意されている。例えば、以下のようなメソッドが定義されている。</p>
+<ul>
+<li>
+<code>map</code>: 引数の関数で変換した値を送る新たなStreamを生成する。</li>
+<li>
+<code>where</code>: 引数の条件を満たす値を送る新たなStreamを生成する。</li>
+<li>
+<code>take</code>: 最初のN件の値だけを返す新たなStreamを生成する。</li>
+<li>
+<code>skip</code>: 最初のN件をスキップした残りの値を返す新たなStreamを生成する。</li>
+<li>
+<code>cast</code>: 実行時に型キャストした値を返す新たなStreamを生成する。</li>
+</ul>
+<h2>
+<code>StreamController</code>による生成</h2>
+<p>これだけで1本記事が書けそうなので今回は割愛する。</p>
+<h2>エラーハンドリング</h2>
+<pre lang="dart" class="highlight highlight-dart"><span class="n">Stream</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">countStream</span><span class="o">(</span><span class="kt">int</span> <span class="n">max</span><span class="o">)</span> <span class="kd">async</span><span class="o">*</span> <span class="o">{</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kd">var</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">max</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">5</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// throw Exception('error for $i') はNG</span>
+      <span class="k">yield</span><span class="o">*</span> <span class="n">Stream</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="n">Exception</span><span class="o">(</span><span class="s">'error for </span><span class="si">$i</span><span class="s">'</span><span class="o">));</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="k">yield</span> <span class="n">i</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<p>Streamの生成時にエラーが発生した場合、エラーをStreamに送る必要がある。<code>throw</code>してしまうと、Streamを生成する関数自体が例外を投げてしまう。エラーをStreamに送ると、後述するように<code>handleError</code>等によって利用側がエラーハンドリングできるようになる。</p>
+<p><code>async*</code>を使って生成する場合、上のように<code>Stream.error</code>で単一のエラーを送るStreamを作り<code>yield*</code>に渡すことでエラーをStreamに送ることができる（もっと簡単にできる方法があれば教えてください）。<code>map</code>等で別のStreamから生成する場合も同様にできるはず。</p>
+<h1>Streamの利用</h1>
+<h2>
+<code>await for</code>による利用</h2>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="kd">async</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="k">await</span> <span class="k">for</span> <span class="o">(</span><span class="kd">final</span> <span class="n">n</span> <span class="k">in</span> <span class="n">countStream</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="n">print</span><span class="o">(</span><span class="n">total</span><span class="o">);</span>
+<span class="o">}</span>
+</pre>
+<p><code>await for</code>文を使うと、Streamから値を受け取るまで待機し、値を受け取ったら処理できる。</p>
+<h2>Streamクラスのメソッドによる利用</h2>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="kd">async</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">countStream</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">reduce</span><span class="o">((</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+  <span class="n">print</span><span class="o">(</span><span class="n">total</span><span class="o">);</span>
+<span class="o">}</span>
+</pre>
+<p><code>Stream</code>クラスにはStreamの値を処理して結果を<code>Future</code>として出力するメソッドが用意されている。例えば、以下のようなメソッドが定義されている。</p>
+<ul>
+<li>
+<code>any</code>: Streamの値のいずれかが条件を満たすかを返す。</li>
+<li>
+<code>contains</code>: Streamに引数の値が含まれるかを返す。</li>
+<li>
+<code>reduce</code>: Streamの値を集約して一つの値を返す。</li>
+<li>
+<code>drain</code>: Streamが完了したら引数の値を返し、エラーが発生したらエラーを返す。</li>
+<li>
+<code>toList</code>: Streamの値を<code>List</code>にして返す。</li>
+</ul>
+<h2>
+<code>listen</code>による利用</h2>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="n">countStream</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">listen</span><span class="o">(</span>
+    <span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span><span class="o">,</span>
+    <span class="nl">onDone:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="n">total</span><span class="o">),</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</pre>
+<p><code>listen</code>メソッドを使うと、Streamの値を受け取ったときの処理、Streamが完了したときの処理などをより汎用的に定義できる。</p>
+<h2>エラーハンドリング</h2>
+<p>Streamの生成側のエラーハンドリングで使ったコードを利用する場合を考える。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="kd">async</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="k">await</span> <span class="k">for</span> <span class="o">(</span><span class="kd">final</span> <span class="n">n</span> <span class="k">in</span> <span class="n">countStream</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span> <span class="o">{</span>
+      <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="n">error</span><span class="o">);</span> <span class="c1">//=&gt; Exception: error for 5</span>
+  <span class="o">}</span>
+
+  <span class="n">print</span><span class="o">(</span><span class="n">total</span><span class="o">);</span> <span class="c1">//=&gt; 10</span>
+<span class="o">}</span>
+</pre>
+<p><code>await for</code>で値を受け取る場合、途中でエラーを受け取ると<code>await for</code>はStreamの処理を中止しそのエラーを<code>throw</code>する。なので、エラーハンドリングするには<code>await for</code>を<code>try ... catch</code>で囲む必要がある。そして、エラーを受け取るまでは処理されるが、<code>catch</code>した時点ではループを抜けているため、その後の処理を継続させることができない。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">var</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="n">countStream</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">listen</span><span class="o">(</span>
+    <span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span><span class="o">,</span>
+    <span class="nl">onDone:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="n">total</span><span class="o">),</span> <span class="c1">//=&gt; 50</span>
+    <span class="nl">onError:</span> <span class="o">(</span><span class="n">error</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="n">error</span><span class="o">),</span> <span class="c1">//=&gt; Exception: error for 5</span>
+    <span class="nl">cancelOnError:</span> <span class="kc">false</span><span class="o">,</span>
+  <span class="o">);</span>
+<span class="o">}</span>
+</pre>
+<p><code>listen</code>で値を受け取る場合はより細かくエラーを受け取ったときの処理を定義できる。<code>onError</code>でエラーを受け取ったときの処理を定義でき、<code>cancelOnError</code>でエラーを受け取ったときにStreamをcancelするかどうかを設定できる。デフォルトではこれが<code>false</code>なので、エラーを受け取っても処理を継続できる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
