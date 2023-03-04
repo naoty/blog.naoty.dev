@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestoreとドメインモデルの間で</title>
+    <meta property="og:title" content="Firestoreとドメインモデルの間で">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/506/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Firestoreとドメインモデルの間で</h1>
+          <p class="metadata">
+            <time datetime="2023-03-04T15:41:00.000+0000">2023-03-04 15:41</time>
+            <a href="/firestore/">#firestore</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>最近、Firestoreのことやドメインモデリングについて思いをめぐらせることが多いので、感じていることや考えていることを雑にテキストに起こした。</p>
+<h1>非正規化とORマッパー</h1>
+<p>Firestoreに限らずNoSQLでは、アクセスパターンに合わせて非正規化したスキーマを設計するのがよいとされている。RDBとは異なり、JOINが使えない（MongoDBでは使えるらしい）ため、アプリケーション側で複数回のクエリを実行し結合することになり効率がよくないのが理由のようだ。</p>
+<p>RDBでそうしてきたようにORマッパーを使い、Firestoreに格納されたデータとオブジェクトとの間で変換しようとすると、どうしても正規化されたスキーマになりやすいと思う。正規化されたモデルを使ってFirestoreにアクセスすると、上述した通り、アプリケーション側での結合に頼ることになり、readのパフォーマンスが悪化しやすくなると思う。</p>
+<h1>非正規化のための工夫</h1>
+<p>スキーマを非正規化すると、同じドメインモデルを複数のコレクションに保存することになる。そのため、コレクション間での一貫性を保つための工夫がアプリケーション側に必要になる。例えば、Firestoreへの書き込みを行うメソッドを統一し、複数のコレクションへの書き込みが矛盾なく行われるようにしたり、コレクション間の矛盾を検知しあるべき状態に収束させるワーカープロセスを用意したり、FaaSを利用してあるコレクションのデータを別コレクションにコピーするようにしたり、といった工夫が考えられそうだ。</p>
+<p>とはいえ、完璧なプログラムが存在しないように、アプリケーション側での工夫にも限界があり、一貫性を強く求められるシステム（SoRなど）では素直にRDBを使って正規化されたスキーマの上で書き込みをする方が無難だと思う。</p>
+<h1>ドメインモデリングとデータモデリング</h1>
+<p>ドメインモデリングを通してドメインを正確に反映したモデルを抽出できる一方で、それをそのままFirestoreに保存しようとすると、上述の通り、パフォーマンス上の問題が出てくる。なので、非正規化などFirestoreの特性に合わせたデータモデリングも同時に必要になる。</p>
+<p>アプリケーションはドメインモデルとデータモデルの溝を埋めるように実装したい。HTTPリクエストをドメインモデルに変換し、ドメインモデルをデータモデルに変換してFirestoreに保存する。そしてその逆を行う。<a href="https://www.oreilly.co.jp/books/9784873118703/">データ指向アプリケーションデザイン</a>を読み直すとこのようなことを思い起こさせてくれる。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
