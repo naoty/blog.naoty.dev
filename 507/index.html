@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>状態ごとにモデルを分割する</title>
+    <meta property="og:title" content="状態ごとにモデルを分割する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/507/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">状態ごとにモデルを分割する</h1>
+          <p class="metadata">
+            <time datetime="2023-03-11T17:39:00.000+0000">2023-03-11 17:39</time>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>ドメインモデリングにおいて状態をどのように扱うか考えることが増えてきたので、以下のような状態を持つブログ記事を例にとって、どのような方法がありうるか考えてみる。</p>
+<ul>
+<li>下書き: まだ公開していないので公開日時がない。</li>
+<li>公開: 公開しているので公開日時がある。</li>
+<li>アーカイブ: ユーザーが退会しているのでユーザーIDがない。</li>
+</ul>
+<p>以下、コンストラクタは省略する。</p>
+<h1>フラグ</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Id</span><span class="o">?</span> <span class="n">userId</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span><span class="o">?</span> <span class="n">publishedAt</span><span class="o">;</span>
+
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isDraft</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isPublished</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isArchived</span><span class="o">;</span>
+
+
+  <span class="kt">void</span> <span class="n">publish</span><span class="o">({</span><span class="kd">required</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">})</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isDraft</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">isDraft</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+      <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">publishedAt</span> <span class="o">=</span> <span class="n">publishedAt</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="n">archive</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isPublished</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+      <span class="n">isArchived</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="n">userId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<ul>
+<li>
+<code>isDraft</code>と<code>isPublished</code>と<code>isArchived</code>がすべて<code>true</code>になることはないし、<code>isDraft</code>が<code>true</code>なら<code>publishedAt</code>は<code>null</code>でないといけない。そういった不変条件を常に満たすように実装が必要になる。</li>
+<li>下書き状態なら公開日時は本来必要ないけど、nullableとして表現するしかない。nulllableなフィールドが増えればそれだけnullチェックも増える。</li>
+<li>
+<code>Article</code>インスタンスを利用する際、フラグをいちいち確認する必要がある。例えば、インスタンスを公開しようとしたとき、その状態をチェックして処理を替えなくてはいけない。</li>
+</ul>
+<h1>enum</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">ArticleStatus</span> <span class="n">status</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Id</span><span class="o">?</span> <span class="n">userId</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span><span class="o">?</span> <span class="n">publishedAt</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kt">enum</span> <span class="n">ArticleStatus</span> <span class="o">{</span>
+  <span class="n">draft</span><span class="o">,</span>
+  <span class="n">published</span><span class="o">,</span>
+  <span class="n">archived</span><span class="o">;</span>
+<span class="o">}</span>
+</pre>
+<ul>
+<li>フラグよりはすっきりしたけど、それ以外は変わっていない。</li>
+</ul>
+<h1>状態ごとにクラスを分割</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">DraftArticle</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">userId</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
+
+  <span class="n">PublishedArticle</span> <span class="n">publish</span><span class="o">({</span><span class="kd">required</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">})</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">PublishedArticle</span><span class="o">(</span>
+      <span class="nl">id:</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">,</span>
+      <span class="nl">userId:</span> <span class="k">this</span><span class="o">.</span><span class="na">userId</span><span class="o">,</span>
+      <span class="nl">title:</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="o">,</span>
+      <span class="nl">publishedAt:</span> <span class="n">publishedAt</span><span class="o">,</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">PublishedArticle</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">userId</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">;</span>
+
+  <span class="n">ArchivedArticle</span> <span class="n">archive</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">ArchivedArticle</span><span class="o">(</span>
+      <span class="nl">id:</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">,</span>
+      <span class="nl">title:</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="o">,</span>
+      <span class="nl">publishedAt:</span> <span class="k">this</span><span class="o">.</span><span class="na">publishedAt</span><span class="o">,</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">ArchivedArticle</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">;</span>
+<span class="o">}</span>
+</pre>
+<ul>
+<li>インスタンスは異なっていても同じ記事であれば<code>id</code>は同じものを利用する。</li>
+<li>上2つと比べて、コード量が増えたけど、不必要でnullableなフィールドはなくなったし、状態に関わる不変条件をチェックする必要もなくなった。</li>
+<li>それぞれの状態に対して可能な処理がコンパイル時には保証されている。例えば、<code>publish</code>は下書き状態の記事にしかできなくなっている。</li>
+<li>状態に関わらずにブログ記事を扱いたい場合、Dartであれば<code>Article</code>インターフェイスを定義することになり、ポリモーフィズムを駆使した実装になるだろう。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
