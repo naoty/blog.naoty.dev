@@ -74,9 +74,9 @@ Total: 1399 (UNKNOWN: 16, LOW: 92, MEDIUM: 1137, HIGH: 143, CRITICAL: 11)
 -FROM ruby:2.6.5
 </span><span class="gi">+FROM node:12.13.1-alpine AS node
 +FROM ruby:2.6.5-alpine
-</span>
--RUN apt-get update
-<span class="gi">+RUN apk update &amp;&amp; \
+</span><span class="err">
+</span><span class="gd">-RUN apt-get update
+</span><span class="gi">+RUN apk update &amp;&amp; \
 +  apk add --no-cache build-base sqlite-dev
 </span></pre>
 <p>trivyでもう一度脆弱性を調べてみると、脆弱性はほとんどなくなった。</p>
@@ -88,13 +88,13 @@ Total: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
 <h1>rootをなるべく使わない</h1>
 <p><code>root</code>ユーザーではなく最小限の権限しかもたないユーザーを使う。コンテナに侵入された場合の被害を最小限に抑えられる。</p>
 <pre lang="diff" class="highlight highlight-diff"> COPY . /hello-rails/
-
-+RUN addgroup -S ruby &amp;&amp; \
-<span class="gi">+  adduser -S ruby ruby &amp;&amp; \
+<span class="err">
+</span><span class="gi">+RUN addgroup -S ruby &amp;&amp; \
++  adduser -S ruby ruby &amp;&amp; \
 +  chown -R ruby:ruby /hello-rails
 +USER ruby
-</span>
- ENTRYPOINT ["bin/rails"]
+</span><span class="err">
+</span> ENTRYPOINT ["bin/rails"]
  CMD ["s"]
 </pre>
 <ul>

@@ -42,17 +42,17 @@
 <pre><code>% gcloud auth application-default login
 </code></pre>
 <p>Dart側はgoogleapis_authパッケージを使い、以下のように実装することでADCを利用して認証できるようになる。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">authClient</span> <span class="o">=</span> <span class="k">await</span> <span class="n">clientViaApplicationDefaultCredentials</span><span class="o">(</span>
-  <span class="nl">scopes:</span> <span class="o">[</span><span class="n">FirestoreApi</span><span class="o">.</span><span class="na">datastoreScope</span><span class="o">],</span>
-<span class="o">);</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">authClient</span> <span class="o">=</span> <span class="k">await</span> <span class="n">clientViaApplicationDefaultCredentials</span><span class="p">(</span>
+  <span class="nl">scopes:</span> <span class="p">[</span><span class="n">FirestoreApi</span><span class="o">.</span><span class="na">datastoreScope</span><span class="p">],</span>
+<span class="p">);</span>
 </pre>
 <h1>Firestoreへのアクセス</h1>
 <p>googleapisパッケージのコードを使うと、直感的なコードでFirestoreにアクセスできるようになる。以下の例では、ドキュメントのリストを取得している。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">api</span> <span class="o">=</span> <span class="n">FirestoreApi</span><span class="o">(</span><span class="n">authClient</span><span class="o">);</span>
-<span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="na">projects</span><span class="o">.</span><span class="na">databases</span><span class="o">.</span><span class="na">documents</span><span class="o">.</span><span class="na">list</span><span class="o">(</span>
-  <span class="s">'projects/</span><span class="si">$project_id</span><span class="s">/databases/(default)/documents'</span><span class="o">,</span>
-  <span class="s">'</span><span class="si">$collection_id</span><span class="s">'</span><span class="o">,</span>
-<span class="o">);</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">api</span> <span class="o">=</span> <span class="n">FirestoreApi</span><span class="p">(</span><span class="n">authClient</span><span class="p">);</span>
+<span class="kd">final</span> <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="na">projects</span><span class="o">.</span><span class="na">databases</span><span class="o">.</span><span class="na">documents</span><span class="o">.</span><span class="na">list</span><span class="p">(</span>
+  <span class="s">'projects/</span><span class="si">$project_id</span><span class="s">/databases/(default)/documents'</span><span class="p">,</span>
+  <span class="s">'</span><span class="si">$collection_id</span><span class="s">'</span><span class="p">,</span>
+<span class="p">);</span>
 </pre>
         </section>
         <footer>

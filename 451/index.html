@@ -177,8 +177,8 @@ SELECT 1 FROM <span class="sb">`</span>reservations<span class="sb">`</span> WHE
 +  raw: ENV['ENABLE_RAW_PROFILE'].to_i.nonzero?,
 +  interval: 1000,
 +  save_every: 5
-</span>
- run App.new
+</span><span class="err">
+</span> run App.new
 </pre>
 <p>d3-flame-graphを使うために<code>raw: true</code>を追加してある。systemdは<code>~/env</code>をRailsサーバーの環境変数として設定するため、これを変更すればオン/オフを切り替えられる。</p>
 <p>Railsサーバーを再起動させてベンチマーカーを実行する。</p>
@@ -410,17 +410,17 @@ isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
 <p><code>user not found</code>エラーは<code>#required_login!</code>ですでにチェックしていることを二重にチェックしているため不要なはず。</p>
 <pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
    required_login!
-
-   transaction do |tx|
+<span class="err">
+</span>   transaction do |tx|
      id = generate_id('reservations', tx)
      schedule_id = params[:schedule_id].to_s
      user_id = current_user[:id]
-
-     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
+<span class="err">
+</span>     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
 <span class="gd">-    halt(403, JSON.generate(error: 'user not found')) unless tx.xquery('SELECT 1 FROM `users` WHERE `id` = ? LIMIT 1', user_id).first
 </span>     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
-
-     # snip
+<span class="err">
+</span>     # snip
    end
  end
 </pre>
@@ -468,17 +468,17 @@ isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
 <p>もう少しよく見てみると、予約を更新していないのに排他ロックを取得しているため、これをやめる。</p>
 <pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
    required_login!
-
-   transaction do |tx|
+<span class="err">
+</span>   transaction do |tx|
      id = generate_id('reservations', tx)
      schedule_id = params[:schedule_id].to_s
      user_id = current_user[:id]
-
--    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
-<span class="gi">+    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first.nil?
+<span class="err">
+</span><span class="gd">-    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1 FOR UPDATE', schedule_id).first.nil?
+</span><span class="gi">+    halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first.nil?
 </span>     halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
-
-     # snip
+<span class="err">
+</span>     # snip
    end
  end
 </pre>
@@ -506,9 +506,9 @@ isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
    schedules.each do |schedule|
      get_reservations_count(schedule)
    end
-
-+  if current_user.nil? || !current_user[:staff]
-<span class="gi">+    schedules = schedules.select { |schedule| schedule[:capacity] &gt; schedule[:reserved] }
+<span class="err">
+</span><span class="gi">+  if current_user.nil? || !current_user[:staff]
++    schedules = schedules.select { |schedule| schedule[:capacity] &gt; schedule[:reserved] }
 +  end
 </span> 
    json(schedules.to_a)
@@ -617,8 +617,8 @@ isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
 <pre lang="diff" class="highlight highlight-diff"><span class="p">post '/api/signup' do
 </span>  id = ''
   nickname = ''
-
-  user = transaction do |tx|
+<span class="err">
+</span>  user = transaction do |tx|
     id = generate_id('users', tx)
     email = params[:email]
     nickname = params[:nickname]
@@ -626,11 +626,11 @@ isucon@ubuntu-focal:~<span class="nv">$ </span>bin/benchmarker
 -   created_at = tx.xquery('SELECT `created_at` FROM `users` WHERE `id` = ? LIMIT 1', id).first[:created_at]
 </span><span class="gi">+   created_at = Time.now.iso8601(6)
 +   tx.xquery('INSERT INTO `users` (`id`, `email`, `nickname`, `created_at`) VALUES (?, ?, ?, ?)', id, email, nickname, created_at)
-</span>
-    { id: id, email: email, nickname: nickname, created_at: created_at }
+</span><span class="err">
+</span>    { id: id, email: email, nickname: nickname, created_at: created_at }
   end
-
-  json(user)
+<span class="err">
+</span>  json(user)
 <span class="p">end
 </span></pre>
 <pre><code>08:23:51.263969 score: 1909(1909 - 0) : pass

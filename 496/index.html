@@ -36,25 +36,25 @@
 <p>このような実装により、このクラスのインスタンスは必ず有効な値であることが保証される。そのため、あるオブジェクトをあちこちで検証する必要がなくなり、検証のための実装がスマートコンストラクタに集約されるため、凝集性の高いコードになる。また、検証漏れによる不具合も回避できるため、堅牢なコードになるとも言えるだろう。</p>
 <h1>実装例</h1>
 <p>JANコードを例にとる。JANコードは13桁または8桁の数字で構成され、<code>"jancode"</code>のような文字列はJANコードではない。こういったビジネスルールをスマートコンストラクタを使って実装してみる。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Jancode</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="kt">String</span> <span class="n">numbers</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Jancode</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">numbers</span><span class="p">;</span>
 
-  <span class="n">Jancode</span><span class="o">.</span><span class="na">_internal</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">numbers</span><span class="o">);</span>
+  <span class="n">Jancode</span><span class="o">.</span><span class="na">_internal</span><span class="p">(</span><span class="k">this</span><span class="o">.</span><span class="na">numbers</span><span class="p">);</span>
 
-  <span class="kd">factory</span> <span class="n">Jancode</span><span class="o">.</span><span class="na">fromNumbers</span><span class="o">(</span><span class="kt">String</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">numbers</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">13</span> <span class="o">||</span> <span class="n">numbers</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">8</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">throw</span> <span class="n">Exception</span><span class="o">(</span><span class="s">'invalid JAN code'</span><span class="o">);</span>
-    <span class="o">}</span>
+  <span class="kd">factory</span> <span class="n">Jancode</span><span class="o">.</span><span class="na">fromNumbers</span><span class="p">(</span><span class="kt">String</span> <span class="n">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">13</span> <span class="o">||</span> <span class="n">numbers</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="n">Exception</span><span class="p">(</span><span class="s">'invalid JAN code'</span><span class="p">);</span>
+    <span class="p">}</span>
 
     <span class="c1">// TODO: implement validation rules</span>
 
-    <span class="k">return</span> <span class="n">Jancode</span><span class="o">.</span><span class="na">_internal</span><span class="o">(</span><span class="n">numbers</span><span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+    <span class="k">return</span> <span class="n">Jancode</span><span class="o">.</span><span class="na">_internal</span><span class="p">(</span><span class="n">numbers</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre>
-<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">jancode</span> <span class="o">=</span> <span class="n">Jancode</span><span class="o">.</span><span class="na">fromNumbers</span><span class="o">(</span><span class="s">'12345678'</span><span class="o">);</span>
-<span class="o">}</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">jancode</span> <span class="o">=</span> <span class="n">Jancode</span><span class="o">.</span><span class="na">fromNumbers</span><span class="p">(</span><span class="s">'12345678'</span><span class="p">);</span>
+<span class="p">}</span>
 </pre>
 <ul>
 <li>Dartでは<code>_</code>から始まるメソッドやフィールドはprivateとして扱われる。ここではコンストラクタを<code>_internal</code>のように定義することでprivateにしている。</li>

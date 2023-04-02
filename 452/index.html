@@ -46,12 +46,12 @@
 <pre lang="diff" class="highlight highlight-diff"> class App &lt; Sinatra::Base
    helpers do
      # snip
-
-+    def redis
-<span class="gi">+      Thread.current[:redis] ||= Redis.new(driver: :hiredis)
+<span class="err">
+</span><span class="gi">+    def redis
++      Thread.current[:redis] ||= Redis.new(driver: :hiredis)
 +    end
-</span>
-     # snip
+</span><span class="err">
+</span>     # snip
    end
  end
 </pre>
@@ -74,26 +74,26 @@
 <p><code>POST /api/reservations</code>で予約数をインクリメントし、予約数をRedisから取得するようにする。</p>
 <pre lang="diff" class="highlight highlight-diff"> post '/api/reservations' do
    required_login!
-
-   transaction do |tx|
+<span class="err">
+</span>   transaction do |tx|
      id = generate_id('reservations', tx)
      schedule_id = params[:schedule_id].to_s
      user_id = current_user[:id]
-
-     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id)
+<span class="err">
+</span>     halt(403, JSON.generate(error: 'schedule not found')) if tx.xquery('SELECT 1 FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id)
      halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` =
-
-     capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
+<span class="err">
+</span>     capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
 <span class="gd">-    reserved = tx.xquery('SELECT COUNT(*) AS count FROM `reservations` WHERE `schedule_id` = ?', schedule_id).first[:count]
 </span><span class="gi">+    reserved = redis.get("schedules:#{schedule_id}:reserved").to_i
-</span>
-     halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= capacity
-
-     tx.xquery('INSERT INTO `reservations` (`id`, `schedule_id`, `user_id`, `created_at`) VALUES (?, ?, ?, NOW(6))', id, schedule_id, us
+</span><span class="err">
+</span>     halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= capacity
+<span class="err">
+</span>     tx.xquery('INSERT INTO `reservations` (`id`, `schedule_id`, `user_id`, `created_at`) VALUES (?, ?, ?, NOW(6))', id, schedule_id, us
      created_at = tx.xquery('SELECT `created_at` FROM `reservations` WHERE `id` = ?', id).first[:created_at]
-
-+    redis.incr("schedules:#{schedule_id}:reserved")
-<span class="gi">+
+<span class="err">
+</span><span class="gi">+    redis.incr("schedules:#{schedule_id}:reserved")
++
 </span>     json({ id: id, schedule_id: schedule_id, user_id: user_id, created_at: created_at})
    end
  end
@@ -109,12 +109,12 @@
 +  schedules.each do |schedule|
 +    schedule[:reserved] = reserved_counts["schedules:#{schedule[:id]}:reserved"].to_i
 +  end
-</span>
-   if current_user.nil? || !current_user[:staff]
+</span><span class="err">
+</span>   if current_user.nil? || !current_user[:staff]
      schedules = schedules.select { |schedule| schedule[:capacity] &gt; schedule[:reserved] }
    end
-
-   json(schedules.to_a)
+<span class="err">
+</span>   json(schedules.to_a)
  end
 </pre>
 <p>ベンチマークの結果はそこまで変化がなかった。</p>
@@ -168,12 +168,12 @@
 </span><span class="gi">+schedule = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first
 +halt(403, JSON.generate(error: 'schedule not found')) if schedule.nil?
 </span> halt(403, JSON.generate(error: 'already taken')) if tx.xquery('SELECT 1 FROM `reservations` WHERE `schedule_id` = ? AND `user_id` = ? LIMIT 1', schedule_id, user_id).first
-
--capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
- reserved = redis.get("schedules:#{schedule_id}:reserved").to_i
-
--halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= capacity
-<span class="gi">+halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= schedule[:capacity]
+<span class="err">
+</span><span class="gd">-capacity = tx.xquery('SELECT `capacity` FROM `schedules` WHERE `id` = ? LIMIT 1', schedule_id).first[:capacity]
+</span> reserved = redis.get("schedules:#{schedule_id}:reserved").to_i
+<span class="err">
+</span><span class="gd">-halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= capacity
+</span><span class="gi">+halt(403, JSON.generate(error: 'capacity is already full')) if reserved &gt;= schedule[:capacity]
 </span></pre>
 <pre><code>09:09:39.008965 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH5HZDT68S0519B4PNJBFX6
 09:09:39.499605 ERR: load: invalid: 存在しないはずのスケジュール ID です: 01FAH5HZX6YW4S72110SHX75SF
@@ -226,8 +226,8 @@ ID 発行形式の変更</p>
    `nickname`   VARCHAR(120) NOT NULL DEFAULT '',
    `staff`      BOOLEAN NOT NULL DEFAULT false,
  ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-
- DROP TABLE IF EXISTS `schedules`;
+<span class="err">
+</span> DROP TABLE IF EXISTS `schedules`;
  CREATE TABLE `schedules` (
 <span class="gd">-  `id`         VARCHAR(255) PRIMARY KEY NOT NULL,
 </span><span class="gi">+  `id`         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -235,8 +235,8 @@ ID 発行形式の変更</p>
    `capacity`   INT UNSIGNED NOT NULL DEFAULT 0,
    `created_at` DATETIME(6) NOT NULL
  ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-
- DROP TABLE IF EXISTS `reservations`;
+<span class="err">
+</span> DROP TABLE IF EXISTS `reservations`;
  CREATE TABLE `reservations` (
 <span class="gd">-  `id`          VARCHAR(255) PRIMARY KEY NOT NULL,
 -  `schedule_id` VARCHAR(255) NOT NULL,

@@ -68,23 +68,23 @@ graph TD
 <p>Gatsbyで生成しているページはReactのコンポーネントでできているので、<code>componentDidMount</code>や<code>componentDidUpdate</code>のようなタイミングでmermaidを動かしている。</p>
 <pre lang="js" class="highlight highlight-js"><span class="k">import</span> <span class="nx">mermaid</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">mermaid</span><span class="dl">"</span><span class="p">;</span>
 
-<span class="kd">class</span> <span class="nx">PostTemplate</span> <span class="kd">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">mermaid</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">class</span> <span class="nc">PostTemplate</span> <span class="kd">extends</span> <span class="nc">Component</span> <span class="p">{</span>
+  <span class="nf">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">mermaid</span><span class="dl">"</span><span class="p">);</span>
 
-    <span class="nx">mermaid</span><span class="p">.</span><span class="nx">initialize</span><span class="p">({</span> <span class="na">startOnLoad</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span>
-    <span class="nx">mermaid</span><span class="p">.</span><span class="nx">mermaidAPI</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">"</span><span class="s2">container</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">graph TD</span><span class="se">\n</span><span class="s2">  a --&gt; b</span><span class="dl">"</span><span class="p">,</span> <span class="nx">svg</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">mermaid</span><span class="p">.</span><span class="nf">initialize</span><span class="p">({</span> <span class="na">startOnLoad</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span>
+    <span class="nx">mermaid</span><span class="p">.</span><span class="nx">mermaidAPI</span><span class="p">.</span><span class="nf">render</span><span class="p">(</span><span class="dl">"</span><span class="s2">container</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">graph TD</span><span class="se">\n</span><span class="s2">  a --&gt; b</span><span class="dl">"</span><span class="p">,</span> <span class="nx">svg</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="nx">element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">;</span>
     <span class="p">})</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre>
 <p>あとは、remarkプラグインを書いて、<code>mermaid</code>がついたcode blockを<code>&lt;div class="mermaid"&gt;&lt;/div&gt;</code>で囲うように変換するようにした。</p>
-<pre lang="js" class="highlight highlight-js"><span class="kd">const</span> <span class="nx">visit</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">unist-util-visit</span><span class="dl">"</span><span class="p">);</span>
+<pre lang="js" class="highlight highlight-js"><span class="kd">const</span> <span class="nx">visit</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">unist-util-visit</span><span class="dl">"</span><span class="p">);</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">markdownAST</span> <span class="p">},</span> <span class="nx">pluginOptions</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">visit</span><span class="p">(</span><span class="nx">markdownAST</span><span class="p">,</span> <span class="dl">"</span><span class="s2">code</span><span class="dl">"</span><span class="p">,</span> <span class="nx">node</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">lang</span> <span class="o">!==</span> <span class="dl">"</span><span class="s2">mermaid</span><span class="dl">"</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+  <span class="nf">visit</span><span class="p">(</span><span class="nx">markdownAST</span><span class="p">,</span> <span class="dl">"</span><span class="s2">code</span><span class="dl">"</span><span class="p">,</span> <span class="nx">node</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nf">if </span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">lang</span> <span class="o">!==</span> <span class="dl">"</span><span class="s2">mermaid</span><span class="dl">"</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">html</span><span class="dl">"</span><span class="p">;</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">`&lt;div class="mermaid"&gt;\n</span><span class="p">${</span><span class="nx">node</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="s2">\n&lt;/div&gt;`</span><span class="p">;</span>

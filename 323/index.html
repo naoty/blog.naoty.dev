@@ -40,8 +40,8 @@
   { csrf_params: request_forgery_protection_token, csrf_token: form_authenticity_token }
 </code></pre>
 <pre lang="jsx" class="highlight highlight-jsx"><span class="c1">// SignUpForm.jsx</span>
-<span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span>
+<span class="nf">render</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nf">return </span><span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="p">=</span><span class="s">"post"</span> <span class="na">action</span><span class="p">=</span><span class="s">"/sign_up"</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="p">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="p">=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">csrfParams</span><span class="si">}</span> <span class="na">value</span><span class="p">=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">csrfToken</span><span class="si">}</span> <span class="p">/&gt;</span>
     <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>

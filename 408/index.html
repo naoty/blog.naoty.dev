@@ -47,9 +47,9 @@
 <li>HDFSのフォーマット</li>
 </ul>
 <pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
-
-+# sshd
-<span class="gi">+RUN apt-get update \
+<span class="err">
+</span><span class="gi">+# sshd
++RUN apt-get update \
 +  &amp;&amp; apt-get install -y --no-install-recommends ssh \
 +  &amp;&amp; apt-get clean \
 +  &amp;&amp; rm -rf /var/lib/apt/lists/*
@@ -66,8 +66,8 @@
 </span></pre>
 <h1>Hive</h1>
 <pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
-
- # sshd
+<span class="err">
+</span> # sshd
  RUN apt-get update \
    &amp;&amp; apt-get install -y --no-install-recommends ssh \
    &amp;&amp; apt-get clean \
@@ -82,9 +82,9 @@
  ENV PATH=/hadoop-2.9.2/bin:/hadoop-2.9.2/sbin:$PATH
  COPY config/hadoop /hadoop-2.9.2/etc/hadoop/
  RUN hdfs namenode -format
-
-+# Hive
-<span class="gi">+RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
+<span class="err">
+</span><span class="gi">+# Hive
++RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
 +ENV HIVE_HOME=/apache-hive-2.3.6-bin PATH=/apache-hive-2.3.6-bin/bin:$PATH
 +COPY config/hive /apache-hive-2.3.6-bin/conf/
 </span></pre>
@@ -112,8 +112,8 @@ schematool <span class="nt">-dbType</span> derby <span class="nt">-initSchema</s
 hiveserver2
 </pre>
 <pre lang="diff" class="highlight highlight-diff"> FROM openjdk:8
-
- # sshd
+<span class="err">
+</span> # sshd
  RUN apt-get update \
    &amp;&amp; apt-get install -y --no-install-recommends ssh \
    &amp;&amp; apt-get clean \
@@ -128,14 +128,14 @@ hiveserver2
  ENV PATH=/hadoop-2.9.2/bin:/hadoop-2.9.2/sbin:$PATH
  COPY config/hadoop /hadoop-2.9.2/etc/hadoop/
  RUN hdfs namenode -format
-
- # Hive
+<span class="err">
+</span> # Hive
  RUN wget -q -O - http://ftp.tsukuba.wide.ad.jp/software/apache/hive/hive-2.3.6/apache-hive-2.3.6-bin.tar.gz | tar zxf -
  ENV HIVE_HOME=/apache-hive-2.3.6-bin PATH=/apache-hive-2.3.6-bin/bin:$PATH
  COPY config/hive /apache-hive-2.3.6-bin/conf/
-
-+WORKDIR /root
-<span class="gi">+COPY start /root/
+<span class="err">
+</span><span class="gi">+WORKDIR /root
++COPY start /root/
 +CMD ["./start"]
 </span></pre>
 <h1>動作確認</h1>

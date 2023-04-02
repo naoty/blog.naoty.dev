@@ -36,17 +36,17 @@
 <p>Presentational ComponentはFunctional Componentで簡単に書けるけど、Container Componentの書き方がいまいち分かってなかったのでメモする。</p>
 <pre lang="js" class="highlight highlight-js"><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
 
-<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">Container</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nc">Container</span> <span class="kd">extends</span> <span class="nc">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nf">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// 子コンポーネントに渡すprops</span>
     <span class="kd">const</span> <span class="nx">props</span> <span class="o">=</span> <span class="p">{};</span>
 
     <span class="c1">// this.props.childrenは複数の可能性もあるので</span>
     <span class="c1">// React.cloneElement(this.props.children)はエラーになる。</span>
-    <span class="k">return</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Children</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="nx">child</span> <span class="o">=&gt;</span> <span class="p">(</span>
+    <span class="k">return</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Children</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="nx">child</span> <span class="o">=&gt;</span> <span class="p">(</span>
       <span class="c1">// childはテキストの可能性もあるためtype checkする</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">child</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">object</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">React</span><span class="p">.</span><span class="nx">cloneElement</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">props</span><span class="p">);</span>
+      <span class="nf">if </span><span class="p">(</span><span class="k">typeof</span> <span class="nx">child</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">object</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">React</span><span class="p">.</span><span class="nf">cloneElement</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">props</span><span class="p">);</span>
       <span class="p">}</span>
 
       <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
@@ -60,10 +60,10 @@
 <p>上のような汎用的なContainer Componentを作るならHOCを使う方がいいかもしれない。</p>
 <pre lang="jsx" class="highlight highlight-jsx"><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
 
-<span class="k">export</span> <span class="k">default</span> <span class="p">(</span><span class="nx">Component</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="k">export</span> <span class="nf">default </span><span class="p">(</span><span class="nx">Component</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// 引数のComponentをラップするComponentを返す</span>
-  <span class="k">return</span> <span class="kd">class</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
-    <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">class</span> <span class="nc">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+    <span class="nf">render</span><span class="p">()</span> <span class="p">{</span>
       <span class="c1">// 自身に渡されたpropsとstateをラップしたComponentに渡す</span>
       <span class="k">return</span> <span class="p">&lt;</span><span class="nc">Component</span> <span class="si">{</span><span class="p">...</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="si">}</span> <span class="si">{</span><span class="p">...</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="si">}</span> <span class="p">/&gt;;</span>
     <span class="p">}</span>

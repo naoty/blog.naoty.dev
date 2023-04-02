@@ -44,26 +44,26 @@
 <p>そこで、クライアントサイドでmermaid.jsを実行するのではなく、gatsbyがページを生成するタイミングでpuppeteer上でmermaid.jsを実行し、レンダリングされたSVGをページに埋め込むようにした。これで、リロードするたびに表示されたりされなかったりすることはない。</p>
 <h1>実装</h1>
 <p>雰囲気だとだいたいこんな感じの実装をしている。</p>
-<pre lang="js" class="highlight highlight-js"><span class="kd">const</span> <span class="nx">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">puppeteer</span><span class="p">.</span><span class="nx">launch</span><span class="p">();</span>
-<span class="kd">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nx">newPage</span><span class="p">();</span>
-<span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">goto</span><span class="p">(</span><span class="s2">`file://</span><span class="p">${</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">index.html</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
-<span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">addScriptTag</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="nx">require</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">"</span><span class="s2">mermaid/dist/mermaid.min.js</span><span class="dl">"</span><span class="p">)</span> <span class="p">});</span>
+<pre lang="js" class="highlight highlight-js"><span class="kd">const</span> <span class="nx">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">puppeteer</span><span class="p">.</span><span class="nf">launch</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nf">newPage</span><span class="p">();</span>
+<span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nf">goto</span><span class="p">(</span><span class="s2">`file://</span><span class="p">${</span><span class="nx">path</span><span class="p">.</span><span class="nf">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">index.html</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
+<span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nf">addScriptTag</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="nx">require</span><span class="p">.</span><span class="nf">resolve</span><span class="p">(</span><span class="dl">"</span><span class="s2">mermaid/dist/mermaid.min.js</span><span class="dl">"</span><span class="p">)</span> <span class="p">});</span>
 
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nf">evaluate</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">text</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">graph LR</span><span class="se">\n</span><span class="s2">  a --&gt; b</span><span class="dl">"</span><span class="p">;</span>
-  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nc">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
-      <span class="nx">mermaid</span><span class="p">.</span><span class="nx">initialize</span><span class="p">({</span> <span class="na">startOnLoad</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span>
-      <span class="nx">mermaid</span><span class="p">.</span><span class="nx">mermaidAPI</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">"</span><span class="s2">diagram</span><span class="dl">"</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">svg</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="nx">resolve</span><span class="p">(</span><span class="nx">svg</span><span class="p">)</span>
+      <span class="nx">mermaid</span><span class="p">.</span><span class="nf">initialize</span><span class="p">({</span> <span class="na">startOnLoad</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span>
+      <span class="nx">mermaid</span><span class="p">.</span><span class="nx">mermaidAPI</span><span class="p">.</span><span class="nf">render</span><span class="p">(</span><span class="dl">"</span><span class="s2">diagram</span><span class="dl">"</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">svg</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nf">resolve</span><span class="p">(</span><span class="nx">svg</span><span class="p">)</span>
       <span class="p">});</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">reject</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="p">}</span> <span class="nf">catch </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nf">reject</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">});</span>
 
-<span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nf">close</span><span class="p">();</span>
 </pre>
 <ul>
 <li>レンダリング用のHTMLを用意して、そこにmermaid.jsを埋め込む。</li>

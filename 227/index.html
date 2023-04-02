@@ -32,11 +32,11 @@
         <section class="body">
           <pre lang="js" class="highlight highlight-js"><span class="kd">var</span> <span class="nx">dateString</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">2014-07-23T00:00:00.000+09:00</span><span class="dl">"</span><span class="p">;</span>
 
-<span class="kd">var</span> <span class="nx">wrongFormat</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="dl">"</span><span class="s2">%Y-%m-%dT%H:%M:%S.%L%Z</span><span class="dl">"</span><span class="p">);</span>
-<span class="nx">wrongFormat</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">dateString</span><span class="p">);</span> <span class="c1">//=&gt; null</span>
+<span class="kd">var</span> <span class="nx">wrongFormat</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="dl">"</span><span class="s2">%Y-%m-%dT%H:%M:%S.%L%Z</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">wrongFormat</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">dateString</span><span class="p">);</span> <span class="c1">//=&gt; null</span>
 
-<span class="kd">var</span> <span class="nx">rightFormat</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="dl">"</span><span class="s2">%Y-%m-%dT%H:%M:%S.%L+09:00</span><span class="dl">"</span><span class="p">);</span>
-<span class="nx">rightFormat</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">dateString</span><span class="p">);</span> <span class="c1">//=&gt; Date</span>
+<span class="kd">var</span> <span class="nx">rightFormat</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="dl">"</span><span class="s2">%Y-%m-%dT%H:%M:%S.%L+09:00</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">rightFormat</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">dateString</span><span class="p">);</span> <span class="c1">//=&gt; Date</span>
 </pre>
 <p>タイムゾーンを表す<code>%Z</code>は<code>+0900</code>のようなフォーマットはパースできるけど、<code>:</code>が含まれるとパースできない。上のようにしたら解決した。</p>
 <h3>参考</h3>

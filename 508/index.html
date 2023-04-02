@@ -54,45 +54,45 @@
 <span class="kn">import</span> <span class="s">'package:test/test.dart'</span><span class="o">;</span>
 <span class="kn">import</span> <span class="s">'../lib/todo_application.dart'</span><span class="o">;</span>
 
-<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
-  <span class="n">group</span><span class="o">(</span><span class="s">'TodoApplication'</span><span class="o">,</span> <span class="o">()</span> <span class="o">{</span>
-    <span class="kd">final</span> <span class="n">todoApp</span> <span class="o">=</span> <span class="n">TodoApplication</span><span class="o">();</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">group</span><span class="p">(</span><span class="s">'TodoApplication'</span><span class="p">,</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">final</span> <span class="n">todoApp</span> <span class="o">=</span> <span class="n">TodoApplication</span><span class="p">();</span>
 
-    <span class="n">setUp</span><span class="o">(()</span> <span class="kd">async</span> <span class="o">{</span>
+    <span class="n">setUp</span><span class="p">(()</span> <span class="kd">async</span> <span class="p">{</span>
       <span class="c1">// テストデータの作成</span>
-      <span class="kd">final</span> <span class="n">testTodoList</span> <span class="o">=</span> <span class="o">[</span>
-        <span class="n">TodoItem</span><span class="o">(</span><span class="nl">id:</span> <span class="s">'1'</span><span class="o">,</span> <span class="nl">title:</span> <span class="s">'test1'</span><span class="o">,</span> <span class="nl">isDone:</span> <span class="kc">false</span><span class="o">),</span>
-        <span class="n">TodoItem</span><span class="o">(</span><span class="nl">id:</span> <span class="s">'2'</span><span class="o">,</span> <span class="nl">title:</span> <span class="s">'test2'</span><span class="o">,</span> <span class="nl">isDone:</span> <span class="kc">true</span><span class="o">),</span>
-        <span class="n">TodoItem</span><span class="o">(</span><span class="nl">id:</span> <span class="s">'3'</span><span class="o">,</span> <span class="nl">title:</span> <span class="s">'test3'</span><span class="o">,</span> <span class="nl">isDone:</span> <span class="kc">false</span><span class="o">),</span>
-      <span class="o">];</span>
-      <span class="k">await</span> <span class="n">File</span><span class="o">(</span><span class="n">TodoApplication</span><span class="o">.</span><span class="na">FILE_PATH</span><span class="o">)</span>
-          <span class="o">.</span><span class="na">writeAsString</span><span class="o">(</span><span class="n">testTodoList</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">e</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">e</span><span class="o">.</span><span class="na">toString</span><span class="o">()).</span><span class="na">join</span><span class="o">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="o">));</span>
-    <span class="o">});</span>
+      <span class="kd">final</span> <span class="n">testTodoList</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">TodoItem</span><span class="p">(</span><span class="nl">id:</span> <span class="s">'1'</span><span class="p">,</span> <span class="nl">title:</span> <span class="s">'test1'</span><span class="p">,</span> <span class="nl">isDone:</span> <span class="kc">false</span><span class="p">),</span>
+        <span class="n">TodoItem</span><span class="p">(</span><span class="nl">id:</span> <span class="s">'2'</span><span class="p">,</span> <span class="nl">title:</span> <span class="s">'test2'</span><span class="p">,</span> <span class="nl">isDone:</span> <span class="kc">true</span><span class="p">),</span>
+        <span class="n">TodoItem</span><span class="p">(</span><span class="nl">id:</span> <span class="s">'3'</span><span class="p">,</span> <span class="nl">title:</span> <span class="s">'test3'</span><span class="p">,</span> <span class="nl">isDone:</span> <span class="kc">false</span><span class="p">),</span>
+      <span class="p">];</span>
+      <span class="k">await</span> <span class="n">File</span><span class="p">(</span><span class="n">TodoApplication</span><span class="o">.</span><span class="na">FILE_PATH</span><span class="p">)</span>
+          <span class="o">.</span><span class="na">writeAsString</span><span class="p">(</span><span class="n">testTodoList</span><span class="o">.</span><span class="na">map</span><span class="p">((</span><span class="n">e</span><span class="p">)</span> <span class="o">=</span><span class="p">&gt;</span> <span class="n">e</span><span class="o">.</span><span class="na">toString</span><span class="p">())</span><span class="o">.</span><span class="na">join</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">));</span>
+    <span class="p">});</span>
 
-    <span class="n">tearDown</span><span class="o">(()</span> <span class="o">{</span>
+    <span class="n">tearDown</span><span class="p">(()</span> <span class="p">{</span>
       <span class="c1">// テストデータの削除</span>
-      <span class="n">File</span><span class="o">(</span><span class="n">TodoApplication</span><span class="o">.</span><span class="na">FILE_PATH</span><span class="o">).</span><span class="na">deleteSync</span><span class="o">();</span>
-    <span class="o">});</span>
+      <span class="n">File</span><span class="p">(</span><span class="n">TodoApplication</span><span class="o">.</span><span class="na">FILE_PATH</span><span class="p">)</span><span class="o">.</span><span class="na">deleteSync</span><span class="p">();</span>
+    <span class="p">});</span>
 
-    <span class="n">test</span><span class="o">(</span><span class="s">'TodoApplication.list'</span><span class="o">,</span> <span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
+    <span class="n">test</span><span class="p">(</span><span class="s">'TodoApplication.list'</span><span class="p">,</span> <span class="p">()</span> <span class="kd">async</span> <span class="p">{</span>
       <span class="c1">// テストデータをリストアップ</span>
-      <span class="kd">final</span> <span class="n">todoList</span> <span class="o">=</span> <span class="k">await</span> <span class="n">todoApp</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>
+      <span class="kd">final</span> <span class="n">todoList</span> <span class="o">=</span> <span class="k">await</span> <span class="n">todoApp</span><span class="o">.</span><span class="na">list</span><span class="p">();</span>
 
       <span class="c1">// リストアップ結果の確認</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">id</span><span class="o">,</span> <span class="s">'1'</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">title</span><span class="o">,</span> <span class="s">'test1'</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">isDone</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="na">id</span><span class="o">,</span> <span class="s">'2'</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="na">title</span><span class="o">,</span> <span class="s">'test2'</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="na">isDone</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">2</span><span class="o">].</span><span class="na">id</span><span class="o">,</span> <span class="s">'3'</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">2</span><span class="o">].</span><span class="na">title</span><span class="o">,</span> <span class="s">'test3'</span><span class="o">);</span>
-      <span class="n">expect</span><span class="o">(</span><span class="n">todoList</span><span class="o">[</span><span class="mi">2</span><span class="o">].</span><span class="na">isDone</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-    <span class="o">});</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="o">.</span><span class="na">length</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="na">id</span><span class="p">,</span> <span class="s">'1'</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="na">title</span><span class="p">,</span> <span class="s">'test1'</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="na">isDone</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="na">id</span><span class="p">,</span> <span class="s">'2'</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="na">title</span><span class="p">,</span> <span class="s">'test2'</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="na">isDone</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="na">id</span><span class="p">,</span> <span class="s">'3'</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="na">title</span><span class="p">,</span> <span class="s">'test3'</span><span class="p">);</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">todoList</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="na">isDone</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="p">});</span>
 
     <span class="c1">// snip</span>
-<span class="o">}</span>
+<span class="p">}</span>
 </pre>
 <p>そしてこれをパスさせるコードの生成を指示する。</p>
 <pre><code>このテストコードをすべてパスさせる実装を出力し、ファイル名をつけてください。
@@ -100,41 +100,41 @@
 <p>生成された実装。</p>
 <pre lang="dart" class="highlight highlight-dart"><span class="kn">import</span> <span class="s">'dart:io'</span><span class="o">;</span>
 
-<span class="kd">class</span> <span class="nc">TodoItem</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="kt">String</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="kt">String</span> <span class="n">title</span><span class="o">;</span>
-  <span class="kt">bool</span> <span class="n">isDone</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">TodoItem</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">id</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">title</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="n">isDone</span><span class="p">;</span>
 
-  <span class="n">TodoItem</span><span class="o">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">isDone</span> <span class="o">=</span> <span class="kc">false</span><span class="o">});</span>
+  <span class="n">TodoItem</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="p">,</span> <span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="p">,</span> <span class="k">this</span><span class="o">.</span><span class="na">isDone</span> <span class="o">=</span> <span class="kc">false</span><span class="p">});</span>
 
   <span class="nd">@override</span>
-  <span class="kt">String</span> <span class="n">toString</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s">'</span><span class="si">$id</span><span class="s">,</span><span class="si">$title</span><span class="s">,</span><span class="si">$isDone</span><span class="s">'</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  <span class="kt">String</span> <span class="n">toString</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s">'</span><span class="si">$id</span><span class="s">,</span><span class="si">$title</span><span class="s">,</span><span class="si">$isDone</span><span class="s">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kd">class</span> <span class="nc">TodoApplication</span> <span class="o">{</span>
-  <span class="kd">static</span> <span class="kd">const</span> <span class="n">FILE_PATH</span> <span class="o">=</span> <span class="s">'todo.txt'</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">TodoApplication</span> <span class="p">{</span>
+  <span class="kd">static</span> <span class="kd">const</span> <span class="n">FILE_PATH</span> <span class="o">=</span> <span class="s">'todo.txt'</span><span class="p">;</span>
 
-  <span class="n">Future</span><span class="o">&lt;</span><span class="kt">List</span><span class="o">&lt;</span><span class="n">TodoItem</span><span class="o">&gt;&gt;</span> <span class="n">list</span><span class="o">()</span> <span class="kd">async</span> <span class="o">{</span>
-    <span class="kd">final</span> <span class="n">todoList</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">TodoItem</span><span class="o">&gt;[];</span>
-    <span class="kd">final</span> <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="o">(</span><span class="n">FILE_PATH</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span> <span class="o">{</span>
-      <span class="kd">final</span> <span class="n">lines</span> <span class="o">=</span> <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="na">readAsLines</span><span class="o">();</span>
-      <span class="k">for</span> <span class="o">(</span><span class="kd">final</span> <span class="n">line</span> <span class="k">in</span> <span class="n">lines</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">','</span><span class="o">);</span>
-        <span class="n">todoList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TodoItem</span><span class="o">(</span>
-          <span class="nl">id:</span> <span class="n">fields</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span>
-          <span class="nl">title:</span> <span class="n">fields</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span>
-          <span class="nl">isDone:</span> <span class="n">fields</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">==</span> <span class="s">'true'</span><span class="o">,</span>
-        <span class="o">));</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">todoList</span><span class="o">;</span>
-  <span class="o">}</span>
+  <span class="n">Future</span><span class="p">&lt;</span><span class="kt">List</span><span class="p">&lt;</span><span class="n">TodoItem</span><span class="p">&gt;&gt;</span> <span class="n">list</span><span class="p">()</span> <span class="kd">async</span> <span class="p">{</span>
+    <span class="kd">final</span> <span class="n">todoList</span> <span class="o">=</span> <span class="p">&lt;</span><span class="n">TodoItem</span><span class="p">&gt;[];</span>
+    <span class="kd">final</span> <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">FILE_PATH</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="na">exists</span><span class="p">())</span> <span class="p">{</span>
+      <span class="kd">final</span> <span class="n">lines</span> <span class="o">=</span> <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="na">readAsLines</span><span class="p">();</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">final</span> <span class="n">line</span> <span class="k">in</span> <span class="n">lines</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">final</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="na">split</span><span class="p">(</span><span class="s">','</span><span class="p">);</span>
+        <span class="n">todoList</span><span class="o">.</span><span class="na">add</span><span class="p">(</span><span class="n">TodoItem</span><span class="p">(</span>
+          <span class="nl">id:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+          <span class="nl">title:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+          <span class="nl">isDone:</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'true'</span><span class="p">,</span>
+        <span class="p">));</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">todoList</span><span class="p">;</span>
+  <span class="p">}</span>
 
   <span class="c1">// snip</span>
-<span class="o">}</span>
+<span class="p">}</span>
 </pre>
 <p>一部省略してあるのだけど、これらのコードはエラーが含まれていて、テストが通らない。コードの修正をすべてChatGPTに依頼すると、提案されたコードにはまた別のエラーが含まれていてキリがない。もしかするともっと良いプロンプトを渡すと精度が上がるのかもしれない。</p>
 <p>コード生成はプログラミングの初手としては非常に強力で、数秒で80点くらいのコードが生成されるので、生成されたコードを人間が手直しするというステップを踏めば、生産性が爆発的に上がる感触があった。</p>

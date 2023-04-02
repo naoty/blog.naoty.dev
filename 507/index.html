@@ -38,33 +38,33 @@
 </ul>
 <p>以下、コンストラクタは省略する。</p>
 <h1>フラグ</h1>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Id</span><span class="o">?</span> <span class="n">userId</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">DateTime</span><span class="o">?</span> <span class="n">publishedAt</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Id</span><span class="o">?</span> <span class="n">userId</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span><span class="o">?</span> <span class="n">publishedAt</span><span class="p">;</span>
 
-  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isDraft</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isPublished</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isArchived</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isDraft</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isPublished</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isArchived</span><span class="p">;</span>
 
 
-  <span class="kt">void</span> <span class="n">publish</span><span class="o">({</span><span class="kd">required</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">})</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">isDraft</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">isDraft</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-      <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-      <span class="k">this</span><span class="o">.</span><span class="na">publishedAt</span> <span class="o">=</span> <span class="n">publishedAt</span><span class="o">;</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+  <span class="kt">void</span> <span class="n">publish</span><span class="p">({</span><span class="kd">required</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="p">})</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isDraft</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">isDraft</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">publishedAt</span> <span class="o">=</span> <span class="n">publishedAt</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
-  <span class="kt">void</span> <span class="n">archive</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">isPublished</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-      <span class="n">isArchived</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-      <span class="n">userId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  <span class="kt">void</span> <span class="n">archive</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isPublished</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="n">isArchived</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="n">userId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre>
 <ul>
 <li>
@@ -74,59 +74,59 @@
 <code>Article</code>インスタンスを利用する際、フラグをいちいち確認する必要がある。例えば、インスタンスを公開しようとしたとき、その状態をチェックして処理を替えなくてはいけない。</li>
 </ul>
 <h1>enum</h1>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">ArticleStatus</span> <span class="n">status</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Id</span><span class="o">?</span> <span class="n">userId</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">DateTime</span><span class="o">?</span> <span class="n">publishedAt</span><span class="o">;</span>
-<span class="o">}</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">ArticleStatus</span> <span class="n">status</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Id</span><span class="o">?</span> <span class="n">userId</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span><span class="o">?</span> <span class="n">publishedAt</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="kt">enum</span> <span class="n">ArticleStatus</span> <span class="o">{</span>
-  <span class="n">draft</span><span class="o">,</span>
-  <span class="n">published</span><span class="o">,</span>
-  <span class="n">archived</span><span class="o">;</span>
-<span class="o">}</span>
+<span class="kt">enum</span> <span class="n">ArticleStatus</span> <span class="p">{</span>
+  <span class="n">draft</span><span class="p">,</span>
+  <span class="n">published</span><span class="p">,</span>
+  <span class="n">archived</span><span class="p">;</span>
+<span class="p">}</span>
 </pre>
 <ul>
 <li>フラグよりはすっきりしたけど、それ以外は変わっていない。</li>
 </ul>
 <h1>状態ごとにクラスを分割</h1>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">DraftArticle</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">userId</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">DraftArticle</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">userId</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="p">;</span>
 
-  <span class="n">PublishedArticle</span> <span class="n">publish</span><span class="o">({</span><span class="kd">required</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">})</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">PublishedArticle</span><span class="o">(</span>
-      <span class="nl">id:</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">,</span>
-      <span class="nl">userId:</span> <span class="k">this</span><span class="o">.</span><span class="na">userId</span><span class="o">,</span>
-      <span class="nl">title:</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="o">,</span>
-      <span class="nl">publishedAt:</span> <span class="n">publishedAt</span><span class="o">,</span>
-    <span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  <span class="n">PublishedArticle</span> <span class="n">publish</span><span class="p">({</span><span class="kd">required</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="p">})</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">PublishedArticle</span><span class="p">(</span>
+      <span class="nl">id:</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="p">,</span>
+      <span class="nl">userId:</span> <span class="k">this</span><span class="o">.</span><span class="na">userId</span><span class="p">,</span>
+      <span class="nl">title:</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="p">,</span>
+      <span class="nl">publishedAt:</span> <span class="n">publishedAt</span><span class="p">,</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">PublishedArticle</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">userId</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">PublishedArticle</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">userId</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="p">;</span>
 
-  <span class="n">ArchivedArticle</span> <span class="n">archive</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">ArchivedArticle</span><span class="o">(</span>
-      <span class="nl">id:</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">,</span>
-      <span class="nl">title:</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="o">,</span>
-      <span class="nl">publishedAt:</span> <span class="k">this</span><span class="o">.</span><span class="na">publishedAt</span><span class="o">,</span>
-    <span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  <span class="n">ArchivedArticle</span> <span class="n">archive</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ArchivedArticle</span><span class="p">(</span>
+      <span class="nl">id:</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="p">,</span>
+      <span class="nl">title:</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="p">,</span>
+      <span class="nl">publishedAt:</span> <span class="k">this</span><span class="o">.</span><span class="na">publishedAt</span><span class="p">,</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">ArchivedArticle</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="o">;</span>
-  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="o">;</span>
-<span class="o">}</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">ArchivedArticle</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">Id</span> <span class="n">id</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">Title</span> <span class="n">title</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="n">DateTime</span> <span class="n">publishedAt</span><span class="p">;</span>
+<span class="p">}</span>
 </pre>
 <ul>
 <li>インスタンスは異なっていても同じ記事であれば<code>id</code>は同じものを利用する。</li>

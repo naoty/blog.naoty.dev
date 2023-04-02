@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2023-04-02</title>
+    <meta property="og:title" content="2023-04-02">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/509/">
+    <meta property="og:image" content="https://blog.naoty.dev/icon-512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">2023-04-02</h1>
+          <p class="metadata">
+            <time datetime="2023-04-02T19:48:00.000+0000">2023-04-02 19:48</time>
+            <a href="/diary/">#diary</a>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>入社して半年経った</h1>
+<p>昨年10月に今の会社に入って、早いものでもう半年が経った。最初の3ヶ月は会社の雰囲気や開発のやり方に慣れていくことにエネルギーを使っていたけど、最近3ヶ月くらいはようやく自発的に動き出せるようになってきた。</p>
+<p>もう半年のゴールとしては、忙しい中でももう少し余裕を持って仕事できるようにしていきたい。あんまり家のこととか自分のこととかに時間やエネルギーを使えていなかったので。</p>
+<h1>パーソナルトレーニングはだいたい3ヶ月</h1>
+<p>今年の初めから開始したパーソナルトレーニングももうそろそろで3ヶ月が経とうとしている。成果としては2ヶ月時点で3kg減を達成したし、週2回のペースで運動するリズムやタンパク質中心の食生活は身についたので、やってよかったと思う。</p>
+<p>とはいえ、パーソナルトレーニングは比較的高額なので、3ヶ月経過したら一般的なジムに移ろうと思っている。</p>
+<h1>花粉症かも</h1>
+<p>ここ数日、頭がぼーっとしたりくしゃみや鼻水が止まらなくなり風邪をひいたかと思っていたけど、もしかして花粉症なのではないかと思ってきた。花粉症とは縁のない人生を送ってきたけど、ついになってしまったかもしれない。</p>
+<h1>Dartのパッケージ作り</h1>
+<p>社内で「<a href="https://book.mynavi.jp/ec/products/detail/id=124056">セキュア・バイ・デザイン</a>」を輪読している影響でDartでドメイン・プリミティブを実装していきたい気持ちが高まっている。</p>
+<p>そんな中で足りないパーツとして宣言的に不変条件を定義する手段がDartにはないことに気づいた。<code>assert</code>は開発時にしか機能しないものだし、if文を使ってチマチマとチェックするのはドメインロジックをストレートに表現する実装とは言えない。</p>
+<p>そこで、<a href="https://github.com/naoty/require">naoty/require</a>というパッケージを作り始めた。これを使うと、こんな感じで不変条件を宣言的に記述できる。条件にマッチしなかった場合、それぞれの条件に合った例外がthrowされるようになっている。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kn">import</span> <span class="s">'package:require/require.dart'</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Customer</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">name</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+  <span class="n">Customer</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="p">,</span> <span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">age</span><span class="p">})</span> <span class="p">{</span>
+    <span class="n">require</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nl">label:</span> <span class="s">'name'</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">hasLengthGreaterThanOrEqualTo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">hasLengthLessThan</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">matches</span><span class="p">(</span><span class="s">'^[a-zA-Z]+</span><span class="err">$</span><span class="s">'</span><span class="p">);</span>
+    <span class="n">require</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="nl">label:</span> <span class="s">'age'</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">isGreaterThanOrEqualTo</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">isLessThan</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<p>PoC的に何パターンか実装してみて、APIの可読性と実装の柔軟性のバランスがとれた実装になってきた。今後はさまざまな条件や型のサポートを増やしたり、実用上の課題を見つけて対応していきたい。</p>
+<p>実装においては、似たような実装が多かったので、おそらく半分以上のコードはGitHub Copilotが生成していると思う。怖いくらい便利。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

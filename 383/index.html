@@ -40,7 +40,7 @@
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">entry</span><span class="p">:</span> <span class="dl">"</span><span class="s2">./src/index.js</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
-    <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">dist</span><span class="dl">"</span><span class="p">),</span>
+    <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nf">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">dist</span><span class="dl">"</span><span class="p">),</span>
     <span class="na">filename</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bundle.js</span><span class="dl">"</span>
   <span class="p">},</span>
   <span class="na">mode</span><span class="p">:</span> <span class="dl">"</span><span class="s2">development</span><span class="dl">"</span>
@@ -48,7 +48,7 @@
 </pre>
 <p>適当なエントリーポイントを用意する。あとでここからMarkdownを<code>import</code>していく。</p>
 <pre lang="js" class="highlight highlight-js"><span class="c1">// src/index.js</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Here is entrypoint.</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Here is entrypoint.</span><span class="dl">"</span><span class="p">);</span>
 </pre>
 <p>webpackが実行できるか確認する。</p>
 <pre><code>$ npx webpack
@@ -61,7 +61,7 @@ Here is entrypoint.
 Here is sample markdown text.
 </pre>
 <p>エントリーポイントでこのMarkdownテキストを<code>import</code>する。</p>
-<pre lang="diff" class="highlight highlight-diff"><span class="err">//</span> src/index.js
+<pre lang="diff" class="highlight highlight-diff">// src/index.js
 <span class="gd">-console.log("Here is entrypoint.");
 </span><span class="gi">+import contents from "./sample.md";
 +console.log(contents);
@@ -73,7 +73,7 @@ Here is sample markdown text.
 <span class="p">};</span>
 </pre>
 <p>このままだと<code>*.md</code>をwebpackはビルドできないので、さっき作ったloaderで処理するように設定を追加する。</p>
-<pre lang="diff" class="highlight highlight-diff"><span class="err">//</span> webpack.config.js
+<pre lang="diff" class="highlight highlight-diff">// webpack.config.js
  module.exports = {
    entry: "./src/index.js",
    output: {
@@ -104,7 +104,7 @@ $ node dist/bundle.js
 <p><code>import contents from "./sample.md"</code>の結果、<code>contents</code>は<code>{}</code>になるということがわかった。</p>
 <h1>3. 何かを返すloader</h1>
 <p>loaderが返す値はどのように使われるのか確かめるため、適当な文字列を返すようにしてみる。</p>
-<pre lang="diff" class="highlight highlight-diff"><span class="err">//</span> lib/loader.js
+<pre lang="diff" class="highlight highlight-diff">// lib/loader.js
  module.exports = function(source) {
 <span class="gd">-  return "";
 </span><span class="gi">+  return "foo";
@@ -114,13 +114,13 @@ $ node dist/bundle.js
 <pre lang="js" class="highlight highlight-js"><span class="c1">// dist/bundle.js</span>
 <span class="cm">/***/</span> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">module</span><span class="p">,</span> <span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
 
-<span class="nb">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">foo</span><span class="se">\n\n</span><span class="s2">//# sourceURL=webpack:///./src/sample.md?</span><span class="dl">"</span><span class="p">);</span>
+<span class="nf">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">foo</span><span class="se">\n\n</span><span class="s2">//# sourceURL=webpack:///./src/sample.md?</span><span class="dl">"</span><span class="p">);</span>
 
 <span class="cm">/***/</span> <span class="p">})</span>
 </pre>
 <p>loaderが返した文字列を<code>eval</code>でJavaScriptのコードとして実行しているようだ。また、<code>eval</code>内では関数に渡された<code>module</code>と<code>exports</code>が使えるようになっている。</p>
 <p>ということは、この<code>module</code>を使うことでloaderから何かを<code>export</code>できそう。</p>
-<pre lang="diff" class="highlight highlight-diff"><span class="err">//</span> lib/loader.js
+<pre lang="diff" class="highlight highlight-diff">// lib/loader.js
  module.exports = function(source) {
 <span class="gd">-  return "";
 </span><span class="gi">+  return `module.exports = ${JSON.stringify({ source })}`;
@@ -128,7 +128,7 @@ $ node dist/bundle.js
 </pre>
 <p>webpackを実行してbundle.jsを確認してみる。</p>
 <pre lang="js" class="highlight highlight-js"><span class="c1">// dist/bundle.js</span>
-<span class="nb">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">module.exports = {</span><span class="se">\"</span><span class="s2">source</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2"># header</span><span class="se">\\</span><span class="s2">nHere is sample markdown text.</span><span class="se">\\</span><span class="s2">n</span><span class="se">\"</span><span class="s2">}</span><span class="se">\n\n</span><span class="s2">//# sourceURL=webpack:///./src/sample.md?</span><span class="dl">"</span><span class="p">);</span>
+<span class="nf">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">module.exports = {</span><span class="se">\"</span><span class="s2">source</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2"># header</span><span class="se">\\</span><span class="s2">nHere is sample markdown text.</span><span class="se">\\</span><span class="s2">n</span><span class="se">\"</span><span class="s2">}</span><span class="se">\n\n</span><span class="s2">//# sourceURL=webpack:///./src/sample.md?</span><span class="dl">"</span><span class="p">);</span>
 </pre>
 <p><code>src/sample.md</code>の中身を<code>export</code>する文字列が生成できた。最後に<code>import</code>できるかも確認する。</p>
 <pre><code>$ node dist/bundle.js
@@ -138,7 +138,7 @@ $ node dist/bundle.js
 <h1>まとめ</h1>
 <p>以下のような関数が、ファイルの中身をオブジェクトとして返す機能をもったミニマムなwebpack loaderと言えそう。</p>
 <pre lang="js" class="highlight highlight-js"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="s2">`module.exports = </span><span class="p">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">source</span> <span class="p">})}</span><span class="s2">`</span><span class="p">;</span>
+  <span class="k">return</span> <span class="s2">`module.exports = </span><span class="p">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">({</span> <span class="nx">source</span> <span class="p">})}</span><span class="s2">`</span><span class="p">;</span>
 <span class="p">};</span>
 </pre>
 <p>あとは、Markdownのパースなどの機能をここに実装していけばよさそう。</p>

@@ -36,58 +36,58 @@
 <h1>実装例</h1>
 <p>以下の例では税を含む金額の計算をDartを使ってモデリングしている。</p>
 <p>まず、金額を表すために単なる<code>int</code>の代わりに<code>Money</code>というドメイン・プリミティブを定義する。-1000円といった負の値は有効ではないのでファクトリーコンストラクタで事前条件を検証し、デフォルトコンストラクタを非公開にすることで有効な値のみで初期化できるようにしている。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Money</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Money</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
 
-  <span class="n">Money</span><span class="o">.</span><span class="na">_internal</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+  <span class="n">Money</span><span class="o">.</span><span class="na">_internal</span><span class="p">(</span><span class="k">this</span><span class="o">.</span><span class="na">value</span><span class="p">);</span>
 
-  <span class="kd">factory</span> <span class="n">Money</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">throw</span> <span class="n">ArgumentError</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="s">'value'</span><span class="o">,</span> <span class="s">'must be &gt;= 0'</span><span class="o">);</span>
-    <span class="o">}</span>
+  <span class="kd">factory</span> <span class="n">Money</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="n">ArgumentError</span><span class="o">.</span><span class="na">value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">'value'</span><span class="p">,</span> <span class="s">'must be &gt;= 0'</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">Money</span><span class="o">.</span><span class="na">_internal</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+    <span class="k">return</span> <span class="n">Money</span><span class="o">.</span><span class="na">_internal</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre>
 <p>次に、税を表す<code>Tax</code>というドメイン・プリミティブを定義する。ここでは通常税率と軽減税率の2種類を定義した。Dartのenhanced enumsを使い、定数コンストラクタを定義すれば、コンパイル時には値が決定するためコンストラクタの引数を検証する必要がない。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kt">enum</span> <span class="n">Tax</span> <span class="o">{</span>
-  <span class="n">regular</span><span class="o">(</span><span class="nl">rate:</span> <span class="mf">0.1</span><span class="o">),</span>
-  <span class="n">reduced</span><span class="o">(</span><span class="nl">rate:</span> <span class="mf">0.08</span><span class="o">);</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">enum</span> <span class="n">Tax</span> <span class="p">{</span>
+  <span class="n">regular</span><span class="p">(</span><span class="nl">rate:</span> <span class="mf">0.1</span><span class="p">),</span>
+  <span class="n">reduced</span><span class="p">(</span><span class="nl">rate:</span> <span class="mf">0.08</span><span class="p">);</span>
 
-  <span class="kd">final</span> <span class="kt">double</span> <span class="n">rate</span><span class="o">;</span>
+  <span class="kd">final</span> <span class="kt">double</span> <span class="n">rate</span><span class="p">;</span>
 
-  <span class="kd">const</span> <span class="n">Tax</span><span class="o">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">rate</span><span class="o">});</span>
-<span class="o">}</span>
+  <span class="kd">const</span> <span class="n">Tax</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">rate</span><span class="p">});</span>
+<span class="p">}</span>
 </pre>
 <p>次に、税抜価格を<code>Money</code>型を利用して定義する。<code>Money</code>型を利用しているので、自動的に負の値になることは実行時に保証されている。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">TaxExcludedPrice</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">Money</span> <span class="n">money</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">TaxExcludedPrice</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">Money</span> <span class="n">money</span><span class="p">;</span>
 
-  <span class="n">TaxExcludedPrice</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">money</span><span class="o">);</span>
-<span class="o">}</span>
+  <span class="n">TaxExcludedPrice</span><span class="p">(</span><span class="k">this</span><span class="o">.</span><span class="na">money</span><span class="p">);</span>
+<span class="p">}</span>
 </pre>
 <p>最後に、これらを利用して税込価格を定義する。コンストラクタにて税抜価格と税から生成するようにしているため、任意の数値から税込価格を直接生成することができない。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">TaxIncludedPrice</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">Money</span> <span class="n">money</span><span class="o">;</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">TaxIncludedPrice</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">Money</span> <span class="n">money</span><span class="p">;</span>
 
-  <span class="n">TaxIncludedPrice</span><span class="o">({</span>
-    <span class="kd">required</span> <span class="n">TaxExcludedPrice</span> <span class="n">taxExcludedPrice</span><span class="o">,</span>
-    <span class="kd">required</span> <span class="n">Tax</span> <span class="n">tax</span><span class="o">,</span>
-  <span class="o">})</span> <span class="o">:</span> <span class="n">money</span> <span class="o">=</span> <span class="n">Money</span><span class="o">((</span><span class="n">taxExcludedPrice</span><span class="o">.</span><span class="na">money</span><span class="o">.</span><span class="na">value</span> <span class="o">*</span> <span class="o">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">tax</span><span class="o">.</span><span class="na">rate</span><span class="o">)).</span><span class="na">round</span><span class="o">());</span>
-<span class="o">}</span>
+  <span class="n">TaxIncludedPrice</span><span class="p">({</span>
+    <span class="kd">required</span> <span class="n">TaxExcludedPrice</span> <span class="n">taxExcludedPrice</span><span class="p">,</span>
+    <span class="kd">required</span> <span class="n">Tax</span> <span class="n">tax</span><span class="p">,</span>
+  <span class="p">})</span> <span class="o">:</span> <span class="n">money</span> <span class="o">=</span> <span class="n">Money</span><span class="p">((</span><span class="n">taxExcludedPrice</span><span class="o">.</span><span class="na">money</span><span class="o">.</span><span class="na">value</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">tax</span><span class="o">.</span><span class="na">rate</span><span class="p">))</span><span class="o">.</span><span class="na">round</span><span class="p">());</span>
+<span class="p">}</span>
 </pre>
 <p>これらを使って軽減税率の商品の税込価格を計算してみる（紙幅の関係で<code>toString()</code>の実装は省略してある）。</p>
-<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
-  <span class="kd">final</span> <span class="n">taxExcludedPrice</span> <span class="o">=</span> <span class="n">TaxExcludedPrice</span><span class="o">(</span><span class="n">Money</span><span class="o">(</span><span class="mi">1000</span><span class="o">));</span>
-  <span class="kd">final</span> <span class="n">taxIncludedPrice</span> <span class="o">=</span> <span class="n">TaxIncludedPrice</span><span class="o">(</span>
-    <span class="nl">taxExcludedPrice:</span> <span class="n">taxExcludedPrice</span><span class="o">,</span>
-    <span class="nl">tax:</span> <span class="n">Tax</span><span class="o">.</span><span class="na">reduced</span><span class="o">,</span>
-  <span class="o">);</span>
+<pre lang="dart" class="highlight highlight-dart"><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">taxExcludedPrice</span> <span class="o">=</span> <span class="n">TaxExcludedPrice</span><span class="p">(</span><span class="n">Money</span><span class="p">(</span><span class="mi">1000</span><span class="p">));</span>
+  <span class="kd">final</span> <span class="n">taxIncludedPrice</span> <span class="o">=</span> <span class="n">TaxIncludedPrice</span><span class="p">(</span>
+    <span class="nl">taxExcludedPrice:</span> <span class="n">taxExcludedPrice</span><span class="p">,</span>
+    <span class="nl">tax:</span> <span class="n">Tax</span><span class="o">.</span><span class="na">reduced</span><span class="p">,</span>
+  <span class="p">);</span>
 
-  <span class="n">print</span><span class="o">(</span><span class="s">'tax included price is </span><span class="si">$taxIncludedPrice</span><span class="s">.'</span><span class="o">);</span>
+  <span class="n">print</span><span class="p">(</span><span class="s">'tax included price is </span><span class="si">$taxIncludedPrice</span><span class="s">.'</span><span class="p">);</span>
   <span class="c1">//=&gt; tax included price is 1080.</span>
-<span class="o">}</span>
+<span class="p">}</span>
 </pre>
 <h1>何が良いのか</h1>
 <p>こうした金額を実装する際、<code>int</code>や<code>double</code>といった基本データ型を直接使って表すことが多いが、<code>Money</code>型を導入することで「負の値は許容しない」といったドメインルールを内包することができる。</p>

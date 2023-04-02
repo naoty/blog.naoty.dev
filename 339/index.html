@@ -43,20 +43,20 @@
 <li>格子点とその分類の予測を<code>plt.contourf()</code>を使って等高線としてプロットする。</li>
 </ul>
 <h2>格子点の取得</h2>
-<pre lang="python" class="highlight highlight-python"><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="n">X1</span><span class="p">,</span> <span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+<pre lang="python" class="highlight highlight-python"><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">X1</span><span class="p">,</span> <span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">meshgrid</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="s">'ok'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">xlimit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">ylimit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="s">'ok'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">xlimit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">ylimit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
 </pre>
 <p><a href="meshgrid.png" target="_blank"><img src="meshgrid.png" alt="meshgrid" style="max-width:100%;"></a></p>
 <p>上のように<code>np.meshgrid()</code>を使うと、2つの配列<code>x1</code>と<code>x2</code>からなる平面上にある格子点を取得できる。</p>
 <p>この格子点の間隔を小さくすると、<code>x1</code>と<code>x2</code>からなる平面上の「すべての点」を擬似的に再現できる。</p>
-<pre lang="python" class="highlight highlight-python"><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<pre lang="python" class="highlight highlight-python"><span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
 
 <span class="c1"># 以下同じ
 </span></pre>
@@ -65,29 +65,29 @@
 <p>ある平面上の「すべての点」を分類器に適用すると、平面上に分類した結果をマッピングできるようになる。</p>
 <p>そのために格子点をトレーニングデータの形状に変換する。つまり、$(x_1, x_2)$のようにする。</p>
 <pre lang="python" class="highlight highlight-python"><span class="c1"># flatにする
-</span><span class="n">X1_flatten</span> <span class="o">=</span> <span class="n">X1</span><span class="p">.</span><span class="n">ravel</span><span class="p">()</span>
-<span class="n">X2_flatten</span> <span class="o">=</span> <span class="n">X2</span><span class="p">.</span><span class="n">ravel</span><span class="p">()</span>
+</span><span class="n">X1_flatten</span> <span class="o">=</span> <span class="n">X1</span><span class="p">.</span><span class="nf">ravel</span><span class="p">()</span>
+<span class="n">X2_flatten</span> <span class="o">=</span> <span class="n">X2</span><span class="p">.</span><span class="nf">ravel</span><span class="p">()</span>
 
 <span class="c1"># 結合して行列にする
-</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">X1_flatten</span><span class="p">,</span> <span class="n">X2_flatten</span><span class="p">])</span>
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">array</span><span class="p">([</span><span class="n">X1_flatten</span><span class="p">,</span> <span class="n">X2_flatten</span><span class="p">])</span>
 
 <span class="c1"># 行方向がトレーニングデータ、列方向がフィーチャーになるように転置する
 </span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">.</span><span class="n">T</span>
 </pre>
 <h2>格子点を分類器に適用する</h2>
-<pre lang="python" class="highlight highlight-python"><span class="n">Z</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<pre lang="python" class="highlight highlight-python"><span class="n">Z</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">.</span><span class="nf">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre>
 <p>上で分類器に適用できるように変換できたので、あとは予測する。</p>
 <h2>等高線図でプロットする</h2>
 <pre lang="python" class="highlight highlight-python"><span class="c1"># プロットできるように形状を揃える
-</span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X1</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="p">.</span><span class="nf">reshape</span><span class="p">(</span><span class="n">X1</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="p">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'RdBu'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'x1'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'x2'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">contourf</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'RdBu'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">xlabel</span><span class="p">(</span><span class="s">'x1'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">ylabel</span><span class="p">(</span><span class="s">'x2'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
 </pre>
 <p><a href="decision_regions.png" target="_blank"><img src="decision_regions.png" alt="decision regions" style="max-width:100%;"></a></p>
 <p><em>（上図は適当な関数を適用しただけです）</em></p>

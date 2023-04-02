@@ -54,12 +54,12 @@
 <span class="nt">&lt;/div&gt;</span>
 </pre>
 <p>あとは、Reduxのstoreを作成するときに上のpropsを設定する。</p>
-<pre lang="javascript" class="highlight highlight-javascript"><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">DOMContentLoaded</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">rootElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">js-redux-root</span><span class="dl">'</span><span class="p">);</span>
-  <span class="kd">const</span> <span class="nx">initialState</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">rootElement</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">reactProps</span><span class="p">);</span>
-  <span class="kd">const</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">createStore</span><span class="p">(</span><span class="nx">rootReducer</span><span class="p">,</span> <span class="nx">initialState</span><span class="p">);</span>
+<pre lang="javascript" class="highlight highlight-javascript"><span class="nb">document</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">DOMContentLoaded</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">rootElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">js-redux-root</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">initialState</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">rootElement</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">reactProps</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">store</span> <span class="o">=</span> <span class="nf">createStore</span><span class="p">(</span><span class="nx">rootReducer</span><span class="p">,</span> <span class="nx">initialState</span><span class="p">);</span>
 
-  <span class="nx">render</span><span class="p">(</span>
+  <span class="nf">render</span><span class="p">(</span>
     <span class="o">&lt;</span><span class="nx">Provider</span> <span class="nx">store</span><span class="o">=</span><span class="p">{</span><span class="nx">store</span><span class="p">}</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="nx">SignUpForm</span> <span class="o">/&gt;</span>
     <span class="o">&lt;</span><span class="sr">/Provider</span><span class="err">&gt;
