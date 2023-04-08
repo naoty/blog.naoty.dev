@@ -10,6 +10,38 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/510/</id>
+    <link href="https://blog.naoty.dev/510/"/>
+    <summary>&lt;p&gt;最近、スプリントにチケットを詰め込みすぎるのをやめて、チーム全体でゆとりを作る試みをしている。元はと言えば、みんな自分の作業に手一杯になってしまい、お互いの作業のことまで気が回る余裕が生まれず、チームとしての一体感が出ていないなという課題感があった。&lt;/p&gt;
+&lt;p&gt;ここで、生まれたゆとりを使って他にどういったことができるか具体的に考えるため、仮に「1日だけ自由にチームの生産性を上げるために時間を使えるとしたら」という仮定を立ててアイデアを出してみたい。もちろん、他のメンバーの作業を手伝うとか、次のスプリントに予定している作業に着手するといった時間の使い方も考えられるけど、チーム全体の生産性を上げるためにスキマ時間を投資するのが賢いと思う。&lt;/p&gt;
+&lt;h1&gt;アイデア&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;小さいリファクタリングを行う
+&lt;ul&gt;
+&lt;li&gt;長過ぎるメソッドを責務に基づいて分割し、可読性やテスト容易性を高める&lt;/li&gt;
+&lt;li&gt;変数名やメソッド名を見直し、可読性を高める&lt;/li&gt;
+&lt;li&gt;エラーメッセージを見直し、原因発見や問題解決のスピードを高める&lt;/li&gt;
+&lt;li&gt;etc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;パフォーマンス（レスポンスタイムやスループット）を改善する&lt;/li&gt;
+&lt;li&gt;テストコードを追加する&lt;/li&gt;
+&lt;li&gt;テストの実行時間を短縮させる&lt;/li&gt;
+&lt;li&gt;flakyなテストを修正する&lt;/li&gt;
+&lt;li&gt;デッドコードを消す&lt;/li&gt;
+&lt;li&gt;linterに規約を追加する&lt;/li&gt;
+&lt;li&gt;コード内のTODOコメントやFIXMEコメントを処理する&lt;/li&gt;
+&lt;li&gt;メソッドやクラスにドキュメントコメントを追加する&lt;/li&gt;
+&lt;li&gt;ライブラリや言語をマイナーアップデートする&lt;/li&gt;
+&lt;li&gt;コードリーディングを行い、結果をドキュメントに整理して共有する&lt;/li&gt;
+&lt;li&gt;古くなったドキュメントを更新する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;他にもいいアイデアがあれば教えてほしいです。&lt;/p&gt;</summary>
+    <title>1日だけチームのために自由に時間が使えるなら</title>
+    <updated>2023-04-08T22:09:00+00:00</updated>
+    <dc:date>2023-04-08T22:09:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/509/</id>
     <link href="https://blog.naoty.dev/509/"/>
     <summary>&lt;h1&gt;入社して半年経った&lt;/h1&gt;
