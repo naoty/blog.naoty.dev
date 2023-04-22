@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>naoty/require</title>
+    <meta property="og:title" content="naoty/require">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/512/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">naoty/require</h1>
+          <p class="metadata">
+            <time datetime="2023-04-22T23:29:00.000+0000">2023-04-22 23:29</time>
+            <a href="/oss/">#oss</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="https://github.com/naoty/require">naoty/require</a>というDartのパッケージを書いてみた。これは、不変条件を宣言的に記述するための小さなパッケージで、以下のように使う。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">User</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">name</span><span class="p">;</span>
+  <span class="kd">final</span> <span class="kt">int</span><span class="o">?</span> <span class="n">age</span><span class="p">;</span>
+
+  <span class="n">User</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="p">,</span> <span class="k">this</span><span class="o">.</span><span class="na">age</span><span class="p">})</span> <span class="p">{</span>
+    <span class="n">require</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nl">label:</span> <span class="s">'name'</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">isNotEmpty</span><span class="p">()</span>
+      <span class="o">.</span><span class="na">hasLengthLessThanOrEqualTo</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+      <span class="o">.</span><span class="na">matches</span><span class="p">(</span><span class="sx">r'^[a-z]+$'</span><span class="p">);</span>
+    <span class="n">requireIfNotNull</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="nl">label:</span> <span class="s">'age'</span><span class="p">)</span>
+      <span class="o">?.</span><span class="na">isGreaterThanOrEqualTo</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<p>できるだけ自然言語として理解できるようにAPIを工夫した。これらの不変条件に違反すると、以下のようなエラーメッセージを持つ例外がthrowされる。</p>
+<pre><code>name('Naoto Kaneko') is required to match '^[a-z]+$'
+</code></pre>
+<h1>きっかけ</h1>
+<p><a href="https://book.mynavi.jp/ec/products/detail/id=124056">セキュア・バイ・デザイン</a>という本を読み、完全性を備えたドメインモデルを構築するためのテクニックとして不変条件が紹介されており、仕事で使っているDartでもこれを実装してみたいと思った。</p>
+<p>ただ、言語仕様に備わっている<code>assert</code>では開発時のみにしか機能せず、こなれたAPIを持ったパッケージも見当たらなかったため、自分で実装してみようと思った。</p>
+<h1>工夫点</h1>
+<p>当初はDartプログラマーには馴染みが深い<code>test</code>パッケージのAPIデザインを踏襲しようとしてみたけど、後継の<code>checks</code>パッケージのことを思い出し、こちらを参考にしてみたところ、</p>
+<ul>
+<li>複数の条件をメソッドチェーンとして表現できる</li>
+<li>nullableなオブジェクトを扱いやすい</li>
+</ul>
+<p>といった特徴があることがわかり、自然言語らしい表現力と強い型システムを両立するデザインになった。例えば、nullableな値に対して<code>require</code>を呼ぶと<code>Subject&lt;T?&gt;</code>が返るのだけど、<code>Subject&lt;T?&gt;</code>に対しては<code>isNull</code>か<code>isNotNull</code>くらいしか呼べないようになっている。そして、<code>isNotNull</code>を呼ぶと<code>Subject&lt;T&gt;</code>が返るため、<code>isNotEmpty</code>など各種条件を呼び出せるようになる。</p>
+<p>一方で、否定形の条件を記述することが難しいという限界もあり、乗り越える方法も考えてみた（<code>require().to(beEmpty())</code>のようなRSpec風のAPIデザインでは<code>require().notTo()</code>とすることで否定形を表現できる）が、逆にnullableなオブジェクトを扱いにくいことがわかったため、否定形ではなくnullablilityの扱いやすさに寄せる意思決定が必要になった。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

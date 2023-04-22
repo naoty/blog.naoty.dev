@@ -10,6 +10,42 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/512/</id>
+    <link href="https://blog.naoty.dev/512/"/>
+    <summary>&lt;p&gt;&lt;a href=&quot;https://github.com/naoty/require&quot;&gt;naoty/require&lt;/a&gt;というDartのパッケージを書いてみた。これは、不変条件を宣言的に記述するための小さなパッケージで、以下のように使う。&lt;/p&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;required&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isNotEmpty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasLengthLessThanOrEqualTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;r'^[a-z]+$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;requireIfNotNull&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;label:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'age'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;?.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isGreaterThanOrEqualTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;できるだけ自然言語として理解できるようにAPIを工夫した。これらの不変条件に違反すると、以下のようなエラーメッセージを持つ例外がthrowされる。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;name('Naoto Kaneko') is required to match '^[a-z]+$'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;きっかけ&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://book.mynavi.jp/ec/products/detail/id=124056&quot;&gt;セキュア・バイ・デザイン&lt;/a&gt;という本を読み、完全性を備えたドメインモデルを構築するためのテクニックとして不変条件が紹介されており、仕事で使っているDartでもこれを実装してみたいと思った。&lt;/p&gt;
+&lt;p&gt;ただ、言語仕様に備わっている&lt;code&gt;assert&lt;/code&gt;では開発時のみにしか機能せず、こなれたAPIを持ったパッケージも見当たらなかったため、自分で実装してみようと思った。&lt;/p&gt;
+&lt;h1&gt;工夫点&lt;/h1&gt;
+&lt;p&gt;当初はDartプログラマーには馴染みが深い&lt;code&gt;test&lt;/code&gt;パッケージのAPIデザインを踏襲しようとしてみたけど、後継の&lt;code&gt;checks&lt;/code&gt;パッケージのことを思い出し、こちらを参考にしてみたところ、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;複数の条件をメソッドチェーンとして表現できる&lt;/li&gt;
+&lt;li&gt;nullableなオブジェクトを扱いやすい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;といった特徴があることがわかり、自然言語らしい表現力と強い型システムを両立するデザインになった。例えば、nullableな値に対して&lt;code&gt;require&lt;/code&gt;を呼ぶと&lt;code&gt;Subject&amp;lt;T?&amp;gt;&lt;/code&gt;が返るのだけど、&lt;code&gt;Subject&amp;lt;T?&amp;gt;&lt;/code&gt;に対しては&lt;code&gt;isNull&lt;/code&gt;か&lt;code&gt;isNotNull&lt;/code&gt;くらいしか呼べないようになっている。そして、&lt;code&gt;isNotNull&lt;/code&gt;を呼ぶと&lt;code&gt;Subject&amp;lt;T&amp;gt;&lt;/code&gt;が返るため、&lt;code&gt;isNotEmpty&lt;/code&gt;など各種条件を呼び出せるようになる。&lt;/p&gt;
+&lt;p&gt;一方で、否定形の条件を記述することが難しいという限界もあり、乗り越える方法も考えてみた（&lt;code&gt;require().to(beEmpty())&lt;/code&gt;のようなRSpec風のAPIデザインでは&lt;code&gt;require().notTo()&lt;/code&gt;とすることで否定形を表現できる）が、逆にnullableなオブジェクトを扱いにくいことがわかったため、否定形ではなくnullablilityの扱いやすさに寄せる意思決定が必要になった。&lt;/p&gt;</summary>
+    <title>naoty/require</title>
+    <updated>2023-04-22T23:29:00+00:00</updated>
+    <dc:date>2023-04-22T23:29:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/511/</id>
     <link href="https://blog.naoty.dev/511/"/>
     <summary>&lt;p&gt;今年こそは運動しようと思ってパーソナルトレーニングを始めてから3ヶ月が経った。そのうち、始めの1ヶ月は食事指導も受けていて、おおむね食生活を変えずに過ごした。&lt;/p&gt;
