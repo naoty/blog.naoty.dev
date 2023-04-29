@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DartのASTを参照する</title>
+    <meta property="og:title" content="DartのASTを参照する">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/513/">
+    <meta property="og:image" content="https://blog.naoty.dev/513/nodes.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">DartのASTを参照する</h1>
+          <p class="metadata">
+            <time datetime="2023-04-29T21:38:00.000+0000">2023-04-29 21:38</time>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <h1>背景</h1>
+<p>Dartのプロジェクトにおいてファイル間の依存関係を明らかにしたいニーズが出てきたため、DartのASTを参照する方法を調べようと思った。ASTを利用すれば<code>import</code>文を解析することで依存関係を明らかにできるだろうと考えた。</p>
+<h1>analyzerパッケージ</h1>
+<p>DartのASTを参照するには、analyzerパッケージを使う。このパッケージはIDEなどで使われるAnalysis Serverを提供している他、linterの実装でも利用されている。</p>
+<p>使い方としては、<code>parseFile</code>関数でファイルに含まれるDartのソースコードをASTに変換する。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">final</span> <span class="n">result</span> <span class="o">=</span> <span class="n">parseFile</span><span class="p">(</span>
+  <span class="nl">path:</span> <span class="s">'path/to/code.dart'</span><span class="p">,</span>
+  <span class="nl">featureSet:</span> <span class="n">FeatureSet</span><span class="o">.</span><span class="na">latestLanguageVersion</span><span class="p">(),</span>
+<span class="p">);</span>
+<span class="c1">// result.unitからASTを参照できる</span>
+</pre>
+<h1>ASTを表すクラス群</h1>
+<p><code>result.unit</code>は<code>Directive</code>のリストと<code>Declaration</code>のリストから成る。<code>Directive</code>や<code>Declaration</code>は以下のような継承ツリーの一部に含まれていて、特に<code>Directive</code>のサブクラスとしては<code>ImportDirective</code>や<code>ExportDirective</code>が存在する。</p>
+<p><a href="./nodes.png" target="_blank"><img src="./nodes.png" alt="Node" style="max-width:100%;"></a></p>
+<h1>AstVisitor</h1>
+<p>ASTのノードの親クラスにあたる<code>AstNode</code>には<code>visitChildren</code>というメソッドが用意されている。<code>AstVisitor</code>型のvisitorを引数に渡すと、ASTのnodeの種類に対応したvisitorのメソッドが呼び出されるようになっている。<code>AstVisitor</code>は抽象型で、これを実装したクラスがいくつか用意されている。</p>
+<ul>
+<li>
+<code>SimpleAstVisitor</code>: メソッドはすべて実装されているが、何もしない。これが他のvisitorのベースになっているようだ。</li>
+<li>
+<code>RecursiveAstVisitor</code>: nodeがchildrenを持っているときに再帰的にASTのツリーをたどる。これも実際には何もしないので、これを継承することで、再帰的にnodeをたどってnodeの種類に応じた処理を実装できる。</li>
+</ul>
+<p>これらを利用して<code>import</code>したファイルを取得するだけのvisitorを実装してみる。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">ImportVisitor</span><span class="p">&lt;</span><span class="n">R</span><span class="p">&gt;</span> <span class="kd">extends</span> <span class="n">SimpleAstVisitor</span><span class="p">&lt;</span><span class="n">R</span><span class="p">&gt;</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">List</span><span class="p">&lt;</span><span class="kt">String</span><span class="p">&gt;</span> <span class="n">importedUris</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nd">@override</span>
+  <span class="n">R</span><span class="o">?</span> <span class="n">visitImportDirective</span><span class="p">(</span><span class="n">ImportDirective</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">importedUris</span><span class="o">.</span><span class="na">add</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="na">uri</span><span class="o">.</span><span class="na">stringValue</span><span class="o">!</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">super</span><span class="o">.</span><span class="na">visitImportDirective</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="n">result</span> <span class="o">=</span> <span class="n">parseFile</span><span class="p">(</span>
+    <span class="nl">path:</span> <span class="s">'path/to/code.dart'</span><span class="p">,</span>
+    <span class="nl">featureSet:</span> <span class="n">FeatureSet</span><span class="o">.</span><span class="na">latestLanguageVersion</span><span class="p">(),</span>
+  <span class="p">);</span>
+
+  <span class="kd">final</span> <span class="n">visitor</span> <span class="o">=</span> <span class="n">ImportVisitor</span><span class="p">&lt;</span><span class="kt">void</span><span class="p">&gt;();</span>
+  <span class="n">result</span><span class="o">.</span><span class="na">unit</span><span class="o">.</span><span class="na">visitChildren</span><span class="p">(</span><span class="n">visitor</span><span class="p">);</span>
+
+  <span class="n">print</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="na">importedUris</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p><code>AstVisitor</code>の<code>visitImportDirective</code>は<code>ImportDirective</code>型のnodeを見つけたときに呼ばれるメソッドで、今回はこれをリストに追加して、ファイル中のすべての<code>import</code>されているファイルを収集している。</p>
+<p>このように<code>AstVisitor</code>を利用することで、特定の種類のnodeのみに対して行う処理を簡潔に実装できるため、アイデア次第でいろんな応用ができるだろう。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

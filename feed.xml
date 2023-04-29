@@ -10,6 +10,60 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/513/</id>
+    <link href="https://blog.naoty.dev/513/"/>
+    <summary>&lt;h1&gt;背景&lt;/h1&gt;
+&lt;p&gt;Dartのプロジェクトにおいてファイル間の依存関係を明らかにしたいニーズが出てきたため、DartのASTを参照する方法を調べようと思った。ASTを利用すれば&lt;code&gt;import&lt;/code&gt;文を解析することで依存関係を明らかにできるだろうと考えた。&lt;/p&gt;
+&lt;h1&gt;analyzerパッケージ&lt;/h1&gt;
+&lt;p&gt;DartのASTを参照するには、analyzerパッケージを使う。このパッケージはIDEなどで使われるAnalysis Serverを提供している他、linterの実装でも利用されている。&lt;/p&gt;
+&lt;p&gt;使い方としては、&lt;code&gt;parseFile&lt;/code&gt;関数でファイルに含まれるDartのソースコードをASTに変換する。&lt;/p&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parseFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;path:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'path/to/code.dart'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;featureSet:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FeatureSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;latestLanguageVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// result.unitからASTを参照できる&lt;/span&gt;
+&lt;/pre&gt;
+&lt;h1&gt;ASTを表すクラス群&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;result.unit&lt;/code&gt;は&lt;code&gt;Directive&lt;/code&gt;のリストと&lt;code&gt;Declaration&lt;/code&gt;のリストから成る。&lt;code&gt;Directive&lt;/code&gt;や&lt;code&gt;Declaration&lt;/code&gt;は以下のような継承ツリーの一部に含まれていて、特に&lt;code&gt;Directive&lt;/code&gt;のサブクラスとしては&lt;code&gt;ImportDirective&lt;/code&gt;や&lt;code&gt;ExportDirective&lt;/code&gt;が存在する。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;./nodes.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./nodes.png&quot; alt=&quot;Node&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;AstVisitor&lt;/h1&gt;
+&lt;p&gt;ASTのノードの親クラスにあたる&lt;code&gt;AstNode&lt;/code&gt;には&lt;code&gt;visitChildren&lt;/code&gt;というメソッドが用意されている。&lt;code&gt;AstVisitor&lt;/code&gt;型のvisitorを引数に渡すと、ASTのnodeの種類に対応したvisitorのメソッドが呼び出されるようになっている。&lt;code&gt;AstVisitor&lt;/code&gt;は抽象型で、これを実装したクラスがいくつか用意されている。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;SimpleAstVisitor&lt;/code&gt;: メソッドはすべて実装されているが、何もしない。これが他のvisitorのベースになっているようだ。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;RecursiveAstVisitor&lt;/code&gt;: nodeがchildrenを持っているときに再帰的にASTのツリーをたどる。これも実際には何もしないので、これを継承することで、再帰的にnodeをたどってnodeの種類に応じた処理を実装できる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらを利用して&lt;code&gt;import&lt;/code&gt;したファイルを取得するだけのvisitorを実装してみる。&lt;/p&gt;
+&lt;pre lang=&quot;dart&quot; class=&quot;highlight highlight-dart&quot;&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ImportVisitor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SimpleAstVisitor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;importedUris&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visitImportDirective&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ImportDirective&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;importedUris&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stringValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;visitImportDirective&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parseFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;path:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'path/to/code.dart'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;featureSet:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FeatureSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;latestLanguageVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visitor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ImportVisitor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;visitChildren&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;visitor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;visitor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;importedUris&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;AstVisitor&lt;/code&gt;の&lt;code&gt;visitImportDirective&lt;/code&gt;は&lt;code&gt;ImportDirective&lt;/code&gt;型のnodeを見つけたときに呼ばれるメソッドで、今回はこれをリストに追加して、ファイル中のすべての&lt;code&gt;import&lt;/code&gt;されているファイルを収集している。&lt;/p&gt;
+&lt;p&gt;このように&lt;code&gt;AstVisitor&lt;/code&gt;を利用することで、特定の種類のnodeのみに対して行う処理を簡潔に実装できるため、アイデア次第でいろんな応用ができるだろう。&lt;/p&gt;</summary>
+    <title>DartのASTを参照する</title>
+    <updated>2023-04-29T21:38:00+00:00</updated>
+    <dc:date>2023-04-29T21:38:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/512/</id>
     <link href="https://blog.naoty.dev/512/"/>
     <summary>&lt;p&gt;&lt;a href=&quot;https://github.com/naoty/require&quot;&gt;naoty/require&lt;/a&gt;というDartのパッケージを書いてみた。これは、不変条件を宣言的に記述するための小さなパッケージで、以下のように使う。&lt;/p&gt;
