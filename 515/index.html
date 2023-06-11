@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クラスとinterface</title>
+    <meta property="og:title" content="クラスとinterface">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/515/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">クラスとinterface</h1>
+          <p class="metadata">
+            <time datetime="2023-06-11T18:29:00.000+0000">2023-06-11 18:29</time>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Dartでは、クラスに対して<code>extends</code>することも<code>implements</code>することもできるのが他の言語とは明らかに違うポイントで、書いていて少し混乱したので、整理してみた。</p>
+<p>こんな感じの雑なクラスを<code>extends</code>あるいは<code>implements</code>する例を考えてみる。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">Article</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">title</span><span class="p">;</span>
+  
+  <span class="kt">bool</span> <span class="kd">get</span> <span class="n">isPublished</span> <span class="o">=</span><span class="p">&gt;</span> <span class="n">_isPublished</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="n">_isPublished</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+  <span class="n">Article</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="p">});</span>
+
+  <span class="kt">void</span> <span class="n">publish</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">_isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<h1>extends</h1>
+<p><code>extends</code>はあるクラスを継承したサブクラスを定義する。他の言語と変わったところはなにもない。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">DraftArticle</span> <span class="kd">extends</span> <span class="n">Article</span> <span class="p">{</span>
+  <span class="n">DraftArticle</span><span class="p">({</span><span class="kd">required</span> <span class="kt">String</span> <span class="n">title</span><span class="p">})</span> <span class="o">:</span> <span class="k">super</span><span class="p">(</span><span class="nl">title:</span> <span class="n">title</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p>スーパークラスを継承しているから、<code>super</code>でスーパークラスを参照できるし、実装もスーパークラスのものをそのまま利用できる。</p>
+<h1>implements</h1>
+<p>Dartの面白い仕様の1つに、すべてのクラスが暗黙的にinterfaceを提供するというものがある。<code>implements</code>はあるクラスが提供するinterfaceを実装する新しいクラスを定義する。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">PublishedArticle</span> <span class="kd">implements</span> <span class="n">Article</span> <span class="p">{</span>
+  <span class="nd">@override</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">title</span><span class="p">;</span>
+  
+  <span class="nd">@override</span>
+  <span class="kd">final</span> <span class="kt">bool</span> <span class="n">isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  
+  <span class="nd">@override</span>
+  <span class="kt">bool</span> <span class="n">_isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  
+  <span class="n">PublishedArticle</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="p">});</span>
+  
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">publish</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre>
+<p>継承する場合と異なる点は以下のようなポイントがある。</p>
+<ul>
+<li>すべてのメソッドやgetter, setterを実装する必要がある。</li>
+<li>複数のスーパークラスを継承できない一方で、複数のクラスのinterfaceであれば実装できる。</li>
+</ul>
+<p>この例だと、privateなフィールドまで実装する必要があり、わざわざinterfaceを実装するメリットが感じられない。</p>
+<h1>abstract class</h1>
+<p><code>abstract class</code>と宣言すると、インスタンスを初期化できないクラスを定義できる。また、abstract classは実装を持たないメソッドも定義できる。他の言語に現れるinterfaceに近い。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Article</span> <span class="p">{</span>
+  <span class="kd">final</span> <span class="kt">String</span> <span class="n">title</span><span class="p">;</span>
+
+  <span class="n">Article</span><span class="p">({</span><span class="kd">required</span> <span class="k">this</span><span class="o">.</span><span class="na">title</span><span class="p">});</span>
+
+  <span class="kt">void</span> <span class="n">publish</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
+<p>abstract classのサブクラスは実装をもたないメソッドを実装する必要がある。</p>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">class</span> <span class="nc">DraftArticle</span> <span class="kd">extends</span> <span class="n">Article</span> <span class="p">{</span>
+  <span class="kt">bool</span> <span class="kd">get</span> <span class="n">isPublished</span> <span class="o">=</span><span class="p">&gt;</span> <span class="n">_isPublished</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="n">_isPublished</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  
+  <span class="n">DraftArticle</span><span class="p">({</span><span class="kd">required</span> <span class="kt">String</span> <span class="n">title</span><span class="p">})</span> <span class="o">:</span> <span class="k">super</span><span class="p">(</span><span class="nl">title:</span> <span class="n">title</span><span class="p">);</span>
+  
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">publish</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">_isPublished</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
