@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モデルとテーブルをコンテキストに分割する戦術</title>
+    <meta property="og:title" content="モデルとテーブルをコンテキストに分割する戦術">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/518/">
+    <meta property="og:image" content="https://blog.naoty.dev/518/phase0.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">モデルとテーブルをコンテキストに分割する戦術</h1>
+          <p class="metadata">
+            <time datetime="2023-06-24T18:26:00.000+0000">2023-06-24 18:26</time>
+            <a href="/ddd/">#ddd</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>アプリケーションが成長して、扱うドメインも大きくなると、どこかでコンテキストの境界をひき、アプリケーションを分割するタイミングがくる。</p>
+<p>そんなときに、複数のコンテキストを内包したドメインモデルと、それを永続化するテーブルを分割する戦術について考えてみた。考えただけで、実践したわけじゃないから、そんなにうまくいかないとかあると思う。</p>
+<p>ユーザーモデルをコンテキストAとコンテキストBに分割する例で考える。</p>
+<h1>フェーズ0</h1>
+<p>初期状態として、ユーザーモデルとそれを保持するテーブルがある。この時点では、すべてのコンテキストを1つのモデルで表現している。</p>
+<p><a href="./phase0.png" target="_blank"><img src="./phase0.png" alt="ユーザーモデルとそれを永続化させるテーブル" style="max-width:100%;"></a></p>
+<p>なお、モデルからテーブルへの矢印はwriteを表し、テーブルからモデルへの矢印はreadを表す。</p>
+<h1>フェーズ1</h1>
+<p>次に、モデルのみコンテキストに分割した。2つのモデルはいまだ1つのテーブルに永続化されている。</p>
+<p><a href="./phase1.png" target="_blank"><img src="./phase1.png" alt="2つのコンテキストとそれぞれに含まれるユーザーモデル、テーブル" style="max-width:100%;"></a></p>
+<p>2つのモデルはテーブルを介して暗黙的に依存関係にあり、片方のコンテキストで起きた変更が意図しない結果を他方のコンテキストに及ぼす危険がある。</p>
+<h1>フェーズ2</h1>
+<p>各コンテキストのモデルに対応するテーブルを追加した。この時点では、writeは元のテーブルと新しく追加したテーブルに二重におこない、readは元のテーブルからおこなう。次のフェーズで完全にテーブルを移行させるのだけど、安全にread先を切り替えるため、一時的に二重にwriteする体制をとっている。</p>
+<p><a href="./phase2.png" target="_blank"><img src="./phase2.png" alt="2つのコンテキストとそれぞれに含まれるユーザーモデルとテーブル、そして独立したテーブル" style="max-width:100%;"></a></p>
+<p>実装としては、元のテーブルと新しいテーブルのwriteを同一トランザクションで実行できるならそうするし、完全に独立したマイクロサービスになっているなら同一トランザクションが使えないため、元のテーブルと同期させるworkerを別途用意し結果整合性を担保すると思う。</p>
+<h1>フェーズ3</h1>
+<p>read先のテーブルを切り替えられたなら、元のテーブルを切り離し、完全にコンテキスト内でモデルとテーブルが完結できる。もし切り替えに失敗しても、元のテーブルにすぐにread先を戻せば影響を最小限に抑えられる。</p>
+<p><a href="./phase3.png" target="_blank"><img src="./phase3.png" alt="2つのコンテキストとそれぞれに含まれるユーザーモデルとテーブル" style="max-width:100%;"></a></p>
+<p>ここまで来てようやくモデルとテーブルをコンテキストに分割することができた。お互いのモデルやテーブルの変更が他方に影響を与えることはなくなった。</p>
+<h1>まとめ</h1>
+<p>3段階に分けてコンテキストに分割していく戦術について見てきたけど、1つのモデルを分割するのにここまで手間をかけるのはさすがに骨が折れるとも思ってしまった。もっと効率的に進める戦術はないものか。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
