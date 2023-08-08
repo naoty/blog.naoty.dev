@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windowsのキーマッピング</title>
+    <meta property="og:title" content="Windowsのキーマッピング">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/521/">
+    <meta property="og:image" content="https://blog.naoty.dev/521/keyboard-manager.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Windowsのキーマッピング</h1>
+          <p class="metadata">
+            <time datetime="2023-08-08T21:24:00.000+0000">2023-08-08 21:24</time>
+            <a href="/windows/">#windows</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Windowsを久々に使い始めて一番戸惑ったのがキーマッピングだった。英字キーボードで日本語を入力するため、普段MacではKarabinerを使ってゴリゴリにカスタマイズしていたのだけど、Windowsでも同様のカスタマイズをしようとしたところKarabinerほど使いやすいアプリケーションがなかった。そして、1週間ほどの試行錯誤と妥協の末、ようやく落ち着いたのでブログに残しておきたい。</p>
+<h1>Keyboard Manager</h1>
+<p><a href="./keyboard-manager.png" target="_blank"><img src="./keyboard-manager.png" alt="" style="max-width:100%;"></a></p>
+<p>Keyboard ManagerはPowerToysというWindows謹製のユーティリティアプリに同梱されているキーマッピングアプリで、シンプルなマッピングならこれで実現できる。</p>
+<p>設定したのはこれだけ。</p>
+<ul>
+<li>CtrlとCapsLockの入れ替え</li>
+<li>Ctrl+hjklで上下左右の矢印キー入力</li>
+</ul>
+<p>後述するalt-ime-ahkと併用する場合、CapsLockをAltに割り当てて入力するとそれ以降キー入力ができなくなる現象が発生することがわかり、Keyboard Managerの設定をなるべく最小限に抑えることにした。</p>
+<h1>alt-ime-ahk</h1>
+<p><a href="https://github.com/karakaram/alt-ime-ahk">https://github.com/karakaram/alt-ime-ahk</a></p>
+<p>MacのKarabinerで便利な設定だったコマンドキーの空打ちでIME切り替えるという挙動をWindowsで再現してくれる便利アプリで、これを導入してなるべくMacと近い操作感にした。</p>
+<p>本当はAltをCtrlに割り当てることでMacとほぼ同じキーマッピングにしたかったのだけど、先述したCapsLockをAltに割り当てられない問題があるため、そこは妥協することとなった。</p>
+<h1>キーボード</h1>
+<p>キーボードにはMistel Barocco MD770を使っているのだけど、裏面にあるDIPスイッチによってMacに最適化された配列にしていたため、Windowsで使うとAltキーとWindowsキーが入れ替わっていることに最初は気づかなかった。</p>
+<p>OSによる差異はキーボードではなくOS上のアプリケーションによって吸収してほしいので、DIPスイッチはすべてオフにした。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

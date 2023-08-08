@@ -10,6 +10,30 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/521/</id>
+    <link href="https://blog.naoty.dev/521/"/>
+    <summary>&lt;p&gt;Windowsを久々に使い始めて一番戸惑ったのがキーマッピングだった。英字キーボードで日本語を入力するため、普段MacではKarabinerを使ってゴリゴリにカスタマイズしていたのだけど、Windowsでも同様のカスタマイズをしようとしたところKarabinerほど使いやすいアプリケーションがなかった。そして、1週間ほどの試行錯誤と妥協の末、ようやく落ち着いたのでブログに残しておきたい。&lt;/p&gt;
+&lt;h1&gt;Keyboard Manager&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;./keyboard-manager.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./keyboard-manager.png&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Keyboard ManagerはPowerToysというWindows謹製のユーティリティアプリに同梱されているキーマッピングアプリで、シンプルなマッピングならこれで実現できる。&lt;/p&gt;
+&lt;p&gt;設定したのはこれだけ。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CtrlとCapsLockの入れ替え&lt;/li&gt;
+&lt;li&gt;Ctrl+hjklで上下左右の矢印キー入力&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;後述するalt-ime-ahkと併用する場合、CapsLockをAltに割り当てて入力するとそれ以降キー入力ができなくなる現象が発生することがわかり、Keyboard Managerの設定をなるべく最小限に抑えることにした。&lt;/p&gt;
+&lt;h1&gt;alt-ime-ahk&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/karakaram/alt-ime-ahk&quot;&gt;https://github.com/karakaram/alt-ime-ahk&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;MacのKarabinerで便利な設定だったコマンドキーの空打ちでIME切り替えるという挙動をWindowsで再現してくれる便利アプリで、これを導入してなるべくMacと近い操作感にした。&lt;/p&gt;
+&lt;p&gt;本当はAltをCtrlに割り当てることでMacとほぼ同じキーマッピングにしたかったのだけど、先述したCapsLockをAltに割り当てられない問題があるため、そこは妥協することとなった。&lt;/p&gt;
+&lt;h1&gt;キーボード&lt;/h1&gt;
+&lt;p&gt;キーボードにはMistel Barocco MD770を使っているのだけど、裏面にあるDIPスイッチによってMacに最適化された配列にしていたため、Windowsで使うとAltキーとWindowsキーが入れ替わっていることに最初は気づかなかった。&lt;/p&gt;
+&lt;p&gt;OSによる差異はキーボードではなくOS上のアプリケーションによって吸収してほしいので、DIPスイッチはすべてオフにした。&lt;/p&gt;</summary>
+    <title>Windowsのキーマッピング</title>
+    <updated>2023-08-08T21:24:00+00:00</updated>
+    <dc:date>2023-08-08T21:24:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/520/</id>
     <link href="https://blog.naoty.dev/520/"/>
     <summary>&lt;p&gt;&lt;figure&gt;&lt;a href=&quot;./finished-PC.jpg&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;./finished-PC.jpg&quot; alt=&quot;&quot; style=&quot;max-width:100%;&quot;&gt;&lt;/a&gt;&lt;figcaption&gt;初の自作PC&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
