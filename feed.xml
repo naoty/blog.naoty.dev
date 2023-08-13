@@ -10,6 +10,44 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/522/</id>
+    <link href="https://blog.naoty.dev/522/"/>
+    <summary>&lt;p&gt;&lt;a href=&quot;/521/&quot;&gt;前回&lt;/a&gt;設定したキーマッピングだと問題があることがわかり、ゼロからやり直した。&lt;/p&gt;
+&lt;h1&gt;TL;DR&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;KeySwapを使ってCtrlとCapsLockを入れ替えた。&lt;/li&gt;
+&lt;li&gt;alt-ime-ahkを使ってAltの空打ちでIMEを切り替えられるようにした。&lt;/li&gt;
+&lt;li&gt;AutoHotKeyを使ってCtrlによるカーソル移動や、コロンとセミコロンの入れ替えなど細かいキーマッピングを設定した。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;AutoHotKey&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;; カーソル移動
+^h::Send '{Left}'
+^j::Send '{Down}'
+^k::Send '{Up}'
+^l::Send '{Right}'
+^a::Send '{Home}'
+^e::Send '{End}'
+
+; セミコロンとコロンを入れ替える
+VKBA::+VKBA
++VKBA::VKBA
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;独自のスクリプト言語を使っているということもあり、メンテナンスのことを考えるとあまり気が乗らなかったのだけど、歴史とユーザーコミュニティの大きさを踏まえてAutoHotKeyを使うことにした。さいわい、上のような簡単な設定だけならシンプルな記述で済んだ。&lt;/p&gt;
+&lt;h1&gt;alt-ime-ahk&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;/522/&quot;&gt;前回&lt;/a&gt;書いたとおり、MacのKarabinerと同じようにaltの空打ちでIMEの切り替えができ、大変便利。実体としてはAutoHotKeyのスクリプトなので、上のスクリプトと合わせて2つのスクリプトをAutoHotKeyで動かしているということになる。&lt;/p&gt;
+&lt;h1&gt;他に試したもの&lt;/h1&gt;
+&lt;h2&gt;keyhac&lt;/h2&gt;
+&lt;p&gt;AutoHotKeyのようなキーマッピングをPythonで記述できるため、メンテナンスしやすさ、学習コストの低さが魅力的に感じたが、セミコロンとコロンを入れ替える設定がどうやらできなさそうということが分かり断念した。&lt;/p&gt;
+&lt;h2&gt;キーボードのマクロ機能&lt;/h2&gt;
+&lt;p&gt;Mistel Barocco MD770にはマクロ機能が備わっており、物理的なレイヤーでマッピングが可能なので試してみたが、修飾キーを伴うマッピングができないということが分かり断念した。&lt;/p&gt;
+&lt;h1&gt;Ctrl押しっぱなし問題&lt;/h1&gt;
+&lt;p&gt;AutoHotKeyやkeyhacでCtrlとCapsLockの入れ替えを設定すると、時々Ctrlが押しっぱなしになり、なにも入力できなくなってしまう現象がおきることがある。Windowsキー+Lでロック画面にいき、復帰すると復旧できるのだけど、そこそこの頻度で発生するため、AutoHotKeyやkeyhacでCtrlをいじるのを断念した。&lt;/p&gt;
+&lt;p&gt;調べていくと、どうやらWindowsのIMEに問題があるらしいことが分かり、レジストリを編集することで解決するという話があった。とはいえ、直接レジストリを編集するのはリスクもあるため、KeySwapを使いレジストリを低いリスクで変更することにした。&lt;/p&gt;</summary>
+    <title>Windowsのキーマッピング2</title>
+    <updated>2023-08-13T09:32:00+00:00</updated>
+    <dc:date>2023-08-13T09:32:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/521/</id>
     <link href="https://blog.naoty.dev/521/"/>
     <summary>&lt;p&gt;Windowsを久々に使い始めて一番戸惑ったのがキーマッピングだった。英字キーボードで日本語を入力するため、普段MacではKarabinerを使ってゴリゴリにカスタマイズしていたのだけど、Windowsでも同様のカスタマイズをしようとしたところKarabinerほど使いやすいアプリケーションがなかった。そして、1週間ほどの試行錯誤と妥協の末、ようやく落ち着いたのでブログに残しておきたい。&lt;/p&gt;

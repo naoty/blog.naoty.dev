@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windowsのキーマッピング2</title>
+    <meta property="og:title" content="Windowsのキーマッピング2">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/522/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">Windowsのキーマッピング2</h1>
+          <p class="metadata">
+            <time datetime="2023-08-13T09:32:00.000+0000">2023-08-13 09:32</time>
+            <a href="/windows/">#windows</a>
+          </p>
+        </header>
+        <section class="body">
+          <p><a href="/521/">前回</a>設定したキーマッピングだと問題があることがわかり、ゼロからやり直した。</p>
+<h1>TL;DR</h1>
+<ul>
+<li>KeySwapを使ってCtrlとCapsLockを入れ替えた。</li>
+<li>alt-ime-ahkを使ってAltの空打ちでIMEを切り替えられるようにした。</li>
+<li>AutoHotKeyを使ってCtrlによるカーソル移動や、コロンとセミコロンの入れ替えなど細かいキーマッピングを設定した。</li>
+</ul>
+<h1>AutoHotKey</h1>
+<pre><code>; カーソル移動
+^h::Send '{Left}'
+^j::Send '{Down}'
+^k::Send '{Up}'
+^l::Send '{Right}'
+^a::Send '{Home}'
+^e::Send '{End}'
+
+; セミコロンとコロンを入れ替える
+VKBA::+VKBA
++VKBA::VKBA
+</code></pre>
+<p>独自のスクリプト言語を使っているということもあり、メンテナンスのことを考えるとあまり気が乗らなかったのだけど、歴史とユーザーコミュニティの大きさを踏まえてAutoHotKeyを使うことにした。さいわい、上のような簡単な設定だけならシンプルな記述で済んだ。</p>
+<h1>alt-ime-ahk</h1>
+<p><a href="/522/">前回</a>書いたとおり、MacのKarabinerと同じようにaltの空打ちでIMEの切り替えができ、大変便利。実体としてはAutoHotKeyのスクリプトなので、上のスクリプトと合わせて2つのスクリプトをAutoHotKeyで動かしているということになる。</p>
+<h1>他に試したもの</h1>
+<h2>keyhac</h2>
+<p>AutoHotKeyのようなキーマッピングをPythonで記述できるため、メンテナンスしやすさ、学習コストの低さが魅力的に感じたが、セミコロンとコロンを入れ替える設定がどうやらできなさそうということが分かり断念した。</p>
+<h2>キーボードのマクロ機能</h2>
+<p>Mistel Barocco MD770にはマクロ機能が備わっており、物理的なレイヤーでマッピングが可能なので試してみたが、修飾キーを伴うマッピングができないということが分かり断念した。</p>
+<h1>Ctrl押しっぱなし問題</h1>
+<p>AutoHotKeyやkeyhacでCtrlとCapsLockの入れ替えを設定すると、時々Ctrlが押しっぱなしになり、なにも入力できなくなってしまう現象がおきることがある。Windowsキー+Lでロック画面にいき、復帰すると復旧できるのだけど、そこそこの頻度で発生するため、AutoHotKeyやkeyhacでCtrlをいじるのを断念した。</p>
+<p>調べていくと、どうやらWindowsのIMEに問題があるらしいことが分かり、レジストリを編集することで解決するという話があった。とはいえ、直接レジストリを編集するのはリスクもあるため、KeySwapを使いレジストリを低いリスクで変更することにした。</p>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
