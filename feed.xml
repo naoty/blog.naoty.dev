@@ -41,7 +41,7 @@ VKBA::+VKBA
 &lt;h2&gt;キーボードのマクロ機能&lt;/h2&gt;
 &lt;p&gt;Mistel Barocco MD770にはマクロ機能が備わっており、物理的なレイヤーでマッピングが可能なので試してみたが、修飾キーを伴うマッピングができないということが分かり断念した。&lt;/p&gt;
 &lt;h1&gt;Ctrl押しっぱなし問題&lt;/h1&gt;
-&lt;p&gt;AutoHotKeyやkeyhacでCtrlとCapsLockの入れ替えを設定すると、時々Ctrlが押しっぱなしになり、なにも入力できなくなってしまう現象がおきることがある。Windowsキー+Lでロック画面にいき、復帰すると復旧できるのだけど、そこそこの頻度で発生するため、AutoHotKeyやkeyhacでCtrlをいじるのを断念した。&lt;/p&gt;
+&lt;p&gt;AutoHotKeyやkeyhac、そして&lt;a href=&quot;/522/&quot;&gt;前回&lt;/a&gt;使っていたKeyboard ManagerでCtrlとCapsLockの入れ替えを設定すると、時々Ctrlが押しっぱなしになり、なにも入力できなくなってしまう現象がおきることがある。Windowsキー+Lでロック画面にいき、復帰すると復旧できるのだけど、そこそこの頻度で発生するため、AutoHotKeyやkeyhacでCtrlをいじるのを断念した。&lt;/p&gt;
 &lt;p&gt;調べていくと、どうやらWindowsのIMEに問題があるらしいことが分かり、レジストリを編集することで解決するという話があった。とはいえ、直接レジストリを編集するのはリスクもあるため、KeySwapを使いレジストリを低いリスクで変更することにした。&lt;/p&gt;</summary>
     <title>Windowsのキーマッピング2</title>
     <updated>2023-08-13T09:32:00+00:00</updated>
