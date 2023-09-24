@@ -10,6 +10,28 @@
   <title>blog.naoty.dev</title>
   <updated>2021-01-09T00:00:00+00:00</updated>
   <entry>
+    <id>https://blog.naoty.dev/526/</id>
+    <link href="https://blog.naoty.dev/526/"/>
+    <summary>&lt;p&gt;最近なんだかまとまったアウトプットができないので、2回つづけて日記回です。&lt;/p&gt;
+&lt;h1&gt;ジムの頻度を週3にした&lt;/h1&gt;
+&lt;p&gt;体重が落ちるペースが急に落ちてきた。たぶん体重が減るにつれて基礎代謝も落ちてきたんだろうと思い、ジムの頻度を週3に上げて消費カロリーを上げるようにしてみている。とはいえ、仕事が忙しくてさっそく失敗したのだけど。ようやく涼しくなってきたのでちょうどよさそう。&lt;/p&gt;
+&lt;h1&gt;Flutterアプリを作り始めた&lt;/h1&gt;
+&lt;p&gt;仕事でいくら既存のFlutterアプリに手を加えたところで、新規でゼロから作ったときの成長スピードには敵わないと思うので、プライベートでもFlutterアプリを書き始めた。&lt;/p&gt;
+&lt;p&gt;基本的な部分から調べながら進めているので、とてもスローペースなんだけど、身になっている感覚がある。&lt;/p&gt;
+&lt;h1&gt;最近読んだ/読んでいる本&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://www.amazon.co.jp/dp/1732102201&quot;&gt;A Philosophy of Software Design&lt;/a&gt;: 最近仕事でモジュラーモノリスについて考えるようになってきたので、深いモジュール/浅いモジュールについて書かれていると聞いて読んでみることにした。インターフェイスが少なくてシンプルなことは、使う人にとって考えることが少なくて良い、って話まで読んだ。あと、複雑なコードは日々の積み重ねでできあがるみたいな話が印象的で、日頃からコードレビューでささいなことでもちゃんと指摘するようにしようと思った。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://www.digital.go.jp/resources/introduction-to-web-accessibility-guidebook&quot;&gt;ウェブアクセシビリティ導入ガイドブック&lt;/a&gt;: アクセシビリティを考慮したアプリケーションを実装しようとしているけど、どこから考えていけばいいのかまったく分からなかったので、デジタル省が公開している資料を読んだ。50ページくらいで読みやすく、最初のとっかかりとしてとてもよかった。ウェブアクセシビリティに関わる人全般が対象読者なのだけど、エンジニア目線で書かれた箇所（SPAへの言及とか）もあって、エンジニアとしても発見があった。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://book.mynavi.jp/shogi/products/detail/id=124902&quot;&gt;終盤戦のストラテジー&lt;/a&gt;（棋書）: 終盤になってから詰みに至るまでのいくつかのフェーズにおける考え方が分かりやすく書かれていてとても勉強になった。特に個人的に課題に感じていた囲いの崩し方について囲い一般について言える具体的な方針が書かれていたのでかなり助かった。繰り返し読みたい一冊。&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <title>2023-09-24</title>
+    <updated>2023-09-24T21:53:00+00:00</updated>
+    <dc:date>2023-09-24T21:53:00+00:00</dc:date>
+  </entry>
+  <entry>
     <id>https://blog.naoty.dev/525/</id>
     <link href="https://blog.naoty.dev/525/"/>
     <summary>&lt;h1&gt;将棋のオンラインレッスン&lt;/h1&gt;
