@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DartのパターンマッチでJSONを扱う</title>
+    <meta property="og:title" content="DartのパターンマッチでJSONを扱う">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.naoty.dev/527/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@naoty_k">
+    <meta name="theme-color" content="#fff">
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml">
+    <link href="/normalize.css" rel="stylesheet">
+    <link href="/main2.css" rel="stylesheet">
+    <link href="/highlight.css" rel="stylesheet">
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+  </head>
+  <body>
+    <main>
+      <article>
+        <header>
+          <h1 class="title mt-0">DartのパターンマッチでJSONを扱う</h1>
+          <p class="metadata">
+            <time datetime="2023-10-14T21:14:00.000+0000">2023-10-14 21:14</time>
+            <a href="/dart/">#dart</a>
+          </p>
+        </header>
+        <section class="body">
+          <p>Dart 3で導入されたパターンマッチに慣れるため、JSONのパースを試してみたところ、とても便利で最高だったのでブログに残しておきたい。</p>
+<h1>パターンマッチを使わない場合</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">const</span> <span class="n">pokedex</span> <span class="o">=</span> <span class="s">'''[
+  {"id": 1, "name": "Bulbasaur", "type": ["Grass", "Poison"]},
+  {"id": 4, "name": "Charmander", "type": ["Fire"]},
+  {"id": 7, "name": "Squirtle", "type": ["Water"]}
+]'''</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">final</span> <span class="n">array</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="na">decode</span><span class="p">(</span><span class="n">pokedex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">array</span> <span class="k">is</span> <span class="kt">List</span><span class="p">&lt;</span><span class="kd">dynamic</span><span class="p">&gt;)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">final</span> <span class="n">object</span> <span class="k">in</span> <span class="n">array</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">object</span> <span class="k">is</span> <span class="kt">Map</span><span class="p">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kd">dynamic</span><span class="p">&gt;</span> <span class="o">&amp;&amp;</span>
+            <span class="n">object</span><span class="p">[</span><span class="s">'id'</span><span class="p">]</span> <span class="k">is</span> <span class="kt">int</span> <span class="o">&amp;&amp;</span>
+            <span class="n">object</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="k">is</span> <span class="kt">String</span> <span class="o">&amp;&amp;</span>
+            <span class="n">object</span><span class="p">[</span><span class="s">'type'</span><span class="p">]</span> <span class="k">is</span> <span class="kt">List</span><span class="p">&lt;</span><span class="kd">dynamic</span><span class="p">&gt;)</span> <span class="p">{</span>
+          <span class="n">print</span><span class="p">(</span>
+              <span class="s">'id: </span><span class="si">${object['id']}</span><span class="s">, name: </span><span class="si">${object['name']}</span><span class="s">, types: </span><span class="si">${object['type']}</span><span class="s">'</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">print</span><span class="p">(</span><span class="s">'failed to decode'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<p>要素の型をちゃんとチェックしようとすると、かなり冗長なコードになってしまう。</p>
+<h1>パターンマッチを使う場合</h1>
+<pre lang="dart" class="highlight highlight-dart"><span class="kd">const</span> <span class="n">pokedex</span> <span class="o">=</span> <span class="s">'''
+[
+  {"id": 1, "name": "Bulbasaur", "type": ["Grass", "Poison"]},
+  {"id": 4, "name": "Charmander", "type": ["Fire"]},
+  {"id": 7, "name": "Squirtle", "type": ["Water"]}
+]
+'''</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="na">decode</span><span class="p">(</span><span class="n">pokedex</span><span class="p">)</span> <span class="k">case</span> <span class="kt">List</span><span class="p">&lt;</span><span class="kd">dynamic</span><span class="p">&gt;</span> <span class="n">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">final</span> <span class="p">{</span>
+          <span class="s">'id'</span><span class="o">:</span> <span class="kt">int</span> <span class="n">id</span><span class="p">,</span>
+          <span class="s">'name'</span><span class="o">:</span> <span class="kt">String</span> <span class="n">name</span><span class="p">,</span>
+          <span class="s">'type'</span><span class="o">:</span> <span class="kt">List</span><span class="p">&lt;</span><span class="kd">dynamic</span><span class="p">&gt;</span> <span class="n">types</span><span class="p">,</span>
+        <span class="p">}</span> <span class="k">in</span> <span class="n">array</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">print</span><span class="p">(</span><span class="s">'id: </span><span class="si">$id</span><span class="s">, name: </span><span class="si">$name</span><span class="s">, types: </span><span class="si">$types</span><span class="s">'</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">print</span><span class="p">(</span><span class="s">'failed to decode'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+<p>型チェックと同時に変数への代入をおこなっているため、簡潔でわかりやすいコードになった。<code>Map</code>の要素に対する型チェックもかなり簡潔になっている。パターンマッチと分割代入のポイントは以下のとおり。</p>
+<ul>
+<li>
+<code>if (&lt;変数&gt; case &lt;パターン&gt;) {}</code>でパターンマッチをおこない、マッチしたかどうかで分岐できる。</li>
+<li>
+<code>for (&lt;パターン&gt; in &lt;変数&gt;) {}</code>でリストの要素に対してパターンマッチをおこない、マッチした要素だけを処理できる。</li>
+<li>パターンに<code>{'&lt;キー&gt;': &lt;パターン&gt;}</code>を渡すことでキーを指定しつつ、値に対してさらなるパターンマッチをおこなえる。</li>
+<li>
+<code>int id</code>のように型宣言した変数名をパターンに渡すことで、型に一致した場合のみマッチするようにしつつ、変数名にマッチした値をbindさせている。</li>
+<li>
+<code>List&lt;dynamic&gt; types</code>としているところを<code>List&lt;String&gt; types</code>とすると、<code>Uncaught Error: Bad state: Pattern matching error</code>というエラーが発生してしまうので、<code>dynamic</code>のままにしている。ここはもっとうまいやり方があるかも。</li>
+</ul>
+        </section>
+        <footer>
+          <nav>
+            <ul class="footer-links mb-0">
+              <li class="footer-link"><a href="https://naoty.dev">Home</a></li>
+              <li class="footer-link"><a href="/">Posts</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
