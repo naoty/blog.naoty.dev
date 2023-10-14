@@ -63,7 +63,7 @@
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;
-&lt;p&gt;型チェックと同時に変数への代入をおこなっているため、簡潔でわかりやすいコードになった。&lt;code&gt;Map&lt;/code&gt;の要素に対する型チェックもかなり簡潔になっている。パターンマッチと分割代入のポイントは以下のとおり。&lt;/p&gt;
+&lt;p&gt;型チェックと同時に変数へのbindをおこなっているため、簡潔でわかりやすいコードになった。&lt;code&gt;Map&lt;/code&gt;の要素に対する型チェックもかなり簡潔になっている。パターンマッチのポイントは以下のとおり。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;code&gt;if (&amp;lt;変数&amp;gt; case &amp;lt;パターン&amp;gt;) {}&lt;/code&gt;でパターンマッチをおこない、マッチしたかどうかで分岐できる。&lt;/li&gt;
